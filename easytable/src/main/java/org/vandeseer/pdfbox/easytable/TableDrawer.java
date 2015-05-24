@@ -4,8 +4,6 @@ import java.awt.Color;
 import java.io.IOException;
 import java.util.Iterator;
 
-import org.apache.pdfbox.pdmodel.PDDocument;
-import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.edit.PDPageContentStream;
 
 public class TableDrawer {
@@ -15,15 +13,11 @@ public class TableDrawer {
   private PDPageContentStream contentStream;
   private Table table;
 
-  public TableDrawer(PDDocument document, PDPage page, Table table) throws IOException {
+  public TableDrawer(PDPageContentStream contentStream, Table table, float startX, float startY) throws IOException {
+    this.contentStream = contentStream;
     this.table = table;
-
-    // Prepare the content stream and its use for landscape mode
-    contentStream = new PDPageContentStream(document, page);
-    contentStream.concatenate2CTM(0, 1, -1, 0, page.findMediaBox().getWidth(), 0);
-
-    tableStartX = table.getMarginLeft();
-    tableStartY = page.findMediaBox().getWidth() - table.getMarginTop() - table.getFontHeight();
+    tableStartX = startX;
+    tableStartY = startY - table.getFontHeight();
   }
 
   public void draw() throws IOException {
@@ -61,7 +55,7 @@ public class TableDrawer {
         startX += columnWidth;
         columnCounter++;
       }
-      startX = table.getMarginLeft();
+      startX = tableStartX;
       startY -= rowHeight;
     }
   }

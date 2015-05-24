@@ -1,7 +1,6 @@
 package org.vandeseer.pdfbox.easytable;
 
 import java.awt.Color;
-import java.awt.Font;
 
 public class Cell {
 

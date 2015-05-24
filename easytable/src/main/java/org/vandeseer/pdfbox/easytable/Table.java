@@ -14,8 +14,6 @@ public class Table {
   private int fontSize = 12;
   private int numberOfColumns = 0;
   private float width = 0;
-  private float marginLeft = 10;
-  private float marginTop = 10;
   private float borderWidth = 0.2f;
 
   public void addRow(Row row) {
@@ -65,14 +63,6 @@ public class Table {
 
   public List<Row> getRows() {
     return rows;
-  }
-
-  public float getMarginLeft() {
-    return marginLeft;
-  }
-
-  public float getMarginTop() {
-    return marginTop;
   }
 
   public float getBorderWidth() {

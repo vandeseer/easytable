@@ -11,6 +11,7 @@ import org.apache.pdfbox.exceptions.COSVisitorException;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.common.PDRectangle;
+import org.apache.pdfbox.pdmodel.edit.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.font.PDType1Font;
 import org.junit.Before;
 import org.junit.Test;
@@ -60,7 +61,10 @@ public class TableDrawerTest {
     cellsRow5.add(new Cell("dieses ist die 5").setBackgroundColor(Color.RED));
     table.addRow(new Row(cellsRow5));
     
-    (new TableDrawer(document, page, table)).draw();
+    PDPageContentStream contentStream = new PDPageContentStream(document, page);
+    contentStream.concatenate2CTM(0, 1, -1, 0, page.findMediaBox().getWidth(), 0);
+    float startY = page.findMediaBox().getWidth() - 30;
+    (new TableDrawer(contentStream, table, 30, startY)).draw();
     // -------------------------
 
     document.save("target/stefans.pdf");
