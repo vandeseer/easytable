@@ -1,8 +1,6 @@
 package org.vandeseer.pdfbox.easytable;
 
 import java.awt.Color;
-import java.util.ArrayList;
-import java.util.List;
 
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
@@ -23,7 +21,7 @@ public class TableDrawerTest {
     contentStream.concatenate2CTM(0, 1, -1, 0, page.findMediaBox().getWidth(), 0);
     final float startY = page.findMediaBox().getWidth() - 30;
     
-    (new TableDrawer(contentStream, getTable1(), 30, startY)).draw();
+    (new TableDrawer(contentStream, getTable(), 30, startY)).draw();
     contentStream.close();
 
     document.save("target/stefans.pdf");
@@ -31,7 +29,7 @@ public class TableDrawerTest {
   }
 
 
-  public Table getTable1() {
+  public Table getTable() {
     final TableBuilder tableBuilder = new TableBuilder()
       .addColumn(new Column(200))
       .addColumn(new Column(400))
