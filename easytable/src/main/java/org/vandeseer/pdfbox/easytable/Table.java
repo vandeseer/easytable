@@ -1,6 +1,7 @@
 package org.vandeseer.pdfbox.easytable;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.apache.pdfbox.pdmodel.font.PDFont;
@@ -91,11 +92,12 @@ public class Table {
     private float width = 0;
     private Table table = new Table(rows, columns);
     
-    public TableBuilder addRow(final Row row) {
-      if (row.getCells().size() != numberOfColumns) {
+    public TableBuilder addRow(Cell... cells) {
+      if (cells.length != numberOfColumns) {
         throw new IllegalArgumentException(
             "Number of row cells does not match with number of table columns");
       }
+      Row row = new Row(Arrays.asList(cells));
       row.setTable(table);
       rows.add(row);
       return this;

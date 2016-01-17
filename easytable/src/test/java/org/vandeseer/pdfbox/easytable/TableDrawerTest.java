@@ -38,30 +38,25 @@ public class TableDrawerTest {
       .setFontSize(4)
       .setFont(PDType1Font.HELVETICA);
 
-    final List<Cell> cellsRow1 = new ArrayList<>();
-    cellsRow1.add(new Cell("11").setBackgroundColor(Color.YELLOW).setHorizontalAlignment(Cell.HorizontalAlignment.RIGHT));
-    cellsRow1.add(new Cell("12"));
-    tableBuilder.addRow(new Row(cellsRow1));
+    Cell cell1 = new Cell("11").setBackgroundColor(Color.YELLOW).setHorizontalAlignment(Cell.HorizontalAlignment.RIGHT);
+    Cell cell2 = new Cell("12");
+    tableBuilder.addRow(cell1, cell2);
     
-    final List<Cell> cellsRow2 = new ArrayList<>();
-    cellsRow2.add(new Cell("super").setHorizontalAlignment(Cell.HorizontalAlignment.RIGHT));
-    cellsRow2.add(new Cell("geil").setBackgroundColor(Color.GRAY));
-    tableBuilder.addRow(new Row(cellsRow2));
+    Cell cellSuper = new Cell("super").setHorizontalAlignment(Cell.HorizontalAlignment.RIGHT);
+    Cell cellGeil = new Cell("geil").setBackgroundColor(Color.GRAY);
+    tableBuilder.addRow(cellSuper, cellGeil);
     
-    final List<Cell> cellsRow3 = new ArrayList<>();
-    cellsRow3.add(new Cell("ein etwas längerer text").setHorizontalAlignment(Cell.HorizontalAlignment.RIGHT));
-    cellsRow3.add(new Cell("ebenso hier! mit umläuten").setBackgroundColor(Color.GRAY));
-    tableBuilder.addRow(new Row(cellsRow3));
+    Cell cell31 = new Cell("ein etwas längerer text").setHorizontalAlignment(Cell.HorizontalAlignment.RIGHT);
+    Cell cell32 = new Cell("ebenso hier! mit umläuten").setBackgroundColor(Color.GRAY);
+    tableBuilder.addRow(cell31, cell32);
     
-    final List<Cell> cellsRow4 = new ArrayList<>();
-    cellsRow4.add(new Cell("nummero 4").setHorizontalAlignment(Cell.HorizontalAlignment.RIGHT));
-    cellsRow4.add(new Cell("dieses ist die 4").setBackgroundColor(Color.GRAY));
-    tableBuilder.addRow(new Row(cellsRow4));
+    Cell cell41 = new Cell("nummero 4").setHorizontalAlignment(Cell.HorizontalAlignment.RIGHT);
+    Cell cell42 = new Cell("dieses ist die 4").setBackgroundColor(Color.GRAY);
+    tableBuilder.addRow(cell41, cell42);
     
-    final List<Cell> cellsRow5 = new ArrayList<>();
-    cellsRow5.add(new Cell("nummero 5"));
-    cellsRow5.add(new Cell("dieses ist die 5").setBackgroundColor(Color.RED));
-    tableBuilder.addRow(new Row(cellsRow5));
+    Cell cell51 = new Cell("nummero 5");
+    Cell cell52 = new Cell("dieses ist die 5").setBackgroundColor(Color.RED);
+    tableBuilder.addRow(cell51, cell52);
     
     return tableBuilder.build();
   }

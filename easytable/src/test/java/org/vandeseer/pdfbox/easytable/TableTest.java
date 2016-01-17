@@ -30,10 +30,7 @@ public class TableTest {
   
   @Test
   public void testFullTable() {
-    List<Cell> cells = new ArrayList<Cell>();
-    cells.add(new Cell("11"));
-    cells.add(new Cell("12"));
-    tableBuilder.addRow(new Row(cells));
+    tableBuilder.addRow(new Cell("11"), new Cell("12"));
     assertThat(tableBuilder.build().getRows().size(), equalTo(1));
   }
 
