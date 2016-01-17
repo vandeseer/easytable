@@ -21,11 +21,6 @@ public class TableDrawer {
   }
 
   public void draw() throws IOException {
-    drawTableTexts();
-    drawTableGridHLines(table.getRowHeight());
-  }
-
-  private void drawTableTexts() throws IOException {
     float startX = tableStartX;
     float startY = tableStartY;
 
@@ -34,12 +29,29 @@ public class TableDrawer {
       int columnCounter = 0;
 
       for (Cell cell : row.getCells()) {
-        // Handle the cell's background color
         final float columnWidth = table.getColumns().get(columnCounter).getWidth();
+        // Handle the cell's background color
         if (cell.hasBackgroundColor()) {
           drawCellBackground(cell, startX, startY, columnWidth, rowHeight);
         }
 
+        // Handle the cell's borders
+        if (cell.hasBorderTop()) {
+          drawHorizontalCellBorder(cell, startX, startY + rowHeight, columnWidth);
+        }
+        
+        if (cell.hasBorderBottom()) {
+          drawHorizontalCellBorder(cell, startX, startY, columnWidth);
+        }
+        
+        if (cell.hasBorderLeft()) {
+          drawVerticalCellBorder(cell, startX, startY, rowHeight);
+        }
+
+        if (cell.hasBorderRight()) {
+          drawVerticalCellBorder(cell, startX + columnWidth, startY, rowHeight);
+        }
+        
         // Handle the cell's text
         if (cell.hasText()) {
           drawCellText(cell, columnWidth, startX, startY);
@@ -51,6 +63,18 @@ public class TableDrawer {
       startX = tableStartX;
       startY -= rowHeight;
     }
+  }
+
+  private void drawVerticalCellBorder(Cell cell, float startX, float startY, float rowHeight)
+      throws IOException {
+    contentStream.setLineWidth(cell.getBorderWidth());
+    contentStream.drawLine(startX, startY, startX, startY + rowHeight + cell.getBorderWidth() / 2);
+  }
+
+  private void drawHorizontalCellBorder(Cell cell, float startX, float startY, float columnWidth)
+      throws IOException {
+    contentStream.setLineWidth(cell.getBorderWidth());
+    contentStream.drawLine(startX, startY, startX + columnWidth + cell.getBorderWidth() / 2, startY);
   }
 
   private void drawCellBackground(final Cell cell, final float startX, final float startY, final float width, final float height)
@@ -82,20 +106,6 @@ public class TableDrawer {
     contentStream.moveTextPositionByAmount(xOffset, yOffset);
     contentStream.drawString(cell.getText());
     contentStream.endText();
-  }
-
-  private void drawTableGridHLines(final float rowHeight) throws IOException {
-    float currentYOffset = tableStartY;
-
-    contentStream.setLineWidth(table.getBorderWidth());
-    final float firstLineYOffset = currentYOffset + rowHeight;
-    final float xOffset = tableStartX + table.getWidth();
-    contentStream.drawLine(tableStartX, firstLineYOffset, xOffset, firstLineYOffset);
-
-    for (int i = 0; i < table.getRows().size(); i++) {
-      contentStream.drawLine(tableStartX, currentYOffset, xOffset, currentYOffset);
-      currentYOffset -= rowHeight;
-    }
   }
 
 }

@@ -9,6 +9,7 @@ import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.edit.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.font.PDType1Font;
 import org.junit.Test;
+import org.vandeseer.pdfbox.easytable.Table.TableBuilder;
 
 public class TableDrawerTest {
 
@@ -31,38 +32,38 @@ public class TableDrawerTest {
 
 
   public Table getTable1() {
-    final Table table = new Table()
+    final TableBuilder tableBuilder = new TableBuilder()
       .addColumn(new Column(200))
       .addColumn(new Column(400))
       .setFontSize(4)
       .setFont(PDType1Font.HELVETICA);
 
-    final List<Cell> cellsRow1 = new ArrayList<Cell>();
+    final List<Cell> cellsRow1 = new ArrayList<>();
     cellsRow1.add(new Cell("11").setBackgroundColor(Color.YELLOW).setHorizontalAlignment(Cell.HorizontalAlignment.RIGHT));
     cellsRow1.add(new Cell("12"));
-    table.addRow(new Row(cellsRow1));
-
-    final List<Cell> cellsRow2 = new ArrayList<Cell>();
+    tableBuilder.addRow(new Row(cellsRow1));
+    
+    final List<Cell> cellsRow2 = new ArrayList<>();
     cellsRow2.add(new Cell("super").setHorizontalAlignment(Cell.HorizontalAlignment.RIGHT));
     cellsRow2.add(new Cell("geil").setBackgroundColor(Color.GRAY));
-    table.addRow(new Row(cellsRow2));
+    tableBuilder.addRow(new Row(cellsRow2));
     
-    final List<Cell> cellsRow3 = new ArrayList<Cell>();
+    final List<Cell> cellsRow3 = new ArrayList<>();
     cellsRow3.add(new Cell("ein etwas längerer text").setHorizontalAlignment(Cell.HorizontalAlignment.RIGHT));
     cellsRow3.add(new Cell("ebenso hier! mit umläuten").setBackgroundColor(Color.GRAY));
-    table.addRow(new Row(cellsRow3));
+    tableBuilder.addRow(new Row(cellsRow3));
     
-    final List<Cell> cellsRow4 = new ArrayList<Cell>();
+    final List<Cell> cellsRow4 = new ArrayList<>();
     cellsRow4.add(new Cell("nummero 4").setHorizontalAlignment(Cell.HorizontalAlignment.RIGHT));
     cellsRow4.add(new Cell("dieses ist die 4").setBackgroundColor(Color.GRAY));
-    table.addRow(new Row(cellsRow4));
+    tableBuilder.addRow(new Row(cellsRow4));
     
-    final List<Cell> cellsRow5 = new ArrayList<Cell>();
+    final List<Cell> cellsRow5 = new ArrayList<>();
     cellsRow5.add(new Cell("nummero 5"));
     cellsRow5.add(new Cell("dieses ist die 5").setBackgroundColor(Color.RED));
-    table.addRow(new Row(cellsRow5));
+    tableBuilder.addRow(new Row(cellsRow5));
     
-    return table;
+    return tableBuilder.build();
   }
 
 }

@@ -5,11 +5,23 @@ import java.util.List;
 
 public class Row {
 
+  private Table table;
   private List<Cell> cells = new ArrayList<Cell>();
 
   public Row(final List<Cell> cells) {
     super();
     this.cells = cells;
+    for (final Cell cell : cells) {
+      cell.setRow(this);
+    }
+  }
+
+  public Table getTable() {
+    return table;
+  }
+
+  public void setTable(Table table) {
+    this.table = table;
   }
 
   public List<Cell> getCells() {

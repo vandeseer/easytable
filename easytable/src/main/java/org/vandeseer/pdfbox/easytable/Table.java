@@ -8,34 +8,39 @@ import org.apache.pdfbox.pdmodel.font.PDType1Font;
 
 public class Table {
 
-  private final List<Row> rows = new ArrayList<Row>();
-  private final List<Column> columns = new ArrayList<Column>();
+  private List<Row> rows = new ArrayList<>();
+  private List<Column> columns = new ArrayList<>();
   private PDFont font = PDType1Font.HELVETICA;
   private int fontSize = 12;
   private int numberOfColumns = 0;
   private float width = 0;
-  private final float borderWidth = 0.2f;
-
-  public void addRow(final Row row) {
-    if (row.getCells().size() != numberOfColumns) {
-      throw new IllegalArgumentException(
-          "Number of row cells does not match with number of table columns");
-    }
-    rows.add(row);
+  private float borderWidth = 0.2f;
+  
+  private Table(final List<Row> rows, final List<Column> columns) {
+    this.rows = rows;
+    this.columns = columns;
   };
-
-  public Table addColumn(final Column column) {
-    numberOfColumns++;
-    columns.add(column);
-    width += column.getWidth();
-    return this;
-  };
-
-  public Table setFont(final PDFont font) {
+ 
+  private void setFont(final PDFont font) {
     this.font = font;
-    return this;
   }
-
+  
+  private void setFontSize(final int fontSize) {
+    this.fontSize = fontSize;
+  }
+  
+  private void setNumberOfColumns(final int numberOfColumns) {
+    this.numberOfColumns = numberOfColumns;
+  }
+  
+  private void setWidth(final float width) {
+    this.width = width;
+  }
+  
+  private void setBorderWidth(final float borderWidth) {
+    this.borderWidth = borderWidth;
+  }
+  
   public float getWidth() {
     return width;
   };
@@ -50,11 +55,6 @@ public class Table {
 
   public int getFontSize() {
     return fontSize;
-  }
-
-  public Table setFontSize(final int fontSize) {
-    this.fontSize = fontSize;
-    return this;
   }
 
   public List<Column> getColumns() {
@@ -81,6 +81,53 @@ public class Table {
   public float getHeight() {
     // TODO in later version we may not have equal sizes of every row!
     return rows.size() * getRowHeight(); 
+  }
+  
+  
+  public static class TableBuilder {
+    private final List<Row> rows = new ArrayList<Row>();
+    private final List<Column> columns = new ArrayList<Column>();
+    private int numberOfColumns = 0;
+    private float width = 0;
+    private Table table = new Table(rows, columns);
+    
+    public TableBuilder addRow(final Row row) {
+      if (row.getCells().size() != numberOfColumns) {
+        throw new IllegalArgumentException(
+            "Number of row cells does not match with number of table columns");
+      }
+      row.setTable(table);
+      rows.add(row);
+      return this;
+    };
+    
+    public TableBuilder addColumn(final Column column) {
+      numberOfColumns++;
+      columns.add(column);
+      width += column.getWidth();
+      return this;
+    };
+
+    public TableBuilder setFont(final PDFont font) {
+      this.table.setFont(font);
+      return this;
+    }
+    
+    public TableBuilder setFontSize(final int fontSize) {
+      this.table.setFontSize(fontSize);
+      return this;
+    }
+    
+    public void setBorderWidth(final float borderWidth) {
+      this.table.setBorderWidth(borderWidth);
+    }
+    
+    public Table build() {
+      table.setWidth(width);
+      table.setNumberOfColumns(numberOfColumns);
+      return table;
+    }
+    
   }
 
 }

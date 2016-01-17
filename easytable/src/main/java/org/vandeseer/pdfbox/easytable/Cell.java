@@ -8,6 +8,8 @@ public class Cell {
     LEFT, RIGHT
   }
   
+  private Row row;
+  
   private HorizontalAlignment alignment = HorizontalAlignment.LEFT;
   private final String text;
   private Color backgroundColor;
@@ -19,6 +21,14 @@ public class Cell {
   public Cell(final String textContent) {
     super();
     this.text = textContent;
+  }
+
+  public Row getRow() {
+    return row;
+  }
+
+  public void setRow(final Row row) {
+    this.row = row;
   }
 
   public String getText() {
@@ -85,6 +95,26 @@ public class Cell {
   public Cell setHorizontalAlignment(final HorizontalAlignment alignment) {
     this.alignment = alignment;
     return this;
+  }
+  
+  public boolean hasBorderTop() {
+    return true;
+  }
+
+  public boolean hasBorderBottom() {
+    return true;
+  }
+  
+  public boolean hasBorderLeft() {
+    return true;
+  }
+  
+  public boolean hasBorderRight() {
+    return true;
+  }
+
+  public float getBorderWidth() {
+    return row.getTable().getBorderWidth();
   }
 
 }
