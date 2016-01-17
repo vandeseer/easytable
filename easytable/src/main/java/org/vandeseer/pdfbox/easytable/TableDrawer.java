@@ -23,8 +23,6 @@ public class TableDrawer {
   public void draw() throws IOException {
     drawTableTexts();
     drawTableGridHLines(table.getRowHeight());
-
-    contentStream.close();
   }
 
   private void drawTableTexts() throws IOException {

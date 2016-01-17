@@ -1,7 +1,5 @@
 package org.vandeseer.pdfbox.easytable;
 
-import static org.junit.Assert.*;
-
 import java.awt.Color;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -10,7 +8,6 @@ import java.util.List;
 import org.apache.pdfbox.exceptions.COSVisitorException;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
-import org.apache.pdfbox.pdmodel.common.PDRectangle;
 import org.apache.pdfbox.pdmodel.edit.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.font.PDType1Font;
 import org.junit.Before;
@@ -65,6 +62,7 @@ public class TableDrawerTest {
     contentStream.concatenate2CTM(0, 1, -1, 0, page.findMediaBox().getWidth(), 0);
     float startY = page.findMediaBox().getWidth() - 30;
     (new TableDrawer(contentStream, table, 30, startY)).draw();
+    contentStream.close();
     // -------------------------
 
     document.save("target/stefans.pdf");

@@ -70,11 +70,17 @@ public class Table {
   }
 
   public float getRowHeight() {
+    // TODO in later version we may not have equal sizes of every row!
     return rows.get(0) != null ? rows.get(0).getVerticalPadding() + fontSize : fontSize;
   }
 
   public float getFontHeight() {
     return font.getFontDescriptor().getFontBoundingBox().getHeight() / 1000 * fontSize;
+  }
+  
+  public float getHeight() {
+    // TODO in later version we may not have equal sizes of every row!
+    return rows.size() * getRowHeight(); 
   }
 
 }
