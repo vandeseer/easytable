@@ -7,7 +7,7 @@ public class Row {
 
   private List<Cell> cells = new ArrayList<Cell>();
 
-  public Row(List<Cell> cells) {
+  public Row(final List<Cell> cells) {
     super();
     this.cells = cells;
   }

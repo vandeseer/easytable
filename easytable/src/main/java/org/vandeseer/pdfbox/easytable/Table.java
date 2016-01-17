@@ -8,15 +8,15 @@ import org.apache.pdfbox.pdmodel.font.PDType1Font;
 
 public class Table {
 
-  private List<Row> rows = new ArrayList<Row>();
-  private List<Column> columns = new ArrayList<Column>();
+  private final List<Row> rows = new ArrayList<Row>();
+  private final List<Column> columns = new ArrayList<Column>();
   private PDFont font = PDType1Font.HELVETICA;
   private int fontSize = 12;
   private int numberOfColumns = 0;
   private float width = 0;
-  private float borderWidth = 0.2f;
+  private final float borderWidth = 0.2f;
 
-  public void addRow(Row row) {
+  public void addRow(final Row row) {
     if (row.getCells().size() != numberOfColumns) {
       throw new IllegalArgumentException(
           "Number of row cells does not match with number of table columns");
@@ -24,14 +24,14 @@ public class Table {
     rows.add(row);
   };
 
-  public Table addColumn(Column column) {
+  public Table addColumn(final Column column) {
     numberOfColumns++;
     columns.add(column);
     width += column.getWidth();
     return this;
   };
 
-  public Table setFont(PDFont font) {
+  public Table setFont(final PDFont font) {
     this.font = font;
     return this;
   }
@@ -52,7 +52,7 @@ public class Table {
     return fontSize;
   }
 
-  public Table setFontSize(int fontSize) {
+  public Table setFontSize(final int fontSize) {
     this.fontSize = fontSize;
     return this;
   }

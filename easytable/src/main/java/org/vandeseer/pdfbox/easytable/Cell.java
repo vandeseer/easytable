@@ -9,14 +9,14 @@ public class Cell {
   }
   
   private HorizontalAlignment alignment = HorizontalAlignment.LEFT;
-  private String text;
+  private final String text;
   private Color backgroundColor;
   private float paddingLeft = 3;
   private float paddingRight = 3;
   private float paddingTop = 3;
   private float paddingBottom = 3;
 
-  public Cell(String textContent) {
+  public Cell(final String textContent) {
     super();
     this.text = textContent;
   }
@@ -33,7 +33,7 @@ public class Cell {
     return backgroundColor;
   }
 
-  public Cell setBackgroundColor(Color backgroundColor) {
+  public Cell setBackgroundColor(final Color backgroundColor) {
     this.backgroundColor = backgroundColor;
     return this;
   }
@@ -46,7 +46,7 @@ public class Cell {
     return paddingLeft;
   }
 
-  public Cell setPaddingLeft(float paddingLeft) {
+  public Cell setPaddingLeft(final float paddingLeft) {
     this.paddingLeft = paddingLeft;
     return this;
   }
@@ -55,7 +55,7 @@ public class Cell {
     return paddingRight;
   }
 
-  public Cell setPaddingRight(float paddingRight) {
+  public Cell setPaddingRight(final float paddingRight) {
     this.paddingRight = paddingRight;
     return this;
   }
@@ -64,7 +64,7 @@ public class Cell {
     return paddingTop;
   }
 
-  public Cell setPaddingTop(float paddingTop) {
+  public Cell setPaddingTop(final float paddingTop) {
     this.paddingTop = paddingTop;
     return this;
   }
@@ -73,7 +73,7 @@ public class Cell {
     return paddingBottom;
   }
 
-  public Cell setPaddingBottom(float paddingBottom) {
+  public Cell setPaddingBottom(final float paddingBottom) {
     this.paddingBottom = paddingBottom;
     return this;
   }
@@ -82,7 +82,7 @@ public class Cell {
     return alignment;
   }
 
-  public Cell setHorizontalAlignment(HorizontalAlignment alignment) {
+  public Cell setHorizontalAlignment(final HorizontalAlignment alignment) {
     this.alignment = alignment;
     return this;
   }

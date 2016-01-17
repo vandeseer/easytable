@@ -2,9 +2,9 @@ package org.vandeseer.pdfbox.easytable;
 
 public class Column {
 
-  private float width;
+  private final float width;
 
-  public Column(float width) {
+  public Column(final float width) {
     super();
     this.width = width;
   }

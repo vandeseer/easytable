@@ -2,18 +2,18 @@ package org.vandeseer.pdfbox.easytable;
 
 import java.awt.Color;
 import java.io.IOException;
-import java.util.Iterator;
 
 import org.apache.pdfbox.pdmodel.edit.PDPageContentStream;
 
 public class TableDrawer {
 
-  private float tableStartX;
-  private float tableStartY;
-  private PDPageContentStream contentStream;
-  private Table table;
+  private final float tableStartX;
+  private final float tableStartY;
+  private final PDPageContentStream contentStream;
+  private final Table table;
 
-  public TableDrawer(PDPageContentStream contentStream, Table table, float startX, float startY) throws IOException {
+  public TableDrawer(final PDPageContentStream contentStream, final Table table, final float startX, final float startY)
+      throws IOException {
     this.contentStream = contentStream;
     this.table = table;
     tableStartX = startX;
@@ -29,18 +29,13 @@ public class TableDrawer {
     float startX = tableStartX;
     float startY = tableStartY;
 
-    Iterator<Row> rowIter = table.getRows().iterator();
-    while (rowIter.hasNext()) {
-      Row row = rowIter.next();
-      float rowHeight = table.getFontSize() + row.getVerticalPadding();
+    for (Row row : table.getRows()) {
+      final float rowHeight = table.getFontSize() + row.getVerticalPadding();
       int columnCounter = 0;
 
-      Iterator<Cell> cellIter = row.getCells().iterator();
-      while (cellIter.hasNext()) {
-        Cell cell = cellIter.next();
-
+      for (Cell cell : row.getCells()) {
         // Handle the cell's background color
-        float columnWidth = table.getColumns().get(columnCounter).getWidth();
+        final float columnWidth = table.getColumns().get(columnCounter).getWidth();
         if (cell.hasBackgroundColor()) {
           drawCellBackground(cell, startX, startY, columnWidth, rowHeight);
         }
@@ -58,7 +53,7 @@ public class TableDrawer {
     }
   }
 
-  private void drawCellBackground(Cell cell, float startX, float startY, float width, float height)
+  private void drawCellBackground(final Cell cell, final float startX, final float startY, final float width, final float height)
       throws IOException {
     contentStream.setNonStrokingColor(cell.getBackgroundColor());
     contentStream.fillRect(startX, startY, width, height);
@@ -68,18 +63,19 @@ public class TableDrawer {
     contentStream.setNonStrokingColor(Color.BLACK);
   }
 
-  private void drawCellText(Cell cell, float columnWidth, float moveX, float moveY)
+  private void drawCellText(final Cell cell, final float columnWidth, final float moveX, final float moveY)
       throws IOException {
     contentStream.beginText();
     contentStream.setFont(table.getFont(), table.getFontSize());
 
     float xOffset = moveX + cell.getPaddingLeft();
-    float yOffset = moveY + cell.getPaddingTop();
+    final float yOffset = moveY + cell.getPaddingTop();
 
     if (cell.getHorizontalAlignment().equals(Cell.HorizontalAlignment.RIGHT)) {
       // For the calculation of text width, see:
       // http://stackoverflow.com/questions/24004539/right-alignment-text-in-pdfbox
-      float textWidth = (table.getFont().getStringWidth(cell.getText()) / 1000f) * table.getFontSize();
+      final float textWidth =
+          (table.getFont().getStringWidth(cell.getText()) / 1000f) * table.getFontSize();
       xOffset = moveX + (columnWidth - (textWidth + cell.getPaddingRight()));
     }
 
@@ -88,12 +84,12 @@ public class TableDrawer {
     contentStream.endText();
   }
 
-  private void drawTableGridHLines(float rowHeight) throws IOException {
+  private void drawTableGridHLines(final float rowHeight) throws IOException {
     float currentYOffset = tableStartY;
 
     contentStream.setLineWidth(table.getBorderWidth());
-    float firstLineYOffset = currentYOffset + rowHeight;
-    float xOffset = tableStartX + table.getWidth();
+    final float firstLineYOffset = currentYOffset + rowHeight;
+    final float xOffset = tableStartX + table.getWidth();
     contentStream.drawLine(tableStartX, firstLineYOffset, xOffset, firstLineYOffset);
 
     for (int i = 0; i < table.getRows().size(); i++) {
