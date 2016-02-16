@@ -20,7 +20,7 @@ public class Row {
     return table;
   }
 
-  public void setTable(Table table) {
+  public void setTable(final Table table) {
     this.table = table;
   }
 
@@ -28,9 +28,12 @@ public class Row {
     return this.cells;
   }
 
-  public float getVerticalPadding() {
-    // we silently assume that each cell has the same padding!
-    return cells.get(0).getPaddingTop() + cells.get(0).getPaddingBottom();
+  public float getHeightWithoutFontHeight() {
+    final Cell highestCell = cells
+        .stream()
+        .max((cell1, cell2) -> Float.compare(cell1.getHeightWithoutFontSize(), cell2.getHeightWithoutFontSize()))
+        .get();
+    return highestCell.getHeightWithoutFontSize();
   }
 
 }

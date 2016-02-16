@@ -25,8 +25,11 @@ public class TableDrawer {
     float startY = tableStartY;
 
     for (Row row : table.getRows()) {
-      final float rowHeight = table.getFontSize() + row.getVerticalPadding();
+      final float rowHeight = table.getFontHeight() + row.getHeightWithoutFontHeight();
       int columnCounter = 0;
+      
+      startX = tableStartX;
+      startY -= rowHeight;
 
       for (Cell cell : row.getCells()) {
         final float columnWidth = table.getColumns().get(columnCounter).getWidth();
@@ -37,19 +40,31 @@ public class TableDrawer {
 
         // Handle the cell's borders
         if (cell.hasBorderTop()) {
-          drawHorizontalCellBorder(cell, startX, startY + rowHeight, columnWidth);
+          float borderWidth = cell.getBorderWidthTop();
+          float correction = borderWidth / 2;
+          contentStream.setLineWidth(borderWidth);
+          contentStream.drawLine(startX - correction, startY + rowHeight, startX + columnWidth + correction, startY + rowHeight);
         }
         
         if (cell.hasBorderBottom()) {
-          drawHorizontalCellBorder(cell, startX, startY, columnWidth);
+          float borderWidth = cell.getBorderWidthBottom();
+          float correction = borderWidth / 2;
+          contentStream.setLineWidth(borderWidth);
+          contentStream.drawLine(startX - correction, startY, startX + columnWidth + correction, startY);
         }
         
         if (cell.hasBorderLeft()) {
-          drawVerticalCellBorder(cell, startX, startY, rowHeight);
+          float borderWidth = cell.getBorderWidthLeft();
+          float correction = borderWidth / 2;
+          contentStream.setLineWidth(borderWidth);
+          contentStream.drawLine(startX, startY - correction, startX, startY + rowHeight + correction);
         }
 
         if (cell.hasBorderRight()) {
-          drawVerticalCellBorder(cell, startX + columnWidth, startY, rowHeight);
+          float borderWidth = cell.getBorderWidthRight();
+          float correction = borderWidth / 2;
+          contentStream.setLineWidth(borderWidth);
+          contentStream.drawLine(startX + columnWidth, startY - correction, startX + columnWidth, startY + rowHeight + correction);
         }
         
         // Handle the cell's text
@@ -60,21 +75,7 @@ public class TableDrawer {
         startX += columnWidth;
         columnCounter++;
       }
-      startX = tableStartX;
-      startY -= rowHeight;
     }
-  }
-
-  private void drawVerticalCellBorder(Cell cell, float startX, float startY, float rowHeight)
-      throws IOException {
-    contentStream.setLineWidth(cell.getBorderWidth());
-    contentStream.drawLine(startX, startY, startX, startY + rowHeight + cell.getBorderWidth() / 2);
-  }
-
-  private void drawHorizontalCellBorder(Cell cell, float startX, float startY, float columnWidth)
-      throws IOException {
-    contentStream.setLineWidth(cell.getBorderWidth());
-    contentStream.drawLine(startX, startY, startX + columnWidth + cell.getBorderWidth() / 2, startY);
   }
 
   private void drawCellBackground(final Cell cell, final float startX, final float startY, final float width, final float height)
@@ -93,7 +94,7 @@ public class TableDrawer {
     contentStream.setFont(table.getFont(), table.getFontSize());
 
     float xOffset = moveX + cell.getPaddingLeft();
-    final float yOffset = moveY + cell.getPaddingTop();
+    final float yOffset = moveY + cell.getPaddingBottom();
 
     if (cell.getHorizontalAlignment().equals(Cell.HorizontalAlignment.RIGHT)) {
       // For the calculation of text width, see:

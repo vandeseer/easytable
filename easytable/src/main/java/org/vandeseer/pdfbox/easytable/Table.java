@@ -2,6 +2,7 @@ package org.vandeseer.pdfbox.easytable;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
 
 import org.apache.pdfbox.pdmodel.font.PDFont;
@@ -70,24 +71,22 @@ public class Table {
     return borderWidth;
   }
 
-  public float getRowHeight() {
-    // TODO in later version we may not have equal sizes of every row!
-    return rows.get(0) != null ? rows.get(0).getVerticalPadding() + fontSize : fontSize;
-  }
-
   public float getFontHeight() {
     return font.getFontDescriptor().getFontBoundingBox().getHeight() / 1000 * fontSize;
   }
   
   public float getHeight() {
-    // TODO in later version we may not have equal sizes of every row!
-    return rows.size() * getRowHeight(); 
+    float height = 0;
+    for (final Row row : rows) {
+      height += (row.getHeightWithoutFontHeight() + this.getFontHeight());
+    }
+    return height;
   }
   
   
   public static class TableBuilder {
-    private final List<Row> rows = new ArrayList<Row>();
-    private final List<Column> columns = new ArrayList<Column>();
+    private final List<Row> rows = new LinkedList<Row>();
+    private final List<Column> columns = new LinkedList<Column>();
     private int numberOfColumns = 0;
     private float width = 0;
     private Table table = new Table(rows, columns);

@@ -13,13 +13,18 @@ public class Cell {
   private HorizontalAlignment alignment = HorizontalAlignment.LEFT;
   private final String text;
   private Color backgroundColor;
-  private float paddingLeft = 3;
-  private float paddingRight = 3;
-  private float paddingTop = 3;
-  private float paddingBottom = 3;
-
+  
+  private float paddingLeft = 4;
+  private float paddingRight = 4;
+  private float paddingTop = 2;
+  private float paddingBottom = 5;
+  
+  private float borderWidthTop = 0;
+  private float borderWidthLeft= 0;
+  private float borderWidthRight = 0;
+  private float borderWidthBottom = 0;
+  
   public Cell(final String textContent) {
-    super();
     this.text = textContent;
   }
 
@@ -98,23 +103,59 @@ public class Cell {
   }
   
   public boolean hasBorderTop() {
-    return true;
+    return getBorderWidthTop() > 0;
   }
 
   public boolean hasBorderBottom() {
-    return true;
+    return getBorderWidthBottom() > 0;
   }
   
   public boolean hasBorderLeft() {
-    return true;
+    return getBorderWidthLeft() > 0;
   }
   
   public boolean hasBorderRight() {
-    return true;
+    return getBorderWidthRight() > 0;
   }
 
-  public float getBorderWidth() {
-    return row.getTable().getBorderWidth();
+  public float getBorderWidthTop() {
+    return borderWidthTop;
+  }
+
+  public Cell setBorderWidthTop(float borderWidthTop) {
+    this.borderWidthTop = borderWidthTop;
+    return this;
+  }
+
+  public float getBorderWidthLeft() {
+    return borderWidthLeft;
+  }
+
+  public Cell setBorderWidthLeft(float borderWidthLeft) {
+    this.borderWidthLeft = borderWidthLeft;
+    return this;
+  }
+
+  public float getBorderWidthRight() {
+    return borderWidthRight;
+  }
+
+  public Cell setBorderWidthRight(float borderWidthRight) {
+    this.borderWidthRight = borderWidthRight;
+    return this;
+  }
+
+  public float getBorderWidthBottom() {
+    return borderWidthBottom;
+  }
+
+  public Cell setBorderWidthBottom(float borderWidthBottom) {
+    this.borderWidthBottom = borderWidthBottom;
+    return this;
+  }
+
+  public float getHeightWithoutFontSize() {
+    return this.paddingBottom + this.paddingTop;
   }
 
 }
