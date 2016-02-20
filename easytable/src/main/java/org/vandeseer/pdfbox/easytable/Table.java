@@ -91,12 +91,11 @@ public class Table {
     private float width = 0;
     private Table table = new Table(rows, columns);
     
-    public TableBuilder addRow(Cell... cells) {
-      if (cells.length != numberOfColumns) {
+    public TableBuilder addRow(Row row) {
+      if (row.getCells().size() != numberOfColumns) {
         throw new IllegalArgumentException(
             "Number of row cells does not match with number of table columns");
       }
-      Row row = new Row(Arrays.asList(cells));
       row.setTable(table);
       rows.add(row);
       return this;

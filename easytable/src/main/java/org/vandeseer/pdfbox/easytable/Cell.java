@@ -17,7 +17,7 @@ public class Cell {
   private float paddingLeft = 4;
   private float paddingRight = 4;
   private float paddingTop = 2;
-  private float paddingBottom = 5;
+  private float paddingBottom = 4;
   
   private float borderWidthTop = 0;
   private float borderWidthLeft= 0;

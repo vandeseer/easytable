@@ -9,6 +9,7 @@ import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 import org.vandeseer.pdfbox.easytable.Table.TableBuilder;
+import org.vandeseer.pdfbox.easytable.Row.RowBuilder;
 
 public class TableTest {
 
@@ -30,8 +31,16 @@ public class TableTest {
   
   @Test
   public void testFullTable() {
-    tableBuilder.addRow(new Cell("11"), new Cell("12"));
+    Row row = new RowBuilder()
+      .add(new Cell("11"))
+      .add(new Cell("12")).build();
+    tableBuilder.addRow(row);
     assertThat(tableBuilder.build().getRows().size(), equalTo(1));
   }
 
+  @Test
+  public void testGetHeight() {
+    // ... TODO Ensure that getHeight is working correctly! 
+  }
+  
 }

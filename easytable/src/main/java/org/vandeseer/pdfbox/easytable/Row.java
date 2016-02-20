@@ -6,9 +6,9 @@ import java.util.List;
 public class Row {
 
   private Table table;
-  private List<Cell> cells = new ArrayList<Cell>();
+  private final List<Cell> cells;
 
-  public Row(final List<Cell> cells) {
+  private Row(final List<Cell> cells) {
     super();
     this.cells = cells;
     for (final Cell cell : cells) {
@@ -34,6 +34,19 @@ public class Row {
         .max((cell1, cell2) -> Float.compare(cell1.getHeightWithoutFontSize(), cell2.getHeightWithoutFontSize()))
         .get();
     return highestCell.getHeightWithoutFontSize();
+  }
+  
+  public static class RowBuilder {
+    private List<Cell> cells = new ArrayList<>();
+    
+    public RowBuilder add(final Cell cell) {
+      cells.add(cell);
+      return this;
+    }
+    
+    public Row build() {
+      return new Row(cells);
+    }
   }
 
 }
