@@ -1,161 +1,161 @@
 package org.vandeseer.pdfbox.easytable;
 
-import java.awt.Color;
+import java.awt.*;
 
 public class Cell {
 
-  public enum HorizontalAlignment {
-    LEFT, RIGHT
-  }
-  
-  private Row row;
-  
-  private HorizontalAlignment alignment = HorizontalAlignment.LEFT;
-  private final String text;
-  private Color backgroundColor;
-  
-  private float paddingLeft = 4;
-  private float paddingRight = 4;
-  private float paddingTop = 2;
-  private float paddingBottom = 4;
-  
-  private float borderWidthTop = 0;
-  private float borderWidthLeft= 0;
-  private float borderWidthRight = 0;
-  private float borderWidthBottom = 0;
-  
-  public Cell(final String textContent) {
-    this.text = textContent;
-  }
+    public enum HorizontalAlignment {
+        LEFT, RIGHT
+    }
 
-  public Row getRow() {
-    return row;
-  }
+    private Row row;
 
-  public void setRow(final Row row) {
-    this.row = row;
-  }
+    private HorizontalAlignment alignment = HorizontalAlignment.LEFT;
+    private final String text;
+    private Color backgroundColor;
 
-  public String getText() {
-    return text;
-  }
+    private float paddingLeft = 4;
+    private float paddingRight = 4;
+    private float paddingTop = 2;
+    private float paddingBottom = 4;
 
-  public boolean hasBackgroundColor() {
-    return backgroundColor != null;
-  }
+    private float borderWidthTop = 0;
+    private float borderWidthLeft = 0;
+    private float borderWidthRight = 0;
+    private float borderWidthBottom = 0;
 
-  public Color getBackgroundColor() {
-    return backgroundColor;
-  }
+    public Cell(final String textContent) {
+        this.text = textContent;
+    }
 
-  public Cell setBackgroundColor(final Color backgroundColor) {
-    this.backgroundColor = backgroundColor;
-    return this;
-  }
+    public Row getRow() {
+        return row;
+    }
 
-  public boolean hasText() {
-    return text != null;
-  }
+    public void setRow(final Row row) {
+        this.row = row;
+    }
 
-  public float getPaddingLeft() {
-    return paddingLeft;
-  }
+    public String getText() {
+        return text;
+    }
 
-  public Cell setPaddingLeft(final float paddingLeft) {
-    this.paddingLeft = paddingLeft;
-    return this;
-  }
+    public boolean hasBackgroundColor() {
+        return backgroundColor != null;
+    }
 
-  public float getPaddingRight() {
-    return paddingRight;
-  }
+    public Color getBackgroundColor() {
+        return backgroundColor;
+    }
 
-  public Cell setPaddingRight(final float paddingRight) {
-    this.paddingRight = paddingRight;
-    return this;
-  }
+    public Cell setBackgroundColor(final Color backgroundColor) {
+        this.backgroundColor = backgroundColor;
+        return this;
+    }
 
-  public float getPaddingTop() {
-    return paddingTop;
-  }
+    public boolean hasText() {
+        return text != null;
+    }
 
-  public Cell setPaddingTop(final float paddingTop) {
-    this.paddingTop = paddingTop;
-    return this;
-  }
+    public float getPaddingLeft() {
+        return paddingLeft;
+    }
 
-  public float getPaddingBottom() {
-    return paddingBottom;
-  }
+    public Cell setPaddingLeft(final float paddingLeft) {
+        this.paddingLeft = paddingLeft;
+        return this;
+    }
 
-  public Cell setPaddingBottom(final float paddingBottom) {
-    this.paddingBottom = paddingBottom;
-    return this;
-  }
+    public float getPaddingRight() {
+        return paddingRight;
+    }
 
-  public HorizontalAlignment getHorizontalAlignment() {
-    return alignment;
-  }
+    public Cell setPaddingRight(final float paddingRight) {
+        this.paddingRight = paddingRight;
+        return this;
+    }
 
-  public Cell setHorizontalAlignment(final HorizontalAlignment alignment) {
-    this.alignment = alignment;
-    return this;
-  }
-  
-  public boolean hasBorderTop() {
-    return getBorderWidthTop() > 0;
-  }
+    public float getPaddingTop() {
+        return paddingTop;
+    }
 
-  public boolean hasBorderBottom() {
-    return getBorderWidthBottom() > 0;
-  }
-  
-  public boolean hasBorderLeft() {
-    return getBorderWidthLeft() > 0;
-  }
-  
-  public boolean hasBorderRight() {
-    return getBorderWidthRight() > 0;
-  }
+    public Cell setPaddingTop(final float paddingTop) {
+        this.paddingTop = paddingTop;
+        return this;
+    }
 
-  public float getBorderWidthTop() {
-    return borderWidthTop;
-  }
+    public float getPaddingBottom() {
+        return paddingBottom;
+    }
 
-  public Cell setBorderWidthTop(float borderWidthTop) {
-    this.borderWidthTop = borderWidthTop;
-    return this;
-  }
+    public Cell setPaddingBottom(final float paddingBottom) {
+        this.paddingBottom = paddingBottom;
+        return this;
+    }
 
-  public float getBorderWidthLeft() {
-    return borderWidthLeft;
-  }
+    public HorizontalAlignment getHorizontalAlignment() {
+        return alignment;
+    }
 
-  public Cell setBorderWidthLeft(float borderWidthLeft) {
-    this.borderWidthLeft = borderWidthLeft;
-    return this;
-  }
+    public Cell setHorizontalAlignment(final HorizontalAlignment alignment) {
+        this.alignment = alignment;
+        return this;
+    }
 
-  public float getBorderWidthRight() {
-    return borderWidthRight;
-  }
+    public boolean hasBorderTop() {
+        return getBorderWidthTop() > 0;
+    }
 
-  public Cell setBorderWidthRight(float borderWidthRight) {
-    this.borderWidthRight = borderWidthRight;
-    return this;
-  }
+    public boolean hasBorderBottom() {
+        return getBorderWidthBottom() > 0;
+    }
 
-  public float getBorderWidthBottom() {
-    return borderWidthBottom;
-  }
+    public boolean hasBorderLeft() {
+        return getBorderWidthLeft() > 0;
+    }
 
-  public Cell setBorderWidthBottom(float borderWidthBottom) {
-    this.borderWidthBottom = borderWidthBottom;
-    return this;
-  }
+    public boolean hasBorderRight() {
+        return getBorderWidthRight() > 0;
+    }
 
-  public float getHeightWithoutFontSize() {
-    return this.paddingBottom + this.paddingTop;
-  }
+    public float getBorderWidthTop() {
+        return borderWidthTop;
+    }
+
+    public Cell setBorderWidthTop(float borderWidthTop) {
+        this.borderWidthTop = borderWidthTop;
+        return this;
+    }
+
+    public float getBorderWidthLeft() {
+        return borderWidthLeft;
+    }
+
+    public Cell setBorderWidthLeft(float borderWidthLeft) {
+        this.borderWidthLeft = borderWidthLeft;
+        return this;
+    }
+
+    public float getBorderWidthRight() {
+        return borderWidthRight;
+    }
+
+    public Cell setBorderWidthRight(float borderWidthRight) {
+        this.borderWidthRight = borderWidthRight;
+        return this;
+    }
+
+    public float getBorderWidthBottom() {
+        return borderWidthBottom;
+    }
+
+    public Cell setBorderWidthBottom(float borderWidthBottom) {
+        this.borderWidthBottom = borderWidthBottom;
+        return this;
+    }
+
+    public float getHeightWithoutFontSize() {
+        return this.paddingBottom + this.paddingTop;
+    }
 
 }
