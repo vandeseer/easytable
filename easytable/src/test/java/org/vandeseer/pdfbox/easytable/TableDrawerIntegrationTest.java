@@ -14,7 +14,7 @@ import java.awt.*;
 public class TableDrawerIntegrationTest {
 
     @Test
-    public void createDocument() throws Exception {
+    public void createAlternateRowsDocument() throws Exception {
         final PDDocument document = new PDDocument();
         final PDPage page = new PDPage(PDPage.PAGE_SIZE_A4);
         page.setRotation(90);
@@ -31,6 +31,57 @@ public class TableDrawerIntegrationTest {
     }
 
     @Test
+    public void createSampleDocument() throws Exception {
+        final PDDocument document = new PDDocument();
+        final PDPage page = new PDPage(PDPage.PAGE_SIZE_A4);
+        document.addPage(page);
+
+        final float startY = page.findMediaBox().getHeight() - 150;
+        final int startX = 56;
+
+        final PDPageContentStream contentStream = new PDPageContentStream(document, page);
+
+        TableBuilder tableBuilder = new TableBuilder()
+                .addColumn(new Column(290))
+                .addColumn(new Column(120))
+                .addColumn(new Column(70))
+                .setFontSize(8)
+                .setFont(PDType1Font.HELVETICA);
+
+        Color lightBlue = new Color(194, 232, 233);
+
+        // Header
+        tableBuilder
+                .addRow(
+                        new RowBuilder()
+                                .add(Cell.of("This is right aligned without a border")
+                                        .setBackgroundColor(lightBlue)
+                                        .setHorizontalAlignment(HorizontalAlignment.RIGHT))
+                                .add(Cell.of("And this is another cell")
+                                        .setBackgroundColor(lightBlue))
+                                .add(Cell.of("Sum")
+                                        .setBackgroundColor(Color.ORANGE))
+                                .build());
+
+        for (int i = 0; i < 12; i++) {
+            Color backgroundColor = i % 2 == 0 ? new Color(240, 240, 240) : Color.WHITE;
+            tableBuilder.addRow(
+                    new RowBuilder()
+                            .add(Cell.of(i).withAllBorders().setBackgroundColor(backgroundColor))
+                            .add(Cell.of(i * i).withAllBorders().setBackgroundColor(backgroundColor))
+                            .add(Cell.of(i + (i * i)).withAllBorders().setBackgroundColor(backgroundColor))
+                            .build());
+        }
+
+        (new TableDrawer(contentStream, tableBuilder.build(), startX, startY)).draw();
+        contentStream.close();
+
+        document.save("target/sampleWithColorsAndBorders.pdf");
+        document.close();
+    }
+
+
+    @Test
     public void createRingManagerDocument() throws Exception {
         final PDDocument document = new PDDocument();
         final PDPage page = new PDPage(PDPage.PAGE_SIZE_A4);
@@ -39,13 +90,6 @@ public class TableDrawerIntegrationTest {
         final float startY = page.findMediaBox().getHeight() - 150;
         final int startX = 56;
 
-        // We have to draw the image first according to:
-        // http://stackoverflow.com/questions/8521290/cant-add-an-image-to-a-pdf-using-pdfbox
-        // Can we also draw svg/eps?
-//    InputStream in = new FileInputStream(new File("/home/stefan/tmp/rmlogo.jpg"));
-//    PDJpeg img = new PDJpeg(document, in);
-//    
-//    
         final PDPageContentStream contentStream = new PDPageContentStream(document, page);
         Table table = getRingManagerTable();
 
@@ -53,8 +97,7 @@ public class TableDrawerIntegrationTest {
 
         contentStream.setFont(PDType1Font.HELVETICA, 8.0f);
         contentStream.beginText();
-        // Is table.getHeight() correct?
-        System.out.println(table.getHeight());
+
         contentStream.moveTextPositionByAmount(startX, startY - (table.getHeight() + 22));
         contentStream.drawString("Dieser Kampf muss der WB nicht entsprechen, da als Sparringskampf angesetzt.");
         contentStream.endText();
@@ -68,7 +111,7 @@ public class TableDrawerIntegrationTest {
     private Table createAndGetTableWithAlternatingColors() {
         TableBuilder tableBuilder = new TableBuilder()
                 .addColumn(new Column(20))
-                .addColumn(new Column(40))
+                .addColumn(new Column(100))
                 .setFontSize(8)
                 .setFont(PDType1Font.HELVETICA);
 
@@ -81,11 +124,26 @@ public class TableDrawerIntegrationTest {
             tableBuilder
                     .addRow(
                             new RowBuilder()
-                                    .add(new Cell(String.valueOf(i))
+                                    .add(Cell.of(String.valueOf(i))
                                             .setBackgroundColor(backgroundColor)
                                             .setBorderWidthBottom(2f)
                                             .setHorizontalAlignment(HorizontalAlignment.RIGHT))
-                                    .add(new Cell(String.valueOf(i * 2))
+                                    .add(Cell.of(String.valueOf(i * 2))
+                                            .setBackgroundColor(backgroundColor))
+                                    .build());
+        }
+
+        for (int i = 0; i < 10; i++) {
+            Color backgroundColor = (i % 2 == 0) ? Color.RED : Color.WHITE;
+
+            tableBuilder
+                    .addRow(
+                            new RowBuilder()
+                                    .add(Cell.of(String.valueOf(i))
+                                            .setBackgroundColor(backgroundColor)
+                                            .setBorderWidthRight(2f)
+                                            .setHorizontalAlignment(HorizontalAlignment.RIGHT))
+                                    .add(Cell.of(String.valueOf(i * 2))
                                             .setBackgroundColor(backgroundColor))
                                     .build());
         }
@@ -105,46 +163,46 @@ public class TableDrawerIntegrationTest {
         float borderWidthInner = 1.0f;
 
         tableBuilder.addRow(new RowBuilder().add(
-                new Cell("1.")
+                Cell.of("1.")
                         .setBorderWidthTop(borderWidthOuter)
                         .setBorderWidthLeft(borderWidthOuter)
                         .setBorderWidthRight(borderWidthInner))
                 .add(
-                        new Cell("WK DBV(s)")
+                        Cell.of("WK DBV(s)")
                                 .setBorderWidthTop(borderWidthOuter)
                                 .setBorderWidthRight(borderWidthInner)
                                 .setBorderWidthLeft(borderWidthInner))
                 .add(
-                        new Cell("Rote Ecke:")
+                        Cell.of("Rote Ecke:")
                                 .setBorderWidthTop(borderWidthOuter)
                                 .setBorderWidthRight(borderWidthOuter)).build());
 
         tableBuilder.addRow(new RowBuilder().add(
-                new Cell("").setBorderWidthLeft(borderWidthOuter))
+                Cell.of("").setBorderWidthLeft(borderWidthOuter))
                 .add(
-                        new Cell("Jugend")
+                        Cell.of("Jugend")
                                 .setBorderWidthRight(borderWidthInner)
                                 .setBorderWidthLeft(borderWidthInner)).add(
-                        new Cell("Thomas Test, m, FC St. Pauli, 01.01.1998, Jugend, 67,5 kg, 12K (8S, 4N, 0U)")
+                        Cell.of("Thomas Test, m, FC St. Pauli, 01.01.1998, Jugend, 67,5 kg, 12K (8S, 4N, 0U)")
                                 .setBorderWidthBottom(borderWidthInner)
                                 .setBorderWidthRight(borderWidthOuter)).build());
 
         tableBuilder.addRow(new RowBuilder().add(
-                new Cell("").setBorderWidthLeft(borderWidthOuter)).add(
-                new Cell("3x3")
+                Cell.of("").setBorderWidthLeft(borderWidthOuter)).add(
+                Cell.of("3x3")
                         .setBorderWidthRight(borderWidthInner)
                         .setBorderWidthLeft(borderWidthInner)).add(
-                new Cell("Blaue Ecke:").setBorderWidthRight(borderWidthOuter)).build());
+                Cell.of("Blaue Ecke:").setBorderWidthRight(borderWidthOuter)).build());
 
         tableBuilder.addRow(new RowBuilder().add(
-                new Cell("")
+                Cell.of("")
                         .setBorderWidthLeft(borderWidthOuter)
                         .setBorderWidthBottom(borderWidthOuter)).add(
-                new Cell("10 Uz, KS")
+                Cell.of("10 Uz, KS")
                         .setBorderWidthRight(borderWidthInner)
                         .setBorderWidthLeft(borderWidthInner)
                         .setBorderWidthBottom(borderWidthOuter)).add(
-                new Cell("Bernd Beispiel, m, Wedeler TSV, 02.01.1999, Jugend, 68,2 kg, 9K (7S, 2N, 0U)")
+                Cell.of("Bernd Beispiel, m, Wedeler TSV, 02.01.1999, Jugend, 68,2 kg, 9K (7S, 2N, 0U)")
                         .setBorderWidthBottom(borderWidthOuter)
                         .setBorderWidthRight(borderWidthOuter)).build());
 

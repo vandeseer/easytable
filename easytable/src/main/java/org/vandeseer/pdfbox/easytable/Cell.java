@@ -24,8 +24,25 @@ public class Cell {
     private float borderWidthRight = 0;
     private float borderWidthBottom = 0;
 
-    public Cell(final String textContent) {
-        this.text = textContent;
+    private Cell(Object object) {
+        this.text = String.valueOf(object);
+    }
+
+    public static Cell of(Object object) {
+        return new Cell(object);
+    }
+
+    public Cell withAllBorders() {
+        int borderWith = 1;
+        return withAllBorders(borderWith);
+    }
+
+    public Cell withAllBorders(int borderWith) {
+        return this
+                .setBorderWidthBottom(borderWith)
+                .setBorderWidthLeft(borderWith)
+                .setBorderWidthRight(borderWith)
+                .setBorderWidthTop(borderWith);
     }
 
     public Row getRow() {

@@ -21,6 +21,11 @@ public class TableDrawer {
     }
 
     public void draw() throws IOException {
+        drawBackgroundAndText();
+        drawBorders();
+    }
+
+    private void drawBackgroundAndText() throws IOException {
         float startX;
         float startY = tableStartY;
 
@@ -38,38 +43,62 @@ public class TableDrawer {
                     drawCellBackground(cell, startX, startY, columnWidth, rowHeight);
                 }
 
+                // Handle the cell's text
+                if (cell.hasText()) {
+                    drawCellText(cell, columnWidth, startX, startY);
+                }
+
+                startX += columnWidth;
+                columnCounter++;
+            }
+        }
+    }
+
+    private void drawBorders() throws IOException {
+        float startX;
+        float startY = tableStartY;
+
+        for (Row row : table.getRows()) {
+            final float rowHeight = table.getFontHeight() + row.getHeightWithoutFontHeight();
+            int columnCounter = 0;
+
+            startX = tableStartX;
+            startY -= rowHeight;
+
+            for (Cell cell : row.getCells()) {
+                final float columnWidth = table.getColumns().get(columnCounter).getWidth();
+
                 // Handle the cell's borders
                 if (cell.hasBorderTop()) {
                     float borderWidth = cell.getBorderWidthTop();
-                    float correction = borderWidth / 2;
+                    float correctionLeft = cell.hasBorderLeft() ? cell.getBorderWidthLeft() / 2 : 0;
+                    float correctionRight = cell.hasBorderRight() ? cell.getBorderWidthRight() / 2 : 0;
                     contentStream.setLineWidth(borderWidth);
-                    contentStream.drawLine(startX - correction, startY + rowHeight, startX + columnWidth + correction, startY + rowHeight);
+                    contentStream.drawLine(startX - correctionLeft, startY + rowHeight, startX + columnWidth + correctionRight, startY + rowHeight);
                 }
 
                 if (cell.hasBorderBottom()) {
                     float borderWidth = cell.getBorderWidthBottom();
-                    float correction = borderWidth / 2;
+                    float correctionLeft = cell.hasBorderLeft() ? cell.getBorderWidthLeft() / 2 : 0;
+                    float correctionRight = cell.hasBorderRight() ? cell.getBorderWidthRight() / 2 : 0;
                     contentStream.setLineWidth(borderWidth);
-                    contentStream.drawLine(startX - correction, startY, startX + columnWidth + correction, startY);
+                    contentStream.drawLine(startX - correctionLeft, startY, startX + columnWidth + correctionRight, startY);
                 }
 
                 if (cell.hasBorderLeft()) {
                     float borderWidth = cell.getBorderWidthLeft();
-                    float correction = borderWidth / 2;
+                    float correctionTop = cell.hasBorderTop() ? cell.getBorderWidthTop() / 2 : 0;
+                    float correctionBottom = cell.hasBorderBottom() ? cell.getBorderWidthBottom() / 2 : 0;
                     contentStream.setLineWidth(borderWidth);
-                    contentStream.drawLine(startX, startY - correction, startX, startY + rowHeight + correction);
+                    contentStream.drawLine(startX, startY - correctionBottom, startX, startY + rowHeight + correctionTop);
                 }
 
                 if (cell.hasBorderRight()) {
                     float borderWidth = cell.getBorderWidthRight();
-                    float correction = borderWidth / 2;
+                    float correctionTop = cell.hasBorderTop() ? cell.getBorderWidthTop() / 2 : 0;
+                    float correctionBottom = cell.hasBorderBottom() ? cell.getBorderWidthBottom() / 2 : 0;
                     contentStream.setLineWidth(borderWidth);
-                    contentStream.drawLine(startX + columnWidth, startY - correction, startX + columnWidth, startY + rowHeight + correction);
-                }
-
-                // Handle the cell's text
-                if (cell.hasText()) {
-                    drawCellText(cell, columnWidth, startX, startY);
+                    contentStream.drawLine(startX + columnWidth, startY - correctionBottom, startX + columnWidth, startY + rowHeight + correctionTop);
                 }
 
                 startX += columnWidth;

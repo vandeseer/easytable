@@ -1,6 +1,5 @@
 package org.vandeseer.pdfbox.easytable;
 
-import org.junit.Before;
 import org.junit.Test;
 import org.vandeseer.pdfbox.easytable.Row.RowBuilder;
 import org.vandeseer.pdfbox.easytable.Table.TableBuilder;
@@ -9,13 +8,6 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 
 public class TableTest {
-
-    //private TableBuilder tableBuilder;
-
-    @Before
-    public void setUp() throws Exception {
-
-    }
 
     @Test
     public void getNumberOfColumns_tableBuilderWithThreeColumns() {
@@ -44,8 +36,8 @@ public class TableTest {
         tableBuilder.addColumn(new Column(12))
                     .addColumn(new Column(34));
         Row row = new RowBuilder()
-                .add(new Cell("11"))
-                .add(new Cell("12")).build();
+                .add(Cell.of("11"))
+                .add(Cell.of("12")).build();
         tableBuilder.addRow(row);
         Table table = tableBuilder.build();
 
@@ -58,8 +50,8 @@ public class TableTest {
         tableBuilder.addColumn(new Column(12))
                     .addColumn(new Column(34));
         Row row = new RowBuilder()
-                .add(new Cell("11").setPaddingTop(35).setPaddingBottom(15))
-                .add(new Cell("12").setPaddingTop(15).setPaddingBottom(25)).build();
+                .add(Cell.of("11").setPaddingTop(35).setPaddingBottom(15))
+                .add(Cell.of("12").setPaddingTop(15).setPaddingBottom(25)).build();
         tableBuilder.addRow(row);
         Table table = tableBuilder
                 .setFontSize(12) // this will have a font height of 13.872
