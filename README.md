@@ -54,7 +54,7 @@ filling the gap for table creation. It's OK, but don't expect too much.
 
 This should produce a whole PDF document with a table that looks like this one:
 
-TBD add table image link
+[[https://raw.githubusercontent.com/vandeseer/easytable/master/easytable/doc/example.png|alt=Table]]
 
 If you run the tests with `mvn clean test` there also three PDF documents created which you can find in the `target` folder.
 The corresponding sources (in order to understand how to use the code) can be found in the test package.
