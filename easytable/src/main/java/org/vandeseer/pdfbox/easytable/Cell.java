@@ -1,6 +1,7 @@
 package org.vandeseer.pdfbox.easytable;
 
 import java.awt.*;
+import java.util.Optional;
 
 public class Cell {
 
@@ -23,6 +24,8 @@ public class Cell {
     private float borderWidthLeft = 0;
     private float borderWidthRight = 0;
     private float borderWidthBottom = 0;
+
+    private Color borderColor;
 
     private Cell(Object object) {
         this.text = String.valueOf(object);
@@ -173,6 +176,19 @@ public class Cell {
 
     public float getHeightWithoutFontSize() {
         return this.paddingBottom + this.paddingTop;
+    }
+
+    public Color getBorderColor() {
+        Optional<Color> optBorderColor = Optional.ofNullable(borderColor);
+        return optBorderColor.orElse(getRow().getBorderColor());
+    }
+
+    public void setBorderColor(Color borderColor) {
+        this.borderColor = borderColor;
+    }
+
+    public Color getParentBorderColor() {
+        return getRow().getBorderColor();
     }
 
 }

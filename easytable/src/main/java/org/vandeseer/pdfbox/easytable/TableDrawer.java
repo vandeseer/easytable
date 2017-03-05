@@ -75,7 +75,9 @@ public class TableDrawer {
                     contentStream.setLineWidth(borderWidth);
                     contentStream.moveTo(startX - correctionLeft, startY + rowHeight);
                     contentStream.lineTo(startX + columnWidth + correctionRight, startY + rowHeight);
+                    contentStream.setStrokingColor(cell.getBorderColor());
                     contentStream.stroke();
+                    contentStream.setStrokingColor(cell.getParentBorderColor());
                 }
 
                 if (cell.hasBorderBottom()) {
@@ -85,7 +87,9 @@ public class TableDrawer {
                     contentStream.setLineWidth(borderWidth);
                     contentStream.moveTo(startX - correctionLeft, startY);
                     contentStream.lineTo(startX + columnWidth + correctionRight, startY);
+                    contentStream.setStrokingColor(cell.getBorderColor());
                     contentStream.stroke();
+                    contentStream.setStrokingColor(cell.getParentBorderColor());
                 }
 
                 if (cell.hasBorderLeft()) {
@@ -95,7 +99,9 @@ public class TableDrawer {
                     contentStream.setLineWidth(borderWidth);
                     contentStream.moveTo(startX, startY - correctionBottom);
                     contentStream.lineTo(startX, startY + rowHeight + correctionTop);
+                    contentStream.setStrokingColor(cell.getBorderColor());
                     contentStream.stroke();
+                    contentStream.setStrokingColor(cell.getParentBorderColor());
                 }
 
                 if (cell.hasBorderRight()) {
@@ -105,7 +111,9 @@ public class TableDrawer {
                     contentStream.setLineWidth(borderWidth);
                     contentStream.moveTo(startX + columnWidth, startY - correctionBottom);
                     contentStream.lineTo(startX + columnWidth, startY + rowHeight + correctionTop);
+                    contentStream.setStrokingColor(cell.getBorderColor());
                     contentStream.stroke();
+                    contentStream.setStrokingColor(cell.getParentBorderColor());
                 }
 
                 startX += columnWidth;

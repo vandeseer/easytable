@@ -3,19 +3,20 @@ package org.vandeseer.pdfbox.easytable;
 import org.apache.pdfbox.pdmodel.font.PDFont;
 import org.apache.pdfbox.pdmodel.font.PDType1Font;
 
-import java.util.ArrayList;
+import java.awt.*;
 import java.util.LinkedList;
 import java.util.List;
 
 public class Table {
 
-    private List<Row> rows = new ArrayList<>();
-    private List<Column> columns = new ArrayList<>();
+    private List<Row> rows = new LinkedList<>();
+    private List<Column> columns = new LinkedList<>();
     private PDFont font = PDType1Font.HELVETICA;
     private int fontSize = 12;
     private int numberOfColumns = 0;
     private float width = 0;
     private float borderWidth = 0.2f;
+    private Color borderColor = Color.BLACK;
 
     private Table(final List<Row> rows, final List<Column> columns) {
         this.rows = rows;
@@ -82,6 +83,14 @@ public class Table {
         return height;
     }
 
+    public Color getBorderColor() {
+        return borderColor;
+    }
+
+    private void setBorderColor(Color borderColor) {
+        this.borderColor = borderColor;
+    }
+
 
     public static class TableBuilder {
         private final List<Row> rows = new LinkedList<>();
@@ -122,8 +131,14 @@ public class Table {
             return this;
         }
 
-        public void setBorderWidth(final float borderWidth) {
+        public TableBuilder setBorderWidth(final float borderWidth) {
             this.table.setBorderWidth(borderWidth);
+            return this;
+        }
+
+        public TableBuilder setBorderColor(final Color color) {
+            this.table.setBorderColor(color);
+            return this;
         }
 
         public Table build() {

@@ -22,6 +22,8 @@ public class TableDrawerIntegrationTest {
         page.setRotation(90);
         document.addPage(page);
         final PDPageContentStream contentStream = new PDPageContentStream(document, page);
+        // TODO replace deprecated method call
+        contentStream.concatenate2CTM(0, 1, -1, 0, page.getMediaBox().getWidth(), 0);
         final float startY = page.getMediaBox().getWidth() - 30;
 
         (new TableDrawer(contentStream, createAndGetTableWithAlternatingColors(), 30, startY)).draw();
@@ -108,9 +110,9 @@ public class TableDrawerIntegrationTest {
     private Table createAndGetTableWithAlternatingColors() {
         TableBuilder tableBuilder = new TableBuilder()
                 .addColumn(new Column(20))
-                .addColumn(new Column(100))
-                .setFontSize(8)
-                .setFont(PDType1Font.HELVETICA);
+                .addColumn(new Column(400))
+                .setFontSize(12)
+                .setFont(PDType1Font.TIMES_ROMAN);
 
         Color lightGray = new Color(224, 224, 224);
         Color lightBlue = new Color(194, 232, 233);
@@ -120,11 +122,11 @@ public class TableDrawerIntegrationTest {
 
             tableBuilder.addRow(new RowBuilder()
                     .add(Cell.withText(i)
-                            .setBackgroundColor(backgroundColor)
                             .setBorderWidthBottom(2f)
                             .setHorizontalAlignment(RIGHT))
-                    .add(Cell.withText(String.valueOf(i * 2))
-                            .setBackgroundColor(backgroundColor))
+                    .add(Cell.withText(String.valueOf(i * 2)))
+                    .setBackgroundColor(backgroundColor)
+                    .setBorderColor(i == 6 ? Color.YELLOW : Color.RED)
                     .build());
         }
 
@@ -149,6 +151,7 @@ public class TableDrawerIntegrationTest {
                 .addColumn(new Column(70))
                 .addColumn(new Column(390))
                 .setFontSize(9)
+                .setBorderColor(Color.GRAY)
                 .setFont(PDType1Font.HELVETICA);
 
         float borderWidthOuter = 1.5f;

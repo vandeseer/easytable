@@ -9,6 +9,7 @@ crucial features. Nevertheless one can already:
 * define single cells with bottom-, top-, left- and right-border width separatly
 * define the background color on row or cell level
 * define padding (top, bottom, left, right) on cell level
+* define border color (on table, row or cell level)
 
 I would say: it's OK, but don't expect too much ... ;-)
 

@@ -9,6 +9,7 @@ public class Row {
 
     private Table table;
     private final List<Cell> cells;
+    private Color borderColor;
 
     private Row(final List<Cell> cells) {
         super();
@@ -22,7 +23,7 @@ public class Row {
         return table;
     }
 
-    public void setTable(final Table table) {
+    void setTable(final Table table) {
         this.table = table;
     }
 
@@ -37,9 +38,19 @@ public class Row {
         return highestCell.orElseThrow(IllegalStateException::new).getHeightWithoutFontSize();
     }
 
+    public Color getBorderColor() {
+        Optional<Color> optBorderColor = Optional.ofNullable(borderColor);
+        return optBorderColor.orElse(getTable().getBorderColor());
+    }
+
+    private void setBorderColor(Color borderColor) {
+        this.borderColor = borderColor;
+    }
+
     public static class RowBuilder {
         private final List<Cell> cells = new LinkedList<>();
         private Optional<Color> backgroundColor = Optional.empty();
+        private Optional<Color> borderColor = Optional.empty();
 
         public RowBuilder add(final Cell cell) {
             cells.add(cell);
@@ -51,13 +62,20 @@ public class Row {
             return this;
         }
 
+        public RowBuilder setBorderColor(Color borderColor) {
+            this.borderColor = Optional.of(borderColor);
+            return this;
+        }
+
         public Row build() {
             cells.stream().forEach(cell -> {
                 if (!cell.hasBackgroundColor()) {
                     backgroundColor.ifPresent(cell::setBackgroundColor);
                 }
             });
-            return new Row(cells);
+            Row row = new Row(cells);
+            borderColor.ifPresent(row::setBorderColor);
+            return row;
         }
     }
 
