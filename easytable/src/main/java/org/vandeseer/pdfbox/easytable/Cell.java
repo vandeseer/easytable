@@ -28,7 +28,7 @@ public class Cell {
         this.text = String.valueOf(object);
     }
 
-    public static Cell of(Object object) {
+    public static Cell withText(Object object) {
         return new Cell(object);
     }
 

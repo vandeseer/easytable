@@ -36,8 +36,8 @@ public class TableTest {
         tableBuilder.addColumn(new Column(12))
                     .addColumn(new Column(34));
         Row row = new RowBuilder()
-                .add(Cell.of("11"))
-                .add(Cell.of("12")).build();
+                .add(Cell.withText("11"))
+                .add(Cell.withText("12")).build();
         tableBuilder.addRow(row);
         Table table = tableBuilder.build();
 
@@ -50,11 +50,11 @@ public class TableTest {
         tableBuilder.addColumn(new Column(12))
                     .addColumn(new Column(34));
         Row row = new RowBuilder()
-                .add(Cell.of("11").setPaddingTop(35).setPaddingBottom(15))
-                .add(Cell.of("12").setPaddingTop(15).setPaddingBottom(25)).build();
+                .add(Cell.withText("11").setPaddingTop(35).setPaddingBottom(15))
+                .add(Cell.withText("12").setPaddingTop(15).setPaddingBottom(25)).build();
         tableBuilder.addRow(row);
         Table table = tableBuilder
-                .setFontSize(12) // this will have a font height of 13.872
+                .setFontSize(12) // this will have a font height withText 13.872
                 .build();
 
         // highest cell (60) + font height

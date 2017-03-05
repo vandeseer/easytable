@@ -1,51 +1,56 @@
 # easytable
 
-This is a (very) small project that builds upon pdfbox (1.8.9) and should help
-filling the gap for table creation. It's OK, but don't expect too much.
+This is a (very) small project that builds upon
+[http://pdfbox.apache.org](Apache*s PDFBox) (>= 2.0.0) and should allow you
+to create tables in a fairly simple way.
+It emerged from the need in another project. Therefore it also may miss some
+crucial features. Nevertheless one can already:
+* set font and font size on table level
+* define single cells with bottom-, top-, left- and right-border width separatly
+* define the background color on row or cell level
+* define padding (top, bottom, left, right) on cell level
+
+I would say: it's OK, but don't expect too much ... ;-)
 
 ## Example
 
-    final PDDocument document = new PDDocument();
-    final PDPage page = new PDPage(PDPage.PAGE_SIZE_A4);
-    document.addPage(page);
-
-    final float startY = page.findMediaBox().getHeight() - 150;
-    final int startX = 56;
-
-    final PDPageContentStream contentStream = new PDPageContentStream(document, page);
-
+    // Define the table structure first
     TableBuilder tableBuilder = new TableBuilder()
-            .addColumn(new Column(290))
-            .addColumn(new Column(120))
-            .addColumn(new Column(70))
+            .addColumnOfWidth(300)
+            .addColumnOfWidth(120)
+            .addColumnOfWidth(70)
             .setFontSize(8)
             .setFont(PDType1Font.HELVETICA);
 
-    Color lightBlue = new Color(194, 232, 233);
+    // Header ...
+    tableBuilder.addRow(new RowBuilder()
+            .add(Cell.withText("This is right aligned without a border").setHorizontalAlignment(RIGHT))
+            .add(Cell.withText("And this is another cell"))
+            .add(Cell.withText("Sum").setBackgroundColor(Color.ORANGE))
+            .setBackgroundColor(Color.BLUE)
+            .build());
 
-    // Header
-    tableBuilder
-            .addRow(
-                    new RowBuilder()
-                            .add(Cell.of("This is right aligned without a border")
-                                    .setBackgroundColor(lightBlue)
-                                    .setHorizontalAlignment(HorizontalAlignment.RIGHT))
-                            .add(Cell.of("And this is another cell")
-                                    .setBackgroundColor(lightBlue))
-                            .add(Cell.of("Sum")
-                                    .setBackgroundColor(Color.ORANGE))
-                            .build());
-
-    for (int i = 0; i < 12; i++) {
-        Color backgroundColor = i % 2 == 0 ? new Color(240, 240, 240) : Color.WHITE;
-        tableBuilder.addRow(
-                new RowBuilder()
-                        .add(Cell.of(i).withAllBorders().setBackgroundColor(backgroundColor))
-                        .add(Cell.of(i * i).withAllBorders().setBackgroundColor(backgroundColor))
-                        .add(Cell.of(i + (i * i)).withAllBorders().setBackgroundColor(backgroundColor))
-                        .build());
+    // ... and some cells
+    for (int i = 0; i < 10; i++) {
+        tableBuilder.addRow(new RowBuilder()
+                .add(Cell.withText(i).withAllBorders())
+                .add(Cell.withText(i * i).withAllBorders())
+                .add(Cell.withText(i + (i * i)).withAllBorders())
+                .setBackgroundColor(i % 2 == 0 ? Color.LIGHT_GRAY : Color.WHITE)
+                .build());
     }
 
+    final PDDocument document = new PDDocument();
+    final PDPage page = new PDPage(PDRectangle.A4);
+    document.addPage(page);
+
+    final PDPageContentStream contentStream = new PDPageContentStream(document, page);
+
+    // Define the starting point
+    final float startY = page.getMediaBox().getHeight() - 50;
+    final int startX = 50;
+
+    // Draw!
     (new TableDrawer(contentStream, tableBuilder.build(), startX, startY)).draw();
     contentStream.close();
 
@@ -61,10 +66,30 @@ The corresponding sources (in order to understand how to use the code) can be fo
 
 ## Installation
 
-This should do the trick:
+First check it out and install it locally:
 
     mvn clean install
 
-## Hints
+Define this in your `pom.xml` in order to use it:
 
-You will need Java 8 ;)
+    <dependency>
+        <groupId>org.vandeseer.pdfbox</groupId>
+        <artifactId>easytable</artifactId>
+        <version>0.0.8</version>
+    </dependency>
+
+## Q&A
+
+### Does it work with Java < 8?
+
+Nope. You will need Java 8.
+
+### Does it work with PDFBox 1.8.9?
+
+Well, Using it with PDFBox 1.8.9 requires you to check out version
+0.0.7 (tagged as such in git) and install it locally, i.e.:
+
+    git checkout v0.0.7
+    mvn clean install
+
+Note though that the API will have changed in the meantime ...

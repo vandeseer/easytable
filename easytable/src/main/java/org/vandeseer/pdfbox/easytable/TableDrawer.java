@@ -1,6 +1,6 @@
 package org.vandeseer.pdfbox.easytable;
 
-import org.apache.pdfbox.pdmodel.edit.PDPageContentStream;
+import org.apache.pdfbox.pdmodel.PDPageContentStream;
 
 import java.awt.*;
 import java.io.IOException;
@@ -12,8 +12,7 @@ public class TableDrawer {
     private final PDPageContentStream contentStream;
     private final Table table;
 
-    public TableDrawer(final PDPageContentStream contentStream, final Table table, final float startX, final float startY)
-            throws IOException {
+    public TableDrawer(final PDPageContentStream contentStream, final Table table, final float startX, final float startY) {
         this.contentStream = contentStream;
         this.table = table;
         tableStartX = startX;
@@ -74,7 +73,9 @@ public class TableDrawer {
                     float correctionLeft = cell.hasBorderLeft() ? cell.getBorderWidthLeft() / 2 : 0;
                     float correctionRight = cell.hasBorderRight() ? cell.getBorderWidthRight() / 2 : 0;
                     contentStream.setLineWidth(borderWidth);
-                    contentStream.drawLine(startX - correctionLeft, startY + rowHeight, startX + columnWidth + correctionRight, startY + rowHeight);
+                    contentStream.moveTo(startX - correctionLeft, startY + rowHeight);
+                    contentStream.lineTo(startX + columnWidth + correctionRight, startY + rowHeight);
+                    contentStream.stroke();
                 }
 
                 if (cell.hasBorderBottom()) {
@@ -82,7 +83,9 @@ public class TableDrawer {
                     float correctionLeft = cell.hasBorderLeft() ? cell.getBorderWidthLeft() / 2 : 0;
                     float correctionRight = cell.hasBorderRight() ? cell.getBorderWidthRight() / 2 : 0;
                     contentStream.setLineWidth(borderWidth);
-                    contentStream.drawLine(startX - correctionLeft, startY, startX + columnWidth + correctionRight, startY);
+                    contentStream.moveTo(startX - correctionLeft, startY);
+                    contentStream.lineTo(startX + columnWidth + correctionRight, startY);
+                    contentStream.stroke();
                 }
 
                 if (cell.hasBorderLeft()) {
@@ -90,7 +93,9 @@ public class TableDrawer {
                     float correctionTop = cell.hasBorderTop() ? cell.getBorderWidthTop() / 2 : 0;
                     float correctionBottom = cell.hasBorderBottom() ? cell.getBorderWidthBottom() / 2 : 0;
                     contentStream.setLineWidth(borderWidth);
-                    contentStream.drawLine(startX, startY - correctionBottom, startX, startY + rowHeight + correctionTop);
+                    contentStream.moveTo(startX, startY - correctionBottom);
+                    contentStream.lineTo(startX, startY + rowHeight + correctionTop);
+                    contentStream.stroke();
                 }
 
                 if (cell.hasBorderRight()) {
@@ -98,7 +103,9 @@ public class TableDrawer {
                     float correctionTop = cell.hasBorderTop() ? cell.getBorderWidthTop() / 2 : 0;
                     float correctionBottom = cell.hasBorderBottom() ? cell.getBorderWidthBottom() / 2 : 0;
                     contentStream.setLineWidth(borderWidth);
-                    contentStream.drawLine(startX + columnWidth, startY - correctionBottom, startX + columnWidth, startY + rowHeight + correctionTop);
+                    contentStream.moveTo(startX + columnWidth, startY - correctionBottom);
+                    contentStream.lineTo(startX + columnWidth, startY + rowHeight + correctionTop);
+                    contentStream.stroke();
                 }
 
                 startX += columnWidth;
@@ -110,8 +117,10 @@ public class TableDrawer {
     private void drawCellBackground(final Cell cell, final float startX, final float startY, final float width, final float height)
             throws IOException {
         contentStream.setNonStrokingColor(cell.getBackgroundColor());
-        contentStream.fillRect(startX, startY, width, height);
-        contentStream.closeSubPath();
+
+        contentStream.addRect(startX, startY, width, height);
+        contentStream.fill();
+        contentStream.closePath();
 
         // Reset NonStroking Color to default value
         contentStream.setNonStrokingColor(Color.BLACK);
@@ -126,15 +135,15 @@ public class TableDrawer {
         final float yOffset = moveY + cell.getPaddingBottom();
 
         if (cell.getHorizontalAlignment().equals(Cell.HorizontalAlignment.RIGHT)) {
-            // For the calculation of text width, see:
+            // For the calculation withText text width, see:
             // http://stackoverflow.com/questions/24004539/right-alignment-text-in-pdfbox
             final float textWidth =
                     (table.getFont().getStringWidth(cell.getText()) / 1000f) * table.getFontSize();
             xOffset = moveX + (columnWidth - (textWidth + cell.getPaddingRight()));
         }
 
-        contentStream.moveTextPositionByAmount(xOffset, yOffset);
-        contentStream.drawString(cell.getText());
+        contentStream.newLineAtOffset(xOffset, yOffset);
+        contentStream.showText(cell.getText());
         contentStream.endText();
     }
 

@@ -93,10 +93,15 @@ public class Table {
         public TableBuilder addRow(Row row) {
             if (row.getCells().size() != numberOfColumns) {
                 throw new IllegalArgumentException(
-                        "Number of row cells does not match with number of table columns");
+                        "Number withText row cells does not match with number withText table columns");
             }
             row.setTable(table);
             rows.add(row);
+            return this;
+        }
+
+        public TableBuilder addColumnOfWidth(int width) {
+            this.addColumn(new Column(width));
             return this;
         }
 
