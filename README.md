@@ -76,7 +76,7 @@ Define this in your `pom.xml` in order to use it:
     <dependency>
         <groupId>org.vandeseer.pdfbox</groupId>
         <artifactId>easytable</artifactId>
-        <version>0.0.8</version>
+        <version>0.0.9</version>
     </dependency>
 
 ## Q&A
