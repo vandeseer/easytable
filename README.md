@@ -1,7 +1,7 @@
 # easytable
 
 This is a (very) small project that builds upon
-[http://pdfbox.apache.org](Apache's PDFBox) (>= 2.0.0) and should allow you
+[Apache's PDFBox](http://pdfbox.apache.org)(>= 2.0.0) and should allow you
 to create tables in a fairly simple way.
 It emerged from the need in another project. Therefore it also may miss some
 crucial features. Nevertheless one can already:
