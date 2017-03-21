@@ -6,7 +6,7 @@ import java.util.Optional;
 public class Cell {
 
     public enum HorizontalAlignment {
-        LEFT, RIGHT
+        LEFT, CENTER, RIGHT
     }
 
     private Row row;
@@ -14,6 +14,7 @@ public class Cell {
     private HorizontalAlignment alignment = HorizontalAlignment.LEFT;
     private final String text;
     private Color backgroundColor;
+    private AWTColor textColor = AWTColor.BLACK;
 
     private float paddingLeft = 4;
     private float paddingRight = 4;
@@ -191,4 +192,16 @@ public class Cell {
         return getRow().getBorderColor();
     }
 
+    public AWTColor getTextColor() {
+        return textColor;
+    }
+
+    public void setTextColor(AWTColor textColor) {
+        this.textColor = textColor;
+    }
+
+    public Cell withTextColor(AWTColor color) {
+        this.textColor = color;
+        return this;
+    }
 }

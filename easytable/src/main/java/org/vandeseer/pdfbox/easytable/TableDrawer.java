@@ -134,20 +134,24 @@ public class TableDrawer {
         contentStream.setNonStrokingColor(Color.BLACK);
     }
 
-    private void drawCellText(final Cell cell, final float columnWidth, final float moveX, final float moveY)
-            throws IOException {
+    private void drawCellText(final Cell cell, final float columnWidth, final float moveX, final float moveY) throws IOException {
         contentStream.beginText();
+        contentStream.setNonStrokingColor(cell.getTextColor());
         contentStream.setFont(table.getFont(), table.getFontSize());
 
         float xOffset = moveX + cell.getPaddingLeft();
         final float yOffset = moveY + cell.getPaddingBottom();
 
-        if (cell.getHorizontalAlignment().equals(Cell.HorizontalAlignment.RIGHT)) {
-            // For the calculation withText text width, see:
-            // http://stackoverflow.com/questions/24004539/right-alignment-text-in-pdfbox
-            final float textWidth =
-                    (table.getFont().getStringWidth(cell.getText()) / 1000f) * table.getFontSize();
-            xOffset = moveX + (columnWidth - (textWidth + cell.getPaddingRight()));
+        final float textWidth = (table.getFont().getStringWidth(cell.getText()) / 1000f) * table.getFontSize();
+
+        switch (cell.getHorizontalAlignment()){
+            case RIGHT:
+                xOffset = moveX + (columnWidth - (textWidth + cell.getPaddingRight()));
+                break;
+            case CENTER:
+                final float diff = (columnWidth - textWidth) / 2;
+                xOffset = moveX + diff;
+                break;
         }
 
         contentStream.newLineAtOffset(xOffset, yOffset);
