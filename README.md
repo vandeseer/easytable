@@ -1,7 +1,7 @@
 # easytable
 
 This is a (very) small project that builds upon
-[http://pdfbox.apache.org](Apache*s PDFBox) (>= 2.0.0) and should allow you
+[http://pdfbox.apache.org](Apache's PDFBox) (>= 2.0.0) and should allow you
 to create tables in a fairly simple way.
 It emerged from the need in another project. Therefore it also may miss some
 crucial features. Nevertheless one can already:
@@ -10,7 +10,9 @@ crucial features. Nevertheless one can already:
 * define the background color on row or cell level
 * define padding (top, bottom, left, right) on cell level
 * define border color (on table, row or cell level)
-* specify text alignment (right or left, center not yet implemented)
+* specify text alignment (right, left or center)
+
+Thanks @Binghammer for implementing cell coloring and text center alignment!
 
 I would say: it's OK, but don't expect too much ... ;-)
 
