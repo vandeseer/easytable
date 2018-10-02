@@ -51,12 +51,12 @@ public class Table {
         return font;
     }
 
-    public int getNumberOfColumns() {
-        return numberOfColumns;
-    }
-
     public int getFontSize() {
         return fontSize;
+    }
+
+    public int getNumberOfColumns() {
+        return numberOfColumns;
     }
 
     public List<Column> getColumns() {
@@ -98,6 +98,10 @@ public class Table {
         private int numberOfColumns = 0;
         private float width = 0;
         private Table table = new Table(rows, columns);
+
+        public static TableBuilder newBuilder() {
+            return new TableBuilder();
+        }
 
         public TableBuilder addRow(Row row) {
             if (row.getCells().size() != numberOfColumns) {

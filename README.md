@@ -1,7 +1,7 @@
 # easytable
 
 This is a (very) small project that builds upon
-[Apache's PDFBox](http://pdfbox.apache.org)(>= 2.0.0) and should allow you
+[Apache's PDFBox](http://pdfbox.apache.org) (>= 2.0.0) and should allow you
 to create tables in a fairly simple way.
 It emerged from the need in another project. Therefore it also may miss some
 crucial features. Nevertheless one can already:
@@ -19,7 +19,7 @@ I would say: it's OK, but don't expect too much ... ;-)
 ## Example
 
     // Define the table structure first
-    TableBuilder tableBuilder = new TableBuilder()
+    TableBuilder tableBuilder = TableBuilder.newBuilder()
             .addColumnOfWidth(300)
             .addColumnOfWidth(120)
             .addColumnOfWidth(70)
@@ -27,7 +27,7 @@ I would say: it's OK, but don't expect too much ... ;-)
             .setFont(PDType1Font.HELVETICA);
 
     // Header ...
-    tableBuilder.addRow(new RowBuilder()
+    tableBuilder.addRow(RowBuilder.newBuilder()
             .add(Cell.withText("This is right aligned without a border").setHorizontalAlignment(RIGHT))
             .add(Cell.withText("And this is another cell"))
             .add(Cell.withText("Sum").setBackgroundColor(Color.ORANGE))
@@ -36,7 +36,7 @@ I would say: it's OK, but don't expect too much ... ;-)
 
     // ... and some cells
     for (int i = 0; i < 10; i++) {
-        tableBuilder.addRow(new RowBuilder()
+        tableBuilder.addRow(RowBuilder.newBuilder()
                 .add(Cell.withText(i).withAllBorders())
                 .add(Cell.withText(i * i).withAllBorders())
                 .add(Cell.withText(i + (i * i)).withAllBorders())

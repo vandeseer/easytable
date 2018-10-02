@@ -5,6 +5,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 
+import static java.util.Comparator.naturalOrder;
+
 public class Row {
 
     private Table table;
@@ -31,9 +33,17 @@ public class Row {
         return this.cells;
     }
 
+    int getFontHeight() {
+        Optional<Integer> cellWithMaxFontHeight = cells.stream()
+                .map(Cell::getFontSize)
+                .map(cellFontSize -> cellFontSize.orElse(table.getFontSize()))
+                .max(naturalOrder());
+        return cellWithMaxFontHeight.orElseThrow(IllegalStateException::new);
+    }
+
     float getHeightWithoutFontHeight() {
         final Optional<Cell> highestCell = cells
-                .stream()
+                .stream() // TODO Can't we replace this with Comparator.comparing?
                 .max((cell1, cell2) -> Float.compare(cell1.getHeightWithoutFontSize(), cell2.getHeightWithoutFontSize()));
         return highestCell.orElseThrow(IllegalStateException::new).getHeightWithoutFontSize();
     }
@@ -51,6 +61,10 @@ public class Row {
         private final List<Cell> cells = new LinkedList<>();
         private Optional<Color> backgroundColor = Optional.empty();
         private Optional<Color> borderColor = Optional.empty();
+
+        public static RowBuilder newBuilder() {
+            return new RowBuilder();
+        }
 
         public RowBuilder add(final Cell cell) {
             cells.add(cell);

@@ -29,7 +29,7 @@ public class TableDrawer {
         float startY = tableStartY;
 
         for (Row row : table.getRows()) {
-            final float rowHeight = table.getFontHeight() + row.getHeightWithoutFontHeight();
+            final float rowHeight = row.getFontHeight() + row.getHeightWithoutFontHeight();
             int columnCounter = 0;
 
             startX = tableStartX;
@@ -58,7 +58,7 @@ public class TableDrawer {
         float startY = tableStartY;
 
         for (Row row : table.getRows()) {
-            final float rowHeight = table.getFontHeight() + row.getHeightWithoutFontHeight();
+            final float rowHeight = row.getFontHeight() + row.getHeightWithoutFontHeight();
             int columnCounter = 0;
 
             startX = tableStartX;
@@ -137,12 +137,13 @@ public class TableDrawer {
     private void drawCellText(final Cell cell, final float columnWidth, final float moveX, final float moveY) throws IOException {
         contentStream.beginText();
         contentStream.setNonStrokingColor(cell.getTextColor());
-        contentStream.setFont(table.getFont(), table.getFontSize());
+        contentStream.setFont(cell.getFont().orElse(table.getFont()), cell.getFontSize().orElse(table.getFontSize()));
 
         float xOffset = moveX + cell.getPaddingLeft();
         final float yOffset = moveY + cell.getPaddingBottom();
 
-        final float textWidth = (table.getFont().getStringWidth(cell.getText()) / 1000f) * table.getFontSize();
+        int currentFontSize = cell.getFontSize().orElse(table.getFontSize());
+        final float textWidth = (table.getFont().getStringWidth(cell.getText()) / 1000f) * currentFontSize;
 
         switch (cell.getHorizontalAlignment()){
             case RIGHT:
