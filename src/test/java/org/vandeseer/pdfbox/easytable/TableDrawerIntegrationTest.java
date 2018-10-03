@@ -17,6 +17,10 @@ import static org.vandeseer.pdfbox.easytable.Cell.HorizontalAlignment.RIGHT;
 
 public class TableDrawerIntegrationTest {
 
+    private static final Color BLUE_DARK = new Color(76, 129, 190);
+    private static final Color BLUE_LIGHT_1 = new Color(186, 206, 230);
+    private static final Color BLUE_LIGHT_2 = new Color(218, 230, 242);
+
     @Test
     public void createAlternateRowsDocument() throws Exception {
         final PDDocument document = new PDDocument();
@@ -90,18 +94,43 @@ public class TableDrawerIntegrationTest {
                 .add(Cell.withText("And this is another cell").span(2).setBackgroundColor(Color.CYAN).setHorizontalAlignment(CENTER).withAllBorders())
                 .setBackgroundColor(Color.BLUE)
                 .build());
-//
-//        // ... and some cells
-//        for (int i = 0; i < 10; i++) {
-//            tableBuilder.addRow(RowBuilder.newBuilder()
-//                    .add(Cell.withText(i).withAllBorders())
-//                    .add(Cell.withText(i * i).withAllBorders())
-//                    .add(Cell.withText(i + (i * i)).withAllBorders())
-//                    .setBackgroundColor(i % 2 == 0 ? Color.LIGHT_GRAY : Color.WHITE)
-//                    .build());
-//        }
 
         createDocumentWithTable(tableBuilder, "target/sampleWithCellSpanning.pdf");
+    }
+
+    @Test
+    public void createExcelLikeSampleDocument() throws Exception {
+        // Define the table structure first
+        TableBuilder tableBuilder = TableBuilder.newBuilder()
+                .addColumnOfWidth(240)
+                .addColumnOfWidth(70)
+                .addColumnOfWidth(70)
+                .addColumnOfWidth(70)
+                .setFontSize(8)
+                .setFont(PDType1Font.HELVETICA)
+                .addRow(RowBuilder.newBuilder()
+                    .add(Cell.withText("Product").withAllBorders())
+                    .add(Cell.withText("2018").withAllBorders())
+                    .add(Cell.withText("2019").withAllBorders())
+                    .add(Cell.withText("Total").withAllBorders())
+                    .setBackgroundColor(BLUE_DARK)
+                    .withTextColor(Color.WHITE)
+                    .setFont(PDType1Font.HELVETICA_BOLD)
+                    .setFontSize(9)
+                    .build());
+
+        // ... and some cells
+        for (int i = 0; i < 10; i++) {
+            tableBuilder.addRow(RowBuilder.newBuilder()
+                    .add(Cell.withText(i).withAllBorders())
+                    .add(Cell.withText(i * i).withAllBorders())
+                    .add(Cell.withText(i + (i * i)).withAllBorders())
+                    .add(Cell.withText(i + (i * i)).withAllBorders())
+                    .setBackgroundColor(i % 2 == 0 ? BLUE_LIGHT_1 : BLUE_LIGHT_2)
+                    .build());
+        }
+
+        createDocumentWithTable(tableBuilder, "target/sampleExcelLike.pdf");
     }
 
     private void createDocumentWithTable(TableBuilder tableBuilder, String fileToSaveTo) throws IOException {

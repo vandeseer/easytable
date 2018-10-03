@@ -1,6 +1,7 @@
 package org.vandeseer.pdfbox.easytable;
 
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
+import org.apache.pdfbox.pdmodel.font.PDFont;
 
 import java.awt.*;
 import java.io.IOException;
@@ -142,15 +143,39 @@ public class TableDrawer {
     }
 
     private void drawCellText(final Cell cell, final float columnWidth, final float moveX, final float moveY) throws IOException {
+        PDFont currentFont = table.getFont();
+        if (cell.getRow().getFont().isPresent()) {
+            currentFont = cell.getRow().getFont().get();
+        }
+        if (cell.getFont().isPresent()) {
+            currentFont = cell.getFont().get();
+        }
+
+        int currentFontSize = table.getFontSize();
+        if (cell.getRow().getFontSize().isPresent()) {
+            currentFontSize = cell.getRow().getFontSize().get();
+        }
+        if (cell.getFontSize().isPresent()) {
+            currentFontSize = cell.getFontSize().get();
+        }
+
+        // TODO unify the coding style and naming!
+        Color currentTextColor = table.getTextColor();
+        if (cell.getRow().getTextColor().isPresent()) {
+            currentTextColor = cell.getRow().getTextColor().get();
+        }
+        if (cell.getTextColor() != null) { // here we should then also use an optional
+            currentTextColor = cell.getTextColor();
+        }
+
         contentStream.beginText();
-        contentStream.setNonStrokingColor(cell.getTextColor());
-        contentStream.setFont(cell.getFont().orElse(table.getFont()), cell.getFontSize().orElse(table.getFontSize()));
+        contentStream.setNonStrokingColor(currentTextColor);
+        contentStream.setFont(currentFont, currentFontSize);
 
         float xOffset = moveX + cell.getPaddingLeft();
         final float yOffset = moveY + cell.getPaddingBottom();
 
-        int currentFontSize = cell.getFontSize().orElse(table.getFontSize());
-        final float textWidth = (table.getFont().getStringWidth(cell.getText()) / 1000f) * currentFontSize;
+        final float textWidth = (currentFont.getStringWidth(cell.getText()) / 1000f) * currentFontSize;
 
         switch (cell.getHorizontalAlignment()){
             case RIGHT:

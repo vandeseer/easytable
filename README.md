@@ -4,15 +4,14 @@ This is a (very) small project that builds upon
 [Apache's PDFBox](http://pdfbox.apache.org) (>= 2.0.0) and should allow you
 to create tables in a fairly simple way.
 It emerged from the need in another project. Therefore it also may miss some
-crucial features. Nevertheless one can already:
-* set font and font size on table level
-* define single cells with bottom-, top-, left- and right-border width separatly
-* define the background color on row or cell level
-* define padding (top, bottom, left, right) on cell level
-* define border color (on table, row or cell level)
-* specify text alignment (right, left or center)
-
-Thanks @Binghammer for implementing cell coloring and text center alignment!
+crucial features. Nevertheless there is:
+* setting font and font size on table level as well as cell level
+* setting single cells with bottom-, top-, left- and right-border width separately
+* background color on row or cell level
+* padding (top, bottom, left, right) on cell level
+* border colors (on table, row or cell level)
+* support for text alignment (right, left or center)
+* row spanning
 
 I would say: it's OK, but don't expect too much ... ;-)
 
@@ -79,8 +78,14 @@ Define this in your `pom.xml` in order to use it:
     <dependency>
         <groupId>org.vandeseer.pdfbox</groupId>
         <artifactId>easytable</artifactId>
-        <version>0.0.9</version>
+        <version>0.0.10</version>
     </dependency>
+
+At one point it will hopefully also be available at maven central. 
+
+## Kudos
+
+Thanks @Binghammer for implementing cell coloring and text center alignment!
 
 ## Q&A
 
@@ -97,3 +102,7 @@ Well, Using it with PDFBox 1.8.9 requires you to check out version
     mvn clean install
 
 Note though that the API will have changed in the meantime ...
+
+### Cool, I like it, can I buy you a beer?
+
+Yes. Or you can upvote this answer on [stackoverflow](https://stackoverflow.com/questions/28059563/how-to-create-table-using-apache-pdfbox/42612456#42612456).

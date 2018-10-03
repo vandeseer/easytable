@@ -9,14 +9,15 @@ import java.util.List;
 
 public class Table {
 
-    private List<Row> rows = new LinkedList<>();
-    private List<Column> columns = new LinkedList<>();
+    private List<Row> rows;
+    private List<Column> columns;
     private PDFont font = PDType1Font.HELVETICA;
     private int fontSize = 12;
     private int numberOfColumns = 0;
     private float width = 0;
     private float borderWidth = 0.2f;
     private Color borderColor = Color.BLACK;
+    private Color textColor = Color.BLACK;
 
     private Table(final List<Row> rows, final List<Column> columns) {
         this.rows = rows;
@@ -91,6 +92,13 @@ public class Table {
         this.borderColor = borderColor;
     }
 
+    public Color getTextColor() {
+        return textColor;
+    }
+
+    private void setTextColor(Color textColor) {
+        this.textColor = textColor;
+    }
 
     public static class TableBuilder {
         private final List<Row> rows = new LinkedList<>();
@@ -143,6 +151,11 @@ public class Table {
 
         public TableBuilder setBorderColor(final Color color) {
             this.table.setBorderColor(color);
+            return this;
+        }
+
+        public TableBuilder setTextColor(final Color color) {
+            this.table.setTextColor(color);
             return this;
         }
 

@@ -16,7 +16,7 @@ public class Cell {
     private HorizontalAlignment alignment = HorizontalAlignment.LEFT;
     private final String text;
     private Color backgroundColor;
-    private Color textColor = Color.BLACK;
+    private Color textColor;
 
     private Optional<PDFont> font = Optional.empty();
     private Optional<Integer> fontSize = Optional.empty();
