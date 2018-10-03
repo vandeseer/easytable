@@ -33,12 +33,27 @@ public class Cell {
 
     private Color borderColor;
 
+    private int span = 1;
+
     private Cell(Object object) {
         this.text = String.valueOf(object);
     }
 
     public static Cell withText(Object object) {
         return new Cell(object);
+    }
+
+    public Cell span(int span) {
+        if (span <= 1) {
+            throw new IllegalArgumentException("span has to be bigger than 1");
+        }
+
+        this.span = span;
+        return this;
+    }
+
+    public int getSpan() {
+        return this.span;
     }
 
     public Cell withAllBorders() {

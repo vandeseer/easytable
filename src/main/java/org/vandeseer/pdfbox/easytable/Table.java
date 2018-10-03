@@ -104,10 +104,11 @@ public class Table {
         }
 
         public TableBuilder addRow(Row row) {
-            if (row.getCells().size() != numberOfColumns) {
+            if (row.getCells().stream().mapToInt(Cell::getSpan).sum() != numberOfColumns) {
                 throw new IllegalArgumentException(
                         "Number withText row cells does not match with number withText table columns");
             }
+
             row.setTable(table);
             rows.add(row);
             return this;

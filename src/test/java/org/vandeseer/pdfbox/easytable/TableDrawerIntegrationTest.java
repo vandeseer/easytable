@@ -12,6 +12,7 @@ import org.vandeseer.pdfbox.easytable.Table.TableBuilder;
 import java.awt.*;
 import java.io.IOException;
 
+import static org.vandeseer.pdfbox.easytable.Cell.HorizontalAlignment.CENTER;
 import static org.vandeseer.pdfbox.easytable.Cell.HorizontalAlignment.RIGHT;
 
 public class TableDrawerIntegrationTest {
@@ -62,6 +63,48 @@ public class TableDrawerIntegrationTest {
                     .build());
         }
 
+        createDocumentWithTable(tableBuilder, "target/sampleWithColorsAndBorders.pdf");
+    }
+
+    @Test
+    public void createSampleDocumentWithCellSpanning() throws Exception {
+        // Define the table structure first
+        TableBuilder tableBuilder = TableBuilder.newBuilder()
+                .addColumnOfWidth(300)
+                .addColumnOfWidth(120)
+                .addColumnOfWidth(70)
+                .setFontSize(8)
+                .setFont(PDType1Font.HELVETICA);
+
+        // Header ...
+        tableBuilder.addRow(RowBuilder.newBuilder()
+                .add(Cell.withText("This is right aligned without a border").setHorizontalAlignment(RIGHT))
+                .add(Cell.withText("And this is another cell"))
+                .add(Cell.withText("Sum").setBackgroundColor(Color.ORANGE))
+                .setBackgroundColor(Color.BLUE)
+                .build());
+
+        // Header ...
+        tableBuilder.addRow(RowBuilder.newBuilder()
+                .add(Cell.withText("This is right aligned without a border").setHorizontalAlignment(RIGHT))
+                .add(Cell.withText("And this is another cell").span(2).setBackgroundColor(Color.CYAN).setHorizontalAlignment(CENTER).withAllBorders())
+                .setBackgroundColor(Color.BLUE)
+                .build());
+//
+//        // ... and some cells
+//        for (int i = 0; i < 10; i++) {
+//            tableBuilder.addRow(RowBuilder.newBuilder()
+//                    .add(Cell.withText(i).withAllBorders())
+//                    .add(Cell.withText(i * i).withAllBorders())
+//                    .add(Cell.withText(i + (i * i)).withAllBorders())
+//                    .setBackgroundColor(i % 2 == 0 ? Color.LIGHT_GRAY : Color.WHITE)
+//                    .build());
+//        }
+
+        createDocumentWithTable(tableBuilder, "target/sampleWithCellSpanning.pdf");
+    }
+
+    private void createDocumentWithTable(TableBuilder tableBuilder, String fileToSaveTo) throws IOException {
         final PDDocument document = new PDDocument();
         final PDPage page = new PDPage(PDRectangle.A4);
         document.addPage(page);
@@ -76,7 +119,7 @@ public class TableDrawerIntegrationTest {
         (new TableDrawer(contentStream, tableBuilder.build(), startX, startY)).draw();
         contentStream.close();
 
-        document.save("target/sampleWithColorsAndBorders.pdf");
+        document.save(fileToSaveTo);
         document.close();
     }
 
@@ -108,22 +151,7 @@ public class TableDrawerIntegrationTest {
                     .build());
         }
 
-        final PDDocument document = new PDDocument();
-        final PDPage page = new PDPage(PDRectangle.A4);
-        document.addPage(page);
-
-        final PDPageContentStream contentStream = new PDPageContentStream(document, page);
-
-        // Define the starting point
-        final float startY = page.getMediaBox().getHeight() - 50;
-        final int startX = 50;
-
-        // Draw!
-        (new TableDrawer(contentStream, tableBuilder.build(), startX, startY)).draw();
-        contentStream.close();
-
-        document.save("target/sampleDifferentFontsInCells.pdf");
-        document.close();
+        createDocumentWithTable(tableBuilder, "target/sampleDifferentFontsInCells.pdf");
     }
 
     @Test

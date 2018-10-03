@@ -36,18 +36,22 @@ public class TableDrawer {
             startY -= rowHeight;
 
             for (Cell cell : row.getCells()) {
-                final float columnWidth = table.getColumns().get(columnCounter).getWidth();
+                float cellWidth = 0;
+                for (int i = 0; i < cell.getSpan(); i++) {
+                    cellWidth += table.getColumns().get(columnCounter + i).getWidth();
+                }
+
                 // Handle the cell's background color
                 if (cell.hasBackgroundColor()) {
-                    drawCellBackground(cell, startX, startY, columnWidth, rowHeight);
+                    drawCellBackground(cell, startX, startY, cellWidth, rowHeight);
                 }
 
                 // Handle the cell's text
                 if (cell.hasText()) {
-                    drawCellText(cell, columnWidth, startX, startY);
+                    drawCellText(cell, cellWidth, startX, startY);
                 }
 
-                startX += columnWidth;
+                startX += cellWidth;
                 columnCounter++;
             }
         }
@@ -65,7 +69,10 @@ public class TableDrawer {
             startY -= rowHeight;
 
             for (Cell cell : row.getCells()) {
-                final float columnWidth = table.getColumns().get(columnCounter).getWidth();
+                float cellWidth = 0;
+                for (int i = 0; i < cell.getSpan(); i++) {
+                    cellWidth += table.getColumns().get(columnCounter + i).getWidth();
+                }
 
                 // Handle the cell's borders
                 if (cell.hasBorderTop()) {
@@ -74,7 +81,7 @@ public class TableDrawer {
                     float correctionRight = cell.hasBorderRight() ? cell.getBorderWidthRight() / 2 : 0;
                     contentStream.setLineWidth(borderWidth);
                     contentStream.moveTo(startX - correctionLeft, startY + rowHeight);
-                    contentStream.lineTo(startX + columnWidth + correctionRight, startY + rowHeight);
+                    contentStream.lineTo(startX + cellWidth + correctionRight, startY + rowHeight);
                     contentStream.setStrokingColor(cell.getBorderColor());
                     contentStream.stroke();
                     contentStream.setStrokingColor(cell.getParentBorderColor());
@@ -86,7 +93,7 @@ public class TableDrawer {
                     float correctionRight = cell.hasBorderRight() ? cell.getBorderWidthRight() / 2 : 0;
                     contentStream.setLineWidth(borderWidth);
                     contentStream.moveTo(startX - correctionLeft, startY);
-                    contentStream.lineTo(startX + columnWidth + correctionRight, startY);
+                    contentStream.lineTo(startX + cellWidth + correctionRight, startY);
                     contentStream.setStrokingColor(cell.getBorderColor());
                     contentStream.stroke();
                     contentStream.setStrokingColor(cell.getParentBorderColor());
@@ -109,14 +116,14 @@ public class TableDrawer {
                     float correctionTop = cell.hasBorderTop() ? cell.getBorderWidthTop() / 2 : 0;
                     float correctionBottom = cell.hasBorderBottom() ? cell.getBorderWidthBottom() / 2 : 0;
                     contentStream.setLineWidth(borderWidth);
-                    contentStream.moveTo(startX + columnWidth, startY - correctionBottom);
-                    contentStream.lineTo(startX + columnWidth, startY + rowHeight + correctionTop);
+                    contentStream.moveTo(startX + cellWidth, startY - correctionBottom);
+                    contentStream.lineTo(startX + cellWidth, startY + rowHeight + correctionTop);
                     contentStream.setStrokingColor(cell.getBorderColor());
                     contentStream.stroke();
                     contentStream.setStrokingColor(cell.getParentBorderColor());
                 }
 
-                startX += columnWidth;
+                startX += cellWidth;
                 columnCounter++;
             }
         }
