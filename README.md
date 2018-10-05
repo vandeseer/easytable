@@ -17,54 +17,101 @@ I would say: it's OK, but don't expect too much ... ;-)
 
 ## Example
 
+In order to produce a whole PDF document with a table that looks like this one:
+
+![easytable table](doc/example.png)
+
+You need the following code:
+
+    // Some data
+    Object[][] data = {
+            { "Whisky"  , 134.4 , 145.98 },
+            { "Beer"    , 768.2 , 677.9  },
+            { "Gin"     , 456.45, 612.0  },
+            { "Vodka"   , 302.71 , 465.2 }
+    };
+
     // Define the table structure first
     TableBuilder tableBuilder = TableBuilder.newBuilder()
-            .addColumnOfWidth(300)
-            .addColumnOfWidth(120)
-            .addColumnOfWidth(70)
+            .addColumnOfWidth(100)
+            .addColumnOfWidth(50)
+            .addColumnOfWidth(50)
+            .addColumnOfWidth(50)
             .setFontSize(8)
-            .setFont(PDType1Font.HELVETICA);
+            .setFont(HELVETICA)
+            .setBorderColor(Color.WHITE);
 
-    // Header ...
-    tableBuilder.addRow(RowBuilder.newBuilder()
-            .add(Cell.withText("This is right aligned without a border").setHorizontalAlignment(RIGHT))
-            .add(Cell.withText("And this is another cell"))
-            .add(Cell.withText("Sum").setBackgroundColor(Color.ORANGE))
-            .setBackgroundColor(Color.BLUE)
-            .build());
+    // Add the header row ...
+    Row headerRow = RowBuilder.newBuilder()
+            .add(Cell.withText("Product").withAllBorders())
+            .add(Cell.withText("2018").withAllBorders().setHorizontalAlignment(CENTER))
+            .add(Cell.withText("2019").withAllBorders().setHorizontalAlignment(CENTER))
+            .add(Cell.withText("Total").withAllBorders().setHorizontalAlignment(CENTER))
+            .setBackgroundColor(BLUE_DARK)
+            .withTextColor(Color.WHITE)
+            .setFont(PDType1Font.HELVETICA_BOLD)
+            .setFontSize(9)
+            .build();
 
-    // ... and some cells
-    for (int i = 0; i < 10; i++) {
+    tableBuilder.addRow(headerRow);
+
+    // ... and some data rows
+    double grandTotal = 0;
+    for (int i = 0; i < data.length; i++) {
+        Object[] dataRow = data[i];
+        double total = (double) dataRow[1] + (double) dataRow[2];
+        grandTotal += total;
+
         tableBuilder.addRow(RowBuilder.newBuilder()
-                .add(Cell.withText(i).withAllBorders())
-                .add(Cell.withText(i * i).withAllBorders())
-                .add(Cell.withText(i + (i * i)).withAllBorders())
-                .setBackgroundColor(i % 2 == 0 ? Color.LIGHT_GRAY : Color.WHITE)
+                .add(Cell.withText(dataRow[0]).withAllBorders())
+                .add(Cell.withText(dataRow[1] + " €").withAllBorders().setHorizontalAlignment(RIGHT))
+                .add(Cell.withText(dataRow[2] + " €").withAllBorders().setHorizontalAlignment(RIGHT))
+                .add(Cell.withText(total + " €").withAllBorders().setHorizontalAlignment(RIGHT))
+                .setBackgroundColor(i % 2 == 0 ? BLUE_LIGHT_1 : BLUE_LIGHT_2)
                 .build());
     }
 
-    final PDDocument document = new PDDocument();
-    final PDPage page = new PDPage(PDRectangle.A4);
-    document.addPage(page);
+    // Add a final row
+    tableBuilder.addRow(RowBuilder.newBuilder()
+            .add(Cell.withText("This spans over 3 cells and shows the grand total in the next cell:")
+                    .span(3)
+                    .setBorderWidthTop(1)
+                    .withTextColor(WHITE)
+                    .withAllBorders()
+                    .setHorizontalAlignment(RIGHT)
+                    .setBackgroundColor(BLUE_DARK)
+                    .withFontSize(6)
+                    .withFont(HELVETICA_OBLIQUE))
+            .add(Cell.withText(grandTotal + " €").setBackgroundColor(LIGHT_GRAY)
+                .withFont(HELVETICA_BOLD_OBLIQUE)
+                .setHorizontalAlignment(RIGHT)
+                .withAllBorders())
+            .build());
+            
+     final PDDocument document = new PDDocument();
+     final PDPage page = new PDPage(PDRectangle.A4);
+     document.addPage(page);
 
-    final PDPageContentStream contentStream = new PDPageContentStream(document, page);
+     final PDPageContentStream contentStream = new PDPageContentStream(document, page);
 
-    // Define the starting point
-    final float startY = page.getMediaBox().getHeight() - 50;
-    final int startX = 50;
+     // Define the starting point
+     final float startY = page.getMediaBox().getHeight() - 50;
+     final int startX = 50;
 
-    // Draw!
-    (new TableDrawer(contentStream, tableBuilder.build(), startX, startY)).draw();
-    contentStream.close();
+     // Draw!
+     TableDrawer.TableDrawerBuilder.newBuilder()
+             .withContentStream(contentStream)
+             .withTable(table)
+             .startX(startX)
+             .startY(startY)
+             .build()
+             .draw();
+     contentStream.close();
 
-    document.save("target/sampleWithColorsAndBorders.pdf");
-    document.close();
+     document.save(fileToSaveTo);
+     document.close();
 
-This should produce a whole PDF document with a table that looks like this one:
-
-![easytable table](https://raw.githubusercontent.com/vandeseer/easytable/master/easytable/doc/example.png)
-
-If you run the tests with `mvn clean test` there also three PDF documents created which you can find in the `target` folder.
+If you run the tests with `mvn clean test` there also some PDF documents created which you can find in the `target` folder.
 The corresponding sources (in order to understand how to use the code) can be found in the test package.
 
 ## Installation

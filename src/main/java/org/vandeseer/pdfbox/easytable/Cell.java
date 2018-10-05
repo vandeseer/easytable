@@ -222,8 +222,9 @@ public class Cell {
         return optBorderColor.orElse(getRow().getBorderColor());
     }
 
-    public void setBorderColor(Color borderColor) {
+    public Cell setBorderColor(Color borderColor) {
         this.borderColor = borderColor;
+        return this;
     }
 
     public Color getParentBorderColor() {

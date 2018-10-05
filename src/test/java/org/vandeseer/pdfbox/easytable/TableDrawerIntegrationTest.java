@@ -12,6 +12,9 @@ import org.vandeseer.pdfbox.easytable.Table.TableBuilder;
 import java.awt.*;
 import java.io.IOException;
 
+import static java.awt.Color.LIGHT_GRAY;
+import static java.awt.Color.WHITE;
+import static org.apache.pdfbox.pdmodel.font.PDType1Font.*;
 import static org.vandeseer.pdfbox.easytable.Cell.HorizontalAlignment.CENTER;
 import static org.vandeseer.pdfbox.easytable.Cell.HorizontalAlignment.RIGHT;
 
@@ -22,55 +25,6 @@ public class TableDrawerIntegrationTest {
     private static final Color BLUE_LIGHT_2 = new Color(218, 230, 242);
 
     @Test
-    public void createAlternateRowsDocument() throws Exception {
-        final PDDocument document = new PDDocument();
-        final PDPage page = new PDPage(PDRectangle.A4);
-        page.setRotation(90);
-        document.addPage(page);
-        final PDPageContentStream contentStream = new PDPageContentStream(document, page);
-        // TODO replace deprecated method call
-        contentStream.concatenate2CTM(0, 1, -1, 0, page.getMediaBox().getWidth(), 0);
-        final float startY = page.getMediaBox().getWidth() - 30;
-
-        (new TableDrawer(contentStream, createAndGetTableWithAlternatingColors(), 30, startY)).draw();
-        contentStream.close();
-
-        document.save("target/alternateRows.pdf");
-        document.close();
-    }
-
-    @Test
-    public void createSampleDocument() throws Exception {
-        // Define the table structure first
-        TableBuilder tableBuilder = TableBuilder.newBuilder()
-                .addColumnOfWidth(300)
-                .addColumnOfWidth(120)
-                .addColumnOfWidth(70)
-                .setFontSize(8)
-                .setFont(PDType1Font.HELVETICA);
-
-        // Header ...
-        tableBuilder.addRow(RowBuilder.newBuilder()
-                .add(Cell.withText("This is right aligned without a border").setHorizontalAlignment(RIGHT))
-                .add(Cell.withText("And this is another cell"))
-                .add(Cell.withText("Sum").setBackgroundColor(Color.ORANGE))
-                .setBackgroundColor(Color.BLUE)
-                .build());
-
-        // ... and some cells
-        for (int i = 0; i < 10; i++) {
-            tableBuilder.addRow(RowBuilder.newBuilder()
-                    .add(Cell.withText(i).withAllBorders())
-                    .add(Cell.withText(i * i).withAllBorders())
-                    .add(Cell.withText(i + (i * i)).withAllBorders())
-                    .setBackgroundColor(i % 2 == 0 ? Color.LIGHT_GRAY : Color.WHITE)
-                    .build());
-        }
-
-        createDocumentWithTable(tableBuilder, "target/sampleWithColorsAndBorders.pdf");
-    }
-
-    @Test
     public void createSampleDocumentWithCellSpanning() throws Exception {
         // Define the table structure first
         TableBuilder tableBuilder = TableBuilder.newBuilder()
@@ -78,7 +32,7 @@ public class TableDrawerIntegrationTest {
                 .addColumnOfWidth(120)
                 .addColumnOfWidth(70)
                 .setFontSize(8)
-                .setFont(PDType1Font.HELVETICA);
+                .setFont(HELVETICA);
 
         // Header ...
         tableBuilder.addRow(RowBuilder.newBuilder()
@@ -95,45 +49,80 @@ public class TableDrawerIntegrationTest {
                 .setBackgroundColor(Color.BLUE)
                 .build());
 
-        createDocumentWithTable(tableBuilder, "target/sampleWithCellSpanning.pdf");
+        createDocumentWithTable(tableBuilder.build(), "target/sampleWithCellSpanning.pdf");
     }
 
     @Test
     public void createExcelLikeSampleDocument() throws Exception {
+        // Some data
+        Object[][] data = {
+                { "Whisky"  , 134.4 , 145.98 },
+                { "Beer"    , 768.2 , 677.9  },
+                { "Gin"     , 456.45, 612.0  },
+                { "Vodka"   , 302.71 , 465.2 }
+        };
+
         // Define the table structure first
         TableBuilder tableBuilder = TableBuilder.newBuilder()
-                .addColumnOfWidth(240)
-                .addColumnOfWidth(70)
-                .addColumnOfWidth(70)
-                .addColumnOfWidth(70)
+                .addColumnOfWidth(100)
+                .addColumnOfWidth(50)
+                .addColumnOfWidth(50)
+                .addColumnOfWidth(50)
                 .setFontSize(8)
-                .setFont(PDType1Font.HELVETICA)
-                .addRow(RowBuilder.newBuilder()
-                    .add(Cell.withText("Product").withAllBorders())
-                    .add(Cell.withText("2018").withAllBorders())
-                    .add(Cell.withText("2019").withAllBorders())
-                    .add(Cell.withText("Total").withAllBorders())
-                    .setBackgroundColor(BLUE_DARK)
-                    .withTextColor(Color.WHITE)
-                    .setFont(PDType1Font.HELVETICA_BOLD)
-                    .setFontSize(9)
-                    .build());
+                .setFont(HELVETICA)
+                .setBorderColor(Color.WHITE);
 
-        // ... and some cells
-        for (int i = 0; i < 10; i++) {
+        // Add the header row ...
+        Row headerRow = RowBuilder.newBuilder()
+                .add(Cell.withText("Product").withAllBorders())
+                .add(Cell.withText("2018").withAllBorders().setHorizontalAlignment(CENTER))
+                .add(Cell.withText("2019").withAllBorders().setHorizontalAlignment(CENTER))
+                .add(Cell.withText("Total").withAllBorders().setHorizontalAlignment(CENTER))
+                .setBackgroundColor(BLUE_DARK)
+                .withTextColor(Color.WHITE)
+                .setFont(PDType1Font.HELVETICA_BOLD)
+                .setFontSize(9)
+                .build();
+
+        tableBuilder.addRow(headerRow);
+
+        // ... and some data rows
+        double grandTotal = 0;
+        for (int i = 0; i < data.length; i++) {
+            Object[] dataRow = data[i];
+            double total = (double) dataRow[1] + (double) dataRow[2];
+            grandTotal += total;
+
             tableBuilder.addRow(RowBuilder.newBuilder()
-                    .add(Cell.withText(i).withAllBorders())
-                    .add(Cell.withText(i * i).withAllBorders())
-                    .add(Cell.withText(i + (i * i)).withAllBorders())
-                    .add(Cell.withText(i + (i * i)).withAllBorders())
+                    .add(Cell.withText(dataRow[0]).withAllBorders())
+                    .add(Cell.withText(dataRow[1] + " €").withAllBorders().setHorizontalAlignment(RIGHT))
+                    .add(Cell.withText(dataRow[2] + " €").withAllBorders().setHorizontalAlignment(RIGHT))
+                    .add(Cell.withText(total + " €").withAllBorders().setHorizontalAlignment(RIGHT))
                     .setBackgroundColor(i % 2 == 0 ? BLUE_LIGHT_1 : BLUE_LIGHT_2)
                     .build());
         }
 
-        createDocumentWithTable(tableBuilder, "target/sampleExcelLike.pdf");
+        // Add a final row
+        tableBuilder.addRow(RowBuilder.newBuilder()
+                .add(Cell.withText("This spans over 3 cells and shows the grand total in the next cell:")
+                        .span(3)
+                        .setBorderWidthTop(1)
+                        .withTextColor(WHITE)
+                        .withAllBorders()
+                        .setHorizontalAlignment(RIGHT)
+                        .setBackgroundColor(BLUE_DARK)
+                        .withFontSize(6)
+                        .withFont(HELVETICA_OBLIQUE))
+                .add(Cell.withText(grandTotal + " €").setBackgroundColor(LIGHT_GRAY)
+                    .withFont(HELVETICA_BOLD_OBLIQUE)
+                    .setHorizontalAlignment(RIGHT)
+                    .withAllBorders())
+                .build());
+
+        createDocumentWithTable(tableBuilder.build(), "target/sampleExcelLike.pdf");
     }
 
-    private void createDocumentWithTable(TableBuilder tableBuilder, String fileToSaveTo) throws IOException {
+    private void createDocumentWithTable(Table table, String fileToSaveTo) throws IOException {
         final PDDocument document = new PDDocument();
         final PDPage page = new PDPage(PDRectangle.A4);
         document.addPage(page);
@@ -145,7 +134,13 @@ public class TableDrawerIntegrationTest {
         final int startX = 50;
 
         // Draw!
-        (new TableDrawer(contentStream, tableBuilder.build(), startX, startY)).draw();
+        TableDrawer.TableDrawerBuilder.newBuilder()
+                .withContentStream(contentStream)
+                .withTable(table)
+                .startX(startX)
+                .startY(startY)
+                .build()
+                .draw();
         contentStream.close();
 
         document.save(fileToSaveTo);
@@ -160,7 +155,7 @@ public class TableDrawerIntegrationTest {
                 .addColumnOfWidth(120)
                 .addColumnOfWidth(70)
                 .setFontSize(8)
-                .setFont(PDType1Font.HELVETICA);
+                .setFont(HELVETICA);
 
         // Header ...
         tableBuilder.addRow(RowBuilder.newBuilder()
@@ -180,7 +175,7 @@ public class TableDrawerIntegrationTest {
                     .build());
         }
 
-        createDocumentWithTable(tableBuilder, "target/sampleDifferentFontsInCells.pdf");
+        createDocumentWithTable(tableBuilder.build(), "target/sampleDifferentFontsInCells.pdf");
     }
 
     @Test
@@ -197,7 +192,7 @@ public class TableDrawerIntegrationTest {
 
         (new TableDrawer(contentStream, table, startX, startY)).draw();
 
-        contentStream.setFont(PDType1Font.HELVETICA, 8.0f);
+        contentStream.setFont(HELVETICA, 8.0f);
         contentStream.beginText();
 
         contentStream.newLineAtOffset(startX, startY - (table.getHeight() + 22));
@@ -210,44 +205,6 @@ public class TableDrawerIntegrationTest {
         document.close();
     }
 
-    private Table createAndGetTableWithAlternatingColors() {
-        TableBuilder tableBuilder = new TableBuilder()
-                .addColumn(new Column(20))
-                .addColumn(new Column(400))
-                .setFontSize(12)
-                .setFont(PDType1Font.TIMES_ROMAN);
-
-        Color lightGray = new Color(224, 224, 224);
-        Color lightBlue = new Color(194, 232, 233);
-
-        for (int i = 0; i < 10; i++) {
-            Color backgroundColor = (i % 2 == 0) ? lightBlue : lightGray;
-
-            tableBuilder.addRow(RowBuilder.newBuilder()
-                    .add(Cell.withText(i)
-                            .setBorderWidthBottom(2f)
-                            .setHorizontalAlignment(RIGHT))
-                    .add(Cell.withText(String.valueOf(i * 2)))
-                    .setBackgroundColor(backgroundColor)
-                    .setBorderColor(i == 6 ? Color.YELLOW : Color.RED)
-                    .build());
-        }
-
-        for (int i = 0; i < 10; i++) {
-            Color backgroundColor = (i % 2 == 0) ? Color.RED : Color.WHITE;
-
-            tableBuilder.addRow(RowBuilder.newBuilder()
-                    .add(Cell.withText(i)
-                            .setBorderWidthRight(2f)
-                            .setHorizontalAlignment(RIGHT))
-                    .add(Cell.withText(i * 2))
-                    .setBackgroundColor(backgroundColor)
-                    .build());
-        }
-
-        return tableBuilder.build();
-    }
-
     private Table getRingManagerTable() {
         final TableBuilder tableBuilder = new TableBuilder()
                 .addColumn(new Column(26))
@@ -255,7 +212,7 @@ public class TableDrawerIntegrationTest {
                 .addColumn(new Column(390))
                 .setFontSize(9)
                 .setBorderColor(Color.GRAY)
-                .setFont(PDType1Font.HELVETICA);
+                .setFont(HELVETICA);
 
         float borderWidthOuter = 1.5f;
         float borderWidthInner = 1.0f;

@@ -13,6 +13,42 @@ public class TableDrawer {
     private final PDPageContentStream contentStream;
     private final Table table;
 
+    public static class TableDrawerBuilder {
+        private float tableStartX;
+        private float tableStartY;
+        private PDPageContentStream contentStream;
+        private Table table;
+
+        // TODO can we somehow put the "cursor" directly to where the content stream is right now?!
+        public static TableDrawerBuilder newBuilder() {
+            return new TableDrawerBuilder();
+        }
+
+        public TableDrawerBuilder startX(float startX) {
+            this.tableStartX = startX;
+            return this;
+        }
+
+        public TableDrawerBuilder startY(float startY) {
+            this.tableStartY = startY;
+            return this;
+        }
+
+        public TableDrawerBuilder withContentStream(PDPageContentStream contentStream) {
+            this.contentStream = contentStream;
+            return this;
+        }
+
+        public TableDrawerBuilder withTable(Table table) {
+            this.table = table;
+            return this;
+        }
+
+        public TableDrawer build() {
+            return new TableDrawer(contentStream, table, tableStartX, tableStartY);
+        }
+    }
+
     public TableDrawer(final PDPageContentStream contentStream, final Table table, final float startX, final float startY) {
         this.contentStream = contentStream;
         this.table = table;
