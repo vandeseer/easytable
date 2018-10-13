@@ -89,7 +89,7 @@ public class TableDrawer {
                 }
 
                 startX += cellWidth;
-                columnCounter++;
+                columnCounter += cell.getSpan();
             }
         }
     }
@@ -161,7 +161,7 @@ public class TableDrawer {
                 }
 
                 startX += cellWidth;
-                columnCounter++;
+                columnCounter += cell.getSpan();
             }
         }
     }

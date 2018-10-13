@@ -125,14 +125,15 @@ Define this in your `pom.xml` in order to use it:
     <dependency>
         <groupId>org.vandeseer.pdfbox</groupId>
         <artifactId>easytable</artifactId>
-        <version>0.0.10</version>
+        <version>0.0.11</version>
     </dependency>
 
 At one point it will hopefully also be available at maven central. 
 
 ## Kudos
 
-Thanks @Binghammer for implementing cell coloring and text center alignment!
+- to [Binghammer](https://github.com/Binghammer) for implementing cell coloring and text center alignment
+- to [Sebastian Göhring](https://github.com/TheSilentHorizon) for finding and fixing a bug (column spanning)
 
 ## Q&A
 

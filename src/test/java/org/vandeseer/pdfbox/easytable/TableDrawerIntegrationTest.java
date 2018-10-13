@@ -26,7 +26,6 @@ public class TableDrawerIntegrationTest {
 
     @Test
     public void createSampleDocumentWithCellSpanning() throws Exception {
-        // Define the table structure first
         TableBuilder tableBuilder = TableBuilder.newBuilder()
                 .addColumnOfWidth(300)
                 .addColumnOfWidth(120)
@@ -34,19 +33,23 @@ public class TableDrawerIntegrationTest {
                 .setFontSize(8)
                 .setFont(HELVETICA);
 
-        // Header ...
         tableBuilder.addRow(RowBuilder.newBuilder()
-                .add(Cell.withText("This is right aligned without a border").setHorizontalAlignment(RIGHT))
-                .add(Cell.withText("And this is another cell"))
-                .add(Cell.withText("Sum").setBackgroundColor(Color.ORANGE))
+                .add(Cell.withText("Pur").span(2).setBackgroundColor(Color.YELLOW).setHorizontalAlignment(CENTER).withAllBorders())
+                .add(Cell.withText("Booz"))
                 .setBackgroundColor(Color.BLUE)
                 .build());
 
-        // Header ...
         tableBuilder.addRow(RowBuilder.newBuilder()
-                .add(Cell.withText("This is right aligned without a border").setHorizontalAlignment(RIGHT))
-                .add(Cell.withText("And this is another cell").span(2).setBackgroundColor(Color.CYAN).setHorizontalAlignment(CENTER).withAllBorders())
+                .add(Cell.withText("Hey").setHorizontalAlignment(RIGHT))
+                .add(Cell.withText("Ho!"))
+                .add(Cell.withText("Fu.").setBackgroundColor(Color.ORANGE))
                 .setBackgroundColor(Color.BLUE)
+                .build());
+
+        tableBuilder.addRow(RowBuilder.newBuilder()
+                .add(Cell.withText("Bar").setHorizontalAlignment(RIGHT))
+                .add(Cell.withText("Baz").span(2).setBackgroundColor(Color.CYAN).setHorizontalAlignment(CENTER).withAllBorders())
+                .setBackgroundColor(Color.GREEN)
                 .build());
 
         createDocumentWithTable(tableBuilder.build(), "target/sampleWithCellSpanning.pdf");
