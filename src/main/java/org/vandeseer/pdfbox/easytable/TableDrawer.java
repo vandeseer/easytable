@@ -24,22 +24,22 @@ public class TableDrawer {
             return new TableDrawerBuilder();
         }
 
-        public TableDrawerBuilder startX(float startX) {
-            this.tableStartX = startX;
+        public TableDrawerBuilder startX(final float startX) {
+            tableStartX = startX;
             return this;
         }
 
-        public TableDrawerBuilder startY(float startY) {
-            this.tableStartY = startY;
+        public TableDrawerBuilder startY(final float startY) {
+            tableStartY = startY;
             return this;
         }
 
-        public TableDrawerBuilder withContentStream(PDPageContentStream contentStream) {
+        public TableDrawerBuilder withContentStream(final PDPageContentStream contentStream) {
             this.contentStream = contentStream;
             return this;
         }
 
-        public TableDrawerBuilder withTable(Table table) {
+        public TableDrawerBuilder withTable(final Table table) {
             this.table = table;
             return this;
         }
@@ -65,14 +65,14 @@ public class TableDrawer {
         float startX;
         float startY = tableStartY;
 
-        for (Row row : table.getRows()) {
+        for (final Row row : table.getRows()) {
             final float rowHeight = row.getFontHeight() + row.getHeightWithoutFontHeight();
             int columnCounter = 0;
 
             startX = tableStartX;
             startY -= rowHeight;
 
-            for (Cell cell : row.getCells()) {
+            for (final Cell cell : row.getCells()) {
                 float cellWidth = 0;
                 for (int i = 0; i < cell.getSpan(); i++) {
                     cellWidth += table.getColumns().get(columnCounter + i).getWidth();
@@ -98,14 +98,14 @@ public class TableDrawer {
         float startX;
         float startY = tableStartY;
 
-        for (Row row : table.getRows()) {
+        for (final Row row : table.getRows()) {
             final float rowHeight = row.getFontHeight() + row.getHeightWithoutFontHeight();
             int columnCounter = 0;
 
             startX = tableStartX;
             startY -= rowHeight;
 
-            for (Cell cell : row.getCells()) {
+            for (final Cell cell : row.getCells()) {
                 float cellWidth = 0;
                 for (int i = 0; i < cell.getSpan(); i++) {
                     cellWidth += table.getColumns().get(columnCounter + i).getWidth();
@@ -113,9 +113,9 @@ public class TableDrawer {
 
                 // Handle the cell's borders
                 if (cell.hasBorderTop()) {
-                    float borderWidth = cell.getBorderWidthTop();
-                    float correctionLeft = cell.hasBorderLeft() ? cell.getBorderWidthLeft() / 2 : 0;
-                    float correctionRight = cell.hasBorderRight() ? cell.getBorderWidthRight() / 2 : 0;
+                    final float borderWidth = cell.getBorderWidthTop();
+                    final float correctionLeft = cell.hasBorderLeft() ? cell.getBorderWidthLeft() / 2 : 0;
+                    final float correctionRight = cell.hasBorderRight() ? cell.getBorderWidthRight() / 2 : 0;
                     contentStream.setLineWidth(borderWidth);
                     contentStream.moveTo(startX - correctionLeft, startY + rowHeight);
                     contentStream.lineTo(startX + cellWidth + correctionRight, startY + rowHeight);
@@ -125,9 +125,9 @@ public class TableDrawer {
                 }
 
                 if (cell.hasBorderBottom()) {
-                    float borderWidth = cell.getBorderWidthBottom();
-                    float correctionLeft = cell.hasBorderLeft() ? cell.getBorderWidthLeft() / 2 : 0;
-                    float correctionRight = cell.hasBorderRight() ? cell.getBorderWidthRight() / 2 : 0;
+                    final float borderWidth = cell.getBorderWidthBottom();
+                    final float correctionLeft = cell.hasBorderLeft() ? cell.getBorderWidthLeft() / 2 : 0;
+                    final float correctionRight = cell.hasBorderRight() ? cell.getBorderWidthRight() / 2 : 0;
                     contentStream.setLineWidth(borderWidth);
                     contentStream.moveTo(startX - correctionLeft, startY);
                     contentStream.lineTo(startX + cellWidth + correctionRight, startY);
@@ -137,9 +137,9 @@ public class TableDrawer {
                 }
 
                 if (cell.hasBorderLeft()) {
-                    float borderWidth = cell.getBorderWidthLeft();
-                    float correctionTop = cell.hasBorderTop() ? cell.getBorderWidthTop() / 2 : 0;
-                    float correctionBottom = cell.hasBorderBottom() ? cell.getBorderWidthBottom() / 2 : 0;
+                    final float borderWidth = cell.getBorderWidthLeft();
+                    final float correctionTop = cell.hasBorderTop() ? cell.getBorderWidthTop() / 2 : 0;
+                    final float correctionBottom = cell.hasBorderBottom() ? cell.getBorderWidthBottom() / 2 : 0;
                     contentStream.setLineWidth(borderWidth);
                     contentStream.moveTo(startX, startY - correctionBottom);
                     contentStream.lineTo(startX, startY + rowHeight + correctionTop);
@@ -149,9 +149,9 @@ public class TableDrawer {
                 }
 
                 if (cell.hasBorderRight()) {
-                    float borderWidth = cell.getBorderWidthRight();
-                    float correctionTop = cell.hasBorderTop() ? cell.getBorderWidthTop() / 2 : 0;
-                    float correctionBottom = cell.hasBorderBottom() ? cell.getBorderWidthBottom() / 2 : 0;
+                    final float borderWidth = cell.getBorderWidthRight();
+                    final float correctionTop = cell.hasBorderTop() ? cell.getBorderWidthTop() / 2 : 0;
+                    final float correctionBottom = cell.hasBorderBottom() ? cell.getBorderWidthBottom() / 2 : 0;
                     contentStream.setLineWidth(borderWidth);
                     contentStream.moveTo(startX + cellWidth, startY - correctionBottom);
                     contentStream.lineTo(startX + cellWidth, startY + rowHeight + correctionTop);
@@ -179,30 +179,10 @@ public class TableDrawer {
     }
 
     private void drawCellText(final Cell cell, final float columnWidth, final float moveX, final float moveY) throws IOException {
-        PDFont currentFont = table.getFont();
-        if (cell.getRow().getFont().isPresent()) {
-            currentFont = cell.getRow().getFont().get();
-        }
-        if (cell.getFont().isPresent()) {
-            currentFont = cell.getFont().get();
-        }
+        final PDFont currentFont = cell.getFont();
+        final int currentFontSize = cell.getFontSize();
+        final Color currentTextColor = cell.getTextColor();
 
-        int currentFontSize = table.getFontSize();
-        if (cell.getRow().getFontSize().isPresent()) {
-            currentFontSize = cell.getRow().getFontSize().get();
-        }
-        if (cell.getFontSize().isPresent()) {
-            currentFontSize = cell.getFontSize().get();
-        }
-
-        // TODO unify the coding style and naming!
-        Color currentTextColor = table.getTextColor();
-        if (cell.getRow().getTextColor().isPresent()) {
-            currentTextColor = cell.getRow().getTextColor().get();
-        }
-        if (cell.getTextColor() != null) { // here we should then also use an optional
-            currentTextColor = cell.getTextColor();
-        }
 
         contentStream.beginText();
         contentStream.setNonStrokingColor(currentTextColor);
@@ -213,7 +193,7 @@ public class TableDrawer {
 
         final float textWidth = (currentFont.getStringWidth(cell.getText()) / 1000f) * currentFontSize;
 
-        switch (cell.getHorizontalAlignment()){
+        switch (cell.getHorizontalAlignment()) {
             case RIGHT:
                 xOffset = moveX + (columnWidth - (textWidth + cell.getPaddingRight()));
                 break;

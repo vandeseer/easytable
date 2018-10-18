@@ -36,25 +36,25 @@ public class Row {
     }
 
     public List<Cell> getCells() {
-        return this.cells;
+        return cells;
     }
 
-    public Optional<Color> getTextColor() {
-        return Optional.ofNullable(textColor);
+    public Color getTextColor() {
+        return Optional.ofNullable(textColor).orElse(table.getTextColor());
     }
 
-    private void setTextColor(Color textColor) {
+    private void setTextColor(final Color textColor) {
         this.textColor = textColor;
     }
 
     // TODO refactor! ;)
     int getFontHeight() {
-        Optional<Integer> cellWithMaxFontHeight = cells.stream()
+        final Optional<Integer> cellWithMaxFontHeight = cells.stream()
                 .map(Cell::getFontSize)
-                .map(cellFontSize -> cellFontSize.orElse(table.getFontSize()))
+                .map(cellFontSize -> table.getFontSize())
                 .max(naturalOrder());
 
-        Integer maxCellHeight = cellWithMaxFontHeight.orElseThrow(IllegalStateException::new);
+        final Integer maxCellHeight = cellWithMaxFontHeight.orElseThrow(IllegalStateException::new);
         return fontSize.map(integer -> Math.max(maxCellHeight, integer)).orElse(maxCellHeight);
     }
 
@@ -66,27 +66,27 @@ public class Row {
     }
 
     public Color getBorderColor() {
-        Optional<Color> optBorderColor = Optional.ofNullable(borderColor);
+        final Optional<Color> optBorderColor = Optional.ofNullable(borderColor);
         return optBorderColor.orElse(getTable().getBorderColor());
     }
 
-    private void setBorderColor(Color borderColor) {
+    private void setBorderColor(final Color borderColor) {
         this.borderColor = borderColor;
     }
 
-    public Optional<Integer> getFontSize() {
-        return fontSize;
+    public Integer getFontSize() {
+        return fontSize.orElse(table.getFontSize());
     }
 
-    private void setFontSize(Optional<Integer> fontSize) {
+    private void setFontSize(final Optional<Integer> fontSize) {
         this.fontSize = fontSize;
     }
 
-    public Optional<PDFont> getFont() {
-        return Optional.ofNullable(font);
+    public PDFont getFont() {
+        return Optional.ofNullable(font).orElse(table.getFont());
     }
 
-    private void setFont(PDFont font) {
+    private void setFont(final PDFont font) {
         this.font = font;
     }
 
@@ -107,38 +107,38 @@ public class Row {
             return this;
         }
 
-        public RowBuilder setBackgroundColor(Color backgroundColor) {
+        public RowBuilder setBackgroundColor(final Color backgroundColor) {
             this.backgroundColor = Optional.ofNullable(backgroundColor);
             return this;
         }
 
-        public RowBuilder setBorderColor(Color borderColor) {
+        public RowBuilder setBorderColor(final Color borderColor) {
             this.borderColor = Optional.of(borderColor);
             return this;
         }
 
-        public RowBuilder setFont(PDFont font) {
+        public RowBuilder setFont(final PDFont font) {
             this.font = font;
             return this;
         }
 
-        public RowBuilder setFontSize(int fontSize) {
+        public RowBuilder setFontSize(final int fontSize) {
             this.fontSize = Optional.of(fontSize);
             return this;
         }
 
-        public RowBuilder withTextColor(Color color) {
-            this.textColor = color;
+        public RowBuilder withTextColor(final Color color) {
+            textColor = color;
             return this;
         }
 
         public Row build() {
-            cells.stream().forEach(cell -> {
+            cells.forEach(cell -> {
                 if (!cell.hasBackgroundColor()) {
                     backgroundColor.ifPresent(cell::setBackgroundColor);
                 }
             });
-            Row row = new Row(cells);
+            final Row row = new Row(cells);
             borderColor.ifPresent(row::setBorderColor);
             Optional.ofNullable(textColor).ifPresent(row::setTextColor);
             Optional.ofNullable(font).ifPresent(row::setFont);
