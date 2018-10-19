@@ -3,6 +3,7 @@ package org.vandeseer.pdfbox.easytable;
 import org.apache.pdfbox.pdmodel.font.PDFont;
 
 import java.awt.*;
+import java.util.Comparator;
 import java.util.Optional;
 
 public class Cell {
@@ -12,6 +13,7 @@ public class Cell {
     }
 
     private Row row;
+    private Column column;
 
     private HorizontalAlignment alignment = HorizontalAlignment.LEFT;
     private final String text;
@@ -92,6 +94,14 @@ public class Cell {
 
     public void setRow(final Row row) {
         this.row = row;
+    }
+
+    public Column getColumn() {
+        return column;
+    }
+
+    public void setColumn(final Column column) {
+        this.column = column;
     }
 
     public String getText() {
@@ -243,8 +253,35 @@ public class Cell {
         return this;
     }
 
-    public float getWidthWithoutWordbreak() throws Exception {
-        return PdfUtil.getStringWidth(text, getFont(), getFontSize());
+    public float getWidth() {
+        final float textWidth;
+
+        if (row.getTable().isWordBreak()) {
+            textWidth = PdfUtil.getOptimalTextBreak(text, getFont(), getFontSize(), getColumn().getWidth())
+                    .stream()
+                    .map(line -> PdfUtil.getStringWidth(line, getFont(), getFontSize()))
+                    .max(Comparator.naturalOrder())
+                    .orElseThrow(RuntimeException::new);
+
+        } else {
+            textWidth = PdfUtil.getStringWidth(text, getFont(), getFontSize());
+        }
+
+        return textWidth + getPaddingLeft() + getPaddingRight();
+    }
+
+    public float getHeight() {
+        final float textHeight;
+
+        if (row.getTable().isWordBreak()) {
+            final int size = PdfUtil.getOptimalTextBreak(text, getFont(), getFontSize(),
+                    getColumn().getWidth() - getPaddingRight() - getPaddingRight()).size();
+            textHeight = size * PdfUtil.getFontHeight(getFont(), getFontSize()) + size * 2f;
+        } else {
+            textHeight = PdfUtil.getFontHeight(getFont(), getFontSize());
+        }
+
+        return textHeight + getHeightWithoutFontSize();
     }
 
 

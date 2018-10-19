@@ -17,14 +17,11 @@ public class Row {
     private Color textColor;
 
     private PDFont font;
-    private Optional<Integer> fontSize = Optional.empty();
+    private Integer fontSize;
 
     private Row(final List<Cell> cells) {
         super();
         this.cells = cells;
-        for (final Cell cell : cells) {
-            cell.setRow(this);
-        }
     }
 
     public Table getTable() {
@@ -51,19 +48,20 @@ public class Row {
     int getFontHeight() {
         final Optional<Integer> cellWithMaxFontHeight = cells.stream()
                 .map(Cell::getFontSize)
-                .map(cellFontSize -> table.getFontSize())
                 .max(naturalOrder());
 
         final Integer maxCellHeight = cellWithMaxFontHeight.orElseThrow(IllegalStateException::new);
-        return fontSize.map(integer -> Math.max(maxCellHeight, integer)).orElse(maxCellHeight);
+        return Math.max(maxCellHeight, maxCellHeight);
     }
 
     float getHeightWithoutFontHeight() {
-        final Optional<Cell> highestCell = cells
-                .stream() // TODO Can't we replace this with Comparator.comparing?
-                .max((cell1, cell2) -> Float.compare(cell1.getHeightWithoutFontSize(), cell2.getHeightWithoutFontSize()));
-        return highestCell.orElseThrow(IllegalStateException::new).getHeightWithoutFontSize();
+        return cells
+                .stream()
+                .map(Cell::getHeightWithoutFontSize)
+                .max(naturalOrder())
+                .orElseThrow(IllegalStateException::new);
     }
+
 
     public Color getBorderColor() {
         final Optional<Color> optBorderColor = Optional.ofNullable(borderColor);
@@ -75,10 +73,10 @@ public class Row {
     }
 
     public Integer getFontSize() {
-        return fontSize.orElse(table.getFontSize());
+        return Optional.ofNullable(fontSize).orElse(table.getFontSize());
     }
 
-    private void setFontSize(final Optional<Integer> fontSize) {
+    private void setFontSize(final Integer fontSize) {
         this.fontSize = fontSize;
     }
 
@@ -92,11 +90,11 @@ public class Row {
 
     public static class RowBuilder {
         private final List<Cell> cells = new LinkedList<>();
-        private Optional<Color> backgroundColor = Optional.empty();
+        private Color backgroundColor;
         private Optional<Color> borderColor = Optional.empty();
         private Color textColor;
         private PDFont font;
-        private Optional<Integer> fontSize = Optional.empty();
+        private Integer fontSize;
 
         public static RowBuilder newBuilder() {
             return new RowBuilder();
@@ -108,7 +106,7 @@ public class Row {
         }
 
         public RowBuilder setBackgroundColor(final Color backgroundColor) {
-            this.backgroundColor = Optional.ofNullable(backgroundColor);
+            this.backgroundColor = backgroundColor;
             return this;
         }
 
@@ -123,7 +121,7 @@ public class Row {
         }
 
         public RowBuilder setFontSize(final int fontSize) {
-            this.fontSize = Optional.of(fontSize);
+            this.fontSize = fontSize;
             return this;
         }
 
@@ -133,11 +131,10 @@ public class Row {
         }
 
         public Row build() {
-            cells.forEach(cell -> {
-                if (!cell.hasBackgroundColor()) {
-                    backgroundColor.ifPresent(cell::setBackgroundColor);
-                }
-            });
+            Optional.ofNullable(backgroundColor).ifPresent(rowBackColor -> cells.stream()
+                    .filter(cell -> !cell.hasBackgroundColor())
+                    .forEach(cell -> cell.setBackgroundColor(rowBackColor)));
+
             final Row row = new Row(cells);
             borderColor.ifPresent(row::setBorderColor);
             Optional.ofNullable(textColor).ifPresent(row::setTextColor);
@@ -146,6 +143,10 @@ public class Row {
             return row;
         }
 
+    }
+
+    public float getHeight() {
+        return getCells().stream().map(Cell::getHeight).max(naturalOrder()).orElseThrow(RuntimeException::new);
     }
 
 }

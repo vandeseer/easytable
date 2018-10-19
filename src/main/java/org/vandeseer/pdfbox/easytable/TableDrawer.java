@@ -5,6 +5,8 @@ import org.apache.pdfbox.pdmodel.font.PDFont;
 
 import java.awt.*;
 import java.io.IOException;
+import java.util.Collections;
+import java.util.List;
 
 public class TableDrawer {
 
@@ -53,7 +55,7 @@ public class TableDrawer {
         this.contentStream = contentStream;
         this.table = table;
         tableStartX = startX;
-        tableStartY = startY - table.getFontHeight();
+        tableStartY = startY - PdfUtil.getFontHeight(table.getFont(), table.getFontSize());
     }
 
     public void draw() throws IOException {
@@ -66,7 +68,7 @@ public class TableDrawer {
         float startY = tableStartY;
 
         for (final Row row : table.getRows()) {
-            final float rowHeight = row.getFontHeight() + row.getHeightWithoutFontHeight();
+            final float rowHeight = row.getHeight();
             int columnCounter = 0;
 
             startX = tableStartX;
@@ -99,7 +101,7 @@ public class TableDrawer {
         float startY = tableStartY;
 
         for (final Row row : table.getRows()) {
-            final float rowHeight = row.getFontHeight() + row.getHeightWithoutFontHeight();
+            final float rowHeight = row.getHeight();
             int columnCounter = 0;
 
             startX = tableStartX;
@@ -183,29 +185,45 @@ public class TableDrawer {
         final int currentFontSize = cell.getFontSize();
         final Color currentTextColor = cell.getTextColor();
 
+        final List<String> lines;
 
-        contentStream.beginText();
-        contentStream.setNonStrokingColor(currentTextColor);
-        contentStream.setFont(currentFont, currentFontSize);
-
-        float xOffset = moveX + cell.getPaddingLeft();
-        final float yOffset = moveY + cell.getPaddingBottom();
-
-        final float textWidth = (currentFont.getStringWidth(cell.getText()) / 1000f) * currentFontSize;
-
-        switch (cell.getHorizontalAlignment()) {
-            case RIGHT:
-                xOffset = moveX + (columnWidth - (textWidth + cell.getPaddingRight()));
-                break;
-            case CENTER:
-                final float diff = (columnWidth - textWidth) / 2;
-                xOffset = moveX + diff;
-                break;
+        if (table.isWordBreak()) {
+            lines = PdfUtil.getOptimalTextBreak(cell.getText(), currentFont, currentFontSize,
+                    columnWidth - cell.getPaddingRight() - cell.getPaddingRight());
+        } else {
+            lines = Collections.singletonList(cell.getText());
         }
 
-        contentStream.newLineAtOffset(xOffset, yOffset);
-        contentStream.showText(cell.getText());
-        contentStream.endText();
+        for (int i = 0; i < lines.size(); i++) {
+            final String line = lines.get(i);
+            contentStream.beginText();
+            contentStream.setNonStrokingColor(currentTextColor);
+            contentStream.setFont(currentFont, currentFontSize);
+
+            float xOffset = moveX + cell.getPaddingLeft();
+            final float yOffset = moveY
+                    + cell.getRow().getHeight() // top-position
+                    - PdfUtil.getFontHeight(currentFont, currentFontSize) / 2
+                    - ((cell.getRow().getHeight() / (lines.size() + 1)) * (i + 1)); // middle of cell
+
+            final float textWidth = PdfUtil.getStringWidth(line, currentFont, currentFontSize);
+
+            switch (cell.getHorizontalAlignment()) {
+                case RIGHT:
+                    xOffset = moveX + (columnWidth - (textWidth + cell.getPaddingRight()));
+                    break;
+                case CENTER:
+                    final float diff = (columnWidth - textWidth) / 2;
+                    xOffset = moveX + diff;
+                    break;
+            }
+
+            contentStream.newLineAtOffset(xOffset, yOffset);
+            contentStream.showText(line);
+            contentStream.endText();
+
+
+        }
     }
 
 }

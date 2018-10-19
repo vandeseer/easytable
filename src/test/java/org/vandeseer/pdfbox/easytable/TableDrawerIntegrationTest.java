@@ -26,7 +26,7 @@ public class TableDrawerIntegrationTest {
 
     @Test
     public void createSampleDocumentWithCellSpanning() throws Exception {
-        TableBuilder tableBuilder = TableBuilder.newBuilder()
+        final TableBuilder tableBuilder = TableBuilder.newBuilder()
                 .addColumnOfWidth(300)
                 .addColumnOfWidth(120)
                 .addColumnOfWidth(70)
@@ -58,15 +58,15 @@ public class TableDrawerIntegrationTest {
     @Test
     public void createExcelLikeSampleDocument() throws Exception {
         // Some data
-        Object[][] data = {
-                { "Whisky"  , 134.4 , 145.98 },
-                { "Beer"    , 768.2 , 677.9  },
-                { "Gin"     , 456.45, 612.0  },
-                { "Vodka"   , 302.71 , 465.2 }
+        final Object[][] data = {
+                {"Whisky", 134.4, 145.98},
+                {"Beer", 768.2, 677.9},
+                {"Gin", 456.45, 612.0},
+                {"Vodka", 302.71, 465.2}
         };
 
         // Define the table structure first
-        TableBuilder tableBuilder = TableBuilder.newBuilder()
+        final TableBuilder tableBuilder = TableBuilder.newBuilder()
                 .addColumnOfWidth(100)
                 .addColumnOfWidth(50)
                 .addColumnOfWidth(50)
@@ -76,12 +76,12 @@ public class TableDrawerIntegrationTest {
                 .setBorderColor(Color.WHITE);
 
         // Add the header row ...
-        Row headerRow = RowBuilder.newBuilder()
+        final Row headerRow = RowBuilder.newBuilder()
                 .add(Cell.withText("Product").withAllBorders())
                 .add(Cell.withText("2018").withAllBorders().setHorizontalAlignment(CENTER))
                 .add(Cell.withText("2019").withAllBorders().setHorizontalAlignment(CENTER))
                 .add(Cell.withText("Total").withAllBorders().setHorizontalAlignment(CENTER))
-                .setBackgroundColor(BLUE_DARK)
+                .setBackgroundColor(TableDrawerIntegrationTest.BLUE_DARK)
                 .withTextColor(Color.WHITE)
                 .setFont(PDType1Font.HELVETICA_BOLD)
                 .setFontSize(9)
@@ -92,8 +92,8 @@ public class TableDrawerIntegrationTest {
         // ... and some data rows
         double grandTotal = 0;
         for (int i = 0; i < data.length; i++) {
-            Object[] dataRow = data[i];
-            double total = (double) dataRow[1] + (double) dataRow[2];
+            final Object[] dataRow = data[i];
+            final double total = (double) dataRow[1] + (double) dataRow[2];
             grandTotal += total;
 
             tableBuilder.addRow(RowBuilder.newBuilder()
@@ -101,7 +101,7 @@ public class TableDrawerIntegrationTest {
                     .add(Cell.withText(dataRow[1] + " €").withAllBorders().setHorizontalAlignment(RIGHT))
                     .add(Cell.withText(dataRow[2] + " €").withAllBorders().setHorizontalAlignment(RIGHT))
                     .add(Cell.withText(total + " €").withAllBorders().setHorizontalAlignment(RIGHT))
-                    .setBackgroundColor(i % 2 == 0 ? BLUE_LIGHT_1 : BLUE_LIGHT_2)
+                    .setBackgroundColor(i % 2 == 0 ? TableDrawerIntegrationTest.BLUE_LIGHT_1 : TableDrawerIntegrationTest.BLUE_LIGHT_2)
                     .build());
         }
 
@@ -113,19 +113,19 @@ public class TableDrawerIntegrationTest {
                         .withTextColor(WHITE)
                         .withAllBorders()
                         .setHorizontalAlignment(RIGHT)
-                        .setBackgroundColor(BLUE_DARK)
+                        .setBackgroundColor(TableDrawerIntegrationTest.BLUE_DARK)
                         .withFontSize(6)
                         .withFont(HELVETICA_OBLIQUE))
                 .add(Cell.withText(grandTotal + " €").setBackgroundColor(LIGHT_GRAY)
-                    .withFont(HELVETICA_BOLD_OBLIQUE)
-                    .setHorizontalAlignment(RIGHT)
-                    .withAllBorders())
+                        .withFont(HELVETICA_BOLD_OBLIQUE)
+                        .setHorizontalAlignment(RIGHT)
+                        .withAllBorders())
                 .build());
 
         createDocumentWithTable(tableBuilder.build(), "target/sampleExcelLike.pdf");
     }
 
-    private void createDocumentWithTable(Table table, String fileToSaveTo) throws IOException {
+    private void createDocumentWithTable(final Table table, final String fileToSaveTo) throws IOException {
         final PDDocument document = new PDDocument();
         final PDPage page = new PDPage(PDRectangle.A4);
         document.addPage(page);
@@ -153,17 +153,20 @@ public class TableDrawerIntegrationTest {
     @Test
     public void createTableWithDifferentFontsInCells() throws IOException {
         // Define the table structure first
-        TableBuilder tableBuilder = TableBuilder.newBuilder()
+        final TableBuilder tableBuilder = TableBuilder.newBuilder()
                 .addColumnOfWidth(300)
                 .addColumnOfWidth(120)
                 .addColumnOfWidth(70)
                 .setFontSize(8)
-                .setFont(HELVETICA);
+                .setFont(HELVETICA)
+                .setWordBreaking();
 
         // Header ...
         tableBuilder.addRow(RowBuilder.newBuilder()
                 .add(Cell.withText("This is right aligned without a border").setHorizontalAlignment(RIGHT))
-                .add(Cell.withText("And this is another cell"))
+                .add(Cell.withText("And this is another cell with a very long long long text that tells a nice" +
+                        " and useless story, because Iam to lazy to get a lorem-ipsum and I have fun while typing" +
+                        " a long text"))
                 .add(Cell.withText("Sum").setBackgroundColor(Color.ORANGE))
                 .setBackgroundColor(Color.BLUE)
                 .build());
@@ -191,7 +194,7 @@ public class TableDrawerIntegrationTest {
         final int startX = 56;
 
         final PDPageContentStream contentStream = new PDPageContentStream(document, page);
-        Table table = getRingManagerTable();
+        final Table table = getRingManagerTable();
 
         (new TableDrawer(contentStream, table, startX, startY)).draw();
 
@@ -217,8 +220,8 @@ public class TableDrawerIntegrationTest {
                 .setBorderColor(Color.GRAY)
                 .setFont(HELVETICA);
 
-        float borderWidthOuter = 1.5f;
-        float borderWidthInner = 1.0f;
+        final float borderWidthOuter = 1.5f;
+        final float borderWidthInner = 1.0f;
 
         tableBuilder.addRow(RowBuilder.newBuilder().add(
                 Cell.withText("1.")
@@ -266,7 +269,6 @@ public class TableDrawerIntegrationTest {
 
         return tableBuilder.build();
     }
-
 
 
 }
