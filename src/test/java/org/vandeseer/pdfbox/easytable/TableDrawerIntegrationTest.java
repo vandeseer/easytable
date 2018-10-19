@@ -166,7 +166,8 @@ public class TableDrawerIntegrationTest {
                 .add(Cell.withText("This is right aligned without a border").setHorizontalAlignment(RIGHT))
                 .add(Cell.withText("And this is another cell with a very long long long text that tells a nice" +
                         " and useless story, because Iam to lazy to get a lorem-ipsum and I have fun while typing" +
-                        " a long text"))
+                        " a long text and a word that cannot be breaked yet aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa" +
+                        "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"))
                 .add(Cell.withText("Sum").setBackgroundColor(Color.ORANGE))
                 .setBackgroundColor(Color.BLUE)
                 .build());

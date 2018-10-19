@@ -78,7 +78,13 @@ public class PdfUtil {
 
             if (PdfUtil.isLineFine(fittedNewLine, font, fontSize, maxWidth)) {
                 returnList.add(fittedNewLine);
-                returnList.addAll(PdfUtil.wrapLine(remains, font, fontSize, maxWidth));
+
+                if (!StringUtils.equals(remains, line)) {
+                    returnList.addAll(PdfUtil.wrapLine(remains, font, fontSize, maxWidth));
+                } else {
+                    // TODO: Break longer words?
+                    returnList.add(remains);
+                }
                 break;
             }
         }
