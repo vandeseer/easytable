@@ -3,6 +3,7 @@ package org.vandeseer.pdfbox.easytable;
 import org.apache.pdfbox.pdmodel.font.PDFont;
 
 import java.awt.*;
+import java.util.Comparator;
 import java.util.Optional;
 
 public class Cell {
@@ -12,14 +13,15 @@ public class Cell {
     }
 
     private Row row;
+    private Column column;
 
     private HorizontalAlignment alignment = HorizontalAlignment.LEFT;
     private final String text;
     private Color backgroundColor;
     private Color textColor;
 
-    private Optional<PDFont> font = Optional.empty();
-    private Optional<Integer> fontSize = Optional.empty();
+    private PDFont font;
+    private Integer fontSize;
 
     private float paddingLeft = 4;
     private float paddingRight = 4;
@@ -35,15 +37,15 @@ public class Cell {
 
     private int span = 1;
 
-    private Cell(Object object) {
-        this.text = String.valueOf(object);
+    private Cell(final Object object) {
+        text = String.valueOf(object);
     }
 
-    public static Cell withText(Object object) {
+    public static Cell withText(final Object object) {
         return new Cell(object);
     }
 
-    public Cell span(int span) {
+    public Cell span(final int span) {
         if (span <= 1) {
             throw new IllegalArgumentException("span has to be bigger than 1");
         }
@@ -53,38 +55,37 @@ public class Cell {
     }
 
     public int getSpan() {
-        return this.span;
+        return span;
     }
 
     public Cell withAllBorders() {
-        int borderWith = 1;
+        final int borderWith = 1;
         return withAllBorders(borderWith);
     }
 
-    public Cell withAllBorders(int borderWith) {
-        return this
-                .setBorderWidthBottom(borderWith)
+    public Cell withAllBorders(final int borderWith) {
+        return setBorderWidthBottom(borderWith)
                 .setBorderWidthLeft(borderWith)
                 .setBorderWidthRight(borderWith)
                 .setBorderWidthTop(borderWith);
     }
 
     public Cell withFont(final PDFont font) {
-        this.font = Optional.ofNullable(font);
+        this.font = font;
         return this;
     }
 
     public Cell withFontSize(final int fontSize) {
-        this.fontSize = Optional.of(fontSize);
+        this.fontSize = fontSize;
         return this;
     }
 
-    public Optional<PDFont> getFont() {
-        return font;
+    public PDFont getFont() {
+        return Optional.ofNullable(font).orElse(row.getFont());
     }
 
-    public Optional<Integer> getFontSize() {
-        return fontSize;
+    public Integer getFontSize() {
+        return Optional.ofNullable(fontSize).orElse(row.getFontSize());
     }
 
     public Row getRow() {
@@ -93,6 +94,14 @@ public class Cell {
 
     public void setRow(final Row row) {
         this.row = row;
+    }
+
+    public Column getColumn() {
+        return column;
+    }
+
+    public void setColumn(final Column column) {
+        this.column = column;
     }
 
     public String getText() {
@@ -181,7 +190,7 @@ public class Cell {
         return borderWidthTop;
     }
 
-    public Cell setBorderWidthTop(float borderWidthTop) {
+    public Cell setBorderWidthTop(final float borderWidthTop) {
         this.borderWidthTop = borderWidthTop;
         return this;
     }
@@ -190,7 +199,7 @@ public class Cell {
         return borderWidthLeft;
     }
 
-    public Cell setBorderWidthLeft(float borderWidthLeft) {
+    public Cell setBorderWidthLeft(final float borderWidthLeft) {
         this.borderWidthLeft = borderWidthLeft;
         return this;
     }
@@ -199,7 +208,7 @@ public class Cell {
         return borderWidthRight;
     }
 
-    public Cell setBorderWidthRight(float borderWidthRight) {
+    public Cell setBorderWidthRight(final float borderWidthRight) {
         this.borderWidthRight = borderWidthRight;
         return this;
     }
@@ -208,21 +217,21 @@ public class Cell {
         return borderWidthBottom;
     }
 
-    public Cell setBorderWidthBottom(float borderWidthBottom) {
+    public Cell setBorderWidthBottom(final float borderWidthBottom) {
         this.borderWidthBottom = borderWidthBottom;
         return this;
     }
 
     public float getHeightWithoutFontSize() {
-        return this.paddingBottom + this.paddingTop;
+        return paddingBottom + paddingTop;
     }
 
     public Color getBorderColor() {
-        Optional<Color> optBorderColor = Optional.ofNullable(borderColor);
+        final Optional<Color> optBorderColor = Optional.ofNullable(borderColor);
         return optBorderColor.orElse(getRow().getBorderColor());
     }
 
-    public Cell setBorderColor(Color borderColor) {
+    public Cell setBorderColor(final Color borderColor) {
         this.borderColor = borderColor;
         return this;
     }
@@ -232,16 +241,48 @@ public class Cell {
     }
 
     public Color getTextColor() {
-        return textColor;
+        return Optional.ofNullable(textColor).orElse(row.getTextColor());
     }
 
-    public void setTextColor(Color textColor) {
+    public void setTextColor(final Color textColor) {
         this.textColor = textColor;
     }
 
-    public Cell withTextColor(Color color) {
-        this.textColor = color;
+    public Cell withTextColor(final Color color) {
+        textColor = color;
         return this;
     }
+
+    public float getWidth() {
+        final float textWidth;
+
+        if (row.getTable().isWordBreak()) {
+            textWidth = PdfUtil.getOptimalTextBreak(text, getFont(), getFontSize(), getColumn().getWidth())
+                    .stream()
+                    .map(line -> PdfUtil.getStringWidth(line, getFont(), getFontSize()))
+                    .max(Comparator.naturalOrder())
+                    .orElseThrow(RuntimeException::new);
+
+        } else {
+            textWidth = PdfUtil.getStringWidth(text, getFont(), getFontSize());
+        }
+
+        return textWidth + getPaddingLeft() + getPaddingRight();
+    }
+
+    public float getHeight() {
+        final float textHeight;
+
+        if (row.getTable().isWordBreak()) {
+            final int size = PdfUtil.getOptimalTextBreak(text, getFont(), getFontSize(),
+                    getColumn().getWidth() - getPaddingRight() - getPaddingRight()).size();
+            textHeight = size * PdfUtil.getFontHeight(getFont(), getFontSize()) + size * 2f;
+        } else {
+            textHeight = PdfUtil.getFontHeight(getFont(), getFontSize());
+        }
+
+        return textHeight + getHeightWithoutFontSize();
+    }
+
 
 }
