@@ -12,6 +12,7 @@ crucial features. Nevertheless there is:
 * border colors (on table, row or cell level)
 * support for text alignment (right, left or center)
 * row spanning
+* line breaking
 
 I would say: it's OK, but don't expect too much ... ;-)
 
@@ -118,6 +119,9 @@ The corresponding sources (in order to understand how to use the code) can be fo
 
 First check it out and install it locally:
 
+    git clone https://github.com/vandeseer/easytable.git
+    cd easytable
+    git checkout v0.0.13
     mvn clean install
 
 Define this in your `pom.xml` in order to use it:
@@ -125,7 +129,7 @@ Define this in your `pom.xml` in order to use it:
     <dependency>
         <groupId>org.vandeseer.pdfbox</groupId>
         <artifactId>easytable</artifactId>
-        <version>0.0.11</version>
+        <version>0.0.13</version>
     </dependency>
 
 At one point it will hopefully also be available at maven central. 
@@ -134,6 +138,7 @@ At one point it will hopefully also be available at maven central.
 
 - to [Binghammer](https://github.com/Binghammer) for implementing cell coloring and text center alignment
 - to [Sebastian Göhring](https://github.com/TheSilentHorizon) for finding and fixing a bug (column spanning)
+- to [AndreKoepke](https://github.com/AndreKoepke) for the line breaking feature, some refactorings and improvements
 
 ## Q&A
 
