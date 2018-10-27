@@ -67,23 +67,48 @@ public class PdfUtil {
             return Collections.singletonList(line);
         }
 
+
+        final List<String> resultLines = PdfUtil.splitByWords(line, font, fontSize, maxWidth);
+
+        if (resultLines.isEmpty()) {
+            resultLines.addAll(PdfUtil.splitBySize(line, font, fontSize, maxWidth));
+        }
+
+
+        return resultLines;
+    }
+
+    private static List<String> splitBySize(final String line, final PDFont font, final int fontSize, final float maxWidth) {
         final List<String> returnList = new ArrayList<>();
 
-        // first step - try split by space
+        for (int i = line.length() - 1; i >= 0; i--) {
+            final String fittedNewLine = line.substring(0, i) + "-";
+            final String remains = line.substring(i);
+
+            if (!StringUtils.isEmpty(fittedNewLine) && PdfUtil.isLineFine(fittedNewLine, font, fontSize, maxWidth)) {
+                returnList.add(fittedNewLine);
+                returnList.addAll(PdfUtil.wrapLine(remains, font, fontSize, maxWidth));
+
+                break;
+            }
+        }
+
+        return returnList;
+    }
+
+    private static List<String> splitByWords(final String line, final PDFont font, final int fontSize, final float maxWidth) {
+        final List<String> returnList = new ArrayList<>();
         final List<String> splitBySpace = Arrays.asList(line.split(" "));
 
         for (int i = splitBySpace.size() - 1; i >= 0; i--) {
             final String fittedNewLine = StringUtils.join(splitBySpace.subList(0, i), " ");
             final String remains = StringUtils.join(splitBySpace.subList(i, splitBySpace.size()), " ");
 
-            if (PdfUtil.isLineFine(fittedNewLine, font, fontSize, maxWidth)) {
+            if (!StringUtils.isEmpty(fittedNewLine) && PdfUtil.isLineFine(fittedNewLine, font, fontSize, maxWidth)) {
                 returnList.add(fittedNewLine);
 
                 if (!StringUtils.equals(remains, line)) {
                     returnList.addAll(PdfUtil.wrapLine(remains, font, fontSize, maxWidth));
-                } else {
-                    // TODO: Break longer words?
-                    returnList.add(remains);
                 }
                 break;
             }
