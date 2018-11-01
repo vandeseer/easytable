@@ -39,7 +39,7 @@ public class PdfUtil {
      * @return Height of font
      */
     public static float getFontHeight(final PDFont font, final int fontSize) {
-        return font.getFontDescriptor().getFontBoundingBox().getHeight() / 1000 * fontSize;
+        return font.getFontDescriptor().getCapHeight() / 1000f * fontSize;
     }
 
 

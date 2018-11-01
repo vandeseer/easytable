@@ -2,8 +2,12 @@ package org.vandeseer.pdfbox.easytable;
 
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.font.PDFont;
+import org.vandeseer.pdfbox.easytable.Cell.CellBaseData;
+import org.vandeseer.pdfbox.easytable.Cell.CellImage;
+import org.vandeseer.pdfbox.easytable.Cell.CellText;
 
 import java.awt.*;
+import java.awt.geom.Point2D;
 import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
@@ -74,7 +78,7 @@ public class TableDrawer {
             startX = tableStartX;
             startY -= rowHeight;
 
-            for (final Cell cell : row.getCells()) {
+            for (final CellBaseData cell : row.getCells()) {
                 float cellWidth = 0;
                 for (int i = 0; i < cell.getSpan(); i++) {
                     cellWidth += table.getColumns().get(columnCounter + i).getWidth();
@@ -86,11 +90,14 @@ public class TableDrawer {
                 }
 
                 // Handle the cell's text
-                if (cell.hasText()) {
-                    drawCellText(cell, cellWidth, startX, startY);
+                if (cell instanceof CellText) {
+                    drawCellText((CellText) cell, cellWidth, startX, startY);
+                } else if (cell instanceof CellImage) {
+                    drawCellImage((CellImage) cell, cellWidth, startX, startY);
                 }
 
                 startX += cellWidth;
+
                 columnCounter += cell.getSpan();
             }
         }
@@ -107,7 +114,7 @@ public class TableDrawer {
             startX = tableStartX;
             startY -= rowHeight;
 
-            for (final Cell cell : row.getCells()) {
+            for (final CellBaseData cell : row.getCells()) {
                 float cellWidth = 0;
                 for (int i = 0; i < cell.getSpan(); i++) {
                     cellWidth += table.getColumns().get(columnCounter + i).getWidth();
@@ -123,7 +130,7 @@ public class TableDrawer {
                     contentStream.lineTo(startX + cellWidth + correctionRight, startY + rowHeight);
                     contentStream.setStrokingColor(cell.getBorderColor());
                     contentStream.stroke();
-                    contentStream.setStrokingColor(cell.getParentBorderColor());
+                    contentStream.setStrokingColor(row.getBorderColor());
                 }
 
                 if (cell.hasBorderBottom()) {
@@ -135,7 +142,7 @@ public class TableDrawer {
                     contentStream.lineTo(startX + cellWidth + correctionRight, startY);
                     contentStream.setStrokingColor(cell.getBorderColor());
                     contentStream.stroke();
-                    contentStream.setStrokingColor(cell.getParentBorderColor());
+                    contentStream.setStrokingColor(row.getBorderColor());
                 }
 
                 if (cell.hasBorderLeft()) {
@@ -147,7 +154,7 @@ public class TableDrawer {
                     contentStream.lineTo(startX, startY + rowHeight + correctionTop);
                     contentStream.setStrokingColor(cell.getBorderColor());
                     contentStream.stroke();
-                    contentStream.setStrokingColor(cell.getParentBorderColor());
+                    contentStream.setStrokingColor(row.getBorderColor());
                 }
 
                 if (cell.hasBorderRight()) {
@@ -159,7 +166,7 @@ public class TableDrawer {
                     contentStream.lineTo(startX + cellWidth, startY + rowHeight + correctionTop);
                     contentStream.setStrokingColor(cell.getBorderColor());
                     contentStream.stroke();
-                    contentStream.setStrokingColor(cell.getParentBorderColor());
+                    contentStream.setStrokingColor(row.getBorderColor());
                 }
 
                 startX += cellWidth;
@@ -168,7 +175,7 @@ public class TableDrawer {
         }
     }
 
-    private void drawCellBackground(final Cell cell, final float startX, final float startY, final float width, final float height)
+    private void drawCellBackground(final CellBaseData cell, final float startX, final float startY, final float width, final float height)
             throws IOException {
         contentStream.setNonStrokingColor(cell.getBackgroundColor());
 
@@ -180,7 +187,7 @@ public class TableDrawer {
         contentStream.setNonStrokingColor(Color.BLACK);
     }
 
-    private void drawCellText(final Cell cell, final float columnWidth, final float moveX, final float moveY) throws IOException {
+    private void drawCellText(final CellText cell, final float columnWidth, final float moveX, final float moveY) throws IOException {
         final PDFont currentFont = cell.getFont();
         final int currentFontSize = cell.getFontSize();
         final Color currentTextColor = cell.getTextColor();
@@ -202,13 +209,13 @@ public class TableDrawer {
 
             float xOffset = moveX + cell.getPaddingLeft();
             final float yOffset = moveY
-                    + cell.getRow().getHeight() // top-position
-                    - PdfUtil.getFontHeight(currentFont, currentFontSize) / 2
-                    - ((cell.getRow().getHeight() / (lines.size() + 1)) * (i + 1)); // middle of cell
+                    //+ cell.getRow().getHeight() // top-position
+                    - PdfUtil.getFontHeight(currentFont, currentFontSize) / 2f
+                    + ((cell.getRow().getHeight() / (lines.size() + 1)) * (i + 1)); // middle of cell
 
             final float textWidth = PdfUtil.getStringWidth(line, currentFont, currentFontSize);
 
-            switch (cell.getHorizontalAlignment()) {
+            switch (cell.getAlignment()) {
                 case RIGHT:
                     xOffset = moveX + (columnWidth - (textWidth + cell.getPaddingRight()));
                     break;
@@ -224,6 +231,24 @@ public class TableDrawer {
 
 
         }
+    }
+
+    private void drawCellImage(final CellImage cell, final float columnWidth, final float moveX, final float moveY) throws IOException {
+        final Point2D.Float size = cell.getFitSize();
+        final Point2D.Float drawAt = new Point2D.Float();
+
+        drawAt.x = moveX
+                + ((columnWidth - cell.getPaddingLeft() - cell.getPaddingRight()) / 2f) //middle of cell
+                + cell.getPaddingLeft()
+                - (size.x / 2f);
+
+        drawAt.y = moveY
+                + ((cell.getHeight() - cell.getPaddingTop() - cell.getPaddingBottom()) / 2f) // middle of cell
+                + cell.getPaddingBottom()
+                - (size.y / 2f);
+
+        contentStream.drawImage(cell.getImage(), drawAt.x, drawAt.y, size.x, size.y);
+
     }
 
 }

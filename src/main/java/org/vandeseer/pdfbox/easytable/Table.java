@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.apache.pdfbox.pdmodel.font.PDFont;
 import org.apache.pdfbox.pdmodel.font.PDType1Font;
+import org.vandeseer.pdfbox.easytable.Cell.CellBaseData;
 
 import java.awt.*;
 import java.util.LinkedList;
@@ -34,7 +35,7 @@ public class Table {
     public float getHeight() {
         float height = 0;
         for (final Row row : rows) {
-            height += (row.getHeightWithoutFontHeight() + PdfUtil.getFontHeight(getFont(), getFontSize()));
+            height += (row.getHeight());
         }
         return height;
     }
@@ -51,7 +52,7 @@ public class Table {
         }
 
         public TableBuilder addRow(final Row row) {
-            if (row.getCells().stream().mapToInt(Cell::getSpan).sum() != numberOfColumns) {
+            if (row.getCells().stream().mapToInt(CellBaseData::getSpan).sum() != numberOfColumns) {
                 throw new IllegalArgumentException(
                         "Number withText row cells does not match with number withText table columns");
             }
