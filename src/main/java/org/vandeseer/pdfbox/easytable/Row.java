@@ -1,6 +1,8 @@
 package org.vandeseer.pdfbox.easytable;
 
+import lombok.Getter;
 import org.apache.pdfbox.pdmodel.font.PDFont;
+import org.vandeseer.pdfbox.easytable.Cell.CellBaseData;
 
 import java.awt.*;
 import java.util.LinkedList;
@@ -12,14 +14,14 @@ import static java.util.Comparator.naturalOrder;
 public class Row {
 
     private Table table;
-    private final List<Cell> cells;
+    private final List<CellBaseData> cells;
     private Color borderColor;
     private Color textColor;
 
     private PDFont font;
     private Integer fontSize;
 
-    private Row(final List<Cell> cells) {
+    private Row(final List<CellBaseData> cells) {
         super();
         this.cells = cells;
     }
@@ -32,7 +34,7 @@ public class Row {
         this.table = table;
     }
 
-    public List<Cell> getCells() {
+    public List<CellBaseData> getCells() {
         return cells;
     }
 
@@ -42,24 +44,6 @@ public class Row {
 
     private void setTextColor(final Color textColor) {
         this.textColor = textColor;
-    }
-
-    // TODO refactor! ;)
-    int getFontHeight() {
-        final Optional<Integer> cellWithMaxFontHeight = cells.stream()
-                .map(Cell::getFontSize)
-                .max(naturalOrder());
-
-        final Integer maxCellHeight = cellWithMaxFontHeight.orElseThrow(IllegalStateException::new);
-        return Math.max(maxCellHeight, maxCellHeight);
-    }
-
-    float getHeightWithoutFontHeight() {
-        return cells
-                .stream()
-                .map(Cell::getHeightWithoutFontSize)
-                .max(naturalOrder())
-                .orElseThrow(IllegalStateException::new);
     }
 
 
@@ -89,7 +73,9 @@ public class Row {
     }
 
     public static class RowBuilder {
-        private final List<Cell> cells = new LinkedList<>();
+        private final List<CellBaseData> cells = new LinkedList<>();
+
+        @Getter
         private Color backgroundColor;
         private Optional<Color> borderColor = Optional.empty();
         private Color textColor;
@@ -100,7 +86,7 @@ public class Row {
             return new RowBuilder();
         }
 
-        public RowBuilder add(final Cell cell) {
+        public RowBuilder add(final CellBaseData cell) {
             cells.add(cell);
             return this;
         }
@@ -146,7 +132,7 @@ public class Row {
     }
 
     public float getHeight() {
-        return getCells().stream().map(Cell::getHeight).max(naturalOrder()).orElseThrow(RuntimeException::new);
+        return getCells().stream().map(CellBaseData::getHeight).max(naturalOrder()).orElseThrow(RuntimeException::new);
     }
 
 }
