@@ -209,9 +209,8 @@ public class TableDrawer {
 
             float xOffset = moveX + cell.getPaddingLeft();
             final float yOffset = moveY
-                    //+ cell.getRow().getHeight() // top-position
                     - PdfUtil.getFontHeight(currentFont, currentFontSize) / 2f
-                    + ((cell.getRow().getHeight() / (lines.size() + 1)) * (i + 1)); // middle of cell
+                    + ((cell.getRow().getHeight() / (lines.size() + 1)) * (lines.size() - i)); // middle of cell
 
             final float textWidth = PdfUtil.getStringWidth(line, currentFont, currentFontSize);
 
