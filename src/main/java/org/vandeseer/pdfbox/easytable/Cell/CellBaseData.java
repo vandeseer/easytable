@@ -55,7 +55,7 @@ public abstract class CellBaseData {
     private float borderWidthBottom = 0;
 
 
-    public CellBaseData withAllBorders(final int borderWith) {
+    public CellBaseData withAllBorders(final float borderWith) {
         borderWidthBottom = borderWith;
         borderWidthLeft = borderWith;
         borderWidthRight = borderWith;
