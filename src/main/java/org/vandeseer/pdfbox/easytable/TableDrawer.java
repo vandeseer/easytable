@@ -18,6 +18,7 @@ public class TableDrawer {
     private final Table table;
 
     public static class TableDrawerBuilder {
+
         private float tableStartX;
         private float tableStartY;
         private PDPageContentStream contentStream;
@@ -61,11 +62,11 @@ public class TableDrawer {
     }
 
     public void draw() throws IOException {
-        drawBackgroundAndText();
+        drawBackgroundAndCellContent();
         drawBorders();
     }
 
-    private void drawBackgroundAndText() throws IOException {
+    private void drawBackgroundAndCellContent() throws IOException {
         float startX;
         float startY = tableStartY;
 
@@ -77,10 +78,7 @@ public class TableDrawer {
             startY -= rowHeight;
 
             for (final CellBaseData cell : row.getCells()) {
-                float cellWidth = 0;
-                for (int i = 0; i < cell.getSpan(); i++) {
-                    cellWidth += table.getColumns().get(columnCounter + i).getWidth();
-                }
+                float cellWidth = table.getAvailableCellWidthRespectingSpan(columnCounter, cell.getSpan());
 
                 // Handle the cell's background color
                 if (cell.hasBackgroundColor()) {
@@ -113,64 +111,57 @@ public class TableDrawer {
             startY -= rowHeight;
 
             for (final CellBaseData cell : row.getCells()) {
-                float cellWidth = 0;
-                for (int i = 0; i < cell.getSpan(); i++) {
-                    cellWidth += table.getColumns().get(columnCounter + i).getWidth();
-                }
+                float cellWidth = table.getAvailableCellWidthRespectingSpan(columnCounter, cell.getSpan());
 
                 // Handle the cell's borders
-                if (cell.hasBorderTop()) {
-                    final float borderWidth = cell.getBorderWidthTop();
+                final Color cellBorderColor = cell.getBorderColor();
+                final Color rowBorderColor = row.getBorderColor();
+
+                if (cell.hasBorderTop() || cell.hasBorderBottom()) {
                     final float correctionLeft = cell.hasBorderLeft() ? cell.getBorderWidthLeft() / 2 : 0;
                     final float correctionRight = cell.hasBorderRight() ? cell.getBorderWidthRight() / 2 : 0;
-                    contentStream.setLineWidth(borderWidth);
-                    contentStream.moveTo(startX - correctionLeft, startY + rowHeight);
-                    contentStream.lineTo(startX + cellWidth + correctionRight, startY + rowHeight);
-                    contentStream.setStrokingColor(cell.getBorderColor());
-                    contentStream.stroke();
-                    contentStream.setStrokingColor(row.getBorderColor());
+
+                    if (cell.hasBorderTop()) {
+                        contentStream.moveTo(startX - correctionLeft, startY + rowHeight);
+                        drawLine(cellBorderColor, cell.getBorderWidthTop(), startX + cellWidth + correctionRight, startY + rowHeight);
+                        contentStream.setStrokingColor(rowBorderColor);
+                    }
+
+                    if (cell.hasBorderBottom()) {
+                        contentStream.moveTo(startX - correctionLeft, startY);
+                        drawLine(cellBorderColor, cell.getBorderWidthBottom(), startX + cellWidth + correctionRight, startY);
+                        contentStream.setStrokingColor(rowBorderColor);
+                    }
                 }
 
-                if (cell.hasBorderBottom()) {
-                    final float borderWidth = cell.getBorderWidthBottom();
-                    final float correctionLeft = cell.hasBorderLeft() ? cell.getBorderWidthLeft() / 2 : 0;
-                    final float correctionRight = cell.hasBorderRight() ? cell.getBorderWidthRight() / 2 : 0;
-                    contentStream.setLineWidth(borderWidth);
-                    contentStream.moveTo(startX - correctionLeft, startY);
-                    contentStream.lineTo(startX + cellWidth + correctionRight, startY);
-                    contentStream.setStrokingColor(cell.getBorderColor());
-                    contentStream.stroke();
-                    contentStream.setStrokingColor(row.getBorderColor());
-                }
-
-                if (cell.hasBorderLeft()) {
-                    final float borderWidth = cell.getBorderWidthLeft();
+                if (cell.hasBorderLeft() || cell.hasBorderRight()) {
                     final float correctionTop = cell.hasBorderTop() ? cell.getBorderWidthTop() / 2 : 0;
                     final float correctionBottom = cell.hasBorderBottom() ? cell.getBorderWidthBottom() / 2 : 0;
-                    contentStream.setLineWidth(borderWidth);
-                    contentStream.moveTo(startX, startY - correctionBottom);
-                    contentStream.lineTo(startX, startY + rowHeight + correctionTop);
-                    contentStream.setStrokingColor(cell.getBorderColor());
-                    contentStream.stroke();
-                    contentStream.setStrokingColor(row.getBorderColor());
-                }
 
-                if (cell.hasBorderRight()) {
-                    final float borderWidth = cell.getBorderWidthRight();
-                    final float correctionTop = cell.hasBorderTop() ? cell.getBorderWidthTop() / 2 : 0;
-                    final float correctionBottom = cell.hasBorderBottom() ? cell.getBorderWidthBottom() / 2 : 0;
-                    contentStream.setLineWidth(borderWidth);
-                    contentStream.moveTo(startX + cellWidth, startY - correctionBottom);
-                    contentStream.lineTo(startX + cellWidth, startY + rowHeight + correctionTop);
-                    contentStream.setStrokingColor(cell.getBorderColor());
-                    contentStream.stroke();
-                    contentStream.setStrokingColor(row.getBorderColor());
+                    if (cell.hasBorderLeft()) {
+                        contentStream.moveTo(startX, startY - correctionBottom);
+                        drawLine(cellBorderColor, cell.getBorderWidthLeft(), startX, startY + rowHeight + correctionTop);
+                        contentStream.setStrokingColor(rowBorderColor);
+                    }
+
+                    if (cell.hasBorderRight()) {
+                        contentStream.moveTo(startX + cellWidth, startY - correctionBottom);
+                        drawLine(cellBorderColor, cell.getBorderWidthRight(), startX + cellWidth, startY + rowHeight + correctionTop);
+                        contentStream.setStrokingColor(rowBorderColor);
+                    }
                 }
 
                 startX += cellWidth;
                 columnCounter += cell.getSpan();
             }
         }
+    }
+
+    private void drawLine(Color color, float width, float toX, float toY) throws IOException {
+        contentStream.setLineWidth(width);
+        contentStream.lineTo(toX, toY);
+        contentStream.setStrokingColor(color);
+        contentStream.stroke();
     }
 
     private void drawCellBackground(final CellBaseData cell, final float startX, final float startY, final float width, final float height)
@@ -181,7 +172,7 @@ public class TableDrawer {
         contentStream.fill();
         contentStream.closePath();
 
-        // Reset NonStroking Color to default value
+        // Reset NonStrokingColor to default value
         contentStream.setNonStrokingColor(Color.BLACK);
     }
 
@@ -212,9 +203,6 @@ public class TableDrawer {
         float yOffset = moveY + yStartRelative;
         for (int i = 0; i < lines.size(); i++) {
             final String line = lines.get(i);
-            contentStream.beginText();
-            contentStream.setNonStrokingColor(currentTextColor);
-            contentStream.setFont(currentFont, currentFontSize);
 
             float xOffset = moveX + cell.getPaddingLeft();
             yOffset -= (
@@ -234,10 +222,17 @@ public class TableDrawer {
 
             }
 
-            contentStream.newLineAtOffset(xOffset, yOffset);
-            contentStream.showText(line);
-            contentStream.endText();
+            drawText(line, currentFont, currentFontSize, currentTextColor, xOffset, yOffset);
         }
+    }
+
+    private void drawText(String text, PDFont font, int fontSize, Color color, float x, float y) throws IOException {
+        contentStream.beginText();
+        contentStream.setNonStrokingColor(color);
+        contentStream.setFont(font, fontSize);
+        contentStream.newLineAtOffset(x, y);
+        contentStream.showText(text);
+        contentStream.endText();
     }
 
     private void drawCellImage(final CellImage cell, final float columnWidth, final float moveX, final float moveY) throws IOException {

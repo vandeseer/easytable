@@ -24,7 +24,7 @@ import static org.vandeseer.pdfbox.easytable.cell.HorizontalAlignment.RIGHT;
 import static org.vandeseer.pdfbox.easytable.cell.VerticalAlignment.BOTTOM;
 import static org.vandeseer.pdfbox.easytable.cell.VerticalAlignment.TOP;
 
-
+// TODO test border color on cell level
 public class TableDrawerIntegrationTest {
 
     private static final Color BLUE_DARK = new Color(76, 129, 190);

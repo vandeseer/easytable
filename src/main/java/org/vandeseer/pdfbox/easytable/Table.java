@@ -40,6 +40,14 @@ public class Table {
         return height;
     }
 
+    float getAvailableCellWidthRespectingSpan(int columnIndex, int span) {
+        float cellWidth = 0;
+        for (int i = 0; i < span; i++) {
+            cellWidth += getColumns().get(columnIndex + i).getWidth();
+        }
+        return cellWidth;
+    }
+
     public static class TableBuilder {
         private final List<Row> rows = new LinkedList<>();
         private final List<Column> columns = new LinkedList<>();
