@@ -2,7 +2,7 @@ package org.vandeseer.pdfbox.easytable;
 
 import lombok.Getter;
 import org.apache.pdfbox.pdmodel.font.PDFont;
-import org.vandeseer.pdfbox.easytable.Cell.CellBaseData;
+import org.vandeseer.pdfbox.easytable.cell.CellBaseData;
 
 import java.awt.*;
 import java.util.LinkedList;

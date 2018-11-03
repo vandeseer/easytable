@@ -2,9 +2,7 @@ package org.vandeseer.pdfbox.easytable;
 
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.font.PDFont;
-import org.vandeseer.pdfbox.easytable.Cell.CellBaseData;
-import org.vandeseer.pdfbox.easytable.Cell.CellImage;
-import org.vandeseer.pdfbox.easytable.Cell.CellText;
+import org.vandeseer.pdfbox.easytable.cell.*;
 
 import java.awt.*;
 import java.awt.geom.Point2D;
@@ -194,13 +192,24 @@ public class TableDrawer {
 
         final List<String> lines;
 
+        float maxWidth = cell.getWidth() - (cell.getPaddingLeft() + cell.getPaddingRight());
         if (table.isWordBreak()) {
-            lines = PdfUtil.getOptimalTextBreak(cell.getText(), currentFont, currentFontSize,
-                    columnWidth - cell.getPaddingRight() - cell.getPaddingRight());
+            lines = PdfUtil.getOptimalTextBreak(cell.getText(), currentFont, currentFontSize, maxWidth);
         } else {
             lines = Collections.singletonList(cell.getText());
         }
 
+        // Vertical alignment
+        float yStartRelative = cell.getRow().getHeight() - cell.getPaddingTop(); // top position
+        if (cell.getRow().getHeight() > cell.getHeight()) {
+            if (cell.getVerticalAlignment() == VerticalAlignment.MIDDLE) {
+                yStartRelative = cell.getRow().getHeight() / 2 + (cell.getHeight() - cell.getPaddingBottom() - cell.getPaddingTop()) / 2;
+            } else if (cell.getVerticalAlignment() == VerticalAlignment.BOTTOM) {
+                yStartRelative = cell.getHeight() - cell.getPaddingTop();
+            }
+        }
+
+        float yOffset = moveY + yStartRelative;
         for (int i = 0; i < lines.size(); i++) {
             final String line = lines.get(i);
             contentStream.beginText();
@@ -208,27 +217,26 @@ public class TableDrawer {
             contentStream.setFont(currentFont, currentFontSize);
 
             float xOffset = moveX + cell.getPaddingLeft();
-            final float yOffset = moveY
-                    - PdfUtil.getFontHeight(currentFont, currentFontSize) / 2f
-                    + ((cell.getRow().getHeight() / (lines.size() + 1)) * (lines.size() - i)); // middle of cell
+            yOffset -= (
+                    PdfUtil.getFontHeight(currentFont, currentFontSize) // font height
+                    + (i > 0 ? PdfUtil.getFontHeight(currentFont, currentFontSize) * cell.getLineSpacing() : 0f) // line spacing
+            );
 
             final float textWidth = PdfUtil.getStringWidth(line, currentFont, currentFontSize);
 
-            switch (cell.getAlignment()) {
-                case RIGHT:
-                    xOffset = moveX + (columnWidth - (textWidth + cell.getPaddingRight()));
-                    break;
-                case CENTER:
-                    final float diff = (columnWidth - textWidth) / 2;
-                    xOffset = moveX + diff;
-                    break;
+            // Handle horizontal alignment by adjusting the xOffset
+            if (cell.getHorizontalAlignment() == HorizontalAlignment.RIGHT) {
+                xOffset = moveX + (columnWidth - (textWidth + cell.getPaddingRight()));
+
+            } else if (cell.getHorizontalAlignment() == HorizontalAlignment.CENTER) {
+                final float diff = (columnWidth - textWidth) / 2;
+                xOffset = moveX + diff;
+
             }
 
             contentStream.newLineAtOffset(xOffset, yOffset);
             contentStream.showText(line);
             contentStream.endText();
-
-
         }
     }
 

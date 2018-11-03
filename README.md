@@ -11,10 +11,10 @@ crucial features. Nevertheless there is:
 * padding (top, bottom, left, right) on cell level
 * border colors (on table, row or cell level)
 * support for text alignment (right, left or center)
+* vertical text alignment
 * row spanning
-* line breaking
-
-I would say: it's OK, but don't expect too much ... ;-)
+* line breaking and line spacing
+* images in cells
 
 ## Example
 
@@ -25,15 +25,15 @@ In order to produce a whole PDF document with a table that looks like this one:
 You need the following code:
 
     // Some data
-    Object[][] data = {
-            { "Whisky"  , 134.4 , 145.98 },
-            { "Beer"    , 768.2 , 677.9  },
-            { "Gin"     , 456.45, 612.0  },
-            { "Vodka"   , 302.71 , 465.2 }
+    final Object[][] data = {
+            {"Whisky", 134.4, 145.98},
+            {"Beer", 768.2, 677.9},
+            {"Gin", 456.45, 612.0},
+            {"Vodka", 302.71, 465.2}
     };
 
     // Define the table structure first
-    TableBuilder tableBuilder = TableBuilder.newBuilder()
+    final TableBuilder tableBuilder = TableBuilder.newBuilder()
             .addColumnOfWidth(100)
             .addColumnOfWidth(50)
             .addColumnOfWidth(50)
@@ -43,12 +43,12 @@ You need the following code:
             .setBorderColor(Color.WHITE);
 
     // Add the header row ...
-    Row headerRow = RowBuilder.newBuilder()
-            .add(Cell.withText("Product").withAllBorders())
-            .add(Cell.withText("2018").withAllBorders().setHorizontalAlignment(CENTER))
-            .add(Cell.withText("2019").withAllBorders().setHorizontalAlignment(CENTER))
-            .add(Cell.withText("Total").withAllBorders().setHorizontalAlignment(CENTER))
-            .setBackgroundColor(BLUE_DARK)
+    final Row headerRow = RowBuilder.newBuilder()
+            .add(CellText.builder().text("Product").build().withAllBorders())
+            .add(CellText.builder().text("2018").horizontalAlignment(CENTER).build().withAllBorders())
+            .add(CellText.builder().text("2019").horizontalAlignment(CENTER).build().withAllBorders())
+            .add(CellText.builder().text("Total").horizontalAlignment(CENTER).build().withAllBorders())
+            .setBackgroundColor(TableDrawerIntegrationTest.BLUE_DARK)
             .withTextColor(Color.WHITE)
             .setFont(PDType1Font.HELVETICA_BOLD)
             .setFontSize(9)
@@ -59,34 +59,40 @@ You need the following code:
     // ... and some data rows
     double grandTotal = 0;
     for (int i = 0; i < data.length; i++) {
-        Object[] dataRow = data[i];
-        double total = (double) dataRow[1] + (double) dataRow[2];
+        final Object[] dataRow = data[i];
+        final double total = (double) dataRow[1] + (double) dataRow[2];
         grandTotal += total;
 
         tableBuilder.addRow(RowBuilder.newBuilder()
-                .add(Cell.withText(dataRow[0]).withAllBorders())
-                .add(Cell.withText(dataRow[1] + " €").withAllBorders().setHorizontalAlignment(RIGHT))
-                .add(Cell.withText(dataRow[2] + " €").withAllBorders().setHorizontalAlignment(RIGHT))
-                .add(Cell.withText(total + " €").withAllBorders().setHorizontalAlignment(RIGHT))
-                .setBackgroundColor(i % 2 == 0 ? BLUE_LIGHT_1 : BLUE_LIGHT_2)
-                .build());
+                .add(CellText.builder().text(String.valueOf(dataRow[0])).build().withAllBorders())
+                .add(CellText.builder().text(dataRow[1] + " €").horizontalAlignment(RIGHT).build().withAllBorders())
+                .add(CellText.builder().text(dataRow[2] + " €").horizontalAlignment(RIGHT).build().withAllBorders())
+                .add(CellText.builder().text(total + " €").horizontalAlignment(RIGHT).build().withAllBorders())
+                .setBackgroundColor(i % 2 == 0 ? TableDrawerIntegrationTest.BLUE_LIGHT_1 : TableDrawerIntegrationTest.BLUE_LIGHT_2)
+                .build())
+        .setWordBreaking();
     }
 
     // Add a final row
     tableBuilder.addRow(RowBuilder.newBuilder()
-            .add(Cell.withText("This spans over 3 cells and shows the grand total in the next cell:")
+            .add(CellText.builder().text("This spans over 3 cells, is right aligned and its text is so long that it even breaks. " +
+                    "Also it shows the grand total in the next cell and furthermore vertical alignment is shown:")
                     .span(3)
-                    .setBorderWidthTop(1)
-                    .withTextColor(WHITE)
-                    .withAllBorders()
-                    .setHorizontalAlignment(RIGHT)
-                    .setBackgroundColor(BLUE_DARK)
-                    .withFontSize(6)
-                    .withFont(HELVETICA_OBLIQUE))
-            .add(Cell.withText(grandTotal + " €").setBackgroundColor(LIGHT_GRAY)
-                .withFont(HELVETICA_BOLD_OBLIQUE)
-                .setHorizontalAlignment(RIGHT)
-                .withAllBorders())
+                    .lineSpacing(1f)
+                    .borderWidthTop(1)
+                    .textColor(WHITE)
+                    .horizontalAlignment(RIGHT)
+                    .backgroundColor(TableDrawerIntegrationTest.BLUE_DARK)
+                    .fontSize(6)
+                    .font(HELVETICA_OBLIQUE)
+                    .build()
+                    .withAllBorders())
+            .add(CellText.builder().text(grandTotal + " €").backgroundColor(LIGHT_GRAY)
+                    .font(HELVETICA_BOLD_OBLIQUE)
+                    .horizontalAlignment(RIGHT)
+                    .verticalAlignment(TOP)
+                    .build()
+                    .withAllBorders())
             .build());
             
      final PDDocument document = new PDDocument();
@@ -121,7 +127,7 @@ First check it out and install it locally:
 
     git clone https://github.com/vandeseer/easytable.git
     cd easytable
-    git checkout v0.0.13
+    git checkout v0.1.0
     mvn clean install
 
 Define this in your `pom.xml` in order to use it:
@@ -129,7 +135,7 @@ Define this in your `pom.xml` in order to use it:
     <dependency>
         <groupId>org.vandeseer.pdfbox</groupId>
         <artifactId>easytable</artifactId>
-        <version>0.0.13</version>
+        <version>0.1.0</version>
     </dependency>
 
 At one point it will hopefully also be available at maven central. 
@@ -138,7 +144,8 @@ At one point it will hopefully also be available at maven central.
 
 - to [Binghammer](https://github.com/Binghammer) for implementing cell coloring and text center alignment
 - to [Sebastian Göhring](https://github.com/TheSilentHorizon) for finding and fixing a bug (column spanning)
-- to [AndreKoepke](https://github.com/AndreKoepke) for the line breaking feature, some refactorings and improvements
+- to [AndreKoepke](https://github.com/AndreKoepke) for the line breaking feature, some bigger nice refactorings and 
+improvements
 
 ## Q&A
 

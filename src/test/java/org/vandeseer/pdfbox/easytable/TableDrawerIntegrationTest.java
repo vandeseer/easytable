@@ -8,10 +8,11 @@ import org.apache.pdfbox.pdmodel.common.PDRectangle;
 import org.apache.pdfbox.pdmodel.font.PDType1Font;
 import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
 import org.junit.Test;
-import org.vandeseer.pdfbox.easytable.Cell.CellImage;
-import org.vandeseer.pdfbox.easytable.Cell.CellText;
+import org.vandeseer.pdfbox.easytable.cell.CellImage;
+import org.vandeseer.pdfbox.easytable.cell.CellText;
 import org.vandeseer.pdfbox.easytable.Row.RowBuilder;
 import org.vandeseer.pdfbox.easytable.Table.TableBuilder;
+import org.vandeseer.pdfbox.easytable.cell.VerticalAlignment;
 
 import java.awt.*;
 import java.io.IOException;
@@ -19,8 +20,10 @@ import java.io.IOException;
 import static java.awt.Color.LIGHT_GRAY;
 import static java.awt.Color.WHITE;
 import static org.apache.pdfbox.pdmodel.font.PDType1Font.*;
-import static org.vandeseer.pdfbox.easytable.Cell.HorizontalAlignment.CENTER;
-import static org.vandeseer.pdfbox.easytable.Cell.HorizontalAlignment.RIGHT;
+import static org.vandeseer.pdfbox.easytable.cell.HorizontalAlignment.CENTER;
+import static org.vandeseer.pdfbox.easytable.cell.HorizontalAlignment.RIGHT;
+import static org.vandeseer.pdfbox.easytable.cell.VerticalAlignment.BOTTOM;
+import static org.vandeseer.pdfbox.easytable.cell.VerticalAlignment.TOP;
 
 
 public class TableDrawerIntegrationTest {
@@ -40,21 +43,21 @@ public class TableDrawerIntegrationTest {
 
 
         tableBuilder.addRow(RowBuilder.newBuilder()
-                .add(CellText.builder().text("Pur").span(2).backgroundColor(Color.YELLOW).alignment(CENTER).build().withAllBorders())
+                .add(CellText.builder().text("Pur").span(2).backgroundColor(Color.YELLOW).horizontalAlignment(CENTER).build().withAllBorders())
                 .add(CellText.builder().text("Booz").build())
                 .setBackgroundColor(Color.BLUE)
                 .build());
 
         tableBuilder.addRow(RowBuilder.newBuilder()
-                .add(CellText.builder().text("Hey").alignment(RIGHT).build())
+                .add(CellText.builder().text("Hey").horizontalAlignment(RIGHT).build())
                 .add(CellText.builder().text("Ho!").build())
                 .add(CellText.builder().text("Fu.").backgroundColor(Color.ORANGE).build())
                 .setBackgroundColor(Color.BLUE)
                 .build());
 
         tableBuilder.addRow(RowBuilder.newBuilder()
-                .add(CellText.builder().text("Bar").alignment(RIGHT).build())
-                .add(CellText.builder().text("Baz").span(2).backgroundColor(Color.CYAN).alignment(CENTER).build().withAllBorders())
+                .add(CellText.builder().text("Bar").horizontalAlignment(RIGHT).build())
+                .add(CellText.builder().text("Baz").span(2).backgroundColor(Color.CYAN).horizontalAlignment(CENTER).build().withAllBorders())
                 .setBackgroundColor(Color.GREEN)
                 .build());
 
@@ -83,10 +86,10 @@ public class TableDrawerIntegrationTest {
 
         // Add the header row ...
         final Row headerRow = RowBuilder.newBuilder()
-                .add(CellText.builder().text("Product").build())
-                .add(CellText.builder().text("2018").alignment(CENTER).build().withAllBorders())
-                .add(CellText.builder().text("2019").alignment(CENTER).build().withAllBorders())
-                .add(CellText.builder().text("Total").alignment(CENTER).build().withAllBorders())
+                .add(CellText.builder().text("Product").build().withAllBorders())
+                .add(CellText.builder().text("2018").horizontalAlignment(CENTER).build().withAllBorders())
+                .add(CellText.builder().text("2019").horizontalAlignment(CENTER).build().withAllBorders())
+                .add(CellText.builder().text("Total").horizontalAlignment(CENTER).build().withAllBorders())
                 .setBackgroundColor(TableDrawerIntegrationTest.BLUE_DARK)
                 .withTextColor(Color.WHITE)
                 .setFont(PDType1Font.HELVETICA_BOLD)
@@ -104,20 +107,23 @@ public class TableDrawerIntegrationTest {
 
             tableBuilder.addRow(RowBuilder.newBuilder()
                     .add(CellText.builder().text(String.valueOf(dataRow[0])).build().withAllBorders())
-                    .add(CellText.builder().text(dataRow[1] + " €").alignment(RIGHT).build().withAllBorders())
-                    .add(CellText.builder().text(dataRow[2] + " €").alignment(RIGHT).build().withAllBorders())
-                    .add(CellText.builder().text(total + " €").alignment(RIGHT).build().withAllBorders())
+                    .add(CellText.builder().text(dataRow[1] + " €").horizontalAlignment(RIGHT).build().withAllBorders())
+                    .add(CellText.builder().text(dataRow[2] + " €").horizontalAlignment(RIGHT).build().withAllBorders())
+                    .add(CellText.builder().text(total + " €").horizontalAlignment(RIGHT).build().withAllBorders())
                     .setBackgroundColor(i % 2 == 0 ? TableDrawerIntegrationTest.BLUE_LIGHT_1 : TableDrawerIntegrationTest.BLUE_LIGHT_2)
-                    .build());
+                    .build())
+            .setWordBreaking();
         }
 
         // Add a final row
         tableBuilder.addRow(RowBuilder.newBuilder()
-                .add(CellText.builder().text("This spans over 3 cells and shows the grand total in the next cell:")
+                .add(CellText.builder().text("This spans over 3 cells, is right aligned and its text is so long that it even breaks. " +
+                        "Also it shows the grand total in the next cell and furthermore vertical alignment is shown:")
                         .span(3)
+                        .lineSpacing(1f)
                         .borderWidthTop(1)
                         .textColor(WHITE)
-                        .alignment(RIGHT)
+                        .horizontalAlignment(RIGHT)
                         .backgroundColor(TableDrawerIntegrationTest.BLUE_DARK)
                         .fontSize(6)
                         .font(HELVETICA_OBLIQUE)
@@ -125,7 +131,8 @@ public class TableDrawerIntegrationTest {
                         .withAllBorders())
                 .add(CellText.builder().text(grandTotal + " €").backgroundColor(LIGHT_GRAY)
                         .font(HELVETICA_BOLD_OBLIQUE)
-                        .alignment(RIGHT)
+                        .horizontalAlignment(RIGHT)
+                        .verticalAlignment(TOP)
                         .build()
                         .withAllBorders())
                 .build());
@@ -171,12 +178,18 @@ public class TableDrawerIntegrationTest {
 
         // Header ...
         tableBuilder.addRow(RowBuilder.newBuilder()
-                .add(CellText.builder().text("This is right aligned without a border").alignment(RIGHT).build())
+                .add(CellText.builder().text("This is top right aligned without a border")
+                        .horizontalAlignment(RIGHT)
+                        .verticalAlignment(TOP)
+                        .build())
                 .add(CellText.builder().text("And this is another cell with a very long long long text that tells a nice" +
                         " and useless story, because Iam to lazy to get a lorem-ipsum and I have fun while typing" +
                         " a long text and a word that cannot be breaked yet aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa" +
                         "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa").build())
-                .add(CellText.builder().text("Sum").backgroundColor(Color.ORANGE).build())
+                .add(CellText.builder().text("This is bottom left aligned")
+                        .backgroundColor(Color.ORANGE)
+                        .verticalAlignment(BOTTOM)
+                        .build())
                 .setBackgroundColor(Color.BLUE)
                 .build());
 
@@ -314,7 +327,7 @@ public class TableDrawerIntegrationTest {
         tableBuilder.addRow(
                 RowBuilder.newBuilder()
                         .add(CellText.builder().text("first").build())
-                        .add(CellText.builder().text("second").alignment(RIGHT).build())
+                        .add(CellText.builder().text("second").horizontalAlignment(RIGHT).build())
                         .build());
 
 

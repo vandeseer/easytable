@@ -1,4 +1,4 @@
-package org.vandeseer.pdfbox.easytable.Cell;
+package org.vandeseer.pdfbox.easytable.cell;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -28,7 +28,10 @@ public abstract class CellBaseData {
     private final int span = 1;
 
     @Builder.Default
-    private final HorizontalAlignment alignment = HorizontalAlignment.LEFT;
+    private final HorizontalAlignment horizontalAlignment = HorizontalAlignment.LEFT;
+
+    @Builder.Default
+    private final VerticalAlignment verticalAlignment = VerticalAlignment.MIDDLE;
 
     @Builder.Default
     private final float paddingLeft = 4;
@@ -54,6 +57,9 @@ public abstract class CellBaseData {
     @Builder.Default
     private float borderWidthBottom = 0;
 
+    public float getHorizontalPadding() {
+        return getPaddingLeft() + getPaddingRight();
+    }
 
     public CellBaseData withAllBorders(final float borderWith) {
         borderWidthBottom = borderWith;
@@ -67,7 +73,6 @@ public abstract class CellBaseData {
         final int borderWith = 1;
         return withAllBorders(borderWith);
     }
-
 
     public boolean hasBorderTop() {
         return getBorderWidthTop() > 0;
@@ -83,10 +88,6 @@ public abstract class CellBaseData {
 
     public boolean hasBorderRight() {
         return getBorderWidthRight() > 0;
-    }
-
-    public float getHeightWithoutFontSize() {
-        return getPaddingBottom() + getPaddingTop();
     }
 
     public boolean hasBackgroundColor() {

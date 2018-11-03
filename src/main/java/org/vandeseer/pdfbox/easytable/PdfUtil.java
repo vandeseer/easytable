@@ -42,7 +42,6 @@ public class PdfUtil {
         return font.getFontDescriptor().getCapHeight() / 1000f * fontSize;
     }
 
-
     /**
      * Split a text into multiple lines to prevent a text-overflow.
      *
@@ -67,13 +66,11 @@ public class PdfUtil {
             return Collections.singletonList(line);
         }
 
-
         final List<String> resultLines = PdfUtil.splitByWords(line, font, fontSize, maxWidth);
 
         if (resultLines.isEmpty()) {
             resultLines.addAll(PdfUtil.splitBySize(line, font, fontSize, maxWidth));
         }
-
 
         return resultLines;
     }

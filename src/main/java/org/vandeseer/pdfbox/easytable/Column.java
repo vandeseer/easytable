@@ -1,6 +1,16 @@
 package org.vandeseer.pdfbox.easytable;
 
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
+@Setter(AccessLevel.PACKAGE)
 public class Column {
+
+    private Table table;
+
+    private Column next;
 
     private final float width;
 
@@ -11,8 +21,8 @@ public class Column {
         this.width = width;
     }
 
-    public float getWidth() {
-        return width;
+    boolean hasNext() {
+        return next != null;
     }
 
 }

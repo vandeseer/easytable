@@ -5,7 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.apache.pdfbox.pdmodel.font.PDFont;
 import org.apache.pdfbox.pdmodel.font.PDType1Font;
-import org.vandeseer.pdfbox.easytable.Cell.CellBaseData;
+import org.vandeseer.pdfbox.easytable.cell.CellBaseData;
 
 import java.awt.*;
 import java.util.LinkedList;
@@ -54,7 +54,7 @@ public class Table {
         public TableBuilder addRow(final Row row) {
             if (row.getCells().stream().mapToInt(CellBaseData::getSpan).sum() != numberOfColumns) {
                 throw new IllegalArgumentException(
-                        "Number withText row cells does not match with number withText table columns");
+                        "Number of row cells does not match with number of table columns");
             }
 
             row.setTable(table);
@@ -113,6 +113,13 @@ public class Table {
         public Table build() {
             table.setWidth(width);
             table.setNumberOfColumns(numberOfColumns);
+            for (int i = 0; i < table.getColumns().size(); i++) {
+                final Column column = table.getColumns().get(i);
+                column.setTable(table);
+                if (i < table.getColumns().size() - 1) {
+                    column.setNext(table.getColumns().get(i + 1));
+                }
+            }
             return table;
         }
 

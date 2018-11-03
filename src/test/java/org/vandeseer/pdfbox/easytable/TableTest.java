@@ -1,7 +1,7 @@
 package org.vandeseer.pdfbox.easytable;
 
 import org.junit.Test;
-import org.vandeseer.pdfbox.easytable.Cell.CellText;
+import org.vandeseer.pdfbox.easytable.cell.CellText;
 import org.vandeseer.pdfbox.easytable.Row.RowBuilder;
 import org.vandeseer.pdfbox.easytable.Table.TableBuilder;
 
