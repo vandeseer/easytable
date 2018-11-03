@@ -12,7 +12,6 @@ import org.vandeseer.pdfbox.easytable.cell.CellImage;
 import org.vandeseer.pdfbox.easytable.cell.CellText;
 import org.vandeseer.pdfbox.easytable.Row.RowBuilder;
 import org.vandeseer.pdfbox.easytable.Table.TableBuilder;
-import org.vandeseer.pdfbox.easytable.cell.VerticalAlignment;
 
 import java.awt.*;
 import java.io.IOException;
@@ -43,7 +42,7 @@ public class TableDrawerIntegrationTest {
 
 
         tableBuilder.addRow(RowBuilder.newBuilder()
-                .add(CellText.builder().text("Pur").span(2).backgroundColor(Color.YELLOW).horizontalAlignment(CENTER).build().withAllBorders())
+                .add(CellText.builder().text("Pur").span(2).backgroundColor(Color.YELLOW).horizontalAlignment(CENTER).allBorders(1).build())
                 .add(CellText.builder().text("Booz").build())
                 .setBackgroundColor(Color.BLUE)
                 .build());
@@ -57,7 +56,7 @@ public class TableDrawerIntegrationTest {
 
         tableBuilder.addRow(RowBuilder.newBuilder()
                 .add(CellText.builder().text("Bar").horizontalAlignment(RIGHT).build())
-                .add(CellText.builder().text("Baz").span(2).backgroundColor(Color.CYAN).horizontalAlignment(CENTER).build().withAllBorders())
+                .add(CellText.builder().text("Baz").span(2).backgroundColor(Color.CYAN).horizontalAlignment(CENTER).allBorders(1).build())
                 .setBackgroundColor(Color.GREEN)
                 .build());
 
@@ -86,10 +85,10 @@ public class TableDrawerIntegrationTest {
 
         // Add the header row ...
         final Row headerRow = RowBuilder.newBuilder()
-                .add(CellText.builder().text("Product").build().withAllBorders())
-                .add(CellText.builder().text("2018").horizontalAlignment(CENTER).build().withAllBorders())
-                .add(CellText.builder().text("2019").horizontalAlignment(CENTER).build().withAllBorders())
-                .add(CellText.builder().text("Total").horizontalAlignment(CENTER).build().withAllBorders())
+                .add(CellText.builder().text("Product").allBorders(1).build())
+                .add(CellText.builder().text("2018").horizontalAlignment(CENTER).allBorders(1).build())
+                .add(CellText.builder().text("2019").horizontalAlignment(CENTER).allBorders(1).build())
+                .add(CellText.builder().text("Total").horizontalAlignment(CENTER).allBorders(1).build())
                 .setBackgroundColor(TableDrawerIntegrationTest.BLUE_DARK)
                 .withTextColor(Color.WHITE)
                 .setFont(PDType1Font.HELVETICA_BOLD)
@@ -106,10 +105,10 @@ public class TableDrawerIntegrationTest {
             grandTotal += total;
 
             tableBuilder.addRow(RowBuilder.newBuilder()
-                    .add(CellText.builder().text(String.valueOf(dataRow[0])).build().withAllBorders())
-                    .add(CellText.builder().text(dataRow[1] + " €").horizontalAlignment(RIGHT).build().withAllBorders())
-                    .add(CellText.builder().text(dataRow[2] + " €").horizontalAlignment(RIGHT).build().withAllBorders())
-                    .add(CellText.builder().text(total + " €").horizontalAlignment(RIGHT).build().withAllBorders())
+                    .add(CellText.builder().text(String.valueOf(dataRow[0])).allBorders(1).build())
+                    .add(CellText.builder().text(dataRow[1] + " €").horizontalAlignment(RIGHT).allBorders(1).build())
+                    .add(CellText.builder().text(dataRow[2] + " €").horizontalAlignment(RIGHT).allBorders(1).build())
+                    .add(CellText.builder().text(total + " €").horizontalAlignment(RIGHT).allBorders(1).build())
                     .setBackgroundColor(i % 2 == 0 ? TableDrawerIntegrationTest.BLUE_LIGHT_1 : TableDrawerIntegrationTest.BLUE_LIGHT_2)
                     .build())
             .setWordBreaking();
@@ -127,14 +126,14 @@ public class TableDrawerIntegrationTest {
                         .backgroundColor(TableDrawerIntegrationTest.BLUE_DARK)
                         .fontSize(6)
                         .font(HELVETICA_OBLIQUE)
-                        .build()
-                        .withAllBorders())
+                        .allBorders(1)
+                        .build())
                 .add(CellText.builder().text(grandTotal + " €").backgroundColor(LIGHT_GRAY)
                         .font(HELVETICA_BOLD_OBLIQUE)
                         .horizontalAlignment(RIGHT)
                         .verticalAlignment(TOP)
-                        .build()
-                        .withAllBorders())
+                        .allBorders(1)
+                        .build())
                 .build());
 
         createDocumentWithTable(tableBuilder.build(), "target/sampleExcelLike.pdf");
@@ -196,9 +195,9 @@ public class TableDrawerIntegrationTest {
         // ... and some cells
         for (int i = 0; i < 10; i++) {
             tableBuilder.addRow(RowBuilder.newBuilder()
-                    .add(CellText.builder().text(String.valueOf(i)).font(PDType1Font.COURIER_BOLD).build().withAllBorders())
-                    .add(CellText.builder().text(String.valueOf(i * i)).fontSize(22).build().withAllBorders())
-                    .add(CellText.builder().text(String.valueOf(i + (i * i))).font(PDType1Font.TIMES_ITALIC).build().withAllBorders())
+                    .add(CellText.builder().text(String.valueOf(i)).font(PDType1Font.COURIER_BOLD).allBorders(1).build())
+                    .add(CellText.builder().text(String.valueOf(i * i)).fontSize(22).allBorders(1).build())
+                    .add(CellText.builder().text(String.valueOf(i + (i * i))).font(PDType1Font.TIMES_ITALIC).allBorders(1).build())
                     .setBackgroundColor(i % 2 == 0 ? Color.LIGHT_GRAY : Color.WHITE)
                     .build());
         }
@@ -333,8 +332,8 @@ public class TableDrawerIntegrationTest {
 
         tableBuilder.addRow(
                 RowBuilder.newBuilder()
-                        .add(CellImage.builder().image(image1).build().withAllBorders())
-                        .add(CellImage.builder().image(image2).build().withAllBorders())
+                        .add(CellImage.builder().image(image1).allBorders(1).build())
+                        .add(CellImage.builder().image(image2).allBorders(1).build())
                         .build());
 
         tableBuilder.addRow(
@@ -343,8 +342,8 @@ public class TableDrawerIntegrationTest {
                                 .text("images from \"https://www.techrepublic.com/pictures/the-21-best-it-and-tech-memes-on-the-internet/5/\"")
                                 .span(2)
                                 .fontSize(6)
-                                .build()
-                                .withAllBorders())
+                                .allBorders(1)
+                                .build())
                         .build()
         );
 

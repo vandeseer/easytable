@@ -22,6 +22,8 @@ public abstract class CellBaseData {
 
     @Setter
     private Color backgroundColor;
+
+    @Builder.Default
     private Color borderColor;
 
     @Builder.Default
@@ -61,19 +63,6 @@ public abstract class CellBaseData {
         return getPaddingLeft() + getPaddingRight();
     }
 
-    public CellBaseData withAllBorders(final float borderWith) {
-        borderWidthBottom = borderWith;
-        borderWidthLeft = borderWith;
-        borderWidthRight = borderWith;
-        borderWidthTop = borderWith;
-        return this;
-    }
-
-    public CellBaseData withAllBorders() {
-        final int borderWith = 1;
-        return withAllBorders(borderWith);
-    }
-
     public boolean hasBorderTop() {
         return getBorderWidthTop() > 0;
     }
@@ -105,5 +94,14 @@ public abstract class CellBaseData {
     }
 
     public abstract float getHeight();
+
+    // This is used for customizations of the Lombok generated (Super)Builder
+    public abstract static class CellBaseDataBuilder<C extends CellBaseData, B extends CellBaseData.CellBaseDataBuilder<C, B>> {
+
+        public B allBorders(final float borderWidth) {
+            return this.borderWidthTop(borderWidth).borderWidthBottom(borderWidth).borderWidthLeft(borderWidth).borderWidthRight(borderWidth);
+        }
+
+    }
 
 }
