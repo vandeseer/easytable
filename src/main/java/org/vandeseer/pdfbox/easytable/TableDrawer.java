@@ -1,5 +1,6 @@
 package org.vandeseer.pdfbox.easytable;
 
+import lombok.Builder;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.font.PDFont;
 import org.vandeseer.pdfbox.easytable.cell.*;
@@ -10,55 +11,21 @@ import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
 
+@Builder
 public class TableDrawer {
 
     private final float tableStartX;
     private final float tableStartY;
+
     private final PDPageContentStream contentStream;
     private final Table table;
 
-    public static class TableDrawerBuilder {
-
-        private float tableStartX;
-        private float tableStartY;
-        private PDPageContentStream contentStream;
-        private Table table;
-
-        // TODO can we somehow put the "cursor" directly to where the content stream is right now?!
-        public static TableDrawerBuilder newBuilder() {
-            return new TableDrawerBuilder();
-        }
-
-        public TableDrawerBuilder startX(final float startX) {
-            tableStartX = startX;
-            return this;
-        }
-
-        public TableDrawerBuilder startY(final float startY) {
-            tableStartY = startY;
-            return this;
-        }
-
-        public TableDrawerBuilder withContentStream(final PDPageContentStream contentStream) {
-            this.contentStream = contentStream;
-            return this;
-        }
-
-        public TableDrawerBuilder withTable(final Table table) {
-            this.table = table;
-            return this;
-        }
-
-        public TableDrawer build() {
-            return new TableDrawer(contentStream, table, tableStartX, tableStartY);
-        }
-    }
-
-    public TableDrawer(final PDPageContentStream contentStream, final Table table, final float startX, final float startY) {
+    // This is needed for the generated builder!
+    private TableDrawer(float tableStartX, float tableStartY, PDPageContentStream contentStream, Table table) {
+        this.tableStartX = tableStartX;
+        this.tableStartY = tableStartY - PdfUtil.getFontHeight(table.getFont(), table.getFontSize()); // custom!
         this.contentStream = contentStream;
         this.table = table;
-        tableStartX = startX;
-        tableStartY = startY - PdfUtil.getFontHeight(table.getFont(), table.getFontSize());
     }
 
     public void draw() throws IOException {
@@ -157,25 +124,6 @@ public class TableDrawer {
         }
     }
 
-    private void drawLine(Color color, float width, float toX, float toY) throws IOException {
-        contentStream.setLineWidth(width);
-        contentStream.lineTo(toX, toY);
-        contentStream.setStrokingColor(color);
-        contentStream.stroke();
-    }
-
-    private void drawCellBackground(final CellBaseData cell, final float startX, final float startY, final float width, final float height)
-            throws IOException {
-        contentStream.setNonStrokingColor(cell.getBackgroundColor());
-
-        contentStream.addRect(startX, startY, width, height);
-        contentStream.fill();
-        contentStream.closePath();
-
-        // Reset NonStrokingColor to default value
-        contentStream.setNonStrokingColor(Color.BLACK);
-    }
-
     private void drawCellText(final CellText cell, final float columnWidth, final float moveX, final float moveY) throws IOException {
         final PDFont currentFont = cell.getFont();
         final int currentFontSize = cell.getFontSize();
@@ -226,15 +174,6 @@ public class TableDrawer {
         }
     }
 
-    private void drawText(String text, PDFont font, int fontSize, Color color, float x, float y) throws IOException {
-        contentStream.beginText();
-        contentStream.setNonStrokingColor(color);
-        contentStream.setFont(font, fontSize);
-        contentStream.newLineAtOffset(x, y);
-        contentStream.showText(text);
-        contentStream.endText();
-    }
-
     private void drawCellImage(final CellImage cell, final float columnWidth, final float moveX, final float moveY) throws IOException {
         final Point2D.Float size = cell.getFitSize();
         final Point2D.Float drawAt = new Point2D.Float();
@@ -250,7 +189,34 @@ public class TableDrawer {
                 - (size.y / 2f);
 
         contentStream.drawImage(cell.getImage(), drawAt.x, drawAt.y, size.x, size.y);
+    }
 
+    private void drawLine(Color color, float width, float toX, float toY) throws IOException {
+        contentStream.setLineWidth(width);
+        contentStream.lineTo(toX, toY);
+        contentStream.setStrokingColor(color);
+        contentStream.stroke();
+    }
+
+    private void drawCellBackground(final CellBaseData cell, final float startX, final float startY, final float width, final float height)
+            throws IOException {
+        contentStream.setNonStrokingColor(cell.getBackgroundColor());
+
+        contentStream.addRect(startX, startY, width, height);
+        contentStream.fill();
+        contentStream.closePath();
+
+        // Reset NonStrokingColor to default value
+        contentStream.setNonStrokingColor(Color.BLACK);
+    }
+
+    private void drawText(String text, PDFont font, int fontSize, Color color, float x, float y) throws IOException {
+        contentStream.beginText();
+        contentStream.setNonStrokingColor(color);
+        contentStream.setFont(font, fontSize);
+        contentStream.newLineAtOffset(x, y);
+        contentStream.showText(text);
+        contentStream.endText();
     }
 
 }

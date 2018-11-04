@@ -24,6 +24,9 @@ import static org.vandeseer.pdfbox.easytable.cell.VerticalAlignment.BOTTOM;
 import static org.vandeseer.pdfbox.easytable.cell.VerticalAlignment.TOP;
 
 // TODO test border color on row level
+// TODO test the precedence of cell level settings of row level/table level settings
+// TODO can we somehow put the "cursor" directly to where the content stream is right now?!
+
 public class TableDrawerIntegrationTest {
 
     private static final Color BLUE_DARK = new Color(76, 129, 190);
@@ -150,11 +153,11 @@ public class TableDrawerIntegrationTest {
         final int startX = 50;
 
         // Draw!
-        TableDrawer.TableDrawerBuilder.newBuilder()
-                .withContentStream(contentStream)
-                .withTable(table)
-                .startX(startX)
-                .startY(startY)
+        TableDrawer.builder()
+                .contentStream(contentStream)
+                .table(table)
+                .tableStartX(startX)
+                .tableStartY(startY)
                 .build()
                 .draw();
         contentStream.close();
@@ -216,7 +219,7 @@ public class TableDrawerIntegrationTest {
         final PDPageContentStream contentStream = new PDPageContentStream(document, page);
         final Table table = getRingManagerTable();
 
-        (new TableDrawer(contentStream, table, startX, startY)).draw();
+        TableDrawer.builder().contentStream(contentStream).table(table).tableStartX(startX).tableStartY(startY).build().draw();
 
         contentStream.setFont(HELVETICA, 8.0f);
         contentStream.beginText();
