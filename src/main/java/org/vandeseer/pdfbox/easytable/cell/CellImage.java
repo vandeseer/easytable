@@ -24,7 +24,7 @@ public class CellImage extends CellBaseData {
 
     @Override
     public float getHeight() {
-        return getFitSize().y + getPaddingTop() + getPaddingBottom();
+        return getFitSize().y + getVerticalPadding();
     }
 
 
@@ -32,7 +32,7 @@ public class CellImage extends CellBaseData {
         final Point2D.Float sizes = new Point2D.Float();
         float scaledWidth = image.getWidth() * getScale();
         float scaledHeight = image.getHeight() * getScale();
-        final float resultingWidth = getColumn().getWidth() - getPaddingLeft() - getPaddingRight();
+        final float resultingWidth = getColumn().getWidth() - getHorizontalPadding();
 
         // maybe reduce the image to fit in column
         if (scaledWidth > resultingWidth) {

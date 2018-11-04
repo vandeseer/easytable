@@ -10,7 +10,6 @@ import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
 import org.junit.Test;
 import org.vandeseer.pdfbox.easytable.cell.CellImage;
 import org.vandeseer.pdfbox.easytable.cell.CellText;
-import org.vandeseer.pdfbox.easytable.Row.RowBuilder;
 import org.vandeseer.pdfbox.easytable.Table.TableBuilder;
 
 import java.awt.*;
@@ -24,7 +23,7 @@ import static org.vandeseer.pdfbox.easytable.cell.HorizontalAlignment.RIGHT;
 import static org.vandeseer.pdfbox.easytable.cell.VerticalAlignment.BOTTOM;
 import static org.vandeseer.pdfbox.easytable.cell.VerticalAlignment.TOP;
 
-// TODO test border color on cell level
+// TODO test border color on row level
 public class TableDrawerIntegrationTest {
 
     private static final Color BLUE_DARK = new Color(76, 129, 190);
@@ -33,31 +32,31 @@ public class TableDrawerIntegrationTest {
 
     @Test
     public void createSampleDocumentWithCellSpanning() throws Exception {
-        final TableBuilder tableBuilder = TableBuilder.newBuilder()
+        final TableBuilder tableBuilder = Table.builder()
                 .addColumnOfWidth(300)
                 .addColumnOfWidth(120)
                 .addColumnOfWidth(70)
-                .setFontSize(8)
-                .setFont(HELVETICA);
+                .fontSize(8)
+                .font(HELVETICA);
 
 
-        tableBuilder.addRow(RowBuilder.newBuilder()
+        tableBuilder.addRow(Row.builder()
                 .add(CellText.builder().text("Pur").span(2).backgroundColor(Color.YELLOW).horizontalAlignment(CENTER).allBorders(1).build())
                 .add(CellText.builder().text("Booz").build())
-                .setBackgroundColor(Color.BLUE)
+                .backgroundColor(Color.BLUE)
                 .build());
 
-        tableBuilder.addRow(RowBuilder.newBuilder()
+        tableBuilder.addRow(Row.builder()
                 .add(CellText.builder().text("Hey").horizontalAlignment(RIGHT).build())
                 .add(CellText.builder().text("Ho!").build())
                 .add(CellText.builder().text("Fu.").backgroundColor(Color.ORANGE).build())
-                .setBackgroundColor(Color.BLUE)
+                .backgroundColor(Color.BLUE)
                 .build());
 
-        tableBuilder.addRow(RowBuilder.newBuilder()
+        tableBuilder.addRow(Row.builder()
                 .add(CellText.builder().text("Bar").horizontalAlignment(RIGHT).build())
                 .add(CellText.builder().text("Baz").span(2).backgroundColor(Color.CYAN).horizontalAlignment(CENTER).allBorders(1).build())
-                .setBackgroundColor(Color.GREEN)
+                .backgroundColor(Color.GREEN)
                 .build());
 
         createDocumentWithTable(tableBuilder.build(), "target/sampleWithCellSpanning.pdf");
@@ -74,25 +73,25 @@ public class TableDrawerIntegrationTest {
         };
 
         // Define the table structure first
-        final TableBuilder tableBuilder = TableBuilder.newBuilder()
+        final TableBuilder tableBuilder = Table.builder()
                 .addColumnOfWidth(100)
                 .addColumnOfWidth(50)
                 .addColumnOfWidth(50)
                 .addColumnOfWidth(50)
-                .setFontSize(8)
-                .setFont(HELVETICA)
-                .setBorderColor(Color.WHITE);
+                .fontSize(8)
+                .font(HELVETICA)
+                .borderColor(Color.WHITE);
 
         // Add the header row ...
-        final Row headerRow = RowBuilder.newBuilder()
+        final Row headerRow = Row.builder()
                 .add(CellText.builder().text("Product").allBorders(1).build())
                 .add(CellText.builder().text("2018").horizontalAlignment(CENTER).allBorders(1).build())
                 .add(CellText.builder().text("2019").horizontalAlignment(CENTER).allBorders(1).build())
                 .add(CellText.builder().text("Total").horizontalAlignment(CENTER).allBorders(1).build())
-                .setBackgroundColor(TableDrawerIntegrationTest.BLUE_DARK)
-                .withTextColor(Color.WHITE)
-                .setFont(PDType1Font.HELVETICA_BOLD)
-                .setFontSize(9)
+                .backgroundColor(TableDrawerIntegrationTest.BLUE_DARK)
+                .textColor(Color.WHITE)
+                .font(PDType1Font.HELVETICA_BOLD)
+                .fontSize(9)
                 .build();
 
         tableBuilder.addRow(headerRow);
@@ -104,18 +103,18 @@ public class TableDrawerIntegrationTest {
             final double total = (double) dataRow[1] + (double) dataRow[2];
             grandTotal += total;
 
-            tableBuilder.addRow(RowBuilder.newBuilder()
+            tableBuilder.addRow(Row.builder()
                     .add(CellText.builder().text(String.valueOf(dataRow[0])).allBorders(1).build())
                     .add(CellText.builder().text(dataRow[1] + " €").horizontalAlignment(RIGHT).allBorders(1).build())
                     .add(CellText.builder().text(dataRow[2] + " €").horizontalAlignment(RIGHT).allBorders(1).build())
                     .add(CellText.builder().text(total + " €").horizontalAlignment(RIGHT).allBorders(1).build())
-                    .setBackgroundColor(i % 2 == 0 ? TableDrawerIntegrationTest.BLUE_LIGHT_1 : TableDrawerIntegrationTest.BLUE_LIGHT_2)
+                    .backgroundColor(i % 2 == 0 ? TableDrawerIntegrationTest.BLUE_LIGHT_1 : TableDrawerIntegrationTest.BLUE_LIGHT_2)
                     .build())
-            .setWordBreaking();
+            .wordBreak(true);
         }
 
         // Add a final row
-        tableBuilder.addRow(RowBuilder.newBuilder()
+        tableBuilder.addRow(Row.builder()
                 .add(CellText.builder().text("This spans over 3 cells, is right aligned and its text is so long that it even breaks. " +
                         "Also it shows the grand total in the next cell and furthermore vertical alignment is shown:")
                         .span(3)
@@ -167,16 +166,16 @@ public class TableDrawerIntegrationTest {
     @Test
     public void createTableWithDifferentFontsInCells() throws IOException {
         // Define the table structure first
-        final TableBuilder tableBuilder = TableBuilder.newBuilder()
+        final TableBuilder tableBuilder = Table.builder()
                 .addColumnOfWidth(300)
                 .addColumnOfWidth(120)
                 .addColumnOfWidth(70)
-                .setFontSize(8)
-                .setFont(HELVETICA)
-                .setWordBreaking();
+                .fontSize(8)
+                .font(HELVETICA)
+                .wordBreak(true);
 
         // Header ...
-        tableBuilder.addRow(RowBuilder.newBuilder()
+        tableBuilder.addRow(Row.builder()
                 .add(CellText.builder().text("This is top right aligned without a border")
                         .horizontalAlignment(RIGHT)
                         .verticalAlignment(TOP)
@@ -189,16 +188,16 @@ public class TableDrawerIntegrationTest {
                         .backgroundColor(Color.ORANGE)
                         .verticalAlignment(BOTTOM)
                         .build())
-                .setBackgroundColor(Color.BLUE)
+                .backgroundColor(Color.BLUE)
                 .build());
 
         // ... and some cells
         for (int i = 0; i < 10; i++) {
-            tableBuilder.addRow(RowBuilder.newBuilder()
+            tableBuilder.addRow(Row.builder()
                     .add(CellText.builder().text(String.valueOf(i)).font(PDType1Font.COURIER_BOLD).allBorders(1).build())
                     .add(CellText.builder().text(String.valueOf(i * i)).fontSize(22).allBorders(1).build())
                     .add(CellText.builder().text(String.valueOf(i + (i * i))).font(PDType1Font.TIMES_ITALIC).allBorders(1).build())
-                    .setBackgroundColor(i % 2 == 0 ? Color.LIGHT_GRAY : Color.WHITE)
+                    .backgroundColor(i % 2 == 0 ? Color.LIGHT_GRAY : Color.WHITE)
                     .build());
         }
 
@@ -234,17 +233,17 @@ public class TableDrawerIntegrationTest {
 
     private Table getRingManagerTable() {
         final TableBuilder tableBuilder = new TableBuilder()
-                .addColumn(new Column(26))
-                .addColumn(new Column(70))
-                .addColumn(new Column(390))
-                .setFontSize(9)
-                .setBorderColor(Color.GRAY)
-                .setFont(HELVETICA);
+                .addColumnOfWidth(26)
+                .addColumnOfWidth(70)
+                .addColumnOfWidth(390)
+                .fontSize(9)
+                .borderColor(Color.GRAY)
+                .font(HELVETICA);
 
         final float borderWidthOuter = 1.5f;
         final float borderWidthInner = 1.0f;
 
-        tableBuilder.addRow(RowBuilder.newBuilder().add(
+        tableBuilder.addRow(Row.builder().add(
                 CellText.builder().text("1.")
                         .borderWidthTop(borderWidthOuter)
                         .borderWidthLeft(borderWidthOuter)
@@ -263,7 +262,7 @@ public class TableDrawerIntegrationTest {
                                 .build()
                 ).build());
 
-        tableBuilder.addRow(RowBuilder.newBuilder().add(
+        tableBuilder.addRow(Row.builder().add(
                 CellText.builder().text("").borderWidthLeft(borderWidthOuter).build())
                 .add(
                         CellText.builder().text("Jugend")
@@ -277,7 +276,7 @@ public class TableDrawerIntegrationTest {
                                 .build())
                 .build());
 
-        tableBuilder.addRow(RowBuilder.newBuilder().add(
+        tableBuilder.addRow(Row.builder().add(
                 CellText.builder().text("").borderWidthLeft(borderWidthOuter).build()).add(
                 CellText.builder().text("3x3")
                         .borderWidthRight(borderWidthInner)
@@ -285,7 +284,7 @@ public class TableDrawerIntegrationTest {
                         .build()).add(
                 CellText.builder().text("Blaue Ecke:").borderWidthRight(borderWidthOuter).build()).build());
 
-        tableBuilder.addRow(RowBuilder.newBuilder().add(
+        tableBuilder.addRow(Row.builder().add(
                 CellText.builder().text("")
                         .borderWidthLeft(borderWidthOuter)
                         .borderWidthBottom(borderWidthOuter)
@@ -314,8 +313,8 @@ public class TableDrawerIntegrationTest {
 
         final PDPageContentStream contentStream = new PDPageContentStream(document, page);
         final TableBuilder tableBuilder = new TableBuilder()
-                .addColumn(new Column(200))
-                .addColumn(new Column(200));
+                .addColumnOfWidth(200)
+                .addColumnOfWidth(200);
 
         final byte[] bytes1 = IOUtils.toByteArray(getClass().getClassLoader().getResourceAsStream("pic1.jpg"));
         final PDImageXObject image1 = PDImageXObject.createFromByteArray(document, bytes1, "test1");
@@ -324,20 +323,20 @@ public class TableDrawerIntegrationTest {
         final PDImageXObject image2 = PDImageXObject.createFromByteArray(document, bytes2, "test2");
 
         tableBuilder.addRow(
-                RowBuilder.newBuilder()
+                Row.builder()
                         .add(CellText.builder().text("first").build())
                         .add(CellText.builder().text("second").horizontalAlignment(RIGHT).build())
                         .build());
 
 
         tableBuilder.addRow(
-                RowBuilder.newBuilder()
+                Row.builder()
                         .add(CellImage.builder().image(image1).allBorders(1).build())
                         .add(CellImage.builder().image(image2).allBorders(1).build())
                         .build());
 
         tableBuilder.addRow(
-                RowBuilder.newBuilder()
+                Row.builder()
                         .add(CellText.builder()
                                 .text("images from \"https://www.techrepublic.com/pictures/the-21-best-it-and-tech-memes-on-the-internet/5/\"")
                                 .span(2)

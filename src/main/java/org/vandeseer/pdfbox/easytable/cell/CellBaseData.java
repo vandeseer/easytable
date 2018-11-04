@@ -63,6 +63,10 @@ public abstract class CellBaseData {
         return getPaddingLeft() + getPaddingRight();
     }
 
+    public float getVerticalPadding() {
+        return getPaddingTop() + getPaddingBottom();
+    }
+
     public boolean hasBorderTop() {
         return getBorderWidthTop() > 0;
     }
@@ -84,8 +88,7 @@ public abstract class CellBaseData {
     }
 
     public Color getBackgroundColor() {
-        // TODO Get Row Color
-        return Optional.ofNullable(backgroundColor).orElse(null);
+        return backgroundColor;
     }
 
     public Color getBorderColor() {

@@ -14,7 +14,7 @@ public class Column {
 
     private final float width;
 
-    public Column(final float width) {
+    Column(final float width) {
         if (width < 0) {
             throw new IllegalArgumentException("Column width must be non-negative");
         }
