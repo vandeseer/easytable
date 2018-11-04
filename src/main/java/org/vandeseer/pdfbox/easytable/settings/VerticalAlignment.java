@@ -1,4 +1,4 @@
-package org.vandeseer.pdfbox.easytable.cell;
+package org.vandeseer.pdfbox.easytable.settings;
 
 public enum VerticalAlignment {
 

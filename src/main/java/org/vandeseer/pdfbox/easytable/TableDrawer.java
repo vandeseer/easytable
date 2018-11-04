@@ -3,7 +3,12 @@ package org.vandeseer.pdfbox.easytable;
 import lombok.Builder;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.font.PDFont;
-import org.vandeseer.pdfbox.easytable.cell.*;
+import org.vandeseer.pdfbox.easytable.cell.CellBaseData;
+import org.vandeseer.pdfbox.easytable.cell.CellImage;
+import org.vandeseer.pdfbox.easytable.cell.CellText;
+import org.vandeseer.pdfbox.easytable.settings.HorizontalAlignment;
+import org.vandeseer.pdfbox.easytable.settings.VerticalAlignment;
+import org.vandeseer.pdfbox.easytable.util.PdfUtil;
 
 import java.awt.*;
 import java.awt.geom.Point2D;

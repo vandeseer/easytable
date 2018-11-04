@@ -6,6 +6,8 @@ import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 import org.vandeseer.pdfbox.easytable.Column;
 import org.vandeseer.pdfbox.easytable.Row;
+import org.vandeseer.pdfbox.easytable.settings.HorizontalAlignment;
+import org.vandeseer.pdfbox.easytable.settings.VerticalAlignment;
 
 import java.awt.*;
 import java.util.Optional;
@@ -101,7 +103,7 @@ public abstract class CellBaseData {
     // This is used for customizations of the Lombok generated (Super)Builder
     public abstract static class CellBaseDataBuilder<C extends CellBaseData, B extends CellBaseData.CellBaseDataBuilder<C, B>> {
 
-        public B allBorders(final float borderWidth) {
+        public B borderWidth(final float borderWidth) {
             return this.borderWidthTop(borderWidth).borderWidthBottom(borderWidth).borderWidthLeft(borderWidth).borderWidthRight(borderWidth);
         }
 

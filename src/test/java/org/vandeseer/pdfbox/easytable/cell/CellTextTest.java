@@ -7,7 +7,7 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.vandeseer.pdfbox.easytable.Column;
-import org.vandeseer.pdfbox.easytable.PdfUtil;
+import org.vandeseer.pdfbox.easytable.util.PdfUtil;
 import org.vandeseer.pdfbox.easytable.Row;
 import org.vandeseer.pdfbox.easytable.Table;
 

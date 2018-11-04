@@ -27,7 +27,6 @@ public class Row {
 
     private Color textColor;
     private Color borderColor;
-
     private Color backgroundColor;
 
     private PDFont font;

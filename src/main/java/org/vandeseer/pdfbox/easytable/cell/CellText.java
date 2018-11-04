@@ -5,7 +5,7 @@ import lombok.NonNull;
 import lombok.experimental.SuperBuilder;
 import org.apache.pdfbox.pdmodel.font.PDFont;
 import org.vandeseer.pdfbox.easytable.Column;
-import org.vandeseer.pdfbox.easytable.PdfUtil;
+import org.vandeseer.pdfbox.easytable.util.PdfUtil;
 
 import java.awt.*;
 import java.util.Comparator;
