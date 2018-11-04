@@ -33,25 +33,25 @@ You need the following code:
     };
 
     // Define the table structure first
-    final TableBuilder tableBuilder = TableBuilder.newBuilder()
+    final TableBuilder tableBuilder = Table.builder()
             .addColumnOfWidth(100)
             .addColumnOfWidth(50)
             .addColumnOfWidth(50)
             .addColumnOfWidth(50)
-            .setFontSize(8)
-            .setFont(HELVETICA)
-            .setBorderColor(Color.WHITE);
+            .fontSize(8)
+            .font(HELVETICA)
+            .borderColor(Color.WHITE);
 
     // Add the header row ...
-    final Row headerRow = RowBuilder.newBuilder()
-            .add(CellText.builder().text("Product").build().withAllBorders())
-            .add(CellText.builder().text("2018").horizontalAlignment(CENTER).build().withAllBorders())
-            .add(CellText.builder().text("2019").horizontalAlignment(CENTER).build().withAllBorders())
-            .add(CellText.builder().text("Total").horizontalAlignment(CENTER).build().withAllBorders())
-            .setBackgroundColor(TableDrawerIntegrationTest.BLUE_DARK)
-            .withTextColor(Color.WHITE)
-            .setFont(PDType1Font.HELVETICA_BOLD)
-            .setFontSize(9)
+    final Row headerRow = Row.builder()
+            .add(CellText.builder().text("Product").borderWidth(1).build())
+            .add(CellText.builder().text("2018").horizontalAlignment(CENTER).borderWidth(1).build())
+            .add(CellText.builder().text("2019").horizontalAlignment(CENTER).borderWidth(1).build())
+            .add(CellText.builder().text("Total").horizontalAlignment(CENTER).borderWidth(1).build())
+            .backgroundColor(TableDrawerIntegrationTest.BLUE_DARK)
+            .textColor(Color.WHITE)
+            .font(PDType1Font.HELVETICA_BOLD)
+            .fontSize(9)
             .build();
 
     tableBuilder.addRow(headerRow);
@@ -63,18 +63,18 @@ You need the following code:
         final double total = (double) dataRow[1] + (double) dataRow[2];
         grandTotal += total;
 
-        tableBuilder.addRow(RowBuilder.newBuilder()
-                .add(CellText.builder().text(String.valueOf(dataRow[0])).build().withAllBorders())
-                .add(CellText.builder().text(dataRow[1] + " €").horizontalAlignment(RIGHT).build().withAllBorders())
-                .add(CellText.builder().text(dataRow[2] + " €").horizontalAlignment(RIGHT).build().withAllBorders())
-                .add(CellText.builder().text(total + " €").horizontalAlignment(RIGHT).build().withAllBorders())
-                .setBackgroundColor(i % 2 == 0 ? TableDrawerIntegrationTest.BLUE_LIGHT_1 : TableDrawerIntegrationTest.BLUE_LIGHT_2)
+        tableBuilder.addRow(Row.builder()
+                .add(CellText.builder().text(String.valueOf(dataRow[0])).borderWidth(1).build())
+                .add(CellText.builder().text(dataRow[1] + " €").horizontalAlignment(RIGHT).borderWidth(1).build())
+                .add(CellText.builder().text(dataRow[2] + " €").horizontalAlignment(RIGHT).borderWidth(1).build())
+                .add(CellText.builder().text(total + " €").horizontalAlignment(RIGHT).borderWidth(1).build())
+                .backgroundColor(i % 2 == 0 ? TableDrawerIntegrationTest.BLUE_LIGHT_1 : TableDrawerIntegrationTest.BLUE_LIGHT_2)
                 .build())
-        .setWordBreaking();
+        .wordBreak(true);
     }
 
     // Add a final row
-    tableBuilder.addRow(RowBuilder.newBuilder()
+    tableBuilder.addRow(Row.builder()
             .add(CellText.builder().text("This spans over 3 cells, is right aligned and its text is so long that it even breaks. " +
                     "Also it shows the grand total in the next cell and furthermore vertical alignment is shown:")
                     .span(3)
@@ -85,14 +85,14 @@ You need the following code:
                     .backgroundColor(TableDrawerIntegrationTest.BLUE_DARK)
                     .fontSize(6)
                     .font(HELVETICA_OBLIQUE)
-                    .build()
-                    .withAllBorders())
+                    .borderWidth(1)
+                    .build())
             .add(CellText.builder().text(grandTotal + " €").backgroundColor(LIGHT_GRAY)
                     .font(HELVETICA_BOLD_OBLIQUE)
                     .horizontalAlignment(RIGHT)
                     .verticalAlignment(TOP)
-                    .build()
-                    .withAllBorders())
+                    .borderWidth(1)
+                    .build())
             .build());
             
      final PDDocument document = new PDDocument();
