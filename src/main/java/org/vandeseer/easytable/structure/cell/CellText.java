@@ -1,11 +1,14 @@
-package org.vandeseer.pdfbox.easytable.cell;
+package org.vandeseer.easytable.structure.cell;
 
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NonNull;
+import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 import org.apache.pdfbox.pdmodel.font.PDFont;
-import org.vandeseer.pdfbox.easytable.Column;
-import org.vandeseer.pdfbox.easytable.util.PdfUtil;
+import org.vandeseer.easytable.settings.FontSettings;
+import org.vandeseer.easytable.structure.Column;
+import org.vandeseer.easytable.util.PdfUtil;
 
 import java.awt.*;
 import java.util.Comparator;
@@ -19,19 +22,21 @@ public class CellText extends CellBaseData {
     private String text;
 
     private Color textColor;
-    private PDFont font;
-    private Integer fontSize;
 
     private float lineSpacing = 1f;
+
+    @Getter
+    @Setter(AccessLevel.NONE)
+    private FontSettings fontSettings;
 
     //region Custom Getter
 
     public PDFont getFont() {
-        return Optional.ofNullable(font).orElse(getRow().getFont());
+        return fontSettings.getFont();
     }
 
     public Integer getFontSize() {
-        return Optional.ofNullable(fontSize).orElse(getRow().getFontSize());
+        return fontSettings.getFontSize();
     }
 
     public Color getTextColor() {
@@ -92,6 +97,22 @@ public class CellText extends CellBaseData {
         }
 
         return textWidth + getHorizontalPadding();
+    }
+
+    public abstract static class CellTextBuilder<C extends CellText, B extends CellText.CellTextBuilder<C, B>> extends CellBaseDataBuilder<C, B> {
+
+        protected FontSettings fontSettings = FontSettings.builder().build();
+
+        public B font(PDFont font) {
+            fontSettings.setFont(font);
+            return this.self();
+        }
+
+        public B fontSize(Integer fontSize) {
+            fontSettings.setFontSize(fontSize);
+            return this.self();
+        }
+
     }
 
 }

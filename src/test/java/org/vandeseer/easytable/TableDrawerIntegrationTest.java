@@ -1,4 +1,4 @@
-package org.vandeseer.pdfbox.easytable;
+package org.vandeseer.easytable;
 
 import org.apache.pdfbox.io.IOUtils;
 import org.apache.pdfbox.pdmodel.PDDocument;
@@ -8,9 +8,12 @@ import org.apache.pdfbox.pdmodel.common.PDRectangle;
 import org.apache.pdfbox.pdmodel.font.PDType1Font;
 import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
 import org.junit.Test;
-import org.vandeseer.pdfbox.easytable.cell.CellImage;
-import org.vandeseer.pdfbox.easytable.cell.CellText;
-import org.vandeseer.pdfbox.easytable.Table.TableBuilder;
+import org.vandeseer.easytable.settings.VerticalAlignment;
+import org.vandeseer.easytable.structure.Row;
+import org.vandeseer.easytable.structure.Table;
+import org.vandeseer.easytable.structure.Table.TableBuilder;
+import org.vandeseer.easytable.structure.cell.CellImage;
+import org.vandeseer.easytable.structure.cell.CellText;
 
 import java.awt.*;
 import java.io.IOException;
@@ -18,10 +21,8 @@ import java.io.IOException;
 import static java.awt.Color.LIGHT_GRAY;
 import static java.awt.Color.WHITE;
 import static org.apache.pdfbox.pdmodel.font.PDType1Font.*;
-import static org.vandeseer.pdfbox.easytable.settings.HorizontalAlignment.CENTER;
-import static org.vandeseer.pdfbox.easytable.settings.HorizontalAlignment.RIGHT;
-import static org.vandeseer.pdfbox.easytable.settings.VerticalAlignment.BOTTOM;
-import static org.vandeseer.pdfbox.easytable.settings.VerticalAlignment.TOP;
+import static org.vandeseer.easytable.settings.HorizontalAlignment.CENTER;
+import static org.vandeseer.easytable.settings.HorizontalAlignment.RIGHT;
 
 // TODO test border color on row level
 // TODO test the precedence of cell level settings of row level/table level settings
@@ -32,6 +33,37 @@ public class TableDrawerIntegrationTest {
     private static final Color BLUE_DARK = new Color(76, 129, 190);
     private static final Color BLUE_LIGHT_1 = new Color(186, 206, 230);
     private static final Color BLUE_LIGHT_2 = new Color(218, 230, 242);
+
+    // TODO we should do a unit test first ;)
+    @Test
+    public void createSampleDocumentWithFontSettingOverriding() throws Exception {
+        final TableBuilder tableBuilder = Table.builder()
+                .addColumnOfWidth(100).addColumnOfWidth(100).addColumnOfWidth(100)
+                .fontSize(10).font(HELVETICA);
+
+        tableBuilder.addRow(
+                Row.builder()
+                        .add(CellText.builder().text("Pur").span(2).borderWidth(1).build())
+                        .add(CellText.builder().text("Booz").build())
+                        .font(COURIER_BOLD).fontSize(8).build());
+
+        tableBuilder.addRow(
+                Row.builder()
+                        .add(CellText.builder().text("Pur").backgroundColor(Color.YELLOW).horizontalAlignment(CENTER).borderWidth(1).build())
+                        .add(CellText.builder().text("Booz").build())
+                        .add(CellText.builder().text("baz").build())
+                        .font(COURIER_BOLD).fontSize(8).build());
+
+        tableBuilder.addRow(
+                Row.builder()
+                        .add(CellText.builder().text("Pur").backgroundColor(Color.YELLOW).horizontalAlignment(CENTER).borderWidth(1).build())
+                        .add(CellText.builder().text("Booz").build())
+                        .add(CellText.builder().text("baz").font(HELVETICA_OBLIQUE).fontSize(5).build())
+                        .build());
+
+        createDocumentWithTable(tableBuilder.build(), "target/fontSettingsOverriding.pdf");
+    }
+
 
     @Test
     public void createSampleDocumentWithCellSpanning() throws Exception {
@@ -133,7 +165,7 @@ public class TableDrawerIntegrationTest {
                 .add(CellText.builder().text(grandTotal + " €").backgroundColor(LIGHT_GRAY)
                         .font(HELVETICA_BOLD_OBLIQUE)
                         .horizontalAlignment(RIGHT)
-                        .verticalAlignment(TOP)
+                        .verticalAlignment(VerticalAlignment.TOP)
                         .borderWidth(1)
                         .build())
                 .build());
@@ -181,7 +213,7 @@ public class TableDrawerIntegrationTest {
         tableBuilder.addRow(Row.builder()
                 .add(CellText.builder().text("This is top right aligned without a border")
                         .horizontalAlignment(RIGHT)
-                        .verticalAlignment(TOP)
+                        .verticalAlignment(VerticalAlignment.TOP)
                         .build())
                 .add(CellText.builder().text("And this is another cell with a very long long long text that tells a nice" +
                         " and useless story, because Iam to lazy to get a lorem-ipsum and I have fun while typing" +
@@ -189,7 +221,7 @@ public class TableDrawerIntegrationTest {
                         "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa").build())
                 .add(CellText.builder().text("This is bottom left aligned")
                         .backgroundColor(Color.ORANGE)
-                        .verticalAlignment(BOTTOM)
+                        .verticalAlignment(VerticalAlignment.BOTTOM)
                         .build())
                 .backgroundColor(Color.BLUE)
                 .build());
@@ -235,7 +267,7 @@ public class TableDrawerIntegrationTest {
     }
 
     private Table getRingManagerTable() {
-        final TableBuilder tableBuilder = new TableBuilder()
+        final TableBuilder tableBuilder = Table.builder()
                 .addColumnOfWidth(26)
                 .addColumnOfWidth(70)
                 .addColumnOfWidth(390)
@@ -311,11 +343,7 @@ public class TableDrawerIntegrationTest {
         final PDPage page = new PDPage(PDRectangle.A4);
         document.addPage(page);
 
-        final float startY = page.getMediaBox().getHeight() - 150;
-        final int startX = 56;
-
-        final PDPageContentStream contentStream = new PDPageContentStream(document, page);
-        final TableBuilder tableBuilder = new TableBuilder()
+        final TableBuilder tableBuilder = Table.builder()
                 .addColumnOfWidth(200)
                 .addColumnOfWidth(200);
 

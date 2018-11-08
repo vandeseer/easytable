@@ -1,14 +1,16 @@
-package org.vandeseer.pdfbox.easytable;
+package org.vandeseer.easytable;
 
 import lombok.Builder;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.font.PDFont;
-import org.vandeseer.pdfbox.easytable.cell.CellBaseData;
-import org.vandeseer.pdfbox.easytable.cell.CellImage;
-import org.vandeseer.pdfbox.easytable.cell.CellText;
-import org.vandeseer.pdfbox.easytable.settings.HorizontalAlignment;
-import org.vandeseer.pdfbox.easytable.settings.VerticalAlignment;
-import org.vandeseer.pdfbox.easytable.util.PdfUtil;
+import org.vandeseer.easytable.structure.Row;
+import org.vandeseer.easytable.structure.Table;
+import org.vandeseer.easytable.structure.cell.CellText;
+import org.vandeseer.easytable.settings.VerticalAlignment;
+import org.vandeseer.easytable.util.PdfUtil;
+import org.vandeseer.easytable.structure.cell.CellBaseData;
+import org.vandeseer.easytable.structure.cell.CellImage;
+import org.vandeseer.easytable.settings.HorizontalAlignment;
 
 import java.awt.*;
 import java.awt.geom.Point2D;
@@ -28,7 +30,7 @@ public class TableDrawer {
     // This is needed for the generated builder!
     private TableDrawer(float tableStartX, float tableStartY, PDPageContentStream contentStream, Table table) {
         this.tableStartX = tableStartX;
-        this.tableStartY = tableStartY - PdfUtil.getFontHeight(table.getFont(), table.getFontSize()); // custom!
+        this.tableStartY = tableStartY - PdfUtil.getFontHeight(table.getFontSettings().getFont(), table.getFontSettings().getFontSize()); // custom!
         this.contentStream = contentStream;
         this.table = table;
     }

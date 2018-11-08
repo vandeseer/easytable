@@ -1,4 +1,4 @@
-package org.vandeseer.pdfbox.easytable;
+package org.vandeseer.easytable.structure;
 
 import lombok.AccessLevel;
 import lombok.Getter;

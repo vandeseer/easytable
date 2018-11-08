@@ -1,9 +1,11 @@
-package org.vandeseer.pdfbox.easytable;
+package org.vandeseer.easytable.structure;
 
 import org.junit.Test;
-import org.vandeseer.pdfbox.easytable.cell.CellText;
-import org.vandeseer.pdfbox.easytable.Row.RowBuilder;
-import org.vandeseer.pdfbox.easytable.Table.TableBuilder;
+import org.vandeseer.easytable.structure.Row;
+import org.vandeseer.easytable.structure.Table;
+import org.vandeseer.easytable.structure.cell.CellText;
+import org.vandeseer.easytable.structure.Row.RowBuilder;
+import org.vandeseer.easytable.structure.Table.TableBuilder;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;

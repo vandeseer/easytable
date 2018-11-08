@@ -1,13 +1,13 @@
-package org.vandeseer.pdfbox.easytable.cell;
+package org.vandeseer.easytable.structure.cell;
 
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
-import org.vandeseer.pdfbox.easytable.Column;
-import org.vandeseer.pdfbox.easytable.Row;
-import org.vandeseer.pdfbox.easytable.settings.HorizontalAlignment;
-import org.vandeseer.pdfbox.easytable.settings.VerticalAlignment;
+import org.vandeseer.easytable.structure.Column;
+import org.vandeseer.easytable.structure.Row;
+import org.vandeseer.easytable.settings.HorizontalAlignment;
+import org.vandeseer.easytable.settings.VerticalAlignment;
 
 import java.awt.*;
 import java.util.Optional;
@@ -29,13 +29,13 @@ public abstract class CellBaseData {
     private Color borderColor;
 
     @Builder.Default
-    private final int span = 1;
-
-    @Builder.Default
     private final HorizontalAlignment horizontalAlignment = HorizontalAlignment.LEFT;
 
     @Builder.Default
     private final VerticalAlignment verticalAlignment = VerticalAlignment.MIDDLE;
+
+    @Builder.Default
+    private final int span = 1;
 
     @Builder.Default
     private final float paddingLeft = 4;

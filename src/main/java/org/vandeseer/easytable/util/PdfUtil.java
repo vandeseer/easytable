@@ -1,4 +1,4 @@
-package org.vandeseer.pdfbox.easytable.util;
+package org.vandeseer.easytable.util;
 
 
 import org.apache.commons.lang3.StringUtils;

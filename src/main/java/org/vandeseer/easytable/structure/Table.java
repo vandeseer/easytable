@@ -1,9 +1,11 @@
-package org.vandeseer.pdfbox.easytable;
+package org.vandeseer.easytable.structure;
 
 import lombok.*;
 import org.apache.pdfbox.pdmodel.font.PDFont;
 import org.apache.pdfbox.pdmodel.font.PDType1Font;
-import org.vandeseer.pdfbox.easytable.cell.CellBaseData;
+import org.vandeseer.easytable.settings.FontSettings;
+import org.vandeseer.easytable.structure.cell.CellBaseData;
+import org.vandeseer.easytable.structure.cell.CellText;
 
 import java.awt.*;
 import java.util.LinkedList;
@@ -15,14 +17,15 @@ import java.util.List;
 @Setter(AccessLevel.PRIVATE)
 public class Table {
 
+    private static final PDFont DEFAULT_FONT = PDType1Font.HELVETICA;
+    private static final int DEFAULT_FONT_SIZE = 12;
+
     private final List<Row> rows;
     private final List<Column> columns;
 
-    @Builder.Default
-    private PDFont font = PDType1Font.HELVETICA;
-
-    @Builder.Default
-    private int fontSize = 12;
+    @Getter
+    @Setter(AccessLevel.NONE)
+    private FontSettings fontSettings;
 
     private int numberOfColumns = 0;
     private float width = 0;
@@ -48,7 +51,7 @@ public class Table {
         return height;
     }
 
-    float getAvailableCellWidthRespectingSpan(int columnIndex, int span) {
+    public float getAvailableCellWidthRespectingSpan(int columnIndex, int span) {
         float cellWidth = 0;
         for (int i = 0; i < span; i++) {
             cellWidth += getColumns().get(columnIndex + i).getWidth();
@@ -61,6 +64,11 @@ public class Table {
         private List<Row> rows = new LinkedList<>();
         private List<Column> columns = new LinkedList<>();
 
+        private FontSettings fontSettings = FontSettings.builder()
+                                                .font(DEFAULT_FONT)
+                                                .fontSize(DEFAULT_FONT_SIZE)
+                                                .build();
+
         public TableBuilder addRow(final Row row) {
             if (row.getCells().stream().mapToInt(CellBaseData::getSpan).sum() != numberOfColumns) {
                 throw new IllegalArgumentException(
@@ -71,14 +79,20 @@ public class Table {
         }
 
         public TableBuilder addColumnOfWidth(final int width) {
-            addColumn(new Column(width));
+            final Column column = new Column(width);
+            numberOfColumns++;
+            columns.add(column);
+            this.width += column.getWidth();
             return this;
         }
 
-        private TableBuilder addColumn(final Column column) {
-            numberOfColumns++;
-            columns.add(column);
-            width += column.getWidth();
+        public TableBuilder font(final PDFont font) {
+            fontSettings.setFont(font);
+            return this;
+        }
+
+        public TableBuilder fontSize(final Integer fontSize) {
+            fontSettings.setFontSize(fontSize);
             return this;
         }
 
@@ -91,10 +105,17 @@ public class Table {
             // Set up the connections between table, row(s) and cell(s)
             for (Row row : rows) {
                 row.setTable(table);
+                row.getFontSettings().fillingMergeBy(table.getFontSettings());
 
                 for (int i = 0; i < row.getCells().size(); i++) {
-                    row.getCells().get(i).setRow(row);
-                    row.getCells().get(i).setColumn(table.getColumns().get(i));
+                    CellBaseData cell = row.getCells().get(i);
+
+                    cell.setRow(row);
+                    cell.setColumn(table.getColumns().get(i));
+
+                    if (cell instanceof CellText) {
+                        ((CellText) cell).getFontSettings().fillingMergeBy(row.getFontSettings());
+                    }
                 }
             }
 

@@ -1,4 +1,4 @@
-package org.vandeseer.pdfbox.easytable.cell;
+package org.vandeseer.easytable.structure.cell;
 
 
 import lombok.Builder;

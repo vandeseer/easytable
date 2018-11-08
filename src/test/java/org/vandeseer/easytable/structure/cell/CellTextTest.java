@@ -1,4 +1,4 @@
-package org.vandeseer.pdfbox.easytable.cell;
+package org.vandeseer.easytable.structure.cell;
 
 import org.apache.pdfbox.pdmodel.font.PDFont;
 import org.apache.pdfbox.pdmodel.font.PDType1Font;
@@ -6,10 +6,10 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.vandeseer.pdfbox.easytable.Column;
-import org.vandeseer.pdfbox.easytable.util.PdfUtil;
-import org.vandeseer.pdfbox.easytable.Row;
-import org.vandeseer.pdfbox.easytable.Table;
+import org.vandeseer.easytable.structure.Column;
+import org.vandeseer.easytable.util.PdfUtil;
+import org.vandeseer.easytable.structure.Row;
+import org.vandeseer.easytable.structure.Table;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.IsEqual.equalTo;
