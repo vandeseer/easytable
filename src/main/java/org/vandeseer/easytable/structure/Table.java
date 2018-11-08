@@ -3,7 +3,9 @@ package org.vandeseer.easytable.structure;
 import lombok.*;
 import org.apache.pdfbox.pdmodel.font.PDFont;
 import org.apache.pdfbox.pdmodel.font.PDType1Font;
-import org.vandeseer.easytable.settings.FontSettings;
+import org.vandeseer.easytable.settings.HorizontalAlignment;
+import org.vandeseer.easytable.settings.Settings;
+import org.vandeseer.easytable.settings.VerticalAlignment;
 import org.vandeseer.easytable.structure.cell.CellBaseData;
 import org.vandeseer.easytable.structure.cell.CellText;
 
@@ -19,13 +21,15 @@ public class Table {
 
     private static final PDFont DEFAULT_FONT = PDType1Font.HELVETICA;
     private static final int DEFAULT_FONT_SIZE = 12;
+    private static final HorizontalAlignment DEFAULT_HORIZONTAL_ALIGNMENT = HorizontalAlignment.LEFT;
+    private static final VerticalAlignment DEFAULT_VERTICAL_ALIGNMENT = VerticalAlignment.MIDDLE;
 
     private final List<Row> rows;
     private final List<Column> columns;
 
     @Getter
     @Setter(AccessLevel.NONE)
-    private FontSettings fontSettings;
+    private Settings settings;
 
     private int numberOfColumns = 0;
     private float width = 0;
@@ -64,7 +68,7 @@ public class Table {
         private List<Row> rows = new LinkedList<>();
         private List<Column> columns = new LinkedList<>();
 
-        private FontSettings fontSettings = FontSettings.builder()
+        private Settings settings = Settings.builder()
                                                 .font(DEFAULT_FONT)
                                                 .fontSize(DEFAULT_FONT_SIZE)
                                                 .build();
@@ -87,12 +91,22 @@ public class Table {
         }
 
         public TableBuilder font(final PDFont font) {
-            fontSettings.setFont(font);
+            settings.setFont(font);
             return this;
         }
 
         public TableBuilder fontSize(final Integer fontSize) {
-            fontSettings.setFontSize(fontSize);
+            settings.setFontSize(fontSize);
+            return this;
+        }
+
+        public TableBuilder horizontalAlignment(HorizontalAlignment alignment) {
+            settings.setHorizontalAlignment(alignment);
+            return this;
+        }
+
+        public TableBuilder verticalAlignment(VerticalAlignment alignment) {
+            settings.setVerticalAlignment(alignment);
             return this;
         }
 
@@ -105,7 +119,7 @@ public class Table {
             // Set up the connections between table, row(s) and cell(s)
             for (Row row : rows) {
                 row.setTable(table);
-                row.getFontSettings().fillingMergeBy(table.getFontSettings());
+                row.getSettings().fillingMergeBy(table.getSettings());
 
                 for (int i = 0; i < row.getCells().size(); i++) {
                     CellBaseData cell = row.getCells().get(i);
@@ -114,7 +128,7 @@ public class Table {
                     cell.setColumn(table.getColumns().get(i));
 
                     if (cell instanceof CellText) {
-                        ((CellText) cell).getFontSettings().fillingMergeBy(row.getFontSettings());
+                        ((CellText) cell).getSettings().fillingMergeBy(row.getSettings());
                     }
                 }
             }

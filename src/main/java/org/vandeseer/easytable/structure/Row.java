@@ -5,7 +5,9 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 import org.apache.pdfbox.pdmodel.font.PDFont;
-import org.vandeseer.easytable.settings.FontSettings;
+import org.vandeseer.easytable.settings.HorizontalAlignment;
+import org.vandeseer.easytable.settings.Settings;
+import org.vandeseer.easytable.settings.VerticalAlignment;
 import org.vandeseer.easytable.structure.cell.CellBaseData;
 
 import java.awt.*;
@@ -32,7 +34,7 @@ public class Row {
 
     @Getter
     @Setter(AccessLevel.NONE)
-    private FontSettings fontSettings;
+    private Settings settings;
 
     private Row(final List<CellBaseData> cells) {
         super();
@@ -57,7 +59,7 @@ public class Row {
 
         private List<CellBaseData> cells = new LinkedList<>();
         private Optional<Color> borderColor = Optional.empty();
-        private FontSettings fontSettings = FontSettings.builder().build();
+        private Settings settings = Settings.builder().build();
 
         public RowBuilder add(final CellBaseData cell) {
             cells.add(cell);
@@ -65,12 +67,22 @@ public class Row {
         }
 
         public Row.RowBuilder font(final PDFont font) {
-            fontSettings.setFont(font);
+            settings.setFont(font);
             return this;
         }
 
         public Row.RowBuilder fontSize(final Integer fontSize) {
-            fontSettings.setFontSize(fontSize);
+            settings.setFontSize(fontSize);
+            return this;
+        }
+
+        public Row.RowBuilder horizontalAlignment(HorizontalAlignment alignment) {
+            settings.setHorizontalAlignment(alignment);
+            return this;
+        }
+
+        public Row.RowBuilder verticalAlignment(VerticalAlignment alignment) {
+            settings.setVerticalAlignment(alignment);
             return this;
         }
 
@@ -80,7 +92,7 @@ public class Row {
                     .forEach(cell -> cell.setBackgroundColor(rowBackColor)));
 
             final Row row = new Row(cells);
-            row.fontSettings = fontSettings;
+            row.settings = settings;
 
             borderColor.ifPresent(row::setBorderColor);
             Optional.ofNullable(textColor).ifPresent(row::setTextColor);

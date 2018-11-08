@@ -1,12 +1,9 @@
 package org.vandeseer.easytable.structure.cell;
 
-import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NonNull;
-import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 import org.apache.pdfbox.pdmodel.font.PDFont;
-import org.vandeseer.easytable.settings.FontSettings;
 import org.vandeseer.easytable.structure.Column;
 import org.vandeseer.easytable.util.PdfUtil;
 
@@ -25,18 +22,14 @@ public class CellText extends CellBaseData {
 
     private float lineSpacing = 1f;
 
-    @Getter
-    @Setter(AccessLevel.NONE)
-    private FontSettings fontSettings;
-
     //region Custom Getter
 
     public PDFont getFont() {
-        return fontSettings.getFont();
+        return settings.getFont();
     }
 
     public Integer getFontSize() {
-        return fontSettings.getFontSize();
+        return settings.getFontSize();
     }
 
     public Color getTextColor() {
@@ -101,15 +94,13 @@ public class CellText extends CellBaseData {
 
     public abstract static class CellTextBuilder<C extends CellText, B extends CellText.CellTextBuilder<C, B>> extends CellBaseDataBuilder<C, B> {
 
-        protected FontSettings fontSettings = FontSettings.builder().build();
-
         public B font(PDFont font) {
-            fontSettings.setFont(font);
+            settings.setFont(font);
             return this.self();
         }
 
         public B fontSize(Integer fontSize) {
-            fontSettings.setFontSize(fontSize);
+            settings.setFontSize(fontSize);
             return this.self();
         }
 

@@ -1,5 +1,6 @@
 package org.vandeseer.easytable;
 
+import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.pdfbox.io.IOUtils;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
@@ -22,6 +23,7 @@ import static java.awt.Color.LIGHT_GRAY;
 import static java.awt.Color.WHITE;
 import static org.apache.pdfbox.pdmodel.font.PDType1Font.*;
 import static org.vandeseer.easytable.settings.HorizontalAlignment.CENTER;
+import static org.vandeseer.easytable.settings.HorizontalAlignment.LEFT;
 import static org.vandeseer.easytable.settings.HorizontalAlignment.RIGHT;
 
 // TODO test border color on row level
@@ -39,24 +41,26 @@ public class TableDrawerIntegrationTest {
     public void createSampleDocumentWithFontSettingOverriding() throws Exception {
         final TableBuilder tableBuilder = Table.builder()
                 .addColumnOfWidth(100).addColumnOfWidth(100).addColumnOfWidth(100)
+                .horizontalAlignment(CENTER)
                 .fontSize(10).font(HELVETICA);
 
         tableBuilder.addRow(
                 Row.builder()
-                        .add(CellText.builder().text("Pur").span(2).borderWidth(1).build())
+                        .add(CellText.builder().text(RandomStringUtils.randomAlphabetic(23)).span(2).borderWidth(1).build())
                         .add(CellText.builder().text("Booz").build())
-                        .font(COURIER_BOLD).fontSize(8).build());
+                        .font(COURIER_BOLD).fontSize(8)
+                        .build());
 
         tableBuilder.addRow(
                 Row.builder()
-                        .add(CellText.builder().text("Pur").backgroundColor(Color.YELLOW).horizontalAlignment(CENTER).borderWidth(1).build())
+                        .add(CellText.builder().text("Pur").backgroundColor(Color.YELLOW).borderWidth(1).build())
                         .add(CellText.builder().text("Booz").build())
                         .add(CellText.builder().text("baz").build())
                         .font(COURIER_BOLD).fontSize(8).build());
 
         tableBuilder.addRow(
                 Row.builder()
-                        .add(CellText.builder().text("Pur").backgroundColor(Color.YELLOW).horizontalAlignment(CENTER).borderWidth(1).build())
+                        .add(CellText.builder().text("Pur").backgroundColor(Color.YELLOW).borderWidth(1).build())
                         .add(CellText.builder().text("Booz").build())
                         .add(CellText.builder().text("baz").font(HELVETICA_OBLIQUE).fontSize(5).build())
                         .build());
@@ -108,7 +112,7 @@ public class TableDrawerIntegrationTest {
         };
 
         // Define the table structure first
-        final TableBuilder tableBuilder = Table.builder()
+        final TableBuilder tableBuilder = Table.builder() // TODO what about "Table.builder().columns(100,50,50,50). ..."? Would be easier! ;)
                 .addColumnOfWidth(100)
                 .addColumnOfWidth(50)
                 .addColumnOfWidth(50)
@@ -119,14 +123,14 @@ public class TableDrawerIntegrationTest {
 
         // Add the header row ...
         final Row headerRow = Row.builder()
-                .add(CellText.builder().text("Product").borderWidth(1).build())
-                .add(CellText.builder().text("2018").horizontalAlignment(CENTER).borderWidth(1).build())
-                .add(CellText.builder().text("2019").horizontalAlignment(CENTER).borderWidth(1).build())
-                .add(CellText.builder().text("Total").horizontalAlignment(CENTER).borderWidth(1).build())
+                .add(CellText.builder().text("Product").horizontalAlignment(LEFT).borderWidth(1).build())
+                .add(CellText.builder().text("2018").borderWidth(1).build())
+                .add(CellText.builder().text("2019").borderWidth(1).build())
+                .add(CellText.builder().text("Total").borderWidth(1).build())
                 .backgroundColor(TableDrawerIntegrationTest.BLUE_DARK)
                 .textColor(Color.WHITE)
-                .font(PDType1Font.HELVETICA_BOLD)
-                .fontSize(9)
+                .font(PDType1Font.HELVETICA_BOLD).fontSize(9)
+                .horizontalAlignment(CENTER)
                 .build();
 
         tableBuilder.addRow(headerRow);
@@ -139,11 +143,12 @@ public class TableDrawerIntegrationTest {
             grandTotal += total;
 
             tableBuilder.addRow(Row.builder()
-                    .add(CellText.builder().text(String.valueOf(dataRow[0])).borderWidth(1).build())
-                    .add(CellText.builder().text(dataRow[1] + " €").horizontalAlignment(RIGHT).borderWidth(1).build())
-                    .add(CellText.builder().text(dataRow[2] + " €").horizontalAlignment(RIGHT).borderWidth(1).build())
-                    .add(CellText.builder().text(total + " €").horizontalAlignment(RIGHT).borderWidth(1).build())
+                    .add(CellText.builder().text(String.valueOf(dataRow[0])).horizontalAlignment(LEFT).borderWidth(1).build())
+                    .add(CellText.builder().text(dataRow[1] + " €").borderWidth(1).build())
+                    .add(CellText.builder().text(dataRow[2] + " €").borderWidth(1).build())
+                    .add(CellText.builder().text(total + " €").borderWidth(1).build())
                     .backgroundColor(i % 2 == 0 ? TableDrawerIntegrationTest.BLUE_LIGHT_1 : TableDrawerIntegrationTest.BLUE_LIGHT_2)
+                    .horizontalAlignment(RIGHT)
                     .build())
             .wordBreak(true);
         }
@@ -156,7 +161,6 @@ public class TableDrawerIntegrationTest {
                         .lineSpacing(1f)
                         .borderWidthTop(1)
                         .textColor(WHITE)
-                        .horizontalAlignment(RIGHT)
                         .backgroundColor(TableDrawerIntegrationTest.BLUE_DARK)
                         .fontSize(6)
                         .font(HELVETICA_OBLIQUE)
@@ -164,10 +168,10 @@ public class TableDrawerIntegrationTest {
                         .build())
                 .add(CellText.builder().text(grandTotal + " €").backgroundColor(LIGHT_GRAY)
                         .font(HELVETICA_BOLD_OBLIQUE)
-                        .horizontalAlignment(RIGHT)
                         .verticalAlignment(VerticalAlignment.TOP)
                         .borderWidth(1)
                         .build())
+                .horizontalAlignment(RIGHT)
                 .build());
 
         createDocumentWithTable(tableBuilder.build(), "target/sampleExcelLike.pdf");

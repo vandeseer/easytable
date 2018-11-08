@@ -30,7 +30,7 @@ public class TableDrawer {
     // This is needed for the generated builder!
     private TableDrawer(float tableStartX, float tableStartY, PDPageContentStream contentStream, Table table) {
         this.tableStartX = tableStartX;
-        this.tableStartY = tableStartY - PdfUtil.getFontHeight(table.getFontSettings().getFont(), table.getFontSettings().getFontSize()); // custom!
+        this.tableStartY = tableStartY - PdfUtil.getFontHeight(table.getSettings().getFont(), table.getSettings().getFontSize()); // custom!
         this.contentStream = contentStream;
         this.table = table;
     }
@@ -148,9 +148,9 @@ public class TableDrawer {
         // Vertical alignment
         float yStartRelative = cell.getRow().getHeight() - cell.getPaddingTop(); // top position
         if (cell.getRow().getHeight() > cell.getHeight()) {
-            if (cell.getVerticalAlignment() == VerticalAlignment.MIDDLE) {
+            if (cell.getSettings().getVerticalAlignment() == VerticalAlignment.MIDDLE) {
                 yStartRelative = cell.getRow().getHeight() / 2 + (cell.getHeight() - cell.getPaddingBottom() - cell.getPaddingTop()) / 2;
-            } else if (cell.getVerticalAlignment() == VerticalAlignment.BOTTOM) {
+            } else if (cell.getSettings().getVerticalAlignment() == VerticalAlignment.BOTTOM) {
                 yStartRelative = cell.getHeight() - cell.getPaddingTop();
             }
         }
@@ -168,10 +168,10 @@ public class TableDrawer {
             final float textWidth = PdfUtil.getStringWidth(line, currentFont, currentFontSize);
 
             // Handle horizontal alignment by adjusting the xOffset
-            if (cell.getHorizontalAlignment() == HorizontalAlignment.RIGHT) {
+            if (cell.getSettings().getHorizontalAlignment() == HorizontalAlignment.RIGHT) {
                 xOffset = moveX + (columnWidth - (textWidth + cell.getPaddingRight()));
 
-            } else if (cell.getHorizontalAlignment() == HorizontalAlignment.CENTER) {
+            } else if (cell.getSettings().getHorizontalAlignment() == HorizontalAlignment.CENTER) {
                 final float diff = (columnWidth - textWidth) / 2;
                 xOffset = moveX + diff;
 
