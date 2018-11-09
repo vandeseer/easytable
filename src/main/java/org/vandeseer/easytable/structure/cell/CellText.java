@@ -12,7 +12,7 @@ import java.util.Comparator;
 import java.util.Optional;
 
 @Getter
-@SuperBuilder
+@SuperBuilder(toBuilder = true)
 public class CellText extends CellBaseData {
 
     @NonNull

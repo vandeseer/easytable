@@ -14,7 +14,7 @@ import org.vandeseer.easytable.structure.Row;
 import java.awt.*;
 import java.util.Optional;
 
-@SuperBuilder
+@SuperBuilder(toBuilder = true)
 @Getter
 public abstract class CellBaseData {
 
