@@ -10,9 +10,11 @@ import org.vandeseer.easytable.structure.Column;
 import org.vandeseer.easytable.util.PdfUtil;
 import org.vandeseer.easytable.structure.Row;
 import org.vandeseer.easytable.structure.Table;
+import org.vandeseer.easytable.structure.Row.RowBuilder;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.IsEqual.equalTo;
+import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -109,6 +111,21 @@ public class CellTextTest {
         // The two columns will have a width of 35 + 15 = 50; the size of the text "abc abc" has 35.02 and the padding
         // is 10 in sum. Therefore the text will be split in pieces of "abc abc".
         assertThat(cell.getWidth(), equalTo(PdfUtil.getStringWidth("abc abc", font, fontSize) + cell.getHorizontalPadding()));
+    }
+    
+    @Test
+    public void getCell_toBuilderFeature() {
+    	// Create two cells without border
+    	CellText originalCell1 = CellText.builder().text("11").paddingTop(35).paddingBottom(15).build();
+        CellText originalCell2 = CellText.builder().text("12").paddingTop(15).paddingBottom(25).build();
+        final Row row = Row.builder()
+                .add(originalCell1.toBuilder().borderWidthBottom(1F).build()) // add the border
+                .add(originalCell2.toBuilder().borderWidthBottom(1F).build()) // add the border
+                .build();
+        for(CellBaseData cell : row.getCells())
+        {
+        	assertEquals(1F,cell.getBorderWidthBottom(),0F); // test if border exists
+        }
     }
 
     private void prepareTwoSpanningColumnsOfSize(float sizeColumn1, float sizeColumn2) {

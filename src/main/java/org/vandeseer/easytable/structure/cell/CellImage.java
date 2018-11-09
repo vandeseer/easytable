@@ -10,7 +10,7 @@ import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
 import java.awt.geom.Point2D;
 
 @Getter
-@SuperBuilder
+@SuperBuilder(toBuilder = true)
 public class CellImage extends CellBaseData {
 
     @NonNull
