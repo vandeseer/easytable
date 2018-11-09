@@ -18,38 +18,46 @@ import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
 
-@Builder
+@Builder(toBuilder = true)
 public class TableDrawer {
 
     private final float tableStartX;
     private final float tableStartY;
+    private final Float tableEndY;
 
     private final PDPageContentStream contentStream;
     private final Table table;
+    private int startRow;
 
     // This is needed for the generated builder!
-    private TableDrawer(float tableStartX, float tableStartY, PDPageContentStream contentStream, Table table) {
+    private TableDrawer(float tableStartX, float tableStartY, Float tableEndY, PDPageContentStream contentStream, Table table, int startRow) {
         this.tableStartX = tableStartX;
         this.tableStartY = tableStartY - PdfUtil.getFontHeight(table.getSettings().getFont(), table.getSettings().getFontSize()); // custom!
+        this.tableEndY = tableEndY;
         this.contentStream = contentStream;
         this.table = table;
+        this.startRow = startRow;
     }
 
-    public void draw() throws IOException {
+    public boolean draw() throws IOException {
         drawBackgroundAndCellContent();
-        drawBorders();
+        return drawBorders();
     }
 
     private void drawBackgroundAndCellContent() throws IOException {
         float startX;
         float startY = tableStartY;
 
-        for (final Row row : table.getRows()) {
+        for(int i = startRow ; i < table.getRows().size() ; i++) {
+            final Row row = table.getRows().get(i);
             final float rowHeight = row.getHeight();
             int columnCounter = 0;
 
             startX = tableStartX;
             startY -= rowHeight;
+            if(tableEndY != null && startY < tableEndY) {
+                return;
+            }
 
             for (final CellBaseData cell : row.getCells()) {
                 float cellWidth = table.getAvailableCellWidthRespectingSpan(columnCounter, cell.getSpan());
@@ -73,16 +81,22 @@ public class TableDrawer {
         }
     }
 
-    private void drawBorders() throws IOException {
+    private boolean drawBorders() throws IOException {
         float startX;
         float startY = tableStartY;
 
-        for (final Row row : table.getRows()) {
+        for(int i = startRow ; i < table.getRows().size() ; i++) {
+            final Row row = table.getRows().get(i);
             final float rowHeight = row.getHeight();
             int columnCounter = 0;
 
             startX = tableStartX;
             startY -= rowHeight;
+            
+            if(tableEndY != null && startY < tableEndY) {
+                startRow = i;
+                return false;
+            }
 
             for (final CellBaseData cell : row.getCells()) {
                 float cellWidth = table.getAvailableCellWidthRespectingSpan(columnCounter, cell.getSpan());
@@ -129,6 +143,7 @@ public class TableDrawer {
                 columnCounter += cell.getSpan();
             }
         }
+        return true;
     }
 
     private void drawCellText(final CellText cell, final float columnWidth, final float moveX, final float moveY) throws IOException {
