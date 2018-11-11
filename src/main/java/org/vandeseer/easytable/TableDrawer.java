@@ -1,16 +1,19 @@
 package org.vandeseer.easytable;
 
 import lombok.Builder;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.experimental.Accessors;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.font.PDFont;
+import org.vandeseer.easytable.settings.HorizontalAlignment;
+import org.vandeseer.easytable.settings.VerticalAlignment;
 import org.vandeseer.easytable.structure.Row;
 import org.vandeseer.easytable.structure.Table;
-import org.vandeseer.easytable.structure.cell.CellText;
-import org.vandeseer.easytable.settings.VerticalAlignment;
-import org.vandeseer.easytable.util.PdfUtil;
 import org.vandeseer.easytable.structure.cell.CellBaseData;
 import org.vandeseer.easytable.structure.cell.CellImage;
-import org.vandeseer.easytable.settings.HorizontalAlignment;
+import org.vandeseer.easytable.structure.cell.CellText;
+import org.vandeseer.easytable.util.PdfUtil;
 
 import java.awt.*;
 import java.awt.geom.Point2D;
@@ -18,44 +21,60 @@ import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
 
-@Builder(toBuilder = true)
 public class TableDrawer {
 
-    private final float tableStartX;
-    private final float tableStartY;
-    private final Float tableEndY;
+    private static final float NO_TABLE_END = -1f;
 
-    private final PDPageContentStream contentStream;
+    @Setter
+    @Accessors(chain = true, fluent = true)
+    private PDPageContentStream contentStream;
+
     private final Table table;
-    private int startRow;
 
-    // This is needed for the generated builder!
-    private TableDrawer(float tableStartX, float tableStartY, Float tableEndY, PDPageContentStream contentStream, Table table, int startRow) {
-        this.tableStartX = tableStartX;
-        this.tableStartY = tableStartY - PdfUtil.getFontHeight(table.getSettings().getFont(), table.getSettings().getFontSize()); // custom!
-        this.tableEndY = tableEndY;
+    @Setter
+    @Accessors(chain = true, fluent = true)
+    private float startX;
+
+    @Setter
+    @Accessors(chain = true, fluent = true)
+    private float startY;
+
+    private float endY;
+
+    private int rowToDraw = 0;
+
+    @Getter
+    private boolean isFinished = false;
+
+    @Builder
+    TableDrawer(float startX, float startY, PDPageContentStream contentStream, Table table, float endY) {
         this.contentStream = contentStream;
         this.table = table;
-        this.startRow = startRow;
+
+        this.startX = startX;
+        this.startY = startY - PdfUtil.getFontHeight(table.getSettings().getFont(), table.getSettings().getFontSize());
+
+        this.endY = endY;
     }
 
-    public boolean draw() throws IOException {
-        drawBackgroundAndCellContent();
-        return drawBorders();
+    public void draw() throws IOException {
+        drawBackgroundAndCellContent(this.startX, this.startY);
+        drawBorders(this.startX, this.startY);
     }
 
-    private void drawBackgroundAndCellContent() throws IOException {
+    private void drawBackgroundAndCellContent(float initialX, float initialY) throws IOException {
         float startX;
-        float startY = tableStartY;
+        float startY = initialY;
 
-        for(int i = startRow ; i < table.getRows().size() ; i++) {
+        for (int i = rowToDraw; i < table.getRows().size(); i++) {
             final Row row = table.getRows().get(i);
             final float rowHeight = row.getHeight();
             int columnCounter = 0;
 
-            startX = tableStartX;
+            startX = initialX;
             startY -= rowHeight;
-            if(tableEndY != null && startY < tableEndY) {
+
+            if (startY < endY) {
                 return;
             }
 
@@ -81,21 +100,21 @@ public class TableDrawer {
         }
     }
 
-    private boolean drawBorders() throws IOException {
+    private void drawBorders(float initialX, float initialY) throws IOException {
         float startX;
-        float startY = tableStartY;
+        float startY = initialY;
 
-        for(int i = startRow ; i < table.getRows().size() ; i++) {
+        for (int i = rowToDraw; i < table.getRows().size(); i++) {
             final Row row = table.getRows().get(i);
             final float rowHeight = row.getHeight();
             int columnCounter = 0;
 
-            startX = tableStartX;
+            startX = initialX;
             startY -= rowHeight;
-            
-            if(tableEndY != null && startY < tableEndY) {
-                startRow = i;
-                return false;
+
+            if (startY < endY) {
+                rowToDraw = i;
+                return;
             }
 
             for (final CellBaseData cell : row.getCells()) {
@@ -143,7 +162,8 @@ public class TableDrawer {
                 columnCounter += cell.getSpan();
             }
         }
-        return true;
+
+        this.isFinished = true;
     }
 
     private void drawCellText(final CellText cell, final float columnWidth, final float moveX, final float moveY) throws IOException {
@@ -177,7 +197,7 @@ public class TableDrawer {
             float xOffset = moveX + cell.getPaddingLeft();
             yOffset -= (
                     PdfUtil.getFontHeight(currentFont, currentFontSize) // font height
-                    + (i > 0 ? PdfUtil.getFontHeight(currentFont, currentFontSize) * cell.getLineSpacing() : 0f) // line spacing
+                            + (i > 0 ? PdfUtil.getFontHeight(currentFont, currentFontSize) * cell.getLineSpacing() : 0f) // line spacing
             );
 
             final float textWidth = PdfUtil.getStringWidth(line, currentFont, currentFontSize);

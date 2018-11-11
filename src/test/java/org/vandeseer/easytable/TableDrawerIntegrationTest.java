@@ -22,9 +22,7 @@ import java.io.IOException;
 import static java.awt.Color.LIGHT_GRAY;
 import static java.awt.Color.WHITE;
 import static org.apache.pdfbox.pdmodel.font.PDType1Font.*;
-import static org.vandeseer.easytable.settings.HorizontalAlignment.CENTER;
-import static org.vandeseer.easytable.settings.HorizontalAlignment.LEFT;
-import static org.vandeseer.easytable.settings.HorizontalAlignment.RIGHT;
+import static org.vandeseer.easytable.settings.HorizontalAlignment.*;
 
 // TODO test border color on row level
 // TODO test the precedence of cell level settings of row level/table level settings
@@ -192,8 +190,8 @@ public class TableDrawerIntegrationTest {
         TableDrawer.builder()
                 .contentStream(contentStream)
                 .table(table)
-                .tableStartX(startX)
-                .tableStartY(startY)
+                .startX(startX)
+                .startY(startY)
                 .build()
                 .draw();
         contentStream.close();
@@ -255,7 +253,7 @@ public class TableDrawerIntegrationTest {
         final PDPageContentStream contentStream = new PDPageContentStream(document, page);
         final Table table = getRingManagerTable();
 
-        TableDrawer.builder().contentStream(contentStream).table(table).tableStartX(startX).tableStartY(startY).build().draw();
+        TableDrawer.builder().contentStream(contentStream).table(table).startX(startX).startY(startY).build().draw();
 
         contentStream.setFont(HELVETICA, 8.0f);
         contentStream.beginText();
@@ -438,14 +436,15 @@ public class TableDrawerIntegrationTest {
         TableDrawer drawer = TableDrawer.builder()
                 .contentStream(contentStream)
                 .table(completeTable)
-                .tableStartX(startX)
-                .tableStartY(startY)
-                .tableEndY(50F) // note: if not set, table is drawn over the end of the page
+                .startX(startX)
+                .startY(startY)
+                .endY(50F) // note: if not set, table is drawn over the end of the page
                 .build();
 
         PDPageContentStream currentContentStream = contentStream;
         // Draw!
-        while(!drawer.draw()) {
+        drawer.draw();
+        while (!drawer.isFinished()) {
             // could not draw on one page
             
             // close current content stream
@@ -459,11 +458,8 @@ public class TableDrawerIntegrationTest {
             // define starting point on additional page
             final float pageStartY = page.getMediaBox().getHeight() - 50;
             
-            drawer = drawer.toBuilder()
-                    .contentStream(additionalContentStream)
-                    .tableStartY(pageStartY)
-                    .build();
-            
+            drawer.contentStream(additionalContentStream).startY(pageStartY).draw();
+
             // change current content stream
             currentContentStream = additionalContentStream;
         }
