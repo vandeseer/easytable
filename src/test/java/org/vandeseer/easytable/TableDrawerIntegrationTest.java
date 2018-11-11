@@ -383,5 +383,94 @@ public class TableDrawerIntegrationTest {
 
         createDocumentWithTable(tableBuilder.build(), "target/images.pdf");
     }
+    
+    @Test
+    public void createTwoPageTable() throws IOException {
+        final PDDocument document = new PDDocument();
+        final PDPage page = new PDPage(PDRectangle.A4);
+        document.addPage(page);
+
+        final TableBuilder tableBuilder = Table.builder()
+                .addColumnOfWidth(200)
+                .addColumnOfWidth(200);
+        
+        CellText dummyHeaderCell = CellText.builder()
+                .text("Header dummy")
+                .backgroundColor(BLUE_DARK)
+                .textColor(Color.WHITE)
+                .borderWidth(1F)
+                .build();
+        
+        CellText dummyCell = CellText.builder()
+                .text("dummy")
+                .borderWidth(1F)
+                .build();
+        
+        tableBuilder.addRow(
+                Row.builder()
+                        .add(dummyHeaderCell)
+                        .add(dummyHeaderCell)
+                        .build());
+        tableBuilder.addRow(
+                Row.builder()
+                        .add(dummyCell)
+                        .add(dummyCell)
+                        .build());
+        tableBuilder.addRow(
+                Row.builder()
+                        .add(dummyCell)
+                        .add(dummyCell)
+                        .build());
+        tableBuilder.addRow(
+                Row.builder()
+                        .add(dummyCell)
+                        .add(dummyCell)
+                        .build());
+        Table completeTable = tableBuilder.build();
+        
+        // now define a starting point at the bottom
+        final PDPageContentStream contentStream = new PDPageContentStream(document, page);
+
+        // Define the starting point
+        final float startY = 100F;
+        final int startX = 50;
+        
+        TableDrawer drawer = TableDrawer.builder()
+                .contentStream(contentStream)
+                .table(completeTable)
+                .tableStartX(startX)
+                .tableStartY(startY)
+                .tableEndY(50F) // note: if not set, table is drawn over the end of the page
+                .build();
+
+        PDPageContentStream currentContentStream = contentStream;
+        // Draw!
+        while(!drawer.draw()) {
+            // could not draw on one page
+            
+            // close current content stream
+            currentContentStream.close();
+            
+            // add a new page and content stream
+            final PDPage additionalPage = new PDPage(PDRectangle.A4);
+            document.addPage(additionalPage);
+            final PDPageContentStream additionalContentStream = new PDPageContentStream(document, additionalPage);
+            
+            // define starting point on additional page
+            final float pageStartY = page.getMediaBox().getHeight() - 50;
+            
+            drawer = drawer.toBuilder()
+                    .contentStream(additionalContentStream)
+                    .tableStartY(pageStartY)
+                    .build();
+            
+            // change current content stream
+            currentContentStream = additionalContentStream;
+        }
+        currentContentStream.close(); // close the last content stream
+
+        document.save("target/twoPageTable.pdf");
+        document.close();
+    }
 
 }
