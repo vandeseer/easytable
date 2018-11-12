@@ -61,6 +61,10 @@ public class Row {
         private Optional<Color> borderColor = Optional.empty();
         private Settings settings = Settings.builder().build();
 
+        private RowBuilder() {
+
+        }
+
         public RowBuilder add(final CellBaseData cell) {
             cells.add(cell);
             return this;

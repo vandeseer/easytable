@@ -7,7 +7,6 @@ import org.vandeseer.easytable.settings.HorizontalAlignment;
 import org.vandeseer.easytable.settings.Settings;
 import org.vandeseer.easytable.settings.VerticalAlignment;
 import org.vandeseer.easytable.structure.cell.CellBaseData;
-import org.vandeseer.easytable.structure.cell.CellText;
 
 import java.awt.*;
 import java.util.LinkedList;
@@ -73,6 +72,10 @@ public class Table {
                                                 .fontSize(DEFAULT_FONT_SIZE)
                                                 .build();
 
+        private TableBuilder() {
+
+        }
+
         public TableBuilder addRow(final Row row) {
             if (row.getCells().stream().mapToInt(CellBaseData::getSpan).sum() != numberOfColumns) {
                 throw new IllegalArgumentException(
@@ -82,7 +85,7 @@ public class Table {
             return this;
         }
 
-        public TableBuilder addColumnOfWidth(final int width) {
+        public TableBuilder addColumnOfWidth(final float width) {
             final Column column = new Column(width);
             numberOfColumns++;
             columns.add(column);
@@ -127,9 +130,9 @@ public class Table {
                     cell.setRow(row);
                     cell.setColumn(table.getColumns().get(columnNumber));
 
-                    if (cell instanceof CellText) {
-                        ((CellText) cell).getSettings().fillingMergeBy(row.getSettings());
-                    }
+                    // Fill up the settings of the cell that are not set there directly
+                    cell.getSettings().fillingMergeBy(row.getSettings());
+
                     columnNumber += cell.getSpan();
                 }
             }

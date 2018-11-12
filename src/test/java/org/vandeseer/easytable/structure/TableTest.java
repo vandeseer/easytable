@@ -1,20 +1,19 @@
 package org.vandeseer.easytable.structure;
 
 import org.junit.Test;
-import org.vandeseer.easytable.structure.Row;
-import org.vandeseer.easytable.structure.Table;
-import org.vandeseer.easytable.structure.cell.CellText;
-import org.vandeseer.easytable.structure.Row.RowBuilder;
 import org.vandeseer.easytable.structure.Table.TableBuilder;
+import org.vandeseer.easytable.structure.cell.CellBaseData;
+import org.vandeseer.easytable.structure.cell.CellText;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.is;
 
 public class TableTest {
 
     @Test
     public void getNumberOfColumns_tableBuilderWithThreeColumns() {
-        final TableBuilder tableBuilder = new TableBuilder()
+        final TableBuilder tableBuilder = Table.builder()
                 .addColumnOfWidth(12)
                 .addColumnOfWidth(34)
                 .addColumnOfWidth(56);
@@ -25,7 +24,7 @@ public class TableTest {
 
     @Test
     public void getWidth_tableBuilderWithTwoColumns() {
-        final TableBuilder tableBuilder = new TableBuilder()
+        final TableBuilder tableBuilder = Table.builder()
                 .addColumnOfWidth(20)
                 .addColumnOfWidth(40);
         final Table table = tableBuilder.build();
@@ -35,10 +34,10 @@ public class TableTest {
 
     @Test
     public void getRows_tableBuilderWithOneRow() {
-        final TableBuilder tableBuilder = new TableBuilder();
+        final TableBuilder tableBuilder = Table.builder();
         tableBuilder.addColumnOfWidth(12)
                 .addColumnOfWidth(34);
-        final Row row = new RowBuilder()
+        final Row row = Row.builder()
                 .add(CellText.builder().text("11").build())
                 .add(CellText.builder().text("12").build())
                 .build();
@@ -50,10 +49,10 @@ public class TableTest {
 
     @Test
     public void getHeight_twoRowsWithDifferentPaddings() {
-        final TableBuilder tableBuilder = new TableBuilder();
+        final TableBuilder tableBuilder = Table.builder();
         tableBuilder.addColumnOfWidth(12)
                 .addColumnOfWidth(34);
-        final Row row = new RowBuilder()
+        final Row row = Row.builder()
                 .add(CellText.builder().text("11").paddingTop(35).paddingBottom(15).build())
                 .add(CellText.builder().text("12").paddingTop(15).paddingBottom(25).build())
                 .build();
@@ -65,25 +64,26 @@ public class TableTest {
         // highest cell (60) + font height
         assertThat(table.getHeight(), equalTo(58.616f));
     }
-    
+
     @Test
-    public void testCellSpanning() {
-        final TableBuilder tableBuilder = new TableBuilder();
-        tableBuilder.addColumnOfWidth(12)
-                .addColumnOfWidth(34)
-                .addColumnOfWidth(12);
-        final Row row = new RowBuilder()
-                .add(CellText.builder().text("11").span(2).build())
-                .add(CellText.builder().text("12").paddingTop(15).paddingBottom(25).build())
-                .build();
-        tableBuilder.addRow(row);
-        final Table table = tableBuilder
+    public void tableBuilder_shouldConnectStructureCorrectly() {
+        // We are spanning two columns in the first cell
+        CellBaseData lastCell = CellText.builder().text("").build();
+
+        Table table = Table.builder()
+                .addColumnOfWidth(10)
+                .addColumnOfWidth(20)
+                .addColumnOfWidth(30)
+                .addRow(Row.builder()
+                    .add(CellText.builder().text("").span(2).build())
+                    .add(lastCell)
+                    .build())
                 .build();
 
-        CellText cell = (CellText) table.getRows().get(0).getCells().get(1);
-        Column lastColumn = table.getColumns().get(table.getColumns().size()-1);
-        // column does not implement equals/hashCode - but the object is really identical "==" comparison possible
-        assertThat("Second table cell should be linked with the third (last) column!", lastColumn==cell.getColumn()); 
+        Column lastColumn = table.getColumns().get(table.getColumns().size() - 1);
+
+        // So make sure the second cell is connected correctly to the last column
+        assertThat(lastCell.getColumn(), is(lastColumn));
     }
 
 }

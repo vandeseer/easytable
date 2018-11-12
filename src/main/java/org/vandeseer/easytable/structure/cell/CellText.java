@@ -47,7 +47,7 @@ public class CellText extends CellBaseData {
         if (getRow().getTable().isWordBreak()) {
 
             final int size = PdfUtil.getOptimalTextBreak(text, getFont(), getFontSize(),
-                    getWidth() - getPaddingRight() - getPaddingRight()).size();
+                    getWidthOfTextAndHorizontalPadding() - getPaddingRight() - getPaddingRight()).size();
 
             final float heightOfTextLines = size * fontHeight;
             final float heightOfLineSpacing = (size - 1) * fontHeight * getLineSpacing();
@@ -61,8 +61,7 @@ public class CellText extends CellBaseData {
         return textHeight + getPaddingBottom() + getPaddingTop();
     }
 
-    // TODO @Override? (Do we need that for image cell alignment for instance?)
-    public float getWidth() {
+    public float getWidthOfTextAndHorizontalPadding() {
         final float textWidth;
 
         if (getRow().getTable().isWordBreak()) {

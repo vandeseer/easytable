@@ -10,7 +10,6 @@ import org.vandeseer.easytable.structure.Column;
 import org.vandeseer.easytable.util.PdfUtil;
 import org.vandeseer.easytable.structure.Row;
 import org.vandeseer.easytable.structure.Table;
-import org.vandeseer.easytable.structure.Row.RowBuilder;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.IsEqual.equalTo;
@@ -50,7 +49,7 @@ public class CellTextTest {
                 .build()
         );
 
-        assertThat(cell.getWidth(), equalTo(PdfUtil.getStringWidth(text, font, fontSize) + cell.getHorizontalPadding()));
+        assertThat(cell.getWidthOfTextAndHorizontalPadding(), equalTo(PdfUtil.getStringWidth(text, font, fontSize) + cell.getHorizontalPadding()));
     }
 
     // TODO We have a StackOverflowError in case the column width is less then the text width of "a-" !
@@ -70,7 +69,7 @@ public class CellTextTest {
                 .build()
         );
 
-        assertThat(cell.getWidth(), equalTo(PdfUtil.getStringWidth("a-", font, fontSize)));
+        assertThat(cell.getWidthOfTextAndHorizontalPadding(), equalTo(PdfUtil.getStringWidth("a-", font, fontSize)));
     }
 
     @Test
@@ -88,7 +87,7 @@ public class CellTextTest {
                 .build()
         );
 
-        assertThat(cell.getWidth(), equalTo(PdfUtil.getStringWidth(text, font, fontSize) + cell.getHorizontalPadding()));
+        assertThat(cell.getWidthOfTextAndHorizontalPadding(), equalTo(PdfUtil.getStringWidth(text, font, fontSize) + cell.getHorizontalPadding()));
     }
 
     @Test
@@ -110,7 +109,7 @@ public class CellTextTest {
 
         // The two columns will have a width of 35 + 15 = 50; the size of the text "abc abc" has 35.02 and the padding
         // is 10 in sum. Therefore the text will be split in pieces of "abc abc".
-        assertThat(cell.getWidth(), equalTo(PdfUtil.getStringWidth("abc abc", font, fontSize) + cell.getHorizontalPadding()));
+        assertThat(cell.getWidthOfTextAndHorizontalPadding(), equalTo(PdfUtil.getStringWidth("abc abc", font, fontSize) + cell.getHorizontalPadding()));
     }
     
     @Test
