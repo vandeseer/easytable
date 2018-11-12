@@ -13,7 +13,7 @@ import org.vandeseer.easytable.structure.cell.CellText;
 import java.awt.*;
 import java.io.IOException;
 
-public class TableDrawerTwoPagesTable {
+public class TableDrawerTwoPagesTableTest {
 
     @Test
     public void createTwoPageTable() throws IOException {
