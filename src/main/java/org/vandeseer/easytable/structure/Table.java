@@ -121,15 +121,16 @@ public class Table {
                 row.setTable(table);
                 row.getSettings().fillingMergeBy(table.getSettings());
 
-                for (int i = 0; i < row.getCells().size(); i++) {
-                    CellBaseData cell = row.getCells().get(i);
+                int columnNumber = 0;
+                for(CellBaseData cell : row.getCells()) {
 
                     cell.setRow(row);
-                    cell.setColumn(table.getColumns().get(i));
+                    cell.setColumn(table.getColumns().get(columnNumber));
 
                     if (cell instanceof CellText) {
                         ((CellText) cell).getSettings().fillingMergeBy(row.getSettings());
                     }
+                    columnNumber += cell.getSpan();
                 }
             }
 

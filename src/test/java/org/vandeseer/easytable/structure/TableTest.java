@@ -65,5 +65,25 @@ public class TableTest {
         // highest cell (60) + font height
         assertThat(table.getHeight(), equalTo(58.616f));
     }
+    
+    @Test
+    public void testCellSpanning() {
+        final TableBuilder tableBuilder = new TableBuilder();
+        tableBuilder.addColumnOfWidth(12)
+                .addColumnOfWidth(34)
+                .addColumnOfWidth(12);
+        final Row row = new RowBuilder()
+                .add(CellText.builder().text("11").span(2).build())
+                .add(CellText.builder().text("12").paddingTop(15).paddingBottom(25).build())
+                .build();
+        tableBuilder.addRow(row);
+        final Table table = tableBuilder
+                .build();
+
+        CellText cell = (CellText) table.getRows().get(0).getCells().get(1);
+        Column lastColumn = table.getColumns().get(table.getColumns().size()-1);
+        // column does not implement equals/hashCode - but the object is really identical "==" comparison possible
+        assertThat("Second table cell should be linked with the third (last) column!", lastColumn==cell.getColumn()); 
+    }
 
 }
