@@ -13,7 +13,7 @@ import org.vandeseer.easytable.structure.cell.CellText;
 import java.awt.*;
 import java.io.IOException;
 
-public class TableDrawerTwoPagesTableTest {
+public class TwoPagesTableTest {
 
     @Test
     public void createTwoPageTable() throws IOException {
@@ -49,14 +49,10 @@ public class TableDrawerTwoPagesTableTest {
 
         final PDDocument document = new PDDocument();
 
-        // Define the starting point
-        final float startY = 100F;
-        final int startX = 50;
-
         TableDrawer drawer = TableDrawer.builder()
                 .table(tableBuilder.build())
-                .startX(startX)
-                .startY(startY)
+                .startX(50)
+                .startY(100F)
                 .endY(50F) // note: if not set, table is drawn over the end of the page
                 .build();
 
