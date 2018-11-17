@@ -23,7 +23,7 @@ public class ExcelLikeExampleTest {
     private final static Color BLUE_LIGHT_1 = new Color(186, 206, 230);
     private final static Color BLUE_LIGHT_2 = new Color(218, 230, 242);
 
-    private final static String OUTPUT_FILE_NAME = "sampleExcelLike.pdf";
+    private final static String OUTPUT_FILE_NAME = "excelLike.pdf";
 
     @Test
     public void tableExample() throws IOException {

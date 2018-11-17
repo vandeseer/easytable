@@ -109,6 +109,10 @@ public abstract class CellBaseData {
             return this.borderWidthTop(borderWidth).borderWidthBottom(borderWidth).borderWidthLeft(borderWidth).borderWidthRight(borderWidth);
         }
 
+        public B padding(final float padding) {
+            return this.paddingTop(padding).paddingBottom(padding).paddingLeft(padding).paddingRight(padding);
+        }
+
         public B horizontalAlignment(HorizontalAlignment alignment) {
             settings.setHorizontalAlignment(alignment);
             return this.self();

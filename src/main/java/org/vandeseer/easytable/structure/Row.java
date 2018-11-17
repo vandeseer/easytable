@@ -36,6 +36,8 @@ public class Row {
     @Setter(AccessLevel.NONE)
     private Settings settings;
 
+    private float height = 0;
+
     private Row(final List<CellBaseData> cells) {
         super();
         this.cells = cells;
@@ -51,7 +53,12 @@ public class Row {
     }
 
     public float getHeight() {
-        return getCells().stream().map(CellBaseData::getHeight).max(naturalOrder()).orElseThrow(RuntimeException::new);
+        final float maxCellHeight = getCells().stream()
+                .map(CellBaseData::getHeight)
+                .max(naturalOrder())
+                .orElseThrow(RuntimeException::new);
+
+        return Math.max(height, maxCellHeight);
     }
 
 
@@ -100,6 +107,8 @@ public class Row {
 
             borderColor.ifPresent(row::setBorderColor);
             Optional.ofNullable(textColor).ifPresent(row::setTextColor);
+
+            row.height = height;
 
             return row;
         }

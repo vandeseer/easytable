@@ -1,5 +1,6 @@
 package org.vandeseer.easytable.structure.cell;
 
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.experimental.SuperBuilder;
@@ -20,6 +21,7 @@ public class CellText extends CellBaseData {
 
     private Color textColor;
 
+    @Builder.Default
     private float lineSpacing = 1f;
 
     //region Custom Getter

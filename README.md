@@ -22,7 +22,13 @@ In order to produce a whole PDF document with a table that looks like this one:
 
 ![easytable table](doc/example.png)
 
-You will need the [this code](src/test/java/org/vandeseer/integrationtest/ExcelLikeExampleTest.java).
+You will need [this code](src/test/java/org/vandeseer/integrationtest/ExcelLikeExampleTest.java).
+
+There are more examples (just see the folder), for instance this one: 
+
+![easytable table](doc/example2.png)
+
+Again, just have a look at the [code](src/test/java/org/vandeseer/integrationtest/SettingsTest.java).
 
 If you run the tests with `mvn clean test` there also some PDF documents created which you can find in the `target` folder.
 The corresponding sources (in order to understand how to use the code) can be found in the test package.

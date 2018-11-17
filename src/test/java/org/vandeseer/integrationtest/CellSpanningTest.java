@@ -41,7 +41,7 @@ public class CellSpanningTest {
                 .backgroundColor(Color.GREEN)
                 .build());
 
-        TestUtils.createAndSaveDocumentWithTable(tableBuilder.build(), "sampleWithCellSpanning.pdf");
+        TestUtils.createAndSaveDocumentWithTable(tableBuilder.build(), "cellSpanning.pdf");
     }
 
 }
