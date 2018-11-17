@@ -85,6 +85,13 @@ public class Table {
             return this;
         }
 
+        public TableBuilder addColumnsOfWidth(final float ...columnWidths) {
+            for (float columnWidth : columnWidths) {
+                addColumnOfWidth(columnWidth);
+            }
+            return this;
+        }
+
         public TableBuilder addColumnOfWidth(final float width) {
             final Column column = new Column(width);
             numberOfColumns++;

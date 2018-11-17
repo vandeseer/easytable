@@ -20,7 +20,7 @@ public class SettingsOverridingTest {
     @Test
     public void createSampleDocumentWithFontSettingOverriding() throws Exception {
         final Table.TableBuilder tableBuilder = Table.builder()
-                .addColumnOfWidth(100).addColumnOfWidth(100).addColumnOfWidth(100)
+                .addColumnsOfWidth(100, 100, 100)
                 .horizontalAlignment(CENTER)
                 .fontSize(10).font(HELVETICA);
 

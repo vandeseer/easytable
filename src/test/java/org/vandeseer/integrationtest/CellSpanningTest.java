@@ -17,9 +17,7 @@ public class CellSpanningTest {
     @Test
     public void createSampleDocumentWithCellSpanning() throws Exception {
         final Table.TableBuilder tableBuilder = Table.builder()
-                .addColumnOfWidth(300)
-                .addColumnOfWidth(120)
-                .addColumnOfWidth(70)
+                .addColumnsOfWidth(300, 120, 70)
                 .fontSize(8)
                 .font(HELVETICA);
 

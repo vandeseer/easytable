@@ -8,6 +8,7 @@ import org.apache.pdfbox.pdmodel.font.PDType1Font;
 import org.junit.Test;
 import org.vandeseer.TestUtils;
 import org.vandeseer.easytable.TableDrawer;
+import org.vandeseer.easytable.settings.HorizontalAlignment;
 import org.vandeseer.easytable.settings.VerticalAlignment;
 import org.vandeseer.easytable.structure.Row;
 import org.vandeseer.easytable.structure.Table;
@@ -18,51 +19,59 @@ import java.awt.*;
 import java.io.IOException;
 
 import static org.apache.pdfbox.pdmodel.font.PDType1Font.HELVETICA;
+import static org.vandeseer.easytable.settings.HorizontalAlignment.LEFT;
 import static org.vandeseer.easytable.settings.HorizontalAlignment.RIGHT;
 
 // TODO test border color on row level
 // TODO test the precedence of cell level settings of row level/table level settings
 // TODO can we somehow put the "cursor" directly to where the content stream is right now?!
-
 public class OthersTest {
 
     @Test
     public void createTableWithDifferentFontsInCells() throws IOException {
         // Define the table structure first
         final TableBuilder tableBuilder = Table.builder()
-                .addColumnOfWidth(300)
-                .addColumnOfWidth(120)
-                .addColumnOfWidth(70)
+                .addColumnsOfWidth(300, 120, 70)
                 .fontSize(8)
                 .font(HELVETICA)
                 .wordBreak(true);
 
-        // Header ...
         tableBuilder.addRow(Row.builder()
-                .add(CellText.builder().text("This is top right aligned without a border")
+                .add(CellText.builder().text("This is top right aligned without a border; the next cell has line spacing 1.5f")
                         .horizontalAlignment(RIGHT)
                         .verticalAlignment(VerticalAlignment.TOP)
                         .build())
                 .add(CellText.builder().text("And this is another cell with a very long long long text that tells a nice" +
-                        " and useless story, because Iam to lazy to get a lorem-ipsum and I have fun while typing" +
-                        " a long text and a word that cannot be breaked yet aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa" +
-                        "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa").build())
-                .add(CellText.builder().text("This is bottom left aligned")
+                        " and useless story, because Iam to lazy to get a lorem-ipsum.")
+                        .lineSpacing(1.5f).build())
+                .add(CellText.builder().text("This is center and middle aligned with a line spacing of 1.2f")
                         .backgroundColor(Color.ORANGE)
-                        .verticalAlignment(VerticalAlignment.BOTTOM)
+                        .verticalAlignment(VerticalAlignment.MIDDLE)
+                        .horizontalAlignment(HorizontalAlignment.CENTER)
+                        .lineSpacing(1.2f)
                         .build())
                 .backgroundColor(Color.BLUE)
                 .build());
 
-        // ... and some cells
-        for (int i = 0; i < 10; i++) {
-            tableBuilder.addRow(Row.builder()
-                    .add(CellText.builder().text(String.valueOf(i)).font(PDType1Font.COURIER_BOLD).borderWidth(1).build())
-                    .add(CellText.builder().text(String.valueOf(i * i)).fontSize(22).borderWidth(1).build())
-                    .add(CellText.builder().text(String.valueOf(i + (i * i))).font(PDType1Font.TIMES_ITALIC).borderWidth(1).build())
-                    .backgroundColor(i % 2 == 0 ? Color.LIGHT_GRAY : Color.WHITE)
-                    .build());
-        }
+        tableBuilder.addRow(Row.builder()
+                .add(CellText.builder().text("This is left bottom aligned with a border on the bottom")
+                        .horizontalAlignment(LEFT)
+                        .verticalAlignment(VerticalAlignment.BOTTOM)
+                        .borderWidthBottom(1)
+                        .build())
+                .add(CellText.builder().text("Bavaria ipsum dolor sit amet Schaung kost nix des Biagadn obandeln. " +
+                        "Di gscheit des is hoid aso kummd Haberertanz heitzdog de Sonn des is a gmahde Wiesn, " +
+                        "Charivari: Kimmt gscheid singd Buam Leonhardifahrt da pfundig gar nia need. " +
+                        "Jo mei Kuaschwanz wia ned woar pfenningguat. Wos griasd eich midnand hi om auf’n Gipfe des " +
+                        "wiad a Mordsgaudi lem und lem lossn Weibaleid obacht mei ebba, in da. " +
+                        "Xaver mechad Schorsch ned woar, mim Radl foahn in da da. Auf’d Schellnsau auszutzeln is des " +
+                        "liab Griasnoggalsubbm wea ko, dea ko hob mei.").build())
+                .add(CellText.builder().text("This is bottom left aligned")
+                        .backgroundColor(Color.LIGHT_GRAY)
+                        .verticalAlignment(VerticalAlignment.BOTTOM)
+                        .build())
+                .backgroundColor(Color.DARK_GRAY)
+                .build());
 
         TestUtils.createAndSaveDocumentWithTable(tableBuilder.build(), "sampleDifferentFontsInCells.pdf");
     }
@@ -96,9 +105,7 @@ public class OthersTest {
 
     private Table getRingManagerTable() {
         final TableBuilder tableBuilder = Table.builder()
-                .addColumnOfWidth(26)
-                .addColumnOfWidth(70)
-                .addColumnOfWidth(390)
+                .addColumnsOfWidth(26, 70, 390)
                 .fontSize(9)
                 .borderColor(Color.GRAY)
                 .font(HELVETICA);

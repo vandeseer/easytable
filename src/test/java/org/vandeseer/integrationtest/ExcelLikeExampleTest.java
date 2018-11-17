@@ -37,11 +37,8 @@ public class ExcelLikeExampleTest {
         };
 
         // Define the table structure first
-        final TableBuilder tableBuilder = Table.builder() // TODO what about "Table.builder().columns(100,50,50,50). ..."? Would be easier! ;)
-                .addColumnOfWidth(100)
-                .addColumnOfWidth(50)
-                .addColumnOfWidth(50)
-                .addColumnOfWidth(50)
+        final TableBuilder tableBuilder = Table.builder()
+                .addColumnsOfWidth(100, 50, 50, 50)
                 .fontSize(8)
                 .font(HELVETICA)
                 .borderColor(Color.WHITE);
