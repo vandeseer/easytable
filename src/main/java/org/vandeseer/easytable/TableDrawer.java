@@ -175,7 +175,7 @@ public class TableDrawer {
 
         float maxWidth = cell.getWidthOfTextAndHorizontalPadding() - (cell.getPaddingLeft() + cell.getPaddingRight());
         if (table.isWordBreak()) {
-            lines = PdfUtil.getOptimalTextBreak(cell.getText(), currentFont, currentFontSize, maxWidth);
+            lines = PdfUtil.getOptimalTextBreakLines(cell.getText(), currentFont, currentFontSize, maxWidth);
         } else {
             lines = Collections.singletonList(cell.getText());
         }

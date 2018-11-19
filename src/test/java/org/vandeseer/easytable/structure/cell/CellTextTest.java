@@ -52,10 +52,8 @@ public class CellTextTest {
         assertThat(cell.getWidthOfTextAndHorizontalPadding(), equalTo(PdfUtil.getStringWidth(text, font, fontSize) + cell.getHorizontalPadding()));
     }
 
-    // TODO We have a StackOverflowError in case the column width is less then the text width of "a-" !
-    // TODO We will get a RuntimeException in case the column width minus the horizontal padding is smaller than the text width of "a-"!
     @Test
-    public void getWidth_cellWithWrappingText() {
+    public void getWidth_cellWithWrappingText_columnSizeOk() {
         enableWordBreaking();
         setColumnWidthTo(9f); // smaller than the size of the text "abc"
 
@@ -70,6 +68,24 @@ public class CellTextTest {
         );
 
         assertThat(cell.getWidthOfTextAndHorizontalPadding(), equalTo(PdfUtil.getStringWidth("a-", font, fontSize)));
+    }
+
+    @Test
+    public void getWidth_cellWithWrappingText_columnTooSmall() {
+        enableWordBreaking();
+        setColumnWidthTo(5f);
+
+        final CellText cell = prepareForTest(
+                CellText.builder()
+                        .font(font)
+                        .fontSize(fontSize)
+                        .text("a")
+                        .paddingLeft(0)
+                        .paddingRight(0)
+                        .build()
+        );
+
+        assertThat(cell.getWidthOfTextAndHorizontalPadding(), equalTo(PdfUtil.getStringWidth("a", font, fontSize)));
     }
 
     @Test

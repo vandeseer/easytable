@@ -57,7 +57,7 @@ public class Table {
     public float getAvailableCellWidthRespectingSpan(int columnIndex, int span) {
         float cellWidth = 0;
         for (int i = 0; i < span; i++) {
-            cellWidth += getColumns().get(columnIndex + i).getWidth();
+            cellWidth += getColumns().get(columnIndex + i).getWidth(); // TODO should we expand?
         }
         return cellWidth;
     }
@@ -132,13 +132,14 @@ public class Table {
                 row.getSettings().fillingMergeBy(table.getSettings());
 
                 int columnNumber = 0;
-                for(CellBaseData cell : row.getCells()) {
-
-                    cell.setRow(row);
-                    cell.setColumn(table.getColumns().get(columnNumber));
+                for (CellBaseData cell : row.getCells()) {
 
                     // Fill up the settings of the cell that are not set there directly
                     cell.getSettings().fillingMergeBy(row.getSettings());
+
+                    cell.setRow(row);
+                    Column column = table.getColumns().get(columnNumber);
+                    cell.setColumn(column);
 
                     columnNumber += cell.getSpan();
                 }

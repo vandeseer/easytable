@@ -51,7 +51,7 @@ public class PdfUtil {
      * @param maxWidth Maximal width of resulting text-lines
      * @return A list of lines, where all are smaller than maxWidth
      */
-    public static List<String> getOptimalTextBreak(final String text, final PDFont font, final int fontSize, final float maxWidth) {
+    public static List<String> getOptimalTextBreakLines(final String text, final PDFont font, final int fontSize, final float maxWidth) {
 
         if (PdfUtil.isLineFine(text, font, fontSize, maxWidth)) {
             return Collections.singletonList(text);
@@ -82,7 +82,11 @@ public class PdfUtil {
             final String fittedNewLine = line.substring(0, i) + "-";
             final String remains = line.substring(i);
 
-            if (!StringUtils.isEmpty(fittedNewLine) && PdfUtil.isLineFine(fittedNewLine, font, fontSize, maxWidth)) {
+            if (i == 0) {
+                break;
+            }
+
+            if (PdfUtil.isLineFine(fittedNewLine, font, fontSize, maxWidth)) {
                 returnList.add(fittedNewLine);
                 returnList.addAll(PdfUtil.wrapLine(remains, font, fontSize, maxWidth));
 

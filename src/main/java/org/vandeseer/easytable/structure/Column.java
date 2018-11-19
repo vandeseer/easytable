@@ -12,7 +12,7 @@ public class Column {
 
     private Column next;
 
-    private final float width;
+    private float width;
 
     Column(final float width) {
         if (width < 0) {

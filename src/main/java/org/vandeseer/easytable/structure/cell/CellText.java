@@ -10,6 +10,7 @@ import org.vandeseer.easytable.util.PdfUtil;
 
 import java.awt.*;
 import java.util.Comparator;
+import java.util.List;
 import java.util.Optional;
 
 @Getter
@@ -48,7 +49,7 @@ public class CellText extends CellBaseData {
 
         if (getRow().getTable().isWordBreak()) {
 
-            final int size = PdfUtil.getOptimalTextBreak(text, getFont(), getFontSize(),
+            final int size = PdfUtil.getOptimalTextBreakLines(text, getFont(), getFontSize(),
                     getWidthOfTextAndHorizontalPadding() - getPaddingRight() - getPaddingRight()).size();
 
             final float heightOfTextLines = size * fontHeight;
@@ -64,6 +65,8 @@ public class CellText extends CellBaseData {
     }
 
     public float getWidthOfTextAndHorizontalPadding() {
+        final float notBrokenTextWidth = PdfUtil.getStringWidth(text, getFont(), getFontSize());
+
         final float textWidth;
 
         if (getRow().getTable().isWordBreak()) {
@@ -80,14 +83,17 @@ public class CellText extends CellBaseData {
             }
 
             final float maxWidth = columnsWidth - getHorizontalPadding();
-            textWidth = PdfUtil.getOptimalTextBreak(text, getFont(), getFontSize(), maxWidth)
+            List<String> textLines = PdfUtil.getOptimalTextBreakLines(text, getFont(), getFontSize(), maxWidth);
+            final float maximalTextWidth = textLines
                     .stream()
                     .map(line -> PdfUtil.getStringWidth(line, getFont(), getFontSize()))
                     .max(Comparator.naturalOrder())
-                    .orElseThrow(RuntimeException::new);
+                    .orElse(notBrokenTextWidth);
+
+            textWidth = maximalTextWidth;
 
         } else {
-            textWidth = PdfUtil.getStringWidth(text, getFont(), getFontSize());
+            textWidth = notBrokenTextWidth;
         }
 
         return textWidth + getHorizontalPadding();
