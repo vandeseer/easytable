@@ -50,7 +50,7 @@ public class CellText extends CellBaseData {
         if (getRow().getTable().isWordBreak()) {
 
             final int size = PdfUtil.getOptimalTextBreakLines(text, getFont(), getFontSize(),
-                    getWidthOfTextAndHorizontalPadding() - getPaddingRight() - getPaddingRight()).size();
+                    getWidthOfTextAndHorizontalPadding() - getHorizontalPadding()).size();
 
             final float heightOfTextLines = size * fontHeight;
             final float heightOfLineSpacing = (size - 1) * fontHeight * getLineSpacing();

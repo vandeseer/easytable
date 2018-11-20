@@ -4,15 +4,19 @@ package org.vandeseer.easytable.util;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.pdfbox.pdmodel.font.PDFont;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import java.io.IOException;
+import java.util.*;
 
 /**
  * Provides some helping functions.
  */
 public class PdfUtil {
+
+    private static final String NEW_LINE_REGEX = "\\r?\\n";
+
+    private PdfUtil() {
+
+    }
 
     /**
      * Computes the width of a String (in points).
@@ -23,10 +27,17 @@ public class PdfUtil {
      * @return Width (in points)
      */
     public static float getStringWidth(final String text, final PDFont font, final int fontSize) {
+        return Arrays.stream(text.split(NEW_LINE_REGEX))
+                .max(Comparator.comparing(String::length))
+                .map(x -> getWidthOfStringWithoutNewlines(x, font, fontSize))
+                .orElseThrow(CouldNotDetermineStringWidthException::new);
+    }
+
+    private static float getWidthOfStringWithoutNewlines(String str, PDFont font, int fontSize) {
         try {
-            return font.getStringWidth(text) * fontSize / 1000F;
-        } catch (final Exception ex) {
-            throw new RuntimeException("error while get strings width", ex);
+            return font.getStringWidth(str) * fontSize / 1000F;
+        } catch (IOException exception) {
+            throw new CouldNotDetermineStringWidthException(exception);
         }
     }
 
@@ -52,13 +63,17 @@ public class PdfUtil {
      * @return A list of lines, where all are smaller than maxWidth
      */
     public static List<String> getOptimalTextBreakLines(final String text, final PDFont font, final int fontSize, final float maxWidth) {
+        final List<String> result = new LinkedList<>();
 
-        if (PdfUtil.isLineFine(text, font, fontSize, maxWidth)) {
-            return Collections.singletonList(text);
-        } else {
-            return PdfUtil.wrapLine(text, font, fontSize, maxWidth);
+        for (final String line : text.split(NEW_LINE_REGEX)) {
+            if (PdfUtil.isLineFine(line, font, fontSize, maxWidth)) {
+                result.add(line);
+            } else {
+                result.addAll(PdfUtil.wrapLine(line, font, fontSize, maxWidth));
+            }
         }
 
+        return result;
     }
 
     private static List<String> wrapLine(final String line, final PDFont font, final int fontSize, final float maxWidth) {
@@ -78,13 +93,9 @@ public class PdfUtil {
     private static List<String> splitBySize(final String line, final PDFont font, final int fontSize, final float maxWidth) {
         final List<String> returnList = new ArrayList<>();
 
-        for (int i = line.length() - 1; i >= 0; i--) {
+        for (int i = line.length() - 1; i > 0; i--) {
             final String fittedNewLine = line.substring(0, i) + "-";
             final String remains = line.substring(i);
-
-            if (i == 0) {
-                break;
-            }
 
             if (PdfUtil.isLineFine(fittedNewLine, font, fontSize, maxWidth)) {
                 returnList.add(fittedNewLine);
@@ -118,14 +129,19 @@ public class PdfUtil {
         return returnList;
     }
 
-
     private static boolean isLineFine(final String line, final PDFont font, final int fontSize, final float maxWidth) {
-        try {
-            return maxWidth >= PdfUtil.getStringWidth(line, font, fontSize);
-        } catch (final Exception ex) {
-            throw new RuntimeException("error while check size of string", ex);
-        }
+        return maxWidth >= PdfUtil.getStringWidth(line, font, fontSize);
     }
 
+
+    private static class CouldNotDetermineStringWidthException extends RuntimeException {
+        CouldNotDetermineStringWidthException() {
+            super();
+        }
+
+        CouldNotDetermineStringWidthException(Exception exception) {
+            super(exception);
+        }
+    }
 
 }
