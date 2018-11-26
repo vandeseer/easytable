@@ -36,7 +36,7 @@ public class Row {
     @Setter(AccessLevel.NONE)
     private Settings settings;
 
-    private float height = 0;
+    private float height;
 
     private Row(final List<CellBaseData> cells) {
         super();

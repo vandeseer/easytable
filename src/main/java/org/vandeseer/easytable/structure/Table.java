@@ -30,8 +30,8 @@ public class Table {
     @Setter(AccessLevel.NONE)
     private Settings settings;
 
-    private int numberOfColumns = 0;
-    private float width = 0;
+    private int numberOfColumns;
+    private float width;
 
     @Builder.Default
     private float borderWidth = 0.2f;

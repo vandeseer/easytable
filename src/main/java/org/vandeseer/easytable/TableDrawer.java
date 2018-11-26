@@ -23,8 +23,6 @@ import java.util.List;
 
 public class TableDrawer {
 
-    private static final float NO_TABLE_END = -1f;
-
     @Setter
     @Accessors(chain = true, fluent = true)
     private PDPageContentStream contentStream;

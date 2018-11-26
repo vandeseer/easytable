@@ -31,7 +31,6 @@ public abstract class CellBaseData {
     @Setter
     private Color backgroundColor;
 
-    @Builder.Default
     private Color borderColor;
 
     @Builder.Default
