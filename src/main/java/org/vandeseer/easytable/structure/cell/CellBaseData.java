@@ -28,9 +28,6 @@ public abstract class CellBaseData {
     @Setter(AccessLevel.PROTECTED)
     protected Settings settings;
 
-    @Setter
-    private Color backgroundColor;
-
     private Color borderColor;
 
     @Builder.Default
@@ -85,11 +82,11 @@ public abstract class CellBaseData {
     }
 
     public boolean hasBackgroundColor() {
-        return backgroundColor != null;
+        return settings.getBackgroundColor() != null;
     }
 
     public Color getBackgroundColor() {
-        return backgroundColor;
+        return settings.getBackgroundColor();
     }
 
     public Color getBorderColor() {
@@ -112,13 +109,18 @@ public abstract class CellBaseData {
             return this.paddingTop(padding).paddingBottom(padding).paddingLeft(padding).paddingRight(padding);
         }
 
-        public B horizontalAlignment(HorizontalAlignment alignment) {
+        public B horizontalAlignment(final HorizontalAlignment alignment) {
             settings.setHorizontalAlignment(alignment);
             return this.self();
         }
 
-        public B verticalAlignment(VerticalAlignment alignment) {
+        public B verticalAlignment(final VerticalAlignment alignment) {
             settings.setVerticalAlignment(alignment);
+            return this.self();
+        }
+
+        public B backgroundColor(final Color backgroundColor) {
+            settings.setBackgroundColor(backgroundColor);
             return this.self();
         }
 

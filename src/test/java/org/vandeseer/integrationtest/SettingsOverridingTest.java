@@ -46,12 +46,13 @@ public class SettingsOverridingTest {
     }
 
     @Test
-    public void createSampleDocumentWithTextColorOverriding() throws Exception {
+    public void createSampleDocumentWithTextColorAndBackgroundColorOverriding() throws Exception {
         final Table.TableBuilder tableBuilder = Table.builder()
                 .addColumnsOfWidth(100, 100, 100)
                 .horizontalAlignment(CENTER)
                 .fontSize(10).font(HELVETICA)
-                .textColor(Color.GREEN);
+                .textColor(Color.GREEN)
+                .backgroundColor(Color.LIGHT_GRAY);
 
         tableBuilder.addRow(
                 Row.builder()
@@ -64,17 +65,18 @@ public class SettingsOverridingTest {
                         .add(CellText.builder().text("Pur").borderWidth(1).build())
                         .add(CellText.builder().text("Booz").borderWidth(1).build())
                         .add(CellText.builder().text("baz").borderWidth(1).build())
+                        .backgroundColor(Color.YELLOW)
                         .textColor(Color.BLACK)
                         .build());
 
         tableBuilder.addRow(
                 Row.builder()
-                        .add(CellText.builder().text("Pur").borderWidth(1).build())
+                        .add(CellText.builder().text("Pur").borderWidth(1).backgroundColor(Color.ORANGE).build())
                         .add(CellText.builder().text("Booz").borderWidth(1).build())
                         .add(CellText.builder().text("baz").borderWidth(1).textColor(Color.PINK).build())
                         .build());
 
-        TestUtils.createAndSaveDocumentWithTable(tableBuilder.build(), "textColorOverriding.pdf");
+        TestUtils.createAndSaveDocumentWithTable(tableBuilder.build(), "textColorAndBackgroundOverriding.pdf");
     }
 
 }

@@ -115,6 +115,11 @@ public class Table {
             return this;
         }
 
+        public TableBuilder backgroundColor(final Color backgroundColor) {
+            settings.setBackgroundColor(backgroundColor);
+            return this;
+        }
+
         public TableBuilder horizontalAlignment(HorizontalAlignment alignment) {
             settings.setHorizontalAlignment(alignment);
             return this;

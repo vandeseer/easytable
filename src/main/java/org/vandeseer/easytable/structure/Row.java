@@ -29,7 +29,6 @@ public class Row {
     private List<CellBaseData> cells;
 
     private Color borderColor;
-    private Color backgroundColor;
 
     @Getter
     @Setter(AccessLevel.NONE)
@@ -87,6 +86,11 @@ public class Row {
             return this;
         }
 
+        public Row.RowBuilder backgroundColor(final Color backgroundColor) {
+            settings.setBackgroundColor(backgroundColor);
+            return this;
+        }
+
         public Row.RowBuilder horizontalAlignment(HorizontalAlignment alignment) {
             settings.setHorizontalAlignment(alignment);
             return this;
@@ -98,10 +102,6 @@ public class Row {
         }
 
         public Row build() {
-            Optional.ofNullable(backgroundColor).ifPresent(rowBackColor -> cells.stream()
-                    .filter(cell -> !cell.hasBackgroundColor())
-                    .forEach(cell -> cell.setBackgroundColor(rowBackColor)));
-
             final Row row = new Row(cells);
             row.settings = settings;
 

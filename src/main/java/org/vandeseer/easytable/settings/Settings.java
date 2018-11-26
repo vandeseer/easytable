@@ -12,7 +12,9 @@ public class Settings {
 
     private PDFont font;
     private Integer fontSize;
+
     private Color textColor;
+    private Color backgroundColor;
 
     private HorizontalAlignment horizontalAlignment;
     private VerticalAlignment verticalAlignment;
@@ -28,6 +30,10 @@ public class Settings {
 
         if (getTextColor() == null && settings.getTextColor() != null) {
             textColor = settings.getTextColor();
+        }
+
+        if (getBackgroundColor() == null && settings.getBackgroundColor() != null) {
+            backgroundColor = settings.getBackgroundColor();
         }
 
         if (getHorizontalAlignment() == null && settings.getHorizontalAlignment() != null) {
