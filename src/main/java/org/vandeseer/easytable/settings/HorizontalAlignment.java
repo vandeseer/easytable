@@ -2,6 +2,6 @@ package org.vandeseer.easytable.settings;
 
 public enum HorizontalAlignment {
 
-    LEFT, CENTER, RIGHT
+    LEFT, CENTER, RIGHT, JUSTIFY
 
 }

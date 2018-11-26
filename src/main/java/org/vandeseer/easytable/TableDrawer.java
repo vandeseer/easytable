@@ -208,6 +208,24 @@ public class TableDrawer {
                 final float diff = (columnWidth - textWidth) / 2;
                 xOffset = moveX + diff;
 
+            } else if (cell.getSettings().getHorizontalAlignment() == HorizontalAlignment.JUSTIFY) {
+
+                // Code from https://stackoverflow.com/questions/20680430/is-it-possible-to-justify-text-in-pdfbox
+                float charSpacing = 0;
+                if (line.length() > 1) {
+                    float size = PdfUtil.getStringWidth(line, cell.getFont(), cell.getFontSize());
+                    float free = (cell.getWidthOfTextAndHorizontalPadding() - cell.getHorizontalPadding()) - size;
+                    if (free > 0) {
+                        charSpacing = free / (line.length() - 1);
+                    }
+                }
+
+                // Don't justify the last line
+                if (i < lines.size() -1) {
+
+                    // setCharacterSpacing() is available in PDFBox version 2.0.4 and higher.
+                    contentStream.setCharacterSpacing(charSpacing);
+                }
             }
 
             drawText(line, currentFont, currentFontSize, currentTextColor, xOffset, yOffset);
@@ -257,6 +275,7 @@ public class TableDrawer {
         contentStream.newLineAtOffset(x, y);
         contentStream.showText(text);
         contentStream.endText();
+        contentStream.setCharacterSpacing(0);
     }
 
 }

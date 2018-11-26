@@ -73,6 +73,7 @@ public class SettingsTest {
                         "liab Griasnoggalsubbm wea ko, dea ko hob mei.")
                         .padding(20)
                         .backgroundColor(Color.DARK_GRAY)
+                        .horizontalAlignment(JUSTIFY)
                         .textColor(Color.WHITE)
                         .lineSpacing(0.9f)
                         .font(COURIER_BOLD)
