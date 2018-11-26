@@ -5,13 +5,13 @@ This is a (very) small project that builds upon
 to create tables in a fairly simple way.
 It emerged from the need in another project. Therefore it also may miss some
 crucial features. Nevertheless there is:
-* setting font and font size on table level as well as cell level
+* setting font and font size on table, row and cell level
 * setting single cells with bottom-, top-, left- and right-border width separately
-* background color on row or cell level
+* background color on table, row and cell level
 * padding (top, bottom, left, right) on cell level
 * border colors (on table, row or cell level)
-* support for text alignment (right, left or center)
-* vertical text alignment
+* support for text alignment (right, left, center, justified)
+* vertical text alignment (top, middle, bottom)
 * row spanning
 * line breaking and line spacing
 * images in cells
@@ -39,7 +39,7 @@ First check it out and install it locally:
 
     git clone https://github.com/vandeseer/easytable.git
     cd easytable
-    git checkout v0.2.0
+    git checkout v0.2.1
     mvn clean install
 
 Define this in your `pom.xml` in order to use it:
@@ -47,7 +47,7 @@ Define this in your `pom.xml` in order to use it:
     <dependency>
         <groupId>org.vandeseer.pdfbox</groupId>
         <artifactId>easytable</artifactId>
-        <version>0.2.0</version>
+        <version>0.2.1</version>
     </dependency>
 
 At one point it will hopefully also be available at maven central. 
