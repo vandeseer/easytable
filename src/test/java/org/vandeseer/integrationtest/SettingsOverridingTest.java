@@ -15,11 +15,12 @@ import static org.vandeseer.easytable.settings.HorizontalAlignment.CENTER;
 public class SettingsOverridingTest {
 
     @Test
-    public void createSampleDocumentWithFontSettingOverriding() throws Exception {
+    public void createSampleDocumentWithFontSettingAndBorderColorOverriding() throws Exception {
         final Table.TableBuilder tableBuilder = Table.builder()
                 .addColumnsOfWidth(100, 100, 100)
                 .horizontalAlignment(CENTER)
-                .fontSize(10).font(HELVETICA);
+                .fontSize(10).font(HELVETICA)
+                .borderColor(Color.RED);
 
         tableBuilder.addRow(
                 Row.builder()
@@ -30,19 +31,27 @@ public class SettingsOverridingTest {
 
         tableBuilder.addRow(
                 Row.builder()
-                        .add(CellText.builder().text("Pur").backgroundColor(Color.YELLOW).borderWidth(1).build())
+                        .add(CellText.builder().text("Pur").backgroundColor(Color.YELLOW).build())
                         .add(CellText.builder().text("Booz").build())
                         .add(CellText.builder().text("baz").build())
                         .font(COURIER_BOLD).fontSize(8).build());
 
         tableBuilder.addRow(
                 Row.builder()
+                        .add(CellText.builder().text("Pur").borderWidthRight(1).borderWidthBottom(1).backgroundColor(Color.YELLOW).build())
+                        .add(CellText.builder().text("Booz").borderWidthTop(1).borderWidthLeft(1).build())
+                        .add(CellText.builder().text("baz").borderWidthBottom(1).build())
+                        .borderColor(Color.GREEN)
+                        .font(COURIER_BOLD).fontSize(8).build());
+
+        tableBuilder.addRow(
+                Row.builder()
                         .add(CellText.builder().text("Pur").backgroundColor(Color.YELLOW).borderWidth(1).build())
                         .add(CellText.builder().text("Booz").build())
-                        .add(CellText.builder().text("baz").font(HELVETICA_OBLIQUE).fontSize(5).build())
+                        .add(CellText.builder().text("baz").borderColor(Color.CYAN).borderWidthBottom(1).font(HELVETICA_OBLIQUE).fontSize(5).build())
                         .build());
 
-        TestUtils.createAndSaveDocumentWithTable(tableBuilder.build(), "fontSettingsOverriding.pdf");
+        TestUtils.createAndSaveDocumentWithTable(tableBuilder.build(), "fontAndBorderColorSettingsOverriding.pdf");
     }
 
     @Test

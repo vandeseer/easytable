@@ -12,7 +12,6 @@ import org.vandeseer.easytable.structure.Column;
 import org.vandeseer.easytable.structure.Row;
 
 import java.awt.*;
-import java.util.Optional;
 
 @SuperBuilder(toBuilder = true)
 @Getter
@@ -27,8 +26,6 @@ public abstract class CellBaseData {
     @Getter
     @Setter(AccessLevel.PROTECTED)
     protected Settings settings;
-
-    private Color borderColor;
 
     @Builder.Default
     private final int span = 1;
@@ -90,8 +87,7 @@ public abstract class CellBaseData {
     }
 
     public Color getBorderColor() {
-        final Optional<Color> optBorderColor = Optional.ofNullable(borderColor);
-        return optBorderColor.orElse(getRow().getBorderColor());
+        return settings.getBorderColor();
     }
 
     public abstract float getHeight();
@@ -121,6 +117,11 @@ public abstract class CellBaseData {
 
         public B backgroundColor(final Color backgroundColor) {
             settings.setBackgroundColor(backgroundColor);
+            return this.self();
+        }
+
+        public B borderColor(final Color borderColor) {
+            settings.setBorderColor(borderColor);
             return this.self();
         }
 

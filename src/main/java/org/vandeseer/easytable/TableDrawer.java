@@ -120,11 +120,11 @@ public class TableDrawer {
 
                 // Handle the cell's borders
                 final Color cellBorderColor = cell.getBorderColor();
-                final Color rowBorderColor = row.getBorderColor();
+                final Color rowBorderColor = row.getSettings().getBorderColor();
 
                 if (cell.hasBorderTop() || cell.hasBorderBottom()) {
-                    final float correctionLeft = cell.hasBorderLeft() ? cell.getBorderWidthLeft() / 2 : 0;
-                    final float correctionRight = cell.hasBorderRight() ? cell.getBorderWidthRight() / 2 : 0;
+                    final float correctionLeft = cell.getBorderWidthLeft() / 2;
+                    final float correctionRight = cell.getBorderWidthRight() / 2;
 
                     if (cell.hasBorderTop()) {
                         contentStream.moveTo(startX - correctionLeft, startY + rowHeight);
@@ -140,8 +140,8 @@ public class TableDrawer {
                 }
 
                 if (cell.hasBorderLeft() || cell.hasBorderRight()) {
-                    final float correctionTop = cell.hasBorderTop() ? cell.getBorderWidthTop() / 2 : 0;
-                    final float correctionBottom = cell.hasBorderBottom() ? cell.getBorderWidthBottom() / 2 : 0;
+                    final float correctionTop = cell.getBorderWidthTop() / 2;
+                    final float correctionBottom = cell.getBorderWidthBottom() / 2;
 
                     if (cell.hasBorderLeft()) {
                         contentStream.moveTo(startX, startY - correctionBottom);

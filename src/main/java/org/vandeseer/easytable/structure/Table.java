@@ -21,6 +21,7 @@ public class Table {
     private static final PDFont DEFAULT_FONT = PDType1Font.HELVETICA;
     private static final int DEFAULT_FONT_SIZE = 12;
     private static final Color DEFAULT_TEXT_COLOR = Color.BLACK;
+    private static final Color DEFAULT_BORDER_COLOR = Color.BLACK;
 
     private static final HorizontalAlignment DEFAULT_HORIZONTAL_ALIGNMENT = HorizontalAlignment.LEFT;
     private static final VerticalAlignment DEFAULT_VERTICAL_ALIGNMENT = VerticalAlignment.MIDDLE;
@@ -37,9 +38,6 @@ public class Table {
 
     @Builder.Default
     private float borderWidth = 0.2f;
-
-    @Builder.Default
-    private Color borderColor = Color.BLACK;
 
     @Builder.Default
     private boolean wordBreak = false;
@@ -70,6 +68,7 @@ public class Table {
                                                 .font(DEFAULT_FONT)
                                                 .fontSize(DEFAULT_FONT_SIZE)
                                                 .textColor(DEFAULT_TEXT_COLOR)
+                                                .borderColor(DEFAULT_BORDER_COLOR)
                                                 .build();
 
         private TableBuilder() {
@@ -117,6 +116,11 @@ public class Table {
 
         public TableBuilder backgroundColor(final Color backgroundColor) {
             settings.setBackgroundColor(backgroundColor);
+            return this;
+        }
+
+        public TableBuilder borderColor(final Color borderColor) {
+            settings.setBorderColor(borderColor);
             return this;
         }
 

@@ -13,7 +13,6 @@ import org.vandeseer.easytable.structure.cell.CellBaseData;
 import java.awt.*;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Optional;
 
 import static java.util.Comparator.naturalOrder;
 
@@ -28,8 +27,6 @@ public class Row {
     @Getter
     private List<CellBaseData> cells;
 
-    private Color borderColor;
-
     @Getter
     @Setter(AccessLevel.NONE)
     private Settings settings;
@@ -39,11 +36,6 @@ public class Row {
     private Row(final List<CellBaseData> cells) {
         super();
         this.cells = cells;
-    }
-
-    public Color getBorderColor() {
-        final Optional<Color> optBorderColor = Optional.ofNullable(borderColor);
-        return optBorderColor.orElse(getTable().getBorderColor());
     }
 
     public float getHeight() {
@@ -59,7 +51,6 @@ public class Row {
     public static class RowBuilder {
 
         private List<CellBaseData> cells = new LinkedList<>();
-        private Optional<Color> borderColor = Optional.empty();
         private Settings settings = Settings.builder().build();
 
         private RowBuilder() {
@@ -91,6 +82,11 @@ public class Row {
             return this;
         }
 
+        public Row.RowBuilder borderColor(final Color borderColor) {
+            settings.setBorderColor(borderColor);
+            return this;
+        }
+
         public Row.RowBuilder horizontalAlignment(HorizontalAlignment alignment) {
             settings.setHorizontalAlignment(alignment);
             return this;
@@ -104,11 +100,7 @@ public class Row {
         public Row build() {
             final Row row = new Row(cells);
             row.settings = settings;
-
-            borderColor.ifPresent(row::setBorderColor);
-
             row.height = height;
-
             return row;
         }
 

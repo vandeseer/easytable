@@ -16,6 +16,8 @@ public class Settings {
     private Color textColor;
     private Color backgroundColor;
 
+    private Color borderColor;
+
     private HorizontalAlignment horizontalAlignment;
     private VerticalAlignment verticalAlignment;
 
@@ -34,6 +36,10 @@ public class Settings {
 
         if (getBackgroundColor() == null && settings.getBackgroundColor() != null) {
             backgroundColor = settings.getBackgroundColor();
+        }
+
+        if (getBorderColor() == null && settings.getBorderColor() != null) {
+            borderColor = settings.getBorderColor();
         }
 
         if (getHorizontalAlignment() == null && settings.getHorizontalAlignment() != null) {
