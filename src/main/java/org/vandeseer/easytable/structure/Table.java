@@ -20,6 +20,8 @@ public class Table {
 
     private static final PDFont DEFAULT_FONT = PDType1Font.HELVETICA;
     private static final int DEFAULT_FONT_SIZE = 12;
+    private static final Color DEFAULT_TEXT_COLOR = Color.BLACK;
+
     private static final HorizontalAlignment DEFAULT_HORIZONTAL_ALIGNMENT = HorizontalAlignment.LEFT;
     private static final VerticalAlignment DEFAULT_VERTICAL_ALIGNMENT = VerticalAlignment.MIDDLE;
 
@@ -38,9 +40,6 @@ public class Table {
 
     @Builder.Default
     private Color borderColor = Color.BLACK;
-
-    @Builder.Default
-    private Color textColor = Color.BLACK;
 
     @Builder.Default
     private boolean wordBreak = false;
@@ -70,6 +69,7 @@ public class Table {
         private Settings settings = Settings.builder()
                                                 .font(DEFAULT_FONT)
                                                 .fontSize(DEFAULT_FONT_SIZE)
+                                                .textColor(DEFAULT_TEXT_COLOR)
                                                 .build();
 
         private TableBuilder() {
@@ -110,6 +110,11 @@ public class Table {
             return this;
         }
 
+        public TableBuilder textColor(final Color textColor) {
+            settings.setTextColor(textColor);
+            return this;
+        }
+
         public TableBuilder horizontalAlignment(HorizontalAlignment alignment) {
             settings.setHorizontalAlignment(alignment);
             return this;
@@ -129,6 +134,8 @@ public class Table {
             // Set up the connections between table, row(s) and cell(s)
             for (Row row : rows) {
                 row.setTable(table);
+
+                // Fill up the settings of the row that are not set there directly
                 row.getSettings().fillingMergeBy(table.getSettings());
 
                 int columnNumber = 0;

@@ -9,14 +9,11 @@ import org.vandeseer.easytable.structure.cell.CellText;
 
 import java.awt.*;
 
-import static org.apache.pdfbox.pdmodel.font.PDType1Font.COURIER_BOLD;
-import static org.apache.pdfbox.pdmodel.font.PDType1Font.HELVETICA;
-import static org.apache.pdfbox.pdmodel.font.PDType1Font.HELVETICA_OBLIQUE;
+import static org.apache.pdfbox.pdmodel.font.PDType1Font.*;
 import static org.vandeseer.easytable.settings.HorizontalAlignment.CENTER;
 
 public class SettingsOverridingTest {
 
-    // TODO we should do a unit test first ;)
     @Test
     public void createSampleDocumentWithFontSettingOverriding() throws Exception {
         final Table.TableBuilder tableBuilder = Table.builder()
@@ -46,6 +43,38 @@ public class SettingsOverridingTest {
                         .build());
 
         TestUtils.createAndSaveDocumentWithTable(tableBuilder.build(), "fontSettingsOverriding.pdf");
+    }
+
+    @Test
+    public void createSampleDocumentWithTextColorOverriding() throws Exception {
+        final Table.TableBuilder tableBuilder = Table.builder()
+                .addColumnsOfWidth(100, 100, 100)
+                .horizontalAlignment(CENTER)
+                .fontSize(10).font(HELVETICA)
+                .textColor(Color.GREEN);
+
+        tableBuilder.addRow(
+                Row.builder()
+                        .add(CellText.builder().text(RandomStringUtils.randomAlphabetic(23)).span(2).borderWidth(1).build())
+                        .add(CellText.builder().text("Booz").borderWidth(1).build())
+                        .build());
+
+        tableBuilder.addRow(
+                Row.builder()
+                        .add(CellText.builder().text("Pur").borderWidth(1).build())
+                        .add(CellText.builder().text("Booz").borderWidth(1).build())
+                        .add(CellText.builder().text("baz").borderWidth(1).build())
+                        .textColor(Color.BLACK)
+                        .build());
+
+        tableBuilder.addRow(
+                Row.builder()
+                        .add(CellText.builder().text("Pur").borderWidth(1).build())
+                        .add(CellText.builder().text("Booz").borderWidth(1).build())
+                        .add(CellText.builder().text("baz").borderWidth(1).textColor(Color.PINK).build())
+                        .build());
+
+        TestUtils.createAndSaveDocumentWithTable(tableBuilder.build(), "textColorOverriding.pdf");
     }
 
 }

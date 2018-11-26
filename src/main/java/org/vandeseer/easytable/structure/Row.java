@@ -28,7 +28,6 @@ public class Row {
     @Getter
     private List<CellBaseData> cells;
 
-    private Color textColor;
     private Color borderColor;
     private Color backgroundColor;
 
@@ -41,10 +40,6 @@ public class Row {
     private Row(final List<CellBaseData> cells) {
         super();
         this.cells = cells;
-    }
-
-    public Color getTextColor() {
-        return Optional.ofNullable(textColor).orElse(table.getTextColor());
     }
 
     public Color getBorderColor() {
@@ -87,6 +82,11 @@ public class Row {
             return this;
         }
 
+        public Row.RowBuilder textColor(final Color textColor) {
+            settings.setTextColor(textColor);
+            return this;
+        }
+
         public Row.RowBuilder horizontalAlignment(HorizontalAlignment alignment) {
             settings.setHorizontalAlignment(alignment);
             return this;
@@ -106,7 +106,6 @@ public class Row {
             row.settings = settings;
 
             borderColor.ifPresent(row::setBorderColor);
-            Optional.ofNullable(textColor).ifPresent(row::setTextColor);
 
             row.height = height;
 

@@ -4,12 +4,15 @@ import lombok.Builder;
 import lombok.Data;
 import org.apache.pdfbox.pdmodel.font.PDFont;
 
+import java.awt.*;
+
 @Data
 @Builder
 public class Settings {
 
     private PDFont font;
     private Integer fontSize;
+    private Color textColor;
 
     private HorizontalAlignment horizontalAlignment;
     private VerticalAlignment verticalAlignment;
@@ -21,6 +24,10 @@ public class Settings {
 
         if (getFontSize() == null && settings.getFontSize() != null) {
             fontSize = settings.getFontSize();
+        }
+
+        if (getTextColor() == null && settings.getTextColor() != null) {
+            textColor = settings.getTextColor();
         }
 
         if (getHorizontalAlignment() == null && settings.getHorizontalAlignment() != null) {

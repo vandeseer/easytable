@@ -11,7 +11,6 @@ import org.vandeseer.easytable.util.PdfUtil;
 import java.awt.*;
 import java.util.Comparator;
 import java.util.List;
-import java.util.Optional;
 
 @Getter
 @SuperBuilder(toBuilder = true)
@@ -36,7 +35,7 @@ public class CellText extends CellBaseData {
     }
 
     public Color getTextColor() {
-        return Optional.ofNullable(textColor).orElse(getRow().getTextColor());
+        return settings.getTextColor();
     }
 
     //endregion
@@ -101,13 +100,18 @@ public class CellText extends CellBaseData {
 
     public abstract static class CellTextBuilder<C extends CellText, B extends CellText.CellTextBuilder<C, B>> extends CellBaseDataBuilder<C, B> {
 
-        public B font(PDFont font) {
+        public B font(final PDFont font) {
             settings.setFont(font);
             return this.self();
         }
 
-        public B fontSize(Integer fontSize) {
+        public B fontSize(final Integer fontSize) {
             settings.setFontSize(fontSize);
+            return this.self();
+        }
+
+        public B textColor(final Color textColor) {
+            settings.setTextColor(textColor);
             return this.self();
         }
 
