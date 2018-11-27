@@ -54,6 +54,9 @@ public abstract class CellBaseData {
     @Builder.Default
     private float borderWidthBottom = 0;
 
+    @Builder.Default
+    private boolean wordBreak = false;
+
     public float getHorizontalPadding() {
         return getPaddingLeft() + getPaddingRight();
     }
@@ -88,6 +91,10 @@ public abstract class CellBaseData {
 
     public Color getBorderColor() {
         return settings.getBorderColor();
+    }
+
+    public boolean isWordBreak(){
+        return getRow() == null ? wordBreak : getRow().isWordBreak();
     }
 
     public abstract float getHeight();

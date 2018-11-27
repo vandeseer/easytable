@@ -159,6 +159,7 @@ public class CellTextTest {
 
     private void enableWordBreaking() {
         when(table.isWordBreak()).thenReturn(true);
+        when(row.isWordBreak()).thenReturn(true);
     }
 
     private void setColumnWidthTo(float width) {

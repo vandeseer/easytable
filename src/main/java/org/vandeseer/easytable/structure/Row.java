@@ -27,6 +27,13 @@ public class Row {
     @Getter
     private List<CellBaseData> cells;
 
+    private Color textColor;
+    private Color borderColor;
+    private Color backgroundColor;
+
+    @Setter
+    private boolean wordBreak;
+
     @Getter
     @Setter(AccessLevel.NONE)
     private Settings settings;
@@ -45,6 +52,10 @@ public class Row {
                 .orElseThrow(RuntimeException::new);
 
         return Math.max(height, maxCellHeight);
+    }
+
+    public boolean isWordBreak() {
+        return getTable() == null ? wordBreak : getTable().isWordBreak();
     }
 
 
@@ -101,6 +112,12 @@ public class Row {
             final Row row = new Row(cells);
             row.settings = settings;
             row.height = height;
+
+            for (CellBaseData cell : row.getCells()) {
+                cell.getSettings().fillingMergeBy(row.getSettings());
+                cell.setRow(row);
+            }
+
             return row;
         }
 

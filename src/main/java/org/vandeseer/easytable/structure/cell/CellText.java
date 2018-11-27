@@ -46,7 +46,7 @@ public class CellText extends CellBaseData {
         final float textHeight;
         final float fontHeight = PdfUtil.getFontHeight(getFont(), getFontSize());
 
-        if (getRow().getTable().isWordBreak()) {
+        if (isWordBreak()) {
 
             final int size = PdfUtil.getOptimalTextBreakLines(text, getFont(), getFontSize(),
                     getWidthOfTextAndHorizontalPadding() - getHorizontalPadding()).size();
@@ -68,7 +68,7 @@ public class CellText extends CellBaseData {
 
         final float textWidth;
 
-        if (getRow().getTable().isWordBreak()) {
+        if (isWordBreak()) {
 
             float columnsWidth = getColumn().getWidth();
 

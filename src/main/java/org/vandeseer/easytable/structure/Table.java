@@ -81,6 +81,15 @@ public class Table {
                         "Number of row cells does not match with number of table columns");
             }
             rows.add(row);
+            row.setWordBreak(wordBreak);
+            return this;
+        }
+
+        public TableBuilder wordBreak(boolean wordBreak) {
+            this.wordBreak = wordBreak;
+            for (Row row : rows) {
+                row.setWordBreak(wordBreak);
+            }
             return this;
         }
 
