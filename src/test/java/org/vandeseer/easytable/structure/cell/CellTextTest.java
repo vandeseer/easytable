@@ -54,7 +54,6 @@ public class CellTextTest {
 
     @Test
     public void getWidth_cellWithWrappingText_columnSizeOk() {
-        enableWordBreaking();
         setColumnWidthTo(9f); // smaller than the size of the text "abc"
 
         final CellText cell = prepareForTest(
@@ -64,6 +63,7 @@ public class CellTextTest {
                 .text("abc abc abc abc")
                 .paddingLeft(0)
                 .paddingRight(0)
+                .wordBreak(true)
                 .build()
         );
 
@@ -72,7 +72,6 @@ public class CellTextTest {
 
     @Test
     public void getWidth_cellWithWrappingText_columnTooSmall() {
-        enableWordBreaking();
         setColumnWidthTo(5f);
 
         final CellText cell = prepareForTest(
@@ -82,6 +81,7 @@ public class CellTextTest {
                         .text("a")
                         .paddingLeft(0)
                         .paddingRight(0)
+                        .wordBreak(true)
                         .build()
         );
 
@@ -108,7 +108,6 @@ public class CellTextTest {
 
     @Test
     public void getWidth_cellWithSpanningWithWrapping() {
-        enableWordBreaking();
         prepareTwoSpanningColumnsOfSize(35f, 15f);
 
         final String text = "abc abc abc abc abc abc abc abc abc abc";
@@ -120,6 +119,7 @@ public class CellTextTest {
                 .span(2)
                 .paddingLeft(5)
                 .paddingRight(5)
+                .wordBreak(true)
                 .build()
         );
 
@@ -158,7 +158,7 @@ public class CellTextTest {
     }
 
     private void enableWordBreaking() {
-        when(table.isWordBreak()).thenReturn(true);
+        when(table.getWordBreak()).thenReturn(true);
     }
 
     private void setColumnWidthTo(float width) {

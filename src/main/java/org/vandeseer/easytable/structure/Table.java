@@ -39,9 +39,9 @@ public class Table {
     @Builder.Default
     private float borderWidth = 0.2f;
 
-    @Builder.Default
-    private boolean wordBreak = false;
-
+    public Boolean getWordBreak(){
+        return settings.getWordBreak();
+    }
 
     public float getHeight() {
         float height = 0;
@@ -131,6 +131,11 @@ public class Table {
 
         public TableBuilder verticalAlignment(VerticalAlignment alignment) {
             settings.setVerticalAlignment(alignment);
+            return this;
+        }
+
+        public TableBuilder wordBreak(Boolean wordBreak) {
+            settings.setWordBreak(wordBreak);
             return this;
         }
 

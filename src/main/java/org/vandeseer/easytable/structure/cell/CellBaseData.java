@@ -90,6 +90,10 @@ public abstract class CellBaseData {
         return settings.getBorderColor();
     }
 
+    public Boolean getWordBreak(){
+        return  settings.getWordBreak();
+    }
+
     public abstract float getHeight();
 
     // This is used for customizations of the Lombok generated (Super)Builder
@@ -122,6 +126,11 @@ public abstract class CellBaseData {
 
         public B borderColor(final Color borderColor) {
             settings.setBorderColor(borderColor);
+            return this.self();
+        }
+
+        public B wordBreak(final Boolean wordBreak) {
+            settings.setWordBreak(wordBreak);
             return this.self();
         }
 

@@ -21,6 +21,8 @@ public class Settings {
     private HorizontalAlignment horizontalAlignment;
     private VerticalAlignment verticalAlignment;
 
+    private Boolean wordBreak;
+
     public void fillingMergeBy(Settings settings) {
         if (getFont() == null && settings.getFont() != null) {
             font = settings.getFont();
@@ -48,6 +50,10 @@ public class Settings {
 
         if (getVerticalAlignment() == null && settings.getVerticalAlignment() != null) {
             verticalAlignment = settings.getVerticalAlignment();
+        }
+
+        if (getWordBreak() == null && settings.getWordBreak() != null) {
+            wordBreak = settings.getWordBreak();
         }
     }
 
