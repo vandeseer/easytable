@@ -39,10 +39,6 @@ public class Table {
     @Builder.Default
     private float borderWidth = 0.2f;
 
-    public Boolean getWordBreak(){
-        return settings.getWordBreak();
-    }
-
     public float getHeight() {
         float height = 0;
         for (final Row row : rows) {

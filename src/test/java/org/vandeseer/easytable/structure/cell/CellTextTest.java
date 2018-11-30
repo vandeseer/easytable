@@ -157,10 +157,6 @@ public class CellTextTest {
         return cell;
     }
 
-    private void enableWordBreaking() {
-        when(table.getWordBreak()).thenReturn(true);
-    }
-
     private void setColumnWidthTo(float width) {
         when(column.getWidth()).thenReturn(width);
     }
