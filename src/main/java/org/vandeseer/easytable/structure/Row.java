@@ -39,6 +39,10 @@ public class Row {
     }
 
     public float getHeight() {
+        if (table == null) {
+            throw new TableNotYetBuiltException();
+        }
+
         final float maxCellHeight = getCells().stream()
                 .map(CellBaseData::getHeight)
                 .max(naturalOrder())
@@ -106,11 +110,6 @@ public class Row {
             final Row row = new Row(cells);
             row.settings = settings;
             row.height = height;
-
-            for (CellBaseData cell : row.getCells()) {
-                cell.setRow(row);
-                cell.getSettings().fillingMergeBy(settings);
-            }
 
             return row;
         }

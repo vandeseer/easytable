@@ -20,7 +20,6 @@ import java.awt.geom.Point2D;
 import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 
 public class TableDrawer {
 
@@ -173,7 +172,7 @@ public class TableDrawer {
         final List<String> lines;
 
         float maxWidth = cell.getWidthOfTextAndHorizontalPadding() - (cell.getPaddingLeft() + cell.getPaddingRight());
-        if (Optional.ofNullable(cell.getWordBreak()).orElse(false)) {
+        if (cell.isWordBreak()) {
             lines = PdfUtil.getOptimalTextBreakLines(cell.getText(), currentFont, currentFontSize, maxWidth);
         } else {
             lines = Collections.singletonList(cell.getText());

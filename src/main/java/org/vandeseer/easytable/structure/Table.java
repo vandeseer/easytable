@@ -65,6 +65,7 @@ public class Table {
                                                 .fontSize(DEFAULT_FONT_SIZE)
                                                 .textColor(DEFAULT_TEXT_COLOR)
                                                 .borderColor(DEFAULT_BORDER_COLOR)
+                                                .wordBreak(true)
                                                 .build();
 
         private TableBuilder() {

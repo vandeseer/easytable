@@ -3,13 +3,16 @@ package org.vandeseer.easytable.structure.cell;
 import org.apache.pdfbox.pdmodel.font.PDFont;
 import org.apache.pdfbox.pdmodel.font.PDType1Font;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.vandeseer.easytable.structure.Column;
-import org.vandeseer.easytable.util.PdfUtil;
 import org.vandeseer.easytable.structure.Row;
 import org.vandeseer.easytable.structure.Table;
+import org.vandeseer.easytable.structure.TableNotYetBuiltException;
+import org.vandeseer.easytable.util.PdfUtil;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.IsEqual.equalTo;
@@ -31,6 +34,9 @@ public class CellTextTest {
     private final PDFont font = PDType1Font.HELVETICA;
 
     private final int fontSize = 10;
+
+    @Rule
+    public final ExpectedException exception = ExpectedException.none();
 
     @Before
     public void before() {
@@ -141,6 +147,14 @@ public class CellTextTest {
         {
         	assertEquals(1F,cell.getBorderWidthBottom(),0F); // test if border exists
         }
+    }
+
+    @Test
+    public void getHeight_shouldThrowExceptionIfTableNotYetBuilt() {
+        CellBaseData cell = CellText.builder().text("abc").paddingTop(35).paddingBottom(15).build();
+
+        exception.expect(TableNotYetBuiltException.class);
+        cell.getHeight();
     }
 
     private void prepareTwoSpanningColumnsOfSize(float sizeColumn1, float sizeColumn2) {

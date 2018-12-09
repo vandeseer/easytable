@@ -59,6 +59,7 @@ At one point it will hopefully also be available at maven central.
 - to [AndreKoepke](https://github.com/AndreKoepke) for the line breaking feature, some bigger nice refactorings and 
 improvements
 - to [Wolfgang Apolinarski](https://github.com/wapolinar) for the printing over pages and bugfixes
+- to [AdrianMiska](https://github.com/AdrianMiska) for finding and fixing an issue with cell height
 
 ## Q&A
 

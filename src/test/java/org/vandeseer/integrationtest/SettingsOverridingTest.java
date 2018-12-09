@@ -51,7 +51,7 @@ public class SettingsOverridingTest {
                         .add(CellText.builder().text("baz").borderColor(Color.CYAN).borderWidthBottom(1).font(HELVETICA_OBLIQUE).fontSize(5).build())
                         .build());
 
-        TestUtils.createAndSaveDocumentWithTable(tableBuilder.build(), "fontAndBorderColorSettingsOverriding.pdf");
+        TestUtils.createAndSaveDocumentWithTable(tableBuilder.build(), "settingsFontAndBorderColorOverriding.pdf");
     }
 
     @Test
@@ -85,7 +85,38 @@ public class SettingsOverridingTest {
                         .add(CellText.builder().text("baz").borderWidth(1).textColor(Color.PINK).build())
                         .build());
 
-        TestUtils.createAndSaveDocumentWithTable(tableBuilder.build(), "textColorAndBackgroundOverriding.pdf");
+        TestUtils.createAndSaveDocumentWithTable(tableBuilder.build(), "settingsTextColorAndBackgroundOverriding.pdf");
+    }
+
+    @Test
+    public void createSampleDocumentWithWordBreakOverriding() throws Exception {
+        final Table.TableBuilder tableBuilder = Table.builder()
+                .addColumnsOfWidth(150, 150, 150)
+                .horizontalAlignment(CENTER);
+
+        tableBuilder.addRow(
+                Row.builder()
+                        .add(CellText.builder().text("This is long and should therefore break. This is long and should therefore break. This is long and should therefore break.")
+                                .span(2).borderWidth(1).wordBreak(true).build())
+                        .add(CellText.builder().text("This, too, is too long for not breaking.").borderWidth(1).build())
+                        .wordBreak(false)
+                        .build());
+
+        tableBuilder.addRow(
+                Row.builder()
+                        .add(CellText.builder().text("This should break, because the row uses overriding.").borderWidth(1).build())
+                        .add(CellText.builder().text("This uses the overriding and should hence not break!").borderWidth(1).wordBreak(false).build())
+                        .add(CellText.builder().text("This should break, because the row uses overriding.").borderWidth(1).build())
+                        .build());
+
+        tableBuilder.addRow(
+                Row.builder()
+                        .add(CellText.builder().text("This should break, because the table uses overriding.").borderWidth(1).build())
+                        .add(CellText.builder().text("This should break, because the table uses overriding.").borderWidth(1).build())
+                        .add(CellText.builder().text("This should break, because the table uses overriding.").borderWidth(1).build())
+                        .build());
+
+        TestUtils.createAndSaveDocumentWithTable(tableBuilder.build(), "settingsWordBreakOverriding.pdf");
     }
 
 }

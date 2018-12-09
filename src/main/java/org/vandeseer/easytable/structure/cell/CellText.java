@@ -11,7 +11,6 @@ import org.vandeseer.easytable.util.PdfUtil;
 import java.awt.*;
 import java.util.Comparator;
 import java.util.List;
-import java.util.Optional;
 
 @Getter
 @SuperBuilder(toBuilder = true)
@@ -44,10 +43,12 @@ public class CellText extends CellBaseData {
 
     @Override
     public float getHeight() {
+        assertIsRendered();
+
         final float textHeight;
         final float fontHeight = PdfUtil.getFontHeight(getFont(), getFontSize());
 
-        if (Optional.ofNullable(settings.getWordBreak()).orElse(false)) {
+        if (settings.isWordBreak()) {
 
             final int size = PdfUtil.getOptimalTextBreakLines(text, getFont(), getFontSize(),
                     getWidthOfTextAndHorizontalPadding() - getHorizontalPadding()).size();
@@ -65,11 +66,13 @@ public class CellText extends CellBaseData {
     }
 
     public float getWidthOfTextAndHorizontalPadding() {
+        assertIsRendered();
+
         final float notBrokenTextWidth = PdfUtil.getStringWidth(text, getFont(), getFontSize());
 
         final float textWidth;
 
-        if (Optional.ofNullable(settings.getWordBreak()).orElse(false)) {
+        if (settings.isWordBreak()) {
 
             float columnsWidth = getColumn().getWidth();
 
