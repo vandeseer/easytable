@@ -39,10 +39,6 @@ public class Table {
     @Builder.Default
     private float borderWidth = 0.2f;
 
-    @Builder.Default
-    private boolean wordBreak = false;
-
-
     public float getHeight() {
         float height = 0;
         for (final Row row : rows) {
@@ -69,6 +65,7 @@ public class Table {
                                                 .fontSize(DEFAULT_FONT_SIZE)
                                                 .textColor(DEFAULT_TEXT_COLOR)
                                                 .borderColor(DEFAULT_BORDER_COLOR)
+                                                .wordBreak(true)
                                                 .build();
 
         private TableBuilder() {
@@ -131,6 +128,11 @@ public class Table {
 
         public TableBuilder verticalAlignment(VerticalAlignment alignment) {
             settings.setVerticalAlignment(alignment);
+            return this;
+        }
+
+        public TableBuilder wordBreak(Boolean wordBreak) {
+            settings.setWordBreak(wordBreak);
             return this;
         }
 

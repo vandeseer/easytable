@@ -10,6 +10,7 @@ import org.vandeseer.easytable.settings.Settings;
 import org.vandeseer.easytable.settings.VerticalAlignment;
 import org.vandeseer.easytable.structure.Column;
 import org.vandeseer.easytable.structure.Row;
+import org.vandeseer.easytable.structure.TableNotYetBuiltException;
 
 import java.awt.*;
 
@@ -90,7 +91,17 @@ public abstract class CellBaseData {
         return settings.getBorderColor();
     }
 
+    public boolean isWordBreak(){
+        return  settings.isWordBreak();
+    }
+
     public abstract float getHeight();
+
+    void assertIsRendered() {
+        if (column == null || row == null) {
+            throw new TableNotYetBuiltException();
+        }
+    }
 
     // This is used for customizations of the Lombok generated (Super)Builder
     public abstract static class CellBaseDataBuilder<C extends CellBaseData, B extends CellBaseData.CellBaseDataBuilder<C, B>> {
@@ -122,6 +133,11 @@ public abstract class CellBaseData {
 
         public B borderColor(final Color borderColor) {
             settings.setBorderColor(borderColor);
+            return this.self();
+        }
+
+        public B wordBreak(final Boolean wordBreak) {
+            settings.setWordBreak(wordBreak);
             return this.self();
         }
 

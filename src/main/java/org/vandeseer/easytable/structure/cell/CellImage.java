@@ -24,6 +24,8 @@ public class CellImage extends CellBaseData {
 
     @Override
     public float getHeight() {
+        assertIsRendered();
+
         return getFitSize().y + getVerticalPadding();
     }
 

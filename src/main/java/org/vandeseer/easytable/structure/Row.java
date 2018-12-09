@@ -39,6 +39,10 @@ public class Row {
     }
 
     public float getHeight() {
+        if (table == null) {
+            throw new TableNotYetBuiltException();
+        }
+
         final float maxCellHeight = getCells().stream()
                 .map(CellBaseData::getHeight)
                 .max(naturalOrder())
@@ -97,10 +101,16 @@ public class Row {
             return this;
         }
 
+        public Row.RowBuilder wordBreak(Boolean wordBreak) {
+            settings.setWordBreak(wordBreak);
+            return this;
+        }
+
         public Row build() {
             final Row row = new Row(cells);
             row.settings = settings;
             row.height = height;
+
             return row;
         }
 
