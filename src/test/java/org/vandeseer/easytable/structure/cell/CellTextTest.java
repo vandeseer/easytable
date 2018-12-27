@@ -55,7 +55,7 @@ public class CellTextTest {
                 .build()
         );
 
-        assertThat(cell.getWidthOfTextAndHorizontalPadding(), equalTo(PdfUtil.getStringWidth(text, font, fontSize) + cell.getHorizontalPadding()));
+        assertThat(cell.getWidthOfText(), equalTo(PdfUtil.getStringWidth(text, font, fontSize)));
     }
 
     @Test
@@ -73,7 +73,7 @@ public class CellTextTest {
                 .build()
         );
 
-        assertThat(cell.getWidthOfTextAndHorizontalPadding(), equalTo(PdfUtil.getStringWidth("a-", font, fontSize)));
+        assertThat(cell.getWidthOfText() + cell.getHorizontalPadding(), equalTo(PdfUtil.getStringWidth("a-", font, fontSize)));
     }
 
     @Test
@@ -91,7 +91,7 @@ public class CellTextTest {
                         .build()
         );
 
-        assertThat(cell.getWidthOfTextAndHorizontalPadding(), equalTo(PdfUtil.getStringWidth("a", font, fontSize)));
+        assertThat(cell.getWidthOfText() + cell.getHorizontalPadding(), equalTo(PdfUtil.getStringWidth("a", font, fontSize)));
     }
 
     @Test
@@ -109,7 +109,7 @@ public class CellTextTest {
                 .build()
         );
 
-        assertThat(cell.getWidthOfTextAndHorizontalPadding(), equalTo(PdfUtil.getStringWidth(text, font, fontSize) + cell.getHorizontalPadding()));
+        assertThat(cell.getWidthOfText(), equalTo(PdfUtil.getStringWidth(text, font, fontSize)));
     }
 
     @Test
@@ -131,7 +131,7 @@ public class CellTextTest {
 
         // The two columns will have a width of 35 + 15 = 50; the size of the text "abc abc" has 35.02 and the padding
         // is 10 in sum. Therefore the text will be split in pieces of "abc abc".
-        assertThat(cell.getWidthOfTextAndHorizontalPadding(), equalTo(PdfUtil.getStringWidth("abc abc", font, fontSize) + cell.getHorizontalPadding()));
+        assertThat(cell.getWidthOfText(), equalTo(PdfUtil.getStringWidth("abc abc", font, fontSize)));
     }
     
     @Test

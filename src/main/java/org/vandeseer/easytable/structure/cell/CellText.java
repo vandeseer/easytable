@@ -50,8 +50,7 @@ public class CellText extends CellBaseData {
 
         if (settings.isWordBreak()) {
 
-            final int size = PdfUtil.getOptimalTextBreakLines(text, getFont(), getFontSize(),
-                    getWidthOfTextAndHorizontalPadding() - getHorizontalPadding()).size();
+            final int size = PdfUtil.getOptimalTextBreakLines(text, getFont(), getFontSize(), getWidthOfText()).size();
 
             final float heightOfTextLines = size * fontHeight;
             final float heightOfLineSpacing = (size - 1) * fontHeight * getLineSpacing();
@@ -65,12 +64,10 @@ public class CellText extends CellBaseData {
         return textHeight + getPaddingBottom() + getPaddingTop();
     }
 
-    public float getWidthOfTextAndHorizontalPadding() {
+    public float getWidthOfText() {
         assertIsRendered();
 
         final float notBrokenTextWidth = PdfUtil.getStringWidth(text, getFont(), getFontSize());
-
-        final float textWidth;
 
         if (settings.isWordBreak()) {
 
@@ -87,19 +84,16 @@ public class CellText extends CellBaseData {
 
             final float maxWidth = columnsWidth - getHorizontalPadding();
             List<String> textLines = PdfUtil.getOptimalTextBreakLines(text, getFont(), getFontSize(), maxWidth);
-            final float maximalTextWidth = textLines
-                    .stream()
+
+            return textLines.stream()
                     .map(line -> PdfUtil.getStringWidth(line, getFont(), getFontSize()))
                     .max(Comparator.naturalOrder())
                     .orElse(notBrokenTextWidth);
 
-            textWidth = maximalTextWidth;
-
         } else {
-            textWidth = notBrokenTextWidth;
+            return notBrokenTextWidth;
         }
 
-        return textWidth + getHorizontalPadding();
     }
 
     public abstract static class CellTextBuilder<C extends CellText, B extends CellText.CellTextBuilder<C, B>> extends CellBaseDataBuilder<C, B> {
