@@ -14,6 +14,11 @@ public class PdfUtil {
 
     private static final String NEW_LINE_REGEX = "\\r?\\n";
 
+    /**
+     * The delta that is still acceptable in float comparisons.
+     */
+    private static final double EPSILON = 0.0001;
+
     private PdfUtil() {
 
     }
@@ -50,7 +55,7 @@ public class PdfUtil {
      * @return Height of font
      */
     public static float getFontHeight(final PDFont font, final int fontSize) {
-        return font.getFontDescriptor().getCapHeight() / 1000f * fontSize;
+        return font.getFontDescriptor().getCapHeight() * fontSize / 1000F;
     }
 
     /**
@@ -66,7 +71,7 @@ public class PdfUtil {
         final List<String> result = new LinkedList<>();
 
         for (final String line : text.split(NEW_LINE_REGEX)) {
-            if (PdfUtil.isLineFine(line, font, fontSize, maxWidth)) {
+            if (PdfUtil.doesTextLineFit(line, font, fontSize, maxWidth)) {
                 result.add(line);
             } else {
                 result.addAll(PdfUtil.wrapLine(line, font, fontSize, maxWidth));
@@ -77,7 +82,7 @@ public class PdfUtil {
     }
 
     private static List<String> wrapLine(final String line, final PDFont font, final int fontSize, final float maxWidth) {
-        if (PdfUtil.isLineFine(line, font, fontSize, maxWidth)) {
+        if (PdfUtil.doesTextLineFit(line, font, fontSize, maxWidth)) {
             return Collections.singletonList(line);
         }
 
@@ -97,7 +102,7 @@ public class PdfUtil {
             final String fittedNewLine = line.substring(0, i) + "-";
             final String remains = line.substring(i);
 
-            if (PdfUtil.isLineFine(fittedNewLine, font, fontSize, maxWidth)) {
+            if (PdfUtil.doesTextLineFit(fittedNewLine, font, fontSize, maxWidth)) {
                 returnList.add(fittedNewLine);
                 returnList.addAll(PdfUtil.wrapLine(remains, font, fontSize, maxWidth));
 
@@ -116,7 +121,7 @@ public class PdfUtil {
             final String fittedNewLine = StringUtils.join(splitBySpace.subList(0, i), " ");
             final String remains = StringUtils.join(splitBySpace.subList(i, splitBySpace.size()), " ");
 
-            if (!StringUtils.isEmpty(fittedNewLine) && PdfUtil.isLineFine(fittedNewLine, font, fontSize, maxWidth)) {
+            if (!StringUtils.isEmpty(fittedNewLine) && PdfUtil.doesTextLineFit(fittedNewLine, font, fontSize, maxWidth)) {
                 returnList.add(fittedNewLine);
 
                 if (!StringUtils.equals(remains, line)) {
@@ -129,8 +134,22 @@ public class PdfUtil {
         return returnList;
     }
 
-    private static boolean isLineFine(final String line, final PDFont font, final int fontSize, final float maxWidth) {
-        return maxWidth >= PdfUtil.getStringWidth(line, font, fontSize);
+    private static boolean doesTextLineFit(final String textLine, final PDFont font, final int fontSize, final float maxWidth) {
+        // Conceptually we want to calculate:
+        //
+        //     maxWidth >= PdfUtil.getStringWidth(line, font, fontSize)
+        //
+        // But this does may not work as expected due to floating point arithmetic.
+        // Hence we use a delta here that is sufficient for our purposes.
+
+        final float stringWidth = PdfUtil.getStringWidth(textLine, font, fontSize);
+        float difference = Math.abs(maxWidth - stringWidth);
+
+        if (difference < EPSILON) {
+            return true; // we consider the two numbers being equal
+        }
+
+        return maxWidth > stringWidth;
     }
 
 

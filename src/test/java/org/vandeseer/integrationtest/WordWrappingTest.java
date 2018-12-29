@@ -7,10 +7,10 @@ import org.vandeseer.easytable.structure.Table;
 import org.vandeseer.easytable.structure.cell.CellText;
 
 import java.awt.*;
+import java.io.IOException;
 
 import static org.apache.pdfbox.pdmodel.font.PDType1Font.HELVETICA;
-import static org.vandeseer.easytable.settings.HorizontalAlignment.CENTER;
-import static org.vandeseer.easytable.settings.HorizontalAlignment.RIGHT;
+import static org.vandeseer.easytable.settings.HorizontalAlignment.*;
 
 public class WordWrappingTest {
 
@@ -103,6 +103,22 @@ public class WordWrappingTest {
                 .build());
 
         TestUtils.createAndSaveDocumentWithTable(tableBuilder.build(), "wordWrapping_issue20_2.pdf");
+    }
+
+    @Test
+    public void issue20() throws IOException {
+        final Table.TableBuilder tableBuilder = Table.builder()
+                .addColumnsOfWidth(100, 100)
+                .fontSize(8)
+                .font(HELVETICA)
+                .addRow(Row.builder()
+                        .add(CellText.builder().text("K.").horizontalAlignment(LEFT).borderWidth(1).build())
+                        .add(CellText.builder().text("fubar").horizontalAlignment(LEFT).borderWidth(1).build())
+                        .horizontalAlignment(RIGHT)
+                        .build())
+                .wordBreak(true);
+
+        TestUtils.createAndSaveDocumentWithTable(tableBuilder.build(), "wordWrapping_issue20_3.pdf");
     }
 
 }
