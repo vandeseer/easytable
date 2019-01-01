@@ -35,22 +35,13 @@ The corresponding sources (in order to understand how to use the code) can be fo
 
 ## Installation
 
-First check it out and install it locally:
-
-    git clone https://github.com/vandeseer/easytable.git
-    cd easytable
-    git checkout v0.2.1
-    mvn clean install
-
-Define this in your `pom.xml` in order to use it:
+Add this to your `pom.xml`:
 
     <dependency>
-        <groupId>org.vandeseer.pdfbox</groupId>
+        <groupId>com.github.vandeseer</groupId>
         <artifactId>easytable</artifactId>
-        <version>0.2.1</version>
+        <version>0.3.0</version>
     </dependency>
-
-At one point it will hopefully also be available at maven central. 
 
 ## Kudos
 
