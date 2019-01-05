@@ -76,12 +76,27 @@ public class TableDrawer {
                 return;
             }
 
-            for (final CellBaseData cell : row.getCells()) {
-                float cellWidth = table.getAvailableCellWidthRespectingSpan(columnCounter, cell.getSpan());
+            List<CellBaseData> cells = row.getCells();
+            for (int j = 0; j < cells.size(); j++) {
+                // Row span
+                // TODO refactor!!
+                int k = 0;
+                while (table.isRowSpanAt(i, j + k)) {
+                    for (int x = 0; x < table.getRowSpanCellFor(i, j + k); x++) {
+                        startX += table.getColumns().get(columnCounter).getWidth();
+                        columnCounter++;
+                    }
+                    k++;
+                }
+
+                CellBaseData cell = cells.get(j);
+                float cellWidth = table.getAvailableCellWidthRespectingSpan(columnCounter, cell.getColSpan());
 
                 // Handle the cell's background color
                 if (cell.hasBackgroundColor()) {
-                    drawCellBackground(cell, startX, startY, cellWidth, rowHeight);
+                    float height = cell.getHeight() > rowHeight ? cell.getHeight() : rowHeight; // TODO
+                    float sY = cell.getHeight() > rowHeight ? startY + rowHeight - cell.getHeight() : startY; // TODO
+                    drawCellBackground(cell, startX, sY, cellWidth, height);
                 }
 
                 // Handle the cell's text
@@ -92,8 +107,7 @@ public class TableDrawer {
                 }
 
                 startX += cellWidth;
-
-                columnCounter += cell.getSpan();
+                columnCounter += cell.getColSpan();
             }
         }
     }
@@ -115,8 +129,21 @@ public class TableDrawer {
                 return;
             }
 
-            for (final CellBaseData cell : row.getCells()) {
-                float cellWidth = table.getAvailableCellWidthRespectingSpan(columnCounter, cell.getSpan());
+            List<CellBaseData> cells = row.getCells();
+            for (int j = 0; j < cells.size(); j++) {
+                // Row span
+                // TODO refactor!!
+                int k = 0;
+                while (table.isRowSpanAt(i, j + k)) {
+                    for (int x = 0; x < table.getRowSpanCellFor(i, j + k); x++) {
+                        startX += table.getColumns().get(columnCounter).getWidth();
+                        columnCounter++;
+                    }
+                    k++;
+                }
+
+                CellBaseData cell = cells.get(j);
+                float cellWidth = table.getAvailableCellWidthRespectingSpan(columnCounter, cell.getColSpan());
 
                 // Handle the cell's borders
                 final Color cellBorderColor = cell.getBorderColor();
@@ -133,8 +160,9 @@ public class TableDrawer {
                     }
 
                     if (cell.hasBorderBottom()) {
-                        contentStream.moveTo(startX - correctionLeft, startY);
-                        drawLine(cellBorderColor, cell.getBorderWidthBottom(), startX + cellWidth + correctionRight, startY);
+                        float sY = cell.getHeight() > rowHeight ? startY + rowHeight - cell.getHeight() : startY; // TODO
+                        contentStream.moveTo(startX - correctionLeft, sY);
+                        drawLine(cellBorderColor, cell.getBorderWidthBottom(), startX + cellWidth + correctionRight, sY);
                         contentStream.setStrokingColor(rowBorderColor);
                     }
                 }
@@ -144,27 +172,31 @@ public class TableDrawer {
                     final float correctionBottom = cell.getBorderWidthBottom() / 2;
 
                     if (cell.hasBorderLeft()) {
-                        contentStream.moveTo(startX, startY - correctionBottom);
-                        drawLine(cellBorderColor, cell.getBorderWidthLeft(), startX, startY + rowHeight + correctionTop);
+                        float sY = cell.getHeight() > rowHeight ? startY + rowHeight - cell.getHeight() : startY; // TODO
+                        float height = cell.getHeight() > rowHeight ? cell.getHeight() : rowHeight; // TODO
+                        contentStream.moveTo(startX, sY - correctionBottom);
+                        drawLine(cellBorderColor, cell.getBorderWidthLeft(), startX, sY + height + correctionTop);
                         contentStream.setStrokingColor(rowBorderColor);
                     }
 
                     if (cell.hasBorderRight()) {
-                        contentStream.moveTo(startX + cellWidth, startY - correctionBottom);
-                        drawLine(cellBorderColor, cell.getBorderWidthRight(), startX + cellWidth, startY + rowHeight + correctionTop);
+                        float sY = cell.getHeight() > rowHeight ? startY + rowHeight - cell.getHeight() : startY; // TODO
+                        float height = cell.getHeight() > rowHeight ? cell.getHeight() : rowHeight; // TODO
+                        contentStream.moveTo(startX + cellWidth, sY - correctionBottom);
+                        drawLine(cellBorderColor, cell.getBorderWidthRight(), startX + cellWidth, sY + height + correctionTop);
                         contentStream.setStrokingColor(rowBorderColor);
                     }
                 }
 
                 startX += cellWidth;
-                columnCounter += cell.getSpan();
+                columnCounter += cell.getColSpan();
             }
         }
 
         this.isFinished = true;
     }
 
-    private void drawCellText(final CellText cell, final float columnWidth, final float moveX, final float moveY) throws IOException {
+    private void drawCellText(final CellText cell, final float columnWidth, final float moveX, float moveY) throws IOException {
         final PDFont currentFont = cell.getFont();
         final int currentFontSize = cell.getFontSize();
         final Color currentTextColor = cell.getTextColor();
@@ -180,11 +212,26 @@ public class TableDrawer {
 
         // Vertical alignment
         float yStartRelative = cell.getRow().getHeight() - cell.getPaddingTop(); // top position
-        if (cell.getRow().getHeight() > cell.getHeight()) {
+        if (cell.getRow().getHeight() > cell.getHeight() || cell.getRowSpan() > 1) {
+
             if (cell.getSettings().getVerticalAlignment() == VerticalAlignment.MIDDLE) {
-                yStartRelative = cell.getRow().getHeight() / 2 + (cell.getHeight() - cell.getPaddingBottom() - cell.getPaddingTop()) / 2;
+
+                float outerHeight = cell.getRowSpan() > 1 ? cell.getHeight() : cell.getRow().getHeight();
+                yStartRelative = outerHeight / 2 + cell.getTextHeight() / 2;
+
+                if (cell.getRowSpan() > 1) {
+                    float rowSpanAdaption = cell.calculateHeightForRowSpan() - cell.getRow().getHeight();
+                    yStartRelative -= rowSpanAdaption;
+                }
+
             } else if (cell.getSettings().getVerticalAlignment() == VerticalAlignment.BOTTOM) {
-                yStartRelative = cell.getHeight() - cell.getPaddingTop();
+
+                yStartRelative = cell.getTextHeight() + cell.getPaddingBottom();
+
+                if (cell.getRowSpan() > 1) {
+                    float rowSpanAdaption = cell.calculateHeightForRowSpan() - cell.getRow().getHeight();
+                    yStartRelative -= rowSpanAdaption;
+                }
             }
         }
 

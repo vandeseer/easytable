@@ -20,7 +20,7 @@ public class RowTest {
     @Test
     public void getHeightShouldThrowExceptionIfNotYetRendered() {
         final Row row = Row.builder()
-                .add(CellText.builder().text("This text should break because too long").span(2).borderWidth(1).build())
+                .add(CellText.builder().text("This text should break because too long").colSpan(2).borderWidth(1).build())
                 .add(CellText.builder().text("Booz").build())
                 .wordBreak(true)
                 .font(COURIER_BOLD).fontSize(8)
@@ -39,7 +39,7 @@ public class RowTest {
                 .wordBreak(false);
 
         final Row row = Row.builder()
-                .add(CellText.builder().text(RandomStringUtils.randomAlphabetic(23)).span(2).borderWidth(1).build())
+                .add(CellText.builder().text(RandomStringUtils.randomAlphabetic(23)).colSpan(2).borderWidth(1).build())
                 .add(CellText.builder().text("Booz").build())
                 .font(COURIER_BOLD).fontSize(8)
                 .build();

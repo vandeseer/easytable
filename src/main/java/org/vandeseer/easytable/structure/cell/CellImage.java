@@ -26,6 +26,11 @@ public class CellImage extends CellBaseData {
     public float getHeight() {
         assertIsRendered();
 
+        // TODO Simplify
+        if (getRowSpan() > 1) {
+            return calculateHeightForRowSpan();
+        }
+
         return getFitSize().y + getVerticalPadding();
     }
 

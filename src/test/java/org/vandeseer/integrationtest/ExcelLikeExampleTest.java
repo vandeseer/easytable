@@ -79,7 +79,7 @@ public class ExcelLikeExampleTest {
         tableBuilder.addRow(Row.builder()
                 .add(CellText.builder().text("This spans over 3 cells, is right aligned and its text is so long that it even breaks. " +
                         "Also it shows the grand total in the next cell and furthermore vertical alignment is shown:")
-                        .span(3)
+                        .colSpan(3)
                         .lineSpacing(1f)
                         .borderWidthTop(1)
                         .textColor(WHITE)
@@ -96,7 +96,7 @@ public class ExcelLikeExampleTest {
                 .horizontalAlignment(RIGHT)
                 .build());
 
-        TestUtils.createAndSaveDocumentWithTable(tableBuilder.build(), OUTPUT_FILE_NAME);
+        TestUtils.createAndSaveDocumentWithTable(OUTPUT_FILE_NAME, tableBuilder.build());
     }
 
 }

@@ -75,7 +75,7 @@ public class TableTest {
                 .addColumnOfWidth(20)
                 .addColumnOfWidth(30)
                 .addRow(Row.builder()
-                    .add(CellText.builder().text("").span(2).build())
+                    .add(CellText.builder().text("").colSpan(2).build())
                     .add(lastCell)
                     .build())
                 .build();
@@ -85,5 +85,7 @@ public class TableTest {
         // So make sure the second cell is connected correctly to the last column
         assertThat(lastCell.getColumn(), is(lastColumn));
     }
+
+    // TODO check addRow ... also check the setup of the structure with row spanning active
 
 }

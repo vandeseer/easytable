@@ -29,7 +29,10 @@ public abstract class CellBaseData {
     protected Settings settings;
 
     @Builder.Default
-    private final int span = 1;
+    private final int colSpan = 1;
+
+    @Builder.Default
+    private final int rowSpan = 1;
 
     @Builder.Default
     private final float paddingLeft = 4;
@@ -96,6 +99,18 @@ public abstract class CellBaseData {
     }
 
     public abstract float getHeight();
+
+    public float calculateHeightForRowSpan() {
+        Row currentRow = row;
+
+        float result = currentRow.getHeight();
+        for (int i = 1; i < getRowSpan(); i++) {
+            result += currentRow.getNext().getHeight();
+            currentRow = currentRow.getNext();
+        }
+
+        return result;
+    }
 
     void assertIsRendered() {
         if (column == null || row == null) {

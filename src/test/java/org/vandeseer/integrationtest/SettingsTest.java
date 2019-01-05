@@ -112,7 +112,7 @@ public class SettingsTest {
                 .backgroundColor(PURPLE_LIGHT_2)
                 .build());
 
-        TestUtils.createAndSaveDocumentWithTable(tableBuilder.build(), "differentFontsInCells.pdf");
+        TestUtils.createAndSaveDocumentWithTable("differentFontsInCells.pdf", tableBuilder.build());
     }
 
 

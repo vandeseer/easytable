@@ -45,7 +45,14 @@ public class CellText extends CellBaseData {
     public float getHeight() {
         assertIsRendered();
 
-        final float textHeight;
+        if (getRowSpan() > 1) {
+            return calculateHeightForRowSpan();
+        }
+
+        return getTextHeight() + getVerticalPadding();
+    }
+
+    public float getTextHeight() {
         final float fontHeight = PdfUtil.getFontHeight(getFont(), getFontSize());
 
         if (settings.isWordBreak()) {
@@ -55,13 +62,11 @@ public class CellText extends CellBaseData {
             final float heightOfTextLines = size * fontHeight;
             final float heightOfLineSpacing = (size - 1) * fontHeight * getLineSpacing();
 
-            textHeight = heightOfTextLines + heightOfLineSpacing;
+            return heightOfTextLines + heightOfLineSpacing;
 
-        } else {
-            textHeight = fontHeight;
         }
 
-        return textHeight + getPaddingBottom() + getPaddingTop();
+        return fontHeight;
     }
 
     public float getWidthOfText() {
@@ -74,9 +79,9 @@ public class CellText extends CellBaseData {
             float columnsWidth = getColumn().getWidth();
 
             // We have to take column spanning into account
-            if (getSpan() > 1) {
+            if (getColSpan() > 1) {
                 Column currentColumn = getColumn();
-                for (int i = 1; i < getSpan(); i++) {
+                for (int i = 1; i < getColSpan(); i++) {
                     columnsWidth += currentColumn.getNext().getWidth();
                     currentColumn = currentColumn.getNext();
                 }

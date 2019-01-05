@@ -12,26 +12,38 @@ import java.io.IOException;
 public class TestUtils {
 
     private static final String TARGET_FOLDER = "target";
-    private static final float DOCUMENT_PADDING = 50f;
+    private static final float PADDING = 50f;
 
     private TestUtils() {
     }
 
-    public static void createAndSaveDocumentWithTable(Table table, String outputFileName) throws IOException {
+    public static void createAndSaveDocumentWithTable(String outputFileName, Table table) throws IOException {
+        createAndSaveDocumentWithTables(outputFileName, table);
+    }
+
+    public static void createAndSaveDocumentWithTables(String outputFileName, Table... tables) throws IOException {
 
         final PDDocument document = new PDDocument();
         final PDPage page = new PDPage(PDRectangle.A4);
         document.addPage(page);
 
+        float startY = page.getMediaBox().getHeight() - PADDING;
+
+
         try (final PDPageContentStream contentStream = new PDPageContentStream(document, page)) {
 
-            TableDrawer.builder()
-                    .contentStream(contentStream)
-                    .table(table)
-                    .startX(DOCUMENT_PADDING)
-                    .startY(page.getMediaBox().getHeight() - DOCUMENT_PADDING)
-                    .build()
-                    .draw();
+            for (Table table : tables) {
+
+                TableDrawer.builder()
+                        .contentStream(contentStream)
+                        .table(table)
+                        .startX(PADDING)
+                        .startY(startY)
+                        .build()
+                        .draw();
+
+                startY -= (table.getHeight() + PADDING);
+            }
 
         }
 

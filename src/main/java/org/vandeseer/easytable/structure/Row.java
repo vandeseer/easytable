@@ -11,31 +11,35 @@ import org.vandeseer.easytable.settings.VerticalAlignment;
 import org.vandeseer.easytable.structure.cell.CellBaseData;
 
 import java.awt.*;
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.List;
 
 import static java.util.Comparator.naturalOrder;
 
 @Builder
-@Setter(AccessLevel.PRIVATE)
+@Getter
+@Setter(AccessLevel.PACKAGE)
 public class Row {
 
-    @Getter
-    @Setter(AccessLevel.PACKAGE)
     private Table table;
 
-    @Getter
     private List<CellBaseData> cells;
 
-    @Getter
     @Setter(AccessLevel.NONE)
     private Settings settings;
 
     private float height;
 
+    private Row next;
+
+
     private Row(final List<CellBaseData> cells) {
         super();
         this.cells = cells;
+    }
+
+    boolean hasNext() {
+        return next != null;
     }
 
     public float getHeight() {
@@ -44,6 +48,7 @@ public class Row {
         }
 
         final float maxCellHeight = getCells().stream()
+                .filter(cell -> cell.getRowSpan() == 1)
                 .map(CellBaseData::getHeight)
                 .max(naturalOrder())
                 .orElseThrow(RuntimeException::new);
@@ -54,7 +59,7 @@ public class Row {
 
     public static class RowBuilder {
 
-        private List<CellBaseData> cells = new LinkedList<>();
+        private List<CellBaseData> cells = new ArrayList<>();
         private Settings settings = Settings.builder().build();
 
         private RowBuilder() {

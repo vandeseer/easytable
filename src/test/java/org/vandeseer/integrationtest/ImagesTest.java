@@ -43,14 +43,14 @@ public class ImagesTest {
                 Row.builder()
                         .add(CellText.builder()
                                 .text("images from \"https://www.techrepublic.com/pictures/the-21-best-it-and-tech-memes-on-the-internet/5/\"")
-                                .span(2)
+                                .colSpan(2)
                                 .fontSize(6)
                                 .borderWidth(1)
                                 .build())
                         .build()
         );
 
-        TestUtils.createAndSaveDocumentWithTable(tableBuilder.build(), "images.pdf");
+        TestUtils.createAndSaveDocumentWithTable("images.pdf", tableBuilder.build());
     }
 
 }

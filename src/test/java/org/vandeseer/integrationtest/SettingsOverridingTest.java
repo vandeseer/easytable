@@ -15,7 +15,16 @@ import static org.vandeseer.easytable.settings.HorizontalAlignment.CENTER;
 public class SettingsOverridingTest {
 
     @Test
-    public void createSampleDocumentWithFontSettingAndBorderColorOverriding() throws Exception {
+    public void createDocumentWithTables() throws Exception {
+        TestUtils.createAndSaveDocumentWithTables("settingsOverriding.pdf",
+                createTableWithFontSettingAndBorderColorOverriding(),
+                createTableWithTextColorAndBackgroundColorOverriding(),
+                createSampleDocumentWithWordBreakOverriding()
+        );
+    }
+
+
+    private Table createTableWithFontSettingAndBorderColorOverriding() {
         final Table.TableBuilder tableBuilder = Table.builder()
                 .addColumnsOfWidth(100, 100, 100)
                 .horizontalAlignment(CENTER)
@@ -24,7 +33,7 @@ public class SettingsOverridingTest {
 
         tableBuilder.addRow(
                 Row.builder()
-                        .add(CellText.builder().text(RandomStringUtils.randomAlphabetic(23)).span(2).borderWidth(1).build())
+                        .add(CellText.builder().text(RandomStringUtils.randomAlphabetic(23)).colSpan(2).borderWidth(1).build())
                         .add(CellText.builder().text("Booz").build())
                         .font(COURIER_BOLD).fontSize(8)
                         .build());
@@ -51,11 +60,10 @@ public class SettingsOverridingTest {
                         .add(CellText.builder().text("baz").borderColor(Color.CYAN).borderWidthBottom(1).font(HELVETICA_OBLIQUE).fontSize(5).build())
                         .build());
 
-        TestUtils.createAndSaveDocumentWithTable(tableBuilder.build(), "settingsFontAndBorderColorOverriding.pdf");
+        return tableBuilder.build();
     }
 
-    @Test
-    public void createSampleDocumentWithTextColorAndBackgroundColorOverriding() throws Exception {
+    private Table createTableWithTextColorAndBackgroundColorOverriding() {
         final Table.TableBuilder tableBuilder = Table.builder()
                 .addColumnsOfWidth(100, 100, 100)
                 .horizontalAlignment(CENTER)
@@ -65,7 +73,7 @@ public class SettingsOverridingTest {
 
         tableBuilder.addRow(
                 Row.builder()
-                        .add(CellText.builder().text(RandomStringUtils.randomAlphabetic(23)).span(2).borderWidth(1).build())
+                        .add(CellText.builder().text(RandomStringUtils.randomAlphabetic(23)).colSpan(2).borderWidth(1).build())
                         .add(CellText.builder().text("Booz").borderWidth(1).build())
                         .build());
 
@@ -85,11 +93,10 @@ public class SettingsOverridingTest {
                         .add(CellText.builder().text("baz").borderWidth(1).textColor(Color.PINK).build())
                         .build());
 
-        TestUtils.createAndSaveDocumentWithTable(tableBuilder.build(), "settingsTextColorAndBackgroundOverriding.pdf");
+        return tableBuilder.build();
     }
 
-    @Test
-    public void createSampleDocumentWithWordBreakOverriding() throws Exception {
+    private Table createSampleDocumentWithWordBreakOverriding() {
         final Table.TableBuilder tableBuilder = Table.builder()
                 .addColumnsOfWidth(150, 150, 150)
                 .horizontalAlignment(CENTER);
@@ -97,7 +104,7 @@ public class SettingsOverridingTest {
         tableBuilder.addRow(
                 Row.builder()
                         .add(CellText.builder().text("This is long and should therefore break. This is long and should therefore break. This is long and should therefore break.")
-                                .span(2).borderWidth(1).wordBreak(true).build())
+                                .colSpan(2).borderWidth(1).wordBreak(true).build())
                         .add(CellText.builder().text("This, too, is too long for not breaking.").borderWidth(1).build())
                         .wordBreak(false)
                         .build());
@@ -116,7 +123,7 @@ public class SettingsOverridingTest {
                         .add(CellText.builder().text("This should break, because the table uses overriding.").borderWidth(1).build())
                         .build());
 
-        TestUtils.createAndSaveDocumentWithTable(tableBuilder.build(), "settingsWordBreakOverriding.pdf");
+        return tableBuilder.build();
     }
 
 }

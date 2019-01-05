@@ -105,7 +105,7 @@ public class CellTextTest {
                 .font(font)
                 .fontSize(fontSize)
                 .text(text)
-                .span(2)
+                .colSpan(2)
                 .build()
         );
 
@@ -122,7 +122,7 @@ public class CellTextTest {
                 .text(text)
                 .font(font)
                 .fontSize(fontSize)
-                .span(2)
+                .colSpan(2)
                 .paddingLeft(5)
                 .paddingRight(5)
                 .wordBreak(true)

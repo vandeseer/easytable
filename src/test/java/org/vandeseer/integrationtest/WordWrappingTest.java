@@ -35,7 +35,7 @@ public class WordWrappingTest {
                 .add(CellText.builder().text("g").borderWidth(1).padding(0f).build())
                 .build());
 
-        TestUtils.createAndSaveDocumentWithTable(tableBuilder.build(), "wordWrapping_issue20.pdf");
+        TestUtils.createAndSaveDocumentWithTable("wordWrapping_issue20.pdf", tableBuilder.build());
     }
 
     @Test
@@ -82,7 +82,7 @@ public class WordWrappingTest {
         tableBuilder.addRow(Row.builder()
                 .add(CellText.builder().text("This is a text that spans over four columns. Hooray! Also it breaks" +
                         "because it is too long. This is a text that spans over four columns. Hooray! " +
-                        "Also it breaks.").span(4).build())
+                        "Also it breaks.").colSpan(4).build())
                 .backgroundColor(Color.LIGHT_GRAY)
                 .build());
 
@@ -97,12 +97,12 @@ public class WordWrappingTest {
         }
 
         tableBuilder.addRow(Row.builder()
-                .add(CellText.builder().text("Gesamt Seite 1:").horizontalAlignment(RIGHT).span(3).borderWidth(1).build())
+                .add(CellText.builder().text("Gesamt Seite 1:").horizontalAlignment(RIGHT).colSpan(3).borderWidth(1).build())
                 .add(CellText.builder().text("1 600 €").horizontalAlignment(RIGHT).borderWidth(1).build())
                 .backgroundColor(Color.LIGHT_GRAY)
                 .build());
 
-        TestUtils.createAndSaveDocumentWithTable(tableBuilder.build(), "wordWrapping_issue20_2.pdf");
+        TestUtils.createAndSaveDocumentWithTable("wordWrapping_issue20_2.pdf", tableBuilder.build());
     }
 
     @Test
@@ -118,7 +118,7 @@ public class WordWrappingTest {
                         .build())
                 .wordBreak(true);
 
-        TestUtils.createAndSaveDocumentWithTable(tableBuilder.build(), "wordWrapping_issue20_3.pdf");
+        TestUtils.createAndSaveDocumentWithTable("wordWrapping_issue20_3.pdf", tableBuilder.build());
     }
 
 }
