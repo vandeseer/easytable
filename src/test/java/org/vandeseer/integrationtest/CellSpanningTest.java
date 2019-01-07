@@ -14,6 +14,8 @@ import java.awt.*;
 import java.io.IOException;
 
 import static org.apache.pdfbox.pdmodel.font.PDType1Font.HELVETICA;
+import static org.vandeseer.TestUtils.createGliderImage;
+import static org.vandeseer.TestUtils.createTuxImage;
 import static org.vandeseer.easytable.settings.HorizontalAlignment.CENTER;
 import static org.vandeseer.easytable.settings.HorizontalAlignment.RIGHT;
 import static org.vandeseer.easytable.settings.VerticalAlignment.BOTTOM;
@@ -274,16 +276,6 @@ public class CellSpanningTest {
                 .build());
 
         return tableBuilder.build();
-    }
-
-    private PDImageXObject createTuxImage() throws IOException {
-        final byte[] tuxBytes = IOUtils.toByteArray(getClass().getClassLoader().getResourceAsStream("tux.png"));
-        return PDImageXObject.createFromByteArray(new PDDocument(), tuxBytes, "tux");
-    }
-
-    private PDImageXObject createGliderImage() throws IOException {
-        final byte[] gliderBytes = IOUtils.toByteArray(getClass().getClassLoader().getResourceAsStream("glider.png"));
-        return PDImageXObject.createFromByteArray(new PDDocument(), gliderBytes, "glider");
     }
 
 }

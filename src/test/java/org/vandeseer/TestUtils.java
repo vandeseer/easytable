@@ -1,9 +1,11 @@
 package org.vandeseer;
 
+import org.apache.pdfbox.io.IOUtils;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.common.PDRectangle;
+import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
 import org.vandeseer.easytable.TableDrawer;
 import org.vandeseer.easytable.structure.Table;
 
@@ -50,6 +52,16 @@ public class TestUtils {
         document.save(TARGET_FOLDER + "/" + outputFileName);
         document.close();
 
+    }
+
+    public static PDImageXObject createTuxImage() throws IOException {
+        final byte[] tuxBytes = IOUtils.toByteArray(TestUtils.class.getClassLoader().getResourceAsStream("tux.png"));
+        return PDImageXObject.createFromByteArray(new PDDocument(), tuxBytes, "tux");
+    }
+
+    public static PDImageXObject createGliderImage() throws IOException {
+        final byte[] gliderBytes = IOUtils.toByteArray(TestUtils.class.getClassLoader().getResourceAsStream("glider.png"));
+        return PDImageXObject.createFromByteArray(new PDDocument(), gliderBytes, "glider");
     }
 
 }

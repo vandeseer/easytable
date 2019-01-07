@@ -7,6 +7,7 @@ import org.vandeseer.easytable.settings.VerticalAlignment;
 import org.vandeseer.easytable.structure.Row;
 import org.vandeseer.easytable.structure.Table;
 import org.vandeseer.easytable.structure.Table.TableBuilder;
+import org.vandeseer.easytable.structure.cell.CellImage;
 import org.vandeseer.easytable.structure.cell.CellText;
 
 import java.awt.*;
@@ -15,13 +16,20 @@ import java.io.IOException;
 import static java.awt.Color.LIGHT_GRAY;
 import static java.awt.Color.WHITE;
 import static org.apache.pdfbox.pdmodel.font.PDType1Font.*;
+import static org.vandeseer.TestUtils.createGliderImage;
+import static org.vandeseer.TestUtils.createTuxImage;
 import static org.vandeseer.easytable.settings.HorizontalAlignment.*;
+import static org.vandeseer.easytable.settings.VerticalAlignment.MIDDLE;
 
 public class ExcelLikeExampleTest {
 
     private final static Color BLUE_DARK = new Color(76, 129, 190);
     private final static Color BLUE_LIGHT_1 = new Color(186, 206, 230);
     private final static Color BLUE_LIGHT_2 = new Color(218, 230, 242);
+
+    private final static Color ORANGE = new Color(255, 195, 0);
+    private final static Color GRAY_LIGHT_1 = new Color(240, 240, 240);
+    private final static Color GRAY_LIGHT_2 = new Color(216, 216, 216);
 
     @Test
     public void createDocumentWithExcelLikeTables() throws IOException {
@@ -104,25 +112,30 @@ public class ExcelLikeExampleTest {
         return tableBuilder.build();
     }
 
-    private Table createComplexExampleTable() {
+    private Table createComplexExampleTable() throws IOException {
 
         final TableBuilder tableBuilder = Table.builder()
                 .addColumnsOfWidth(50, 100, 40, 70, 80)
                 .fontSize(8)
                 .font(HELVETICA);
 
+        // Header row
         tableBuilder.addRow(Row.builder()
                 .add(CellText.builder().borderWidth(1).text("Model").build())
                 .add(CellText.builder().borderWidth(1).text("Specification").colSpan(3).build())
-                .add(CellText.builder().borderWidth(1).text("Release Date").build())
+                .add(CellText.builder().borderWidth(1).text("Date").build())
+                .backgroundColor(ORANGE)
+                .textColor(WHITE)
+                .font(HELVETICA_BOLD)
+                .horizontalAlignment(CENTER)
                 .build()
         );
 
         tableBuilder.addRow(Row.builder()
-                .add(CellText.builder().borderWidth(1).text("A 350").rowSpan(7).build())
-                .add(CellText.builder().borderWidth(1).text("External dimensions").rowSpan(6).build())
+                .add(CellText.builder().borderWidth(1).text("Linux").rowSpan(7).build())
+                .add(CellImage.builder().borderWidth(1).image(createGliderImage()).scale(0.4f).rowSpan(6).build())
                 .add(CellText.builder().borderWidth(1).text("Market").colSpan(2).build())
-                .add(CellText.builder().borderWidth(1).text("End of 2020").rowSpan(14).build())
+                .add(CellText.builder().borderWidth(1).text("2019-01-01").rowSpan(14).verticalAlignment(MIDDLE).horizontalAlignment(CENTER).build())
                 .build()
         );
 
@@ -161,7 +174,7 @@ public class ExcelLikeExampleTest {
 
         tableBuilder.addRow(Row.builder()
                 .add(CellText.builder().borderWidth(1).text("A 350").rowSpan(7).build())
-                .add(CellText.builder().borderWidth(1).text("External dimensions").rowSpan(6).build())
+                .add(CellImage.builder().borderWidth(1).image(createTuxImage()).scale(0.4f).rowSpan(6).build())
                 .add(CellText.builder().borderWidth(1).text("Market").colSpan(2).build())
                 .build()
         );
