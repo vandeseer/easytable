@@ -45,11 +45,9 @@ public class CellText extends CellBaseData {
     public float getHeight() {
         assertIsRendered();
 
-        if (getRowSpan() > 1) {
-            return calculateHeightForRowSpan();
-        }
-
-        return getTextHeight() + getVerticalPadding();
+        return getRowSpan() > 1
+                ? calculateHeightForRowSpan()
+                : getTextHeight() + getVerticalPadding();
     }
 
     public float getTextHeight() {

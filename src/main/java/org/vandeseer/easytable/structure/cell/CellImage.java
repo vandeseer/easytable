@@ -26,14 +26,10 @@ public class CellImage extends CellBaseData {
     public float getHeight() {
         assertIsRendered();
 
-        // TODO Simplify
-        if (getRowSpan() > 1) {
-            return calculateHeightForRowSpan();
-        }
-
-        return getFitSize().y + getVerticalPadding();
+        return getRowSpan() > 1
+                ? calculateHeightForRowSpan()
+                : getFitSize().y + getVerticalPadding();
     }
-
 
     public Point2D.Float getFitSize() {
         final Point2D.Float sizes = new Point2D.Float();
@@ -56,6 +52,6 @@ public class CellImage extends CellBaseData {
         sizes.y = scaledHeight;
 
         return sizes;
-
     }
+
 }

@@ -103,7 +103,8 @@ public class TableDrawer {
                 if (cell instanceof CellText) {
                     drawCellText((CellText) cell, cellWidth, startX, startY);
                 } else if (cell instanceof CellImage) {
-                    drawCellImage((CellImage) cell, cellWidth, startX, startY);
+                    float sY = cell.getHeight() > rowHeight ? startY + rowHeight - cell.getHeight() : startY; // TODO
+                    drawCellImage((CellImage) cell, cellWidth, startX, sY);
                 }
 
                 startX += cellWidth;
@@ -201,14 +202,11 @@ public class TableDrawer {
         final int currentFontSize = cell.getFontSize();
         final Color currentTextColor = cell.getTextColor();
 
-        final List<String> lines;
-
         float maxWidth = cell.getWidthOfText();
-        if (cell.isWordBreak()) {
-            lines = PdfUtil.getOptimalTextBreakLines(cell.getText(), currentFont, currentFontSize, maxWidth);
-        } else {
-            lines = Collections.singletonList(cell.getText());
-        }
+
+        final List<String> lines = cell.isWordBreak()
+                ? PdfUtil.getOptimalTextBreakLines(cell.getText(), currentFont, currentFontSize, maxWidth)
+                : Collections.singletonList(cell.getText());
 
         // Vertical alignment
         float yStartRelative = cell.getRow().getHeight() - cell.getPaddingTop(); // top position
@@ -284,12 +282,12 @@ public class TableDrawer {
         final Point2D.Float drawAt = new Point2D.Float();
 
         drawAt.x = moveX
-                + ((columnWidth - cell.getPaddingLeft() - cell.getPaddingRight()) / 2f) //middle of cell
+                + ((columnWidth - cell.getHorizontalPadding()) / 2f) //middle of cell
                 + cell.getPaddingLeft()
                 - (size.x / 2f);
 
         drawAt.y = moveY
-                + ((cell.getHeight() - cell.getPaddingTop() - cell.getPaddingBottom()) / 2f) // middle of cell
+                + ((cell.getHeight() - cell.getVerticalPadding()) / 2f) // middle of cell
                 + cell.getPaddingBottom()
                 - (size.y / 2f);
 

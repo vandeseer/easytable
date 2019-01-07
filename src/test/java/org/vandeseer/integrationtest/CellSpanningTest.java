@@ -1,12 +1,17 @@
 package org.vandeseer.integrationtest;
 
+import org.apache.pdfbox.io.IOUtils;
+import org.apache.pdfbox.pdmodel.PDDocument;
+import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
 import org.junit.Test;
 import org.vandeseer.TestUtils;
 import org.vandeseer.easytable.structure.Row;
 import org.vandeseer.easytable.structure.Table;
+import org.vandeseer.easytable.structure.cell.CellImage;
 import org.vandeseer.easytable.structure.cell.CellText;
 
 import java.awt.*;
+import java.io.IOException;
 
 import static org.apache.pdfbox.pdmodel.font.PDType1Font.HELVETICA;
 import static org.vandeseer.easytable.settings.HorizontalAlignment.CENTER;
@@ -24,7 +29,8 @@ public class CellSpanningTest {
                 createTableWithTwoCellRowSpannings(),
                 createTableWithSeveralRowSpannings(),
                 createTableWithDifferentAlignmentsInSpannedCells(),
-                createTableWithSeveralRowAndCellSpannings()
+                createTableWithSeveralRowAndCellSpannings(),
+                createTableWithImages()
         );
     }
 
@@ -233,6 +239,51 @@ public class CellSpanningTest {
                 .build());
 
         return tableBuilder.build();
+    }
+
+    private Table createTableWithImages() throws IOException {
+        final Table.TableBuilder tableBuilder = Table.builder()
+                .addColumnsOfWidth(200, 120, 70, 100)
+                .fontSize(8)
+                .font(HELVETICA);
+
+
+        tableBuilder.addRow(Row.builder()
+                .add(CellImage.builder().borderWidth(1).image(createTuxImage()).scale(0.1f).build())
+                .add(CellImage.builder().borderWidth(1).image(createGliderImage()).scale(0.1f).build())
+                .add(CellImage.builder().borderWidth(1).image(createGliderImage()).scale(0.1f).build())
+                .add(CellImage.builder().borderWidth(1).image(createTuxImage()).scale(0.1f).build())
+                .build());
+
+        tableBuilder.addRow(Row.builder()
+                .add(CellImage.builder().borderWidth(1).image(createTuxImage()).scale(0.1f).build())
+                .add(CellImage.builder().borderWidth(1).image(createGliderImage()).scale(0.2f).colSpan(2).rowSpan(2).build())
+                .add(CellImage.builder().borderWidth(1).image(createTuxImage()).scale(0.1f).build())
+                .build());
+
+        tableBuilder.addRow(Row.builder()
+                .add(CellImage.builder().borderWidth(1).image(createTuxImage()).scale(0.1f).build())
+                .add(CellImage.builder().borderWidth(1).image(createTuxImage()).scale(0.1f).build())
+                .build());
+
+        tableBuilder.addRow(Row.builder()
+                .add(CellImage.builder().borderWidth(1).image(createGliderImage()).scale(0.1f).build())
+                .add(CellImage.builder().borderWidth(1).image(createTuxImage()).scale(0.1f).build())
+                .add(CellImage.builder().borderWidth(1).image(createTuxImage()).scale(0.1f).build())
+                .add(CellImage.builder().borderWidth(1).image(createGliderImage()).scale(0.1f).build())
+                .build());
+
+        return tableBuilder.build();
+    }
+
+    private PDImageXObject createTuxImage() throws IOException {
+        final byte[] tuxBytes = IOUtils.toByteArray(getClass().getClassLoader().getResourceAsStream("tux.png"));
+        return PDImageXObject.createFromByteArray(new PDDocument(), tuxBytes, "tux");
+    }
+
+    private PDImageXObject createGliderImage() throws IOException {
+        final byte[] gliderBytes = IOUtils.toByteArray(getClass().getClassLoader().getResourceAsStream("glider.png"));
+        return PDImageXObject.createFromByteArray(new PDDocument(), gliderBytes, "glider");
     }
 
 }
