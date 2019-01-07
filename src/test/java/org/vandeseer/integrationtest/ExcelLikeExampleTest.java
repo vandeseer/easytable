@@ -23,10 +23,15 @@ public class ExcelLikeExampleTest {
     private final static Color BLUE_LIGHT_1 = new Color(186, 206, 230);
     private final static Color BLUE_LIGHT_2 = new Color(218, 230, 242);
 
-    private final static String OUTPUT_FILE_NAME = "excelLike.pdf";
-
     @Test
-    public void tableExample() throws IOException {
+    public void createDocumentWithExcelLikeTables() throws IOException {
+        TestUtils.createAndSaveDocumentWithTables("excelLike.pdf",
+                createSimpleExampleTable(),
+                createComplexExampleTable()
+        );
+    }
+
+    private Table createSimpleExampleTable() {
         
         // Some data
         final Object[][] data = {
@@ -96,7 +101,103 @@ public class ExcelLikeExampleTest {
                 .horizontalAlignment(RIGHT)
                 .build());
 
-        TestUtils.createAndSaveDocumentWithTable(OUTPUT_FILE_NAME, tableBuilder.build());
+        return tableBuilder.build();
+    }
+
+    private Table createComplexExampleTable() {
+
+        final TableBuilder tableBuilder = Table.builder()
+                .addColumnsOfWidth(50, 100, 40, 70, 80)
+                .fontSize(8)
+                .font(HELVETICA);
+
+        tableBuilder.addRow(Row.builder()
+                .add(CellText.builder().borderWidth(1).text("Model").build())
+                .add(CellText.builder().borderWidth(1).text("Specification").colSpan(3).build())
+                .add(CellText.builder().borderWidth(1).text("Release Date").build())
+                .build()
+        );
+
+        tableBuilder.addRow(Row.builder()
+                .add(CellText.builder().borderWidth(1).text("A 350").rowSpan(7).build())
+                .add(CellText.builder().borderWidth(1).text("External dimensions").rowSpan(6).build())
+                .add(CellText.builder().borderWidth(1).text("Market").colSpan(2).build())
+                .add(CellText.builder().borderWidth(1).text("End of 2020").rowSpan(14).build())
+                .build()
+        );
+
+        tableBuilder.addRow(Row.builder()
+                .add(CellText.builder().borderWidth(1).text("Wide").colSpan(2).build())
+                .build()
+        );
+
+        tableBuilder.addRow(Row.builder()
+                .add(CellText.builder().borderWidth(1).text("High").colSpan(2).build())
+                .build()
+        );
+
+        tableBuilder.addRow(Row.builder()
+                .add(CellText.builder().borderWidth(1).text("Depth").colSpan(2).build())
+                .build()
+        );
+
+        tableBuilder.addRow(Row.builder()
+                .add(CellText.builder().borderWidth(1).text("Weight").rowSpan(2).build())
+                .add(CellText.builder().borderWidth(1).text("No battery").build())
+                .build()
+        );
+
+        tableBuilder.addRow(Row.builder()
+                .add(CellText.builder().borderWidth(1).text("Battery").build())
+                .build()
+        );
+
+        tableBuilder.addRow(Row.builder()
+                .add(CellText.builder().borderWidth(1).text("Shape").colSpan(3).build())
+                .build()
+        );
+
+        // Second part
+
+        tableBuilder.addRow(Row.builder()
+                .add(CellText.builder().borderWidth(1).text("A 350").rowSpan(7).build())
+                .add(CellText.builder().borderWidth(1).text("External dimensions").rowSpan(6).build())
+                .add(CellText.builder().borderWidth(1).text("Market").colSpan(2).build())
+                .build()
+        );
+
+        tableBuilder.addRow(Row.builder()
+                .add(CellText.builder().borderWidth(1).text("Wide").colSpan(2).build())
+                .build()
+        );
+
+        tableBuilder.addRow(Row.builder()
+                .add(CellText.builder().borderWidth(1).text("High").colSpan(2).build())
+                .build()
+        );
+
+        tableBuilder.addRow(Row.builder()
+                .add(CellText.builder().borderWidth(1).text("Depth").colSpan(2).build())
+                .build()
+        );
+
+        tableBuilder.addRow(Row.builder()
+                .add(CellText.builder().borderWidth(1).text("Weight").rowSpan(2).build())
+                .add(CellText.builder().borderWidth(1).text("No battery").build())
+                .build()
+        );
+
+        tableBuilder.addRow(Row.builder()
+                .add(CellText.builder().borderWidth(1).text("Battery").build())
+                .build()
+        );
+
+        tableBuilder.addRow(Row.builder()
+                .add(CellText.builder().borderWidth(1).text("Shape").colSpan(3).build())
+                .build()
+        );
+
+        return tableBuilder.build();
     }
 
 }

@@ -9,8 +9,10 @@ import org.vandeseer.easytable.settings.VerticalAlignment;
 import org.vandeseer.easytable.structure.cell.CellBaseData;
 
 import java.awt.*;
+import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
-import java.util.*;
+import java.util.Set;
 
 @AllArgsConstructor
 @Builder(buildMethodName = "internalBuild")
@@ -29,9 +31,7 @@ public class Table {
     private final List<Row> rows;
     private final List<Column> columns;
 
-    // TODO this data structure/handling is shit :D
     private final Set<Point> rowSpanCells;
-    private final Map<Point, Integer> rowSpanCellsColSpanMap;
 
     @Getter
     @Setter(AccessLevel.NONE)
@@ -59,12 +59,8 @@ public class Table {
         return cellWidth;
     }
 
-    public boolean isRowSpanAt(int colIndex,int rowIndex) {
-        return rowSpanCells.contains(new Point(colIndex, rowIndex));
-    }
-
-    public int getRowSpanCellFor(int colIndex, int rowIndex) {
-        return rowSpanCellsColSpanMap.get(new Point(colIndex, rowIndex));
+    public boolean isRowSpanAt(int rowIndex,int columnIndex) {
+        return rowSpanCells.contains(new Point(rowIndex, columnIndex));
     }
 
     public static class TableBuilder {
@@ -80,10 +76,7 @@ public class Table {
                                                 .wordBreak(true)
                                                 .build();
 
-        // TODO Simplify those structures! ... Point? Really? ;)
-        private Map<Integer, Long> rowSpanMap = new HashMap<>();
         private Set<Point> rowSpanCells = new HashSet<>();
-        private Map<Point, Integer> rowSpanCellsColSpanMap = new HashMap<>();
 
         private TableBuilder() {
 
@@ -96,15 +89,6 @@ public class Table {
             // due to cells in this row that declare row spanning
             updateRowSpanInformation(cells);
 
-            // Check for the sum of col spans
-            int colSpanSum = cells.stream().mapToInt(CellBaseData::getColSpan).sum();
-            int differenceOfCells = numberOfColumns - colSpanSum;
-
-            if (differenceOfCells != 0 && isDifferenceOfLastRowRowSpanning(differenceOfCells)) {
-                throw new IllegalArgumentException("Row " + rows.size() + ": " +
-                        "Number of row cells does not match with number of table columns or row spanning setup");
-            }
-
             if (!rows.isEmpty()) {
                 rows.get(rows.size() - 1).setNext(row);
             }
@@ -113,33 +97,27 @@ public class Table {
             return this;
         }
 
-        // TODO too complex :-/ Simplify!
         private void updateRowSpanInformation(List<CellBaseData> cells) {
-            for (int i = 0; i < cells.size(); i++) {
-                CellBaseData cell = cells.get(i);
+            int currentColumn = 0;
+
+            for (CellBaseData cell : cells) {
+
                 if (cell.getRowSpan() > 1) {
                     int k = 0;
-                    while (k < cells.size() && rowSpanCells.contains(new Point(rows.size(), i + k))) {
+                    while (rowSpanCells.contains(new Point(rows.size(), currentColumn + k))) {
                         k++;
                     }
 
                     for (int j = 0; j < cell.getRowSpan(); j++) {
-                        if (j < cell.getRowSpan() - 1) {
-                            long increment = cell.getColSpan() > 1 ? cell.getColSpan() : 1;
-                            rowSpanMap.merge(rows.size() + j, increment, (key, value) -> value + increment);
-                        }
                         if (j >= 1) {
-                            Point point = new Point(rows.size() + j, i + k);
+                            Point point = new Point(rows.size() + j, currentColumn + k);
                             rowSpanCells.add(point);
-                            rowSpanCellsColSpanMap.put(point, cell.getColSpan());
                         }
                     }
                 }
-            }
-        }
 
-        private boolean isDifferenceOfLastRowRowSpanning(int difference) {
-            return difference != rowSpanMap.get(rows.size() - 1);
+                currentColumn += cell.getColSpan();
+            }
         }
 
         public TableBuilder addColumnsOfWidth(final float ...columnWidths) {
@@ -198,10 +176,12 @@ public class Table {
         }
 
         public Table build() {
-            Table table = this.internalBuild();
+            if (getNumberOfRegularCells() != getNumberOfSpannedCells()) {
+                throw new RuntimeException("Number of table cells does not match with table setup. " +
+                        "This could be due to row or col spanning not being correct.");
+            }
 
-            // TODO check for row spanning issues!
-            // ...
+            Table table = this.internalBuild();
 
             table.setWidth(width);
             table.setNumberOfColumns(numberOfColumns);
@@ -237,6 +217,16 @@ public class Table {
             }
 
             return table;
+        }
+
+        private int getNumberOfRegularCells() {
+            return columns.size() * rows.size();
+        }
+
+        private int getNumberOfSpannedCells() {
+            return rows.stream()
+                    .flatMapToInt(row -> row.getCells().stream().mapToInt(cell -> cell.getRowSpan() * cell.getColSpan()))
+                    .sum();
         }
 
     }

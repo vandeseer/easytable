@@ -76,20 +76,13 @@ public class TableDrawer {
                 return;
             }
 
-            List<CellBaseData> cells = row.getCells();
-            for (int j = 0; j < cells.size(); j++) {
-                // Row span
-                // TODO refactor!!
-                int k = 0;
-                while (table.isRowSpanAt(i, j + k)) {
-                    for (int x = 0; x < table.getRowSpanCellFor(i, j + k); x++) {
-                        startX += table.getColumns().get(columnCounter).getWidth();
-                        columnCounter++;
-                    }
-                    k++;
+            for (CellBaseData cell : row.getCells()) {
+
+                while (table.isRowSpanAt(i, columnCounter)) {
+                    startX += table.getColumns().get(columnCounter).getWidth();
+                    columnCounter++;
                 }
 
-                CellBaseData cell = cells.get(j);
                 float cellWidth = table.getAvailableCellWidthRespectingSpan(columnCounter, cell.getColSpan());
 
                 // Handle the cell's background color
@@ -130,20 +123,13 @@ public class TableDrawer {
                 return;
             }
 
-            List<CellBaseData> cells = row.getCells();
-            for (int j = 0; j < cells.size(); j++) {
-                // Row span
-                // TODO refactor!!
-                int k = 0;
-                while (table.isRowSpanAt(i, j + k)) {
-                    for (int x = 0; x < table.getRowSpanCellFor(i, j + k); x++) {
-                        startX += table.getColumns().get(columnCounter).getWidth();
-                        columnCounter++;
-                    }
-                    k++;
+            for (CellBaseData cell : row.getCells()) {
+
+                while (table.isRowSpanAt(i, columnCounter)) {
+                    startX += table.getColumns().get(columnCounter).getWidth();
+                    columnCounter++;
                 }
 
-                CellBaseData cell = cells.get(j);
                 float cellWidth = table.getAvailableCellWidthRespectingSpan(columnCounter, cell.getColSpan());
 
                 // Handle the cell's borders
