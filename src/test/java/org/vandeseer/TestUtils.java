@@ -10,6 +10,7 @@ import org.vandeseer.easytable.TableDrawer;
 import org.vandeseer.easytable.structure.Table;
 
 import java.io.IOException;
+import java.util.Objects;
 
 public class TestUtils {
 
@@ -55,12 +56,12 @@ public class TestUtils {
     }
 
     public static PDImageXObject createTuxImage() throws IOException {
-        final byte[] tuxBytes = IOUtils.toByteArray(TestUtils.class.getClassLoader().getResourceAsStream("tux.png"));
+        final byte[] tuxBytes = IOUtils.toByteArray(Objects.requireNonNull(TestUtils.class.getClassLoader().getResourceAsStream("tux.png")));
         return PDImageXObject.createFromByteArray(new PDDocument(), tuxBytes, "tux");
     }
 
     public static PDImageXObject createGliderImage() throws IOException {
-        final byte[] gliderBytes = IOUtils.toByteArray(TestUtils.class.getClassLoader().getResourceAsStream("glider.png"));
+        final byte[] gliderBytes = IOUtils.toByteArray(Objects.requireNonNull(TestUtils.class.getClassLoader().getResourceAsStream("glider.png")));
         return PDImageXObject.createFromByteArray(new PDDocument(), gliderBytes, "glider");
     }
 

@@ -12,7 +12,7 @@ crucial features. Nevertheless there is:
 * border colors (on table, row or cell level)
 * support for text alignment (right, left, center, justified)
 * vertical text alignment (top, middle, bottom)
-* row spanning
+* cell spanning and row spanning 
 * line breaking and line spacing
 * images in cells
 
@@ -23,10 +23,13 @@ In order to produce a whole PDF document with a table that looks like this one:
 ![easytable table](doc/example.png)
 
 You will need [this code](src/test/java/org/vandeseer/integrationtest/ExcelLikeExampleTest.java).
+In the same file you find the code for this table: 
+
+![easytable table](doc/example2.png)
 
 There are more examples (just see the folder), for instance this one: 
 
-![easytable table](doc/example2.png)
+![easytable table](doc/example3.png)
 
 Again, just have a look at the [code](src/test/java/org/vandeseer/integrationtest/SettingsTest.java).
 
