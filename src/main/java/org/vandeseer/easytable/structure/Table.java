@@ -87,7 +87,7 @@ public class Table {
 
             // Store how many cells can or better have to be omitted in the next rows
             // due to cells in this row that declare row spanning
-            updateRowSpanInformation(cells);
+            updateRowSpanCellsSet(cells);
 
             if (!rows.isEmpty()) {
                 rows.get(rows.size() - 1).setNext(row);
@@ -97,21 +97,29 @@ public class Table {
             return this;
         }
 
-        private void updateRowSpanInformation(List<CellBaseData> cells) {
+        // This method is unfortunately a bit complex, but what it does is basically:
+        // Put every cell coordinate in the set which needs to be skipped because it is
+        // "contained" in another cell due to row spanning.
+        // The coordinates are those of the table how it would look like without any spanning.
+        private void updateRowSpanCellsSet(List<CellBaseData> cells) {
             int currentColumn = 0;
 
             for (CellBaseData cell : cells) {
 
                 if (cell.getRowSpan() > 1) {
-                    int k = 0;
-                    while (rowSpanCells.contains(new Point(rows.size(), currentColumn + k))) {
-                        k++;
+                    // First we need to skip the cells in columns where we have row spanning from rows above
+                    int skipped = 0;
+                    while (rowSpanCells.contains(new Point(rows.size(), currentColumn + skipped))) {
+                        skipped++;
                     }
 
-                    for (int j = 0; j < cell.getRowSpan(); j++) {
-                        if (j >= 1) {
-                            Point point = new Point(rows.size() + j, currentColumn + k);
-                            rowSpanCells.add(point);
+                    for (int rowsToSpan = 0; rowsToSpan < cell.getRowSpan(); rowsToSpan++) {
+
+                        // Skip first row's cell, because that is a regular cell
+                        if (rowsToSpan >= 1) {
+                            for (int colSpan = 0; colSpan < cell.getColSpan(); colSpan++) {
+                                rowSpanCells.add(new Point(rows.size() + rowsToSpan, currentColumn + skipped + colSpan));
+                            }
                         }
                     }
                 }
@@ -120,7 +128,7 @@ public class Table {
             }
         }
 
-        public TableBuilder addColumnsOfWidth(final float ...columnWidths) {
+        public TableBuilder addColumnsOfWidth(final float... columnWidths) {
             for (float columnWidth : columnWidths) {
                 addColumnOfWidth(columnWidth);
             }
