@@ -13,7 +13,7 @@ import org.vandeseer.easytable.structure.cell.CellText;
 import java.awt.*;
 import java.io.IOException;
 
-public class TwoPagesTableTest {
+public class TableOverSeveralPagesTest {
 
     @Test
     public void createTwoPageTable() throws IOException {
@@ -66,7 +66,7 @@ public class TwoPagesTableTest {
             drawer.startY(page.getMediaBox().getHeight() - 50);
         } while (!drawer.isFinished());
 
-        document.save("target/twoPageTable.pdf");
+        document.save("target/severalPagesTable.pdf");
         document.close();
     }
 

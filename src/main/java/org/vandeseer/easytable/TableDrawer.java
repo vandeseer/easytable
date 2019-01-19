@@ -19,6 +19,7 @@ import java.awt.*;
 import java.awt.geom.Point2D;
 import java.io.IOException;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 public class TableDrawer {
@@ -67,15 +68,21 @@ public class TableDrawer {
             final Row row = table.getRows().get(i);
             int columnCounter = 0;
 
-            float x = startingPoint.x;
-            y -= row.getHeight();
+            // First of all, we need to check whether we should draw any further ...
+            final float lowestPoint = y - row.getCells().stream()
+                    .map(CellBaseData::getHeight)
+                    .max(Comparator.naturalOrder())
+                    .orElse(row.getHeight());
 
-            if (y < endY) {
+            if (lowestPoint < endY) {
                 if (isLastAction) {
                     rowToDraw = i;
                 }
                 return;
             }
+
+            float x = startingPoint.x;
+            y -= row.getHeight();
 
             for (CellBaseData cell : row.getCells()) {
 

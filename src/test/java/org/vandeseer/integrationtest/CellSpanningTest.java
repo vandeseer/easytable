@@ -1,10 +1,12 @@
 package org.vandeseer.integrationtest;
 
-import org.apache.pdfbox.io.IOUtils;
 import org.apache.pdfbox.pdmodel.PDDocument;
-import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
+import org.apache.pdfbox.pdmodel.PDPage;
+import org.apache.pdfbox.pdmodel.PDPageContentStream;
+import org.apache.pdfbox.pdmodel.common.PDRectangle;
 import org.junit.Test;
 import org.vandeseer.TestUtils;
+import org.vandeseer.easytable.TableDrawer;
 import org.vandeseer.easytable.structure.Row;
 import org.vandeseer.easytable.structure.Table;
 import org.vandeseer.easytable.structure.cell.CellImage;
@@ -34,6 +36,31 @@ public class CellSpanningTest {
                 createTableWithSeveralRowAndCellSpannings(),
                 createTableWithImages()
         );
+    }
+
+    @Test
+    public void createDocumentWithTableOverMultiplePages() throws Exception {
+        final PDDocument document = new PDDocument();
+
+        TableDrawer drawer = TableDrawer.builder()
+                .table(createVeryLargeTable())
+                .startX(50)
+                .endY(50F) // note: if not set, table is drawn over the end of the page
+                .build();
+
+        do {
+            PDPage page = new PDPage(PDRectangle.A4);
+            document.addPage(page);
+
+            drawer.startY(page.getMediaBox().getHeight() - 50);
+
+            try (PDPageContentStream contentStream = new PDPageContentStream(document, page)) {
+                drawer.contentStream(contentStream).draw();
+            }
+        } while (!drawer.isFinished());
+
+        document.save("target/cellSpanningMultiplePages.pdf");
+        document.close();
     }
 
     private Table createTableWithCellColSpanning() {
@@ -274,6 +301,71 @@ public class CellSpanningTest {
                 .add(CellImage.builder().borderWidth(1).image(createTuxImage()).scale(0.1f).build())
                 .add(CellImage.builder().borderWidth(1).image(createGliderImage()).scale(0.1f).build())
                 .build());
+
+        return tableBuilder.build();
+    }
+
+    private Table createVeryLargeTable() {
+        final Table.TableBuilder tableBuilder = Table.builder()
+                .addColumnsOfWidth(300, 120, 70)
+                .fontSize(12)
+                .font(HELVETICA);
+
+        int count = 0;
+        for (int i = 0; i < 50; i++) {
+            if (i % 2 == 0) {
+                tableBuilder.addRow(Row.builder()
+                        .add(CellText.builder().text("This is\nrow span 4").rowSpan(4).borderWidth(1).verticalAlignment(MIDDLE).horizontalAlignment(CENTER).build())
+                        .add(CellText.builder().text("Pur").backgroundColor(Color.YELLOW).borderWidth(1).horizontalAlignment(CENTER).build())
+                        .add(CellText.builder().text("Booz").borderWidth(1).build())
+                        .backgroundColor(Color.BLUE)
+                        .build());
+
+                tableBuilder.addRow(Row.builder()
+                        .add(CellText.builder().text("This is\nrow span 3").rowSpan(3).borderWidth(1)
+                                .backgroundColor(Color.ORANGE).verticalAlignment(BOTTOM).build())
+                        .add(CellText.builder().text("Ho!").borderWidth(1).build())
+                        .backgroundColor(Color.BLUE)
+                        .build());
+
+                tableBuilder.addRow(Row.builder()
+                        .add(CellText.builder().text("Three").borderWidth(1).build())
+                        .backgroundColor(Color.GREEN)
+                        .build());
+
+                tableBuilder.addRow(Row.builder()
+                        .add(CellText.builder().text("Three").borderWidth(1).build())
+                        .backgroundColor(Color.GREEN)
+                        .build());
+
+                tableBuilder.addRow(Row.builder()
+                        .add(CellText.builder().text("Spanning 2 cols").colSpan(2).borderWidth(1).build())
+                        .add(CellText.builder().text("Three").borderWidth(1).horizontalAlignment(CENTER).build())
+                        .backgroundColor(Color.CYAN)
+                        .build());
+            }
+
+            tableBuilder.addRow(Row.builder()
+                    .add(CellText.builder().borderWidth(1).text(String.valueOf(count++)).build())
+                    .add(CellText.builder().borderWidth(1).text("Two").build())
+                    .add(CellText.builder().borderWidth(1).text("Three").build())
+                    .build());
+
+            tableBuilder.addRow(Row.builder()
+                    .add(CellText.builder().borderWidth(1).text(String.valueOf(count++)).build())
+                    .add(CellText.builder().borderWidth(1).text("Spanning 2x2").colSpan(2).rowSpan(2).build())
+                    .build());
+
+            tableBuilder.addRow(Row.builder()
+                    .add(CellText.builder().borderWidth(1).text(String.valueOf(count++)).build())
+                    .build());
+
+            tableBuilder.addRow(Row.builder()
+                    .add(CellText.builder().borderWidth(1).text(String.valueOf(count++)).build())
+                    .add(CellText.builder().borderWidth(1).text("Two").build())
+                    .add(CellText.builder().borderWidth(1).text("Three").build())
+                    .build());
+        }
 
         return tableBuilder.build();
     }
