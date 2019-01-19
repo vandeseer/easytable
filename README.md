@@ -1,7 +1,7 @@
 # easytable
 
 This is a (very) small project that builds upon
-[Apache's PDFBox](http://pdfbox.apache.org) (>= 2.0.0) and should allow you
+[Apache's PDFBox](http://pdfbox.apache.org) (>= 2.0.4) and should allow you
 to create tables in a fairly simple way.
 It emerged from the need in another project. Therefore it also may miss some
 crucial features. Nevertheless there is:
@@ -43,7 +43,7 @@ Add this to your `pom.xml`:
     <dependency>
         <groupId>com.github.vandeseer</groupId>
         <artifactId>easytable</artifactId>
-        <version>0.3.0</version>
+        <version>0.4.0</version>
     </dependency>
 
 ## Kudos
