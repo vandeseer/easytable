@@ -1,6 +1,5 @@
 package org.vandeseer.easytable.structure;
 
-import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
@@ -39,7 +38,7 @@ public class RowTest {
                 .wordBreak(false);
 
         final Row row = Row.builder()
-                .add(CellText.builder().text(RandomStringUtils.randomAlphabetic(23)).colSpan(2).borderWidth(1).build())
+                .add(CellText.builder().text("iVgebALheQlBkxtDyNDrhKv").colSpan(2).borderWidth(1).build())
                 .add(CellText.builder().text("Booz").build())
                 .font(COURIER_BOLD).fontSize(8)
                 .build();

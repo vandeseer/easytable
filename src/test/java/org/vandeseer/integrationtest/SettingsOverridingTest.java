@@ -1,6 +1,5 @@
 package org.vandeseer.integrationtest;
 
-import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.Test;
 import org.vandeseer.TestUtils;
 import org.vandeseer.easytable.structure.Row;
@@ -33,7 +32,7 @@ public class SettingsOverridingTest {
 
         tableBuilder.addRow(
                 Row.builder()
-                        .add(CellText.builder().text(RandomStringUtils.randomAlphabetic(23)).colSpan(2).borderWidth(1).build())
+                        .add(CellText.builder().text("FCmjGVylqCjoxxfFWhehSrm").colSpan(2).borderWidth(1).build())
                         .add(CellText.builder().text("Booz").build())
                         .font(COURIER_BOLD).fontSize(8)
                         .build());
@@ -73,7 +72,7 @@ public class SettingsOverridingTest {
 
         tableBuilder.addRow(
                 Row.builder()
-                        .add(CellText.builder().text(RandomStringUtils.randomAlphabetic(23)).colSpan(2).borderWidth(1).build())
+                        .add(CellText.builder().text("OWpTlEgQPoSmoyjdNcQdVbc").colSpan(2).borderWidth(1).build())
                         .add(CellText.builder().text("Booz").borderWidth(1).build())
                         .build());
 
