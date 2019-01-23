@@ -1,7 +1,6 @@
 package org.vandeseer.easytable.util;
 
 
-import org.apache.commons.lang3.StringUtils;
 import org.apache.pdfbox.pdmodel.font.PDFont;
 
 import java.io.IOException;
@@ -118,13 +117,13 @@ public class PdfUtil {
         final List<String> splitBySpace = Arrays.asList(line.split(" "));
 
         for (int i = splitBySpace.size() - 1; i >= 0; i--) {
-            final String fittedNewLine = StringUtils.join(splitBySpace.subList(0, i), " ");
-            final String remains = StringUtils.join(splitBySpace.subList(i, splitBySpace.size()), " ");
+            final String fittedNewLine = String.join(" ", splitBySpace.subList(0, i));
+            final String remains = String.join(" ", splitBySpace.subList(i, splitBySpace.size()));
 
-            if (!StringUtils.isEmpty(fittedNewLine) && PdfUtil.doesTextLineFit(fittedNewLine, font, fontSize, maxWidth)) {
+            if (!fittedNewLine.isEmpty() && PdfUtil.doesTextLineFit(fittedNewLine, font, fontSize, maxWidth)) {
                 returnList.add(fittedNewLine);
 
-                if (!StringUtils.equals(remains, line)) {
+                if (!Objects.equals(remains, line)) {
                     returnList.addAll(PdfUtil.wrapLine(remains, font, fontSize, maxWidth));
                 }
                 break;
