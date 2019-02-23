@@ -255,15 +255,52 @@ public class TableDrawer {
         final Point2D.Float size = cell.getFitSize();
         final Point2D.Float drawAt = new Point2D.Float();
 
-        drawAt.x = moveX
-                + ((columnWidth - cell.getHorizontalPadding()) / 2f) //middle of cell
-                + cell.getPaddingLeft()
-                - (size.x / 2f);
+        // TODO refactor! The logic is the same for both types of cells ...
+        // Vertical alignment
+        float yStartRelative = cell.getRow().getHeight() - cell.getPaddingTop(); // top position
+        if (cell.getRow().getHeight() > cell.getHeight() || cell.getRowSpan() > 1) {
 
-        drawAt.y = moveY
-                + ((cell.getHeight() - cell.getVerticalPadding()) / 2f) // middle of cell
-                + cell.getPaddingBottom()
-                - (size.y / 2f);
+            if (cell.getSettings().getVerticalAlignment() == VerticalAlignment.MIDDLE) {
+
+                float outerHeight = cell.getRowSpan() > 1 ? cell.getHeight() : cell.getRow().getHeight();
+                yStartRelative = outerHeight / 2 + size.y / 2;
+
+                if (cell.getRowSpan() > 1) {
+                    float rowSpanAdaption = cell.calculateHeightForRowSpan() - cell.getRow().getHeight();
+                    yStartRelative -= rowSpanAdaption;
+                }
+
+            } else if (cell.getSettings().getVerticalAlignment() == VerticalAlignment.BOTTOM) {
+
+                yStartRelative = size.y + cell.getPaddingBottom();
+
+                if (cell.getRowSpan() > 1) {
+                    float rowSpanAdaption = cell.calculateHeightForRowSpan() - cell.getRow().getHeight();
+                    yStartRelative -= rowSpanAdaption;
+                }
+            }
+        }
+
+        // Handle horizontal alignment by adjusting the xOffset
+        float xOffset = moveX + cell.getPaddingLeft();
+        if (cell.getSettings().getHorizontalAlignment() == HorizontalAlignment.RIGHT) {
+            xOffset = moveX + (columnWidth - (size.x + cell.getPaddingRight()));
+
+        } else if (cell.getSettings().getHorizontalAlignment() == HorizontalAlignment.CENTER) {
+            final float diff = (columnWidth - size.y) / 2;
+            xOffset = moveX + diff;
+
+        }
+
+        drawAt.x = xOffset;
+//                + ((columnWidth - cell.getHorizontalPadding()) / 2f) //middle of cell
+//                + cell.getPaddingLeft()
+//                - (size.x / 2f);
+
+        drawAt.y = moveY + yStartRelative - size.y;
+//                + ((cell.getHeight() - cell.getVerticalPadding()) / 2f) // middle of cell
+//                + cell.getPaddingBottom()
+//                - (size.y / 2f);
 
         contentStream.drawImage(cell.getImage(), drawAt.x, drawAt.y, size.x, size.y);
     }
