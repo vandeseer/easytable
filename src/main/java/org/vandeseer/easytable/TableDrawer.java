@@ -121,7 +121,7 @@ public class TableDrawer {
         if (cell instanceof CellText) {
             drawCellText((CellText) cell, cellWidth, start.x, start.y);
         } else if (cell instanceof CellImage) {
-            drawCellImage((CellImage) cell, cellWidth, start.x, y);
+            drawCellImage((CellImage) cell, cellWidth, start.x, start.y);
         }
 
     }
@@ -255,7 +255,7 @@ public class TableDrawer {
         final Point2D.Float size = cell.getFitSize();
         final Point2D.Float drawAt = new Point2D.Float();
 
-        // TODO refactor! The logic is the same for both types of cells ...
+        // TODO Refactor out vertical alignment for image and text cells? The logic is the same for both types ...
         // Vertical alignment
         float yStartRelative = cell.getRow().getHeight() - cell.getPaddingTop(); // top position
         if (cell.getRow().getHeight() > cell.getHeight() || cell.getRowSpan() > 1) {
@@ -293,14 +293,7 @@ public class TableDrawer {
         }
 
         drawAt.x = xOffset;
-//                + ((columnWidth - cell.getHorizontalPadding()) / 2f) //middle of cell
-//                + cell.getPaddingLeft()
-//                - (size.x / 2f);
-
         drawAt.y = moveY + yStartRelative - size.y;
-//                + ((cell.getHeight() - cell.getVerticalPadding()) / 2f) // middle of cell
-//                + cell.getPaddingBottom()
-//                - (size.y / 2f);
 
         contentStream.drawImage(cell.getImage(), drawAt.x, drawAt.y, size.x, size.y);
     }
