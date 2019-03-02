@@ -1,9 +1,9 @@
 package org.vandeseer.easytable;
 
-import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
+import lombok.experimental.SuperBuilder;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.font.PDFont;
 import org.vandeseer.easytable.settings.HorizontalAlignment;
@@ -22,13 +22,14 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+@SuperBuilder(toBuilder = true)
 public class TableDrawer {
 
     @Setter
     @Accessors(chain = true, fluent = true)
     private PDPageContentStream contentStream;
 
-    private final Table table;
+    protected final Table table;
 
     @Setter
     @Accessors(chain = true, fluent = true)
@@ -38,15 +39,14 @@ public class TableDrawer {
     @Accessors(chain = true, fluent = true)
     private float startY;
 
-    private float endY;
+    protected float endY;
 
-    private int rowToDraw = 0;
+    protected int rowToDraw = 0;
 
     @Getter
-    private boolean isFinished = false;
+    protected boolean isFinished = false;
 
-    @Builder
-    TableDrawer(float startX, float startY, PDPageContentStream contentStream, Table table, float endY) {
+    protected TableDrawer(float startX, float startY, PDPageContentStream contentStream, Table table, float endY) {
         this.contentStream = contentStream;
         this.table = table;
 
@@ -106,7 +106,7 @@ public class TableDrawer {
         }
     }
 
-    private void drawBackgroundColorAndCellContent(Point2D.Float start, Row row, CellBaseData cell, float cellWidth) throws IOException {
+    protected void drawBackgroundColorAndCellContent(Point2D.Float start, Row row, CellBaseData cell, float cellWidth) throws IOException {
 
         final float rowHeight = row.getHeight();
         final float height = cell.getHeight() > rowHeight ? cell.getHeight() : rowHeight;
@@ -119,14 +119,14 @@ public class TableDrawer {
 
         // Handle the cell's content
         if (cell instanceof CellText) {
-            drawCellText((CellText) cell, cellWidth, start.x, start.y);
+            drawTextCell((CellText) cell, cellWidth, start.x, start.y);
         } else if (cell instanceof CellImage) {
-            drawCellImage((CellImage) cell, cellWidth, start.x, start.y);
+            drawImageCell((CellImage) cell, cellWidth, start.x, start.y);
         }
 
     }
 
-    private void drawBorders(Point2D.Float start, Row row, CellBaseData cell, float cellWidth) throws IOException {
+    protected void drawBorders(Point2D.Float start, Row row, CellBaseData cell, float cellWidth) throws IOException {
         final float rowHeight = row.getHeight();
 
         final float height = cell.getHeight() > rowHeight ? cell.getHeight() : rowHeight;
@@ -171,7 +171,7 @@ public class TableDrawer {
         }
     }
 
-    private void drawCellText(final CellText cell, final float columnWidth, final float moveX, float moveY) throws IOException {
+    protected void drawTextCell(final CellText cell, final float columnWidth, final float moveX, float moveY) throws IOException {
         final PDFont currentFont = cell.getFont();
         final int currentFontSize = cell.getFontSize();
         final Color currentTextColor = cell.getTextColor();
@@ -251,7 +251,7 @@ public class TableDrawer {
         }
     }
 
-    private void drawCellImage(final CellImage cell, final float columnWidth, final float moveX, final float moveY) throws IOException {
+    protected void drawImageCell(final CellImage cell, final float columnWidth, final float moveX, final float moveY) throws IOException {
         final Point2D.Float size = cell.getFitSize();
         final Point2D.Float drawAt = new Point2D.Float();
 
@@ -298,14 +298,14 @@ public class TableDrawer {
         contentStream.drawImage(cell.getImage(), drawAt.x, drawAt.y, size.x, size.y);
     }
 
-    private void drawLine(Color color, float width, float toX, float toY) throws IOException {
+    protected void drawLine(Color color, float width, float toX, float toY) throws IOException {
         contentStream.setLineWidth(width);
         contentStream.lineTo(toX, toY);
         contentStream.setStrokingColor(color);
         contentStream.stroke();
     }
 
-    private void drawCellBackground(final CellBaseData cell, final float startX, final float startY, final float width, final float height)
+    protected void drawCellBackground(final CellBaseData cell, final float startX, final float startY, final float width, final float height)
             throws IOException {
         contentStream.setNonStrokingColor(cell.getBackgroundColor());
 
@@ -317,7 +317,7 @@ public class TableDrawer {
         contentStream.setNonStrokingColor(Color.BLACK);
     }
 
-    private void drawText(String text, PDFont font, int fontSize, Color color, float x, float y) throws IOException {
+    protected void drawText(String text, PDFont font, int fontSize, Color color, float x, float y) throws IOException {
         contentStream.beginText();
         contentStream.setNonStrokingColor(color);
         contentStream.setFont(font, fontSize);

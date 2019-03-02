@@ -46,6 +46,10 @@ Add this to your `pom.xml`:
         <version>0.4.1</version>
     </dependency>
 
+Or checkout the repository and install it locally with maven (e.g. for the`develop` branch):
+
+    mvn install -DskipTests -Dgpg.skip
+
 ## Kudos
 
 - to [Binghammer](https://github.com/Binghammer) for implementing cell coloring and text center alignment
@@ -58,6 +62,12 @@ improvements
 - to [Drummond Dawson](https://github.com/drumonii) for code changes that allowed removing a dependency
 
 ## Q&A
+
+### Can I customize the `TableDrawer` for my own specific needs?
+
+Yep, have a look at those two classes: 
+- (Using [Lombok](https://projectlombok.org/)): [EasytableCustomTableDrawer](src/test/java/org/vandeseer/custom/EasytableCustomTableDrawer.java)
+- (Not using [Lombok](https://projectlombok.org/)): [EasytableNoLombokCustomTableDrawer](src/test/java/org/vandeseer/custom/EasytableNoLombokCustomTableDrawer.java)
 
 ### Does it work with Java < 8?
 
