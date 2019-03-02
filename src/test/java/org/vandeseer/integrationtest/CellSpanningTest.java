@@ -273,9 +273,10 @@ public class CellSpanningTest {
     private Table createTableWithImages() throws IOException {
         final Table.TableBuilder tableBuilder = Table.builder()
                 .addColumnsOfWidth(200, 120, 70, 100)
+                .horizontalAlignment(CENTER)
+                .verticalAlignment(MIDDLE)
                 .fontSize(8)
                 .font(HELVETICA);
-
 
         tableBuilder.addRow(Row.builder()
                 .add(CellImage.builder().borderWidth(1).image(createTuxImage()).scale(0.1f).build())
