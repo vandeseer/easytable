@@ -17,6 +17,8 @@ public class TestUtils {
     private static final String TARGET_FOLDER = "target";
     private static final float PADDING = 50f;
 
+    private static final PDDocument PD_DOCUMENT_FOR_IMAGES = new PDDocument();
+
     private TestUtils() {
     }
 
@@ -35,7 +37,7 @@ public class TestUtils {
 
         try (final PDPageContentStream contentStream = new PDPageContentStream(document, page)) {
 
-            for (Table table : tables) {
+            for (final Table table : tables) {
 
                 TableDrawer.builder()
                         .contentStream(contentStream)
@@ -57,12 +59,12 @@ public class TestUtils {
 
     public static PDImageXObject createTuxImage() throws IOException {
         final byte[] tuxBytes = IOUtils.toByteArray(Objects.requireNonNull(TestUtils.class.getClassLoader().getResourceAsStream("tux.png")));
-        return PDImageXObject.createFromByteArray(new PDDocument(), tuxBytes, "tux");
+        return PDImageXObject.createFromByteArray(PD_DOCUMENT_FOR_IMAGES, tuxBytes, "tux");
     }
 
     public static PDImageXObject createGliderImage() throws IOException {
         final byte[] gliderBytes = IOUtils.toByteArray(Objects.requireNonNull(TestUtils.class.getClassLoader().getResourceAsStream("glider.png")));
-        return PDImageXObject.createFromByteArray(new PDDocument(), gliderBytes, "glider");
+        return PDImageXObject.createFromByteArray(PD_DOCUMENT_FOR_IMAGES, gliderBytes, "glider");
     }
 
 }
