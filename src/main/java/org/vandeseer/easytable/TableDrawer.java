@@ -46,7 +46,7 @@ public class TableDrawer {
     private boolean isFinished = false;
 
     @Builder
-    TableDrawer(float startX, float startY, PDPageContentStream contentStream, Table table, float endY) {
+    public TableDrawer(float startX, float startY, PDPageContentStream contentStream, Table table, float endY) {
         this.contentStream = contentStream;
         this.table = table;
 
