@@ -33,7 +33,7 @@ public class TableDrawer {
 
     @Setter
     @Accessors(chain = true, fluent = true)
-    private float startX;
+    protected float startX;
 
     @Setter
     @Accessors(chain = true, fluent = true)
