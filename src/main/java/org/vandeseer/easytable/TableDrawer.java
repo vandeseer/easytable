@@ -27,7 +27,7 @@ public class TableDrawer {
 
     @Setter
     @Accessors(chain = true, fluent = true)
-    private PDPageContentStream contentStream;
+    protected PDPageContentStream contentStream;
 
     protected final Table table;
 
@@ -37,7 +37,7 @@ public class TableDrawer {
 
     @Setter
     @Accessors(chain = true, fluent = true)
-    private float startY;
+    protected float startY;
 
     protected float endY;
 
