@@ -61,7 +61,7 @@ public class TableDrawer {
         drawWithFunction(new Point2D.Float(this.startX, this.startY), this::drawBorders, true);
     }
 
-    private void drawWithFunction(Point2D.Float startingPoint, TableDrawerFunction function, boolean isLastAction) throws IOException {
+    protected void drawWithFunction(Point2D.Float startingPoint, TableDrawerFunction function, boolean isLastAction) throws IOException {
         float y = startingPoint.y;
 
         for (int i = rowToDraw; i < table.getRows().size(); i++) {
