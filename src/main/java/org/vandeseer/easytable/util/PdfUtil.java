@@ -1,10 +1,12 @@
 package org.vandeseer.easytable.util;
 
 
+import lombok.SneakyThrows;
 import org.apache.pdfbox.pdmodel.font.PDFont;
 
 import java.io.IOException;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Provides some helping functions.
@@ -37,12 +39,27 @@ public class PdfUtil {
                 .orElseThrow(CouldNotDetermineStringWidthException::new);
     }
 
-    private static float getWidthOfStringWithoutNewlines(String str, PDFont font, int fontSize) {
-        try {
-            return font.getStringWidth(str) * fontSize / 1000F;
-        } catch (IOException exception) {
-            throw new CouldNotDetermineStringWidthException(exception);
+    @SneakyThrows
+    private static float getWidthOfStringWithoutNewlines(String text, PDFont font, int fontSize) {
+        final StringBuilder printable = new StringBuilder();
+        int unprintable = 0;
+
+        final List<String> codePointsAsString = text.codePoints()
+                .mapToObj(codePoint -> new String(new int[]{codePoint}, 0, 1))
+                .collect(Collectors.toList());
+
+        for (final String codepoint : codePointsAsString) {
+            try {
+                font.encode(codepoint);
+                printable.append(codepoint);
+            } catch (final IllegalArgumentException e) {
+                unprintable++;
+            }
         }
+
+        final float unprintableLength = font.getStringWidth("–") * unprintable * fontSize / 1000F;
+        final float printableLength = font.getStringWidth(printable.toString()) * fontSize / 1000F;
+        return printableLength + unprintableLength;
     }
 
 

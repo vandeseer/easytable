@@ -27,17 +27,17 @@ public class TableDrawer {
 
     @Setter
     @Accessors(chain = true, fluent = true)
-    private PDPageContentStream contentStream;
+    protected PDPageContentStream contentStream;
 
     protected final Table table;
 
     @Setter
     @Accessors(chain = true, fluent = true)
-    private float startX;
+    protected float startX;
 
     @Setter
     @Accessors(chain = true, fluent = true)
-    private float startY;
+    protected float startY;
 
     protected float endY;
 
@@ -61,7 +61,7 @@ public class TableDrawer {
         drawWithFunction(new Point2D.Float(this.startX, this.startY), this::drawBorders, true);
     }
 
-    private void drawWithFunction(Point2D.Float startingPoint, TableDrawerFunction function, boolean isLastAction) throws IOException {
+    protected void drawWithFunction(Point2D.Float startingPoint, TableDrawerFunction function, boolean isLastAction) throws IOException {
         float y = startingPoint.y;
 
         for (int i = rowToDraw; i < table.getRows().size(); i++) {
