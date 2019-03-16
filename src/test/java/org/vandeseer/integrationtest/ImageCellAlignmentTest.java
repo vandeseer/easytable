@@ -75,7 +75,7 @@ public class ImageCellAlignmentTest {
                         .horizontalAlignment(horizontalAlignment)
                         .borderWidth(1)
                         .padding(2)
-                        .image(TestUtils.createGliderImage())
+                        .image(TestUtils.createSampleImage())
                         .colSpan(2)
                         .build());
 

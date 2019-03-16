@@ -67,4 +67,9 @@ public class TestUtils {
         return PDImageXObject.createFromByteArray(PD_DOCUMENT_FOR_IMAGES, gliderBytes, "glider");
     }
 
+    public static PDImageXObject createSampleImage() throws IOException {
+        final byte[] sampleBytes = IOUtils.toByteArray(Objects.requireNonNull(TestUtils.class.getClassLoader().getResourceAsStream("sample.png")));
+        return PDImageXObject.createFromByteArray(PD_DOCUMENT_FOR_IMAGES, sampleBytes, "sample");
+    }
+
 }

@@ -287,7 +287,7 @@ public class TableDrawer {
             xOffset = moveX + (columnWidth - (size.x + cell.getPaddingRight()));
 
         } else if (cell.getSettings().getHorizontalAlignment() == HorizontalAlignment.CENTER) {
-            final float diff = (columnWidth - size.y) / 2;
+            final float diff = (columnWidth - size.x) / 2;
             xOffset = moveX + diff;
 
         }
