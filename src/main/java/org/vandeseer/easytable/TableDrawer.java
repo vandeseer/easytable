@@ -4,6 +4,8 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 import lombok.experimental.SuperBuilder;
+import org.apache.pdfbox.pdmodel.PDDocument;
+import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.font.PDFont;
 import org.vandeseer.easytable.settings.HorizontalAlignment;
@@ -21,6 +23,7 @@ import java.io.IOException;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.function.Supplier;
 
 @SuperBuilder(toBuilder = true)
 public class TableDrawer {
@@ -59,6 +62,21 @@ public class TableDrawer {
     public void draw() throws IOException {
         drawWithFunction(new Point2D.Float(this.startX, this.startY), this::drawBackgroundColorAndCellContent, false);
         drawWithFunction(new Point2D.Float(this.startX, this.startY), this::drawBorders, true);
+    }
+
+    public void draw(Supplier<PDDocument> documentSupplier, Supplier<PDPage> pageSupplier, float yOffset) throws IOException {
+        final PDDocument document = documentSupplier.get();
+
+        do {
+            PDPage page = pageSupplier.get();
+            document.addPage(page);
+
+            try (final PDPageContentStream newPageContentStream = new PDPageContentStream(document, page)) {
+                contentStream(newPageContentStream).draw();
+            }
+
+            startY(page.getMediaBox().getHeight() - yOffset);
+        } while (!isFinished());
     }
 
     protected void drawWithFunction(Point2D.Float startingPoint, TableDrawerFunction function, boolean isLastAction) throws IOException {
