@@ -195,7 +195,8 @@ public class Table {
             table.setNumberOfColumns(numberOfColumns);
 
             // Set up the connections between table, row(s) and cell(s)
-            for (Row row : rows) {
+            for (int rowIndex = 0; rowIndex < rows.size(); rowIndex++) {
+                Row row = rows.get(rowIndex);
                 row.setTable(table);
 
                 // Fill up the settings of the row that are not set there directly
@@ -208,6 +209,12 @@ public class Table {
                     cell.getSettings().fillingMergeBy(row.getSettings());
 
                     cell.setRow(row);
+
+                    // We need to take into account row spanning ...
+                    while (table.isRowSpanAt(rowIndex, columnNumber)) {
+                        columnNumber++;
+                    }
+
                     Column column = table.getColumns().get(columnNumber);
                     cell.setColumn(column);
 
