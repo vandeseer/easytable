@@ -24,6 +24,9 @@ public abstract class CellBaseData {
     @Setter
     private Column column;
 
+    @Setter
+    private float width;
+
     @Getter
     @Setter(AccessLevel.PROTECTED)
     protected Settings settings;

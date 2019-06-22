@@ -9,6 +9,6 @@ import java.io.IOException;
 @FunctionalInterface
 public interface TableDrawerFunction {
 
-    void accept(Point2D.Float start, Row row, CellBaseData cell, float cellWidth) throws IOException;
+    void accept(Point2D.Float start, Row row, CellBaseData cell) throws IOException;
 
 }

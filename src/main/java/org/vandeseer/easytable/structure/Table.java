@@ -218,6 +218,8 @@ public class Table {
                     Column column = table.getColumns().get(columnNumber);
                     cell.setColumn(column);
 
+                    cell.setWidth(table.getAvailableCellWidthRespectingSpan(columnNumber, cell.getColSpan()));
+
                     columnNumber += cell.getColSpan();
                 }
             }

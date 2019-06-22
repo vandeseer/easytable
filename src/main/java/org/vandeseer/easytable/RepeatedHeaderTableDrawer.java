@@ -46,11 +46,9 @@ public class RepeatedHeaderTableDrawer extends TableDrawer {
                 columnCounter++;
             }
 
-            float cellWidth = table.getAvailableCellWidthRespectingSpan(columnCounter, cell.getColSpan());
+            function.accept(new Point2D.Float(x, y), headerRow, cell);
 
-            function.accept(new Point2D.Float(x, y), headerRow, cell, cellWidth);
-
-            x += cellWidth;
+            x += cell.getWidth();
             columnCounter += cell.getColSpan();
         }
     }

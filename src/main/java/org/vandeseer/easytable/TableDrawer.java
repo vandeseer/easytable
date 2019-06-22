@@ -109,12 +109,10 @@ public class TableDrawer {
                     columnCounter++;
                 }
 
-                float cellWidth = table.getAvailableCellWidthRespectingSpan(columnCounter, cell.getColSpan());
-
                 // This is the interesting part :)
-                function.accept(new Point2D.Float(x, y), row, cell, cellWidth);
+                function.accept(new Point2D.Float(x, y), row, cell);
 
-                x += cellWidth;
+                x += cell.getWidth();
                 columnCounter += cell.getColSpan();
             }
         }
@@ -124,7 +122,7 @@ public class TableDrawer {
         }
     }
 
-    protected void drawBackgroundColorAndCellContent(Point2D.Float start, Row row, CellBaseData cell, float cellWidth) throws IOException {
+    protected void drawBackgroundColorAndCellContent(Point2D.Float start, Row row, CellBaseData cell) throws IOException {
 
         final float rowHeight = row.getHeight();
         final float height = cell.getHeight() > rowHeight ? cell.getHeight() : rowHeight;
@@ -132,20 +130,20 @@ public class TableDrawer {
 
         // Handle the cell's background color
         if (cell.hasBackgroundColor()) {
-            drawCellBackground(cell, start.x, y, cellWidth, height);
+            drawCellBackground(cell, start.x, y, cell.getWidth(), height);
         }
 
         // Handle the cell's content
         if (cell instanceof CellText) {
-            drawTextCell((CellText) cell, cellWidth, start.x, start.y);
+            drawTextCell((CellText) cell, start.x, start.y);
         } else if (cell instanceof CellImage) {
-            drawImageCell((CellImage) cell, cellWidth, start.x, start.y);
+            drawImageCell((CellImage) cell, start.x, start.y);
         }
-
     }
 
-    protected void drawBorders(Point2D.Float start, Row row, CellBaseData cell, float cellWidth) throws IOException {
+    protected void drawBorders(Point2D.Float start, Row row, CellBaseData cell) throws IOException {
         final float rowHeight = row.getHeight();
+        final float cellWidth = cell.getWidth();
 
         final float height = cell.getHeight() > rowHeight ? cell.getHeight() : rowHeight;
         final float sY = cell.getHeight() > rowHeight ? start.y + rowHeight - cell.getHeight() : start.y;
@@ -189,7 +187,7 @@ public class TableDrawer {
         }
     }
 
-    protected void drawTextCell(final CellText cell, final float columnWidth, final float moveX, float moveY) throws IOException {
+    protected void drawTextCell(final CellText cell, final float moveX, float moveY) throws IOException {
         final PDFont currentFont = cell.getFont();
         final int currentFontSize = cell.getFontSize();
         final Color currentTextColor = cell.getTextColor();
@@ -239,10 +237,10 @@ public class TableDrawer {
 
             // Handle horizontal alignment by adjusting the xOffset
             if (cell.getSettings().getHorizontalAlignment() == HorizontalAlignment.RIGHT) {
-                xOffset = moveX + (columnWidth - (textWidth + cell.getPaddingRight()));
+                xOffset = moveX + (cell.getWidth() - (textWidth + cell.getPaddingRight()));
 
             } else if (cell.getSettings().getHorizontalAlignment() == HorizontalAlignment.CENTER) {
-                final float diff = (columnWidth - textWidth) / 2;
+                final float diff = (cell.getWidth() - textWidth) / 2;
                 xOffset = moveX + diff;
 
             } else if (cell.getSettings().getHorizontalAlignment() == HorizontalAlignment.JUSTIFY) {
@@ -269,7 +267,7 @@ public class TableDrawer {
         }
     }
 
-    protected void drawImageCell(final CellImage cell, final float columnWidth, final float moveX, final float moveY) throws IOException {
+    protected void drawImageCell(final CellImage cell, final float moveX, final float moveY) throws IOException {
         final Point2D.Float size = cell.getFitSize();
         final Point2D.Float drawAt = new Point2D.Float();
 
@@ -302,10 +300,10 @@ public class TableDrawer {
         // Handle horizontal alignment by adjusting the xOffset
         float xOffset = moveX + cell.getPaddingLeft();
         if (cell.getSettings().getHorizontalAlignment() == HorizontalAlignment.RIGHT) {
-            xOffset = moveX + (columnWidth - (size.x + cell.getPaddingRight()));
+            xOffset = moveX + (cell.getWidth() - (size.x + cell.getPaddingRight()));
 
         } else if (cell.getSettings().getHorizontalAlignment() == HorizontalAlignment.CENTER) {
-            final float diff = (columnWidth - size.x) / 2;
+            final float diff = (cell.getWidth() - size.x) / 2;
             xOffset = moveX + diff;
 
         }
