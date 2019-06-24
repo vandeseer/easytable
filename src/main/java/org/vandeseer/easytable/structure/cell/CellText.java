@@ -5,6 +5,8 @@ import lombok.Getter;
 import lombok.NonNull;
 import lombok.experimental.SuperBuilder;
 import org.apache.pdfbox.pdmodel.font.PDFont;
+import org.vandeseer.easytable.drawing.CellDrawer;
+import org.vandeseer.easytable.drawing.CellTextDrawer;
 import org.vandeseer.easytable.structure.Column;
 import org.vandeseer.easytable.util.PdfUtil;
 
@@ -14,7 +16,7 @@ import java.util.List;
 
 @Getter
 @SuperBuilder(toBuilder = true)
-public class CellText extends CellBaseData {
+public class CellText extends AbstractCell {
 
     @NonNull
     private String text;
@@ -99,7 +101,12 @@ public class CellText extends CellBaseData {
 
     }
 
-    public abstract static class CellTextBuilder<C extends CellText, B extends CellText.CellTextBuilder<C, B>> extends CellBaseDataBuilder<C, B> {
+    @Override
+    public CellDrawer getDrawer() {
+        return new CellTextDrawer(this);
+    }
+
+    public abstract static class CellTextBuilder<C extends CellText, B extends CellText.CellTextBuilder<C, B>> extends AbstractCellBuilder<C, B> {
 
         public B font(final PDFont font) {
             settings.setFont(font);

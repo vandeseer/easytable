@@ -4,7 +4,7 @@ import lombok.experimental.SuperBuilder;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import org.vandeseer.easytable.structure.Row;
 import org.vandeseer.easytable.structure.Table;
-import org.vandeseer.easytable.structure.cell.CellBaseData;
+import org.vandeseer.easytable.structure.cell.AbstractCell;
 
 import java.awt.geom.Point2D;
 import java.io.IOException;
@@ -39,14 +39,14 @@ public class RepeatedHeaderTableDrawer extends TableDrawer {
 
         y -= headerRow.getHeight();
 
-        for (CellBaseData cell : headerRow.getCells()) {
+        for (AbstractCell cell : headerRow.getCells()) {
 
             while (table.isRowSpanAt(0, columnCounter)) {
                 x += table.getColumns().get(columnCounter).getWidth();
                 columnCounter++;
             }
 
-            function.accept(new Point2D.Float(x, y), headerRow, cell);
+            function.accept(new Point2D.Float(x, y), cell);
 
             x += cell.getWidth();
             columnCounter += cell.getColSpan();

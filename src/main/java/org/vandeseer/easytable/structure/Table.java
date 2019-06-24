@@ -6,7 +6,7 @@ import org.apache.pdfbox.pdmodel.font.PDType1Font;
 import org.vandeseer.easytable.settings.HorizontalAlignment;
 import org.vandeseer.easytable.settings.Settings;
 import org.vandeseer.easytable.settings.VerticalAlignment;
-import org.vandeseer.easytable.structure.cell.CellBaseData;
+import org.vandeseer.easytable.structure.cell.AbstractCell;
 
 import java.awt.*;
 import java.util.HashSet;
@@ -83,7 +83,7 @@ public class Table {
         }
 
         public TableBuilder addRow(final Row row) {
-            final List<CellBaseData> cells = row.getCells();
+            final List<AbstractCell> cells = row.getCells();
 
             // Store how many cells can or better have to be omitted in the next rows
             // due to cells in this row that declare row spanning
@@ -101,10 +101,10 @@ public class Table {
         // Put every cell coordinate in the set which needs to be skipped because it is
         // "contained" in another cell due to row spanning.
         // The coordinates are those of the table how it would look like without any spanning.
-        private void updateRowSpanCellsSet(List<CellBaseData> cells) {
+        private void updateRowSpanCellsSet(List<AbstractCell> cells) {
             int currentColumn = 0;
 
-            for (CellBaseData cell : cells) {
+            for (AbstractCell cell : cells) {
 
                 if (cell.getRowSpan() > 1) {
                     // First we need to skip the cells in columns where we have row spanning from rows above
@@ -203,7 +203,7 @@ public class Table {
                 row.getSettings().fillingMergeBy(table.getSettings());
 
                 int columnNumber = 0;
-                for (CellBaseData cell : row.getCells()) {
+                for (AbstractCell cell : row.getCells()) {
 
                     // Fill up the settings of the cell that are not set there directly
                     cell.getSettings().fillingMergeBy(row.getSettings());

@@ -23,11 +23,13 @@ public class EasytableNoLombokCustomTableDrawer {
             super(startX, startY, contentStream, table, 0);
         }
 
-        @Override
-        protected void drawText(String text, PDFont font, int fontSize, Color color, float x, float y) throws IOException {
-            System.out.println("My custom table drawer is called :-)");
-            super.drawText(text.toLowerCase(), font, fontSize, color, x, y);
-        }
+        // TODO
+
+//        @Override
+//        protected void drawText(String text, PDFont font, int fontSize, Color color, float x, float y) throws IOException {
+//            System.out.println("My custom table drawer is called :-)");
+//            super.drawText(text.toLowerCase(), font, fontSize, color, x, y, super.contentStream);
+//        }
 
     }
 

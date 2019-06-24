@@ -1,0 +1,106 @@
+package org.vandeseer.easytable.drawing;
+
+import org.apache.pdfbox.pdmodel.font.PDFont;
+import org.vandeseer.easytable.TableDrawer;
+import org.vandeseer.easytable.settings.HorizontalAlignment;
+import org.vandeseer.easytable.settings.VerticalAlignment;
+import org.vandeseer.easytable.structure.cell.CellText;
+import org.vandeseer.easytable.util.PdfUtil;
+
+import java.awt.*;
+import java.io.IOException;
+import java.util.Collections;
+import java.util.List;
+
+public class CellTextDrawer implements CellDrawer {
+
+    private final CellText cell;
+
+    public CellTextDrawer(CellText cell) {
+        this.cell = cell;
+    }
+
+    public void draw(DrawingContext drawingContext) throws IOException {
+        final float startX = drawingContext.getStartingPoint().x;
+        final float startY = drawingContext.getStartingPoint().y;
+
+        final PDFont currentFont = cell.getFont();
+        final int currentFontSize = cell.getFontSize();
+        final Color currentTextColor = cell.getTextColor();
+
+        float maxWidth = cell.getWidthOfText();
+
+        final List<String> lines = cell.isWordBreak()
+                ? PdfUtil.getOptimalTextBreakLines(cell.getText(), currentFont, currentFontSize, maxWidth)
+                : Collections.singletonList(cell.getText());
+
+        // Vertical alignment
+        float yStartRelative = cell.getRow().getHeight() - cell.getPaddingTop(); // top position
+        if (cell.getRow().getHeight() > cell.getHeight() || cell.getRowSpan() > 1) {
+
+            if (cell.getSettings().getVerticalAlignment() == VerticalAlignment.MIDDLE) {
+
+                float outerHeight = cell.getRowSpan() > 1 ? cell.getHeight() : cell.getRow().getHeight();
+                yStartRelative = outerHeight / 2 + cell.getTextHeight() / 2;
+
+                if (cell.getRowSpan() > 1) {
+                    float rowSpanAdaption = cell.calculateHeightForRowSpan() - cell.getRow().getHeight();
+                    yStartRelative -= rowSpanAdaption;
+                }
+
+            } else if (cell.getSettings().getVerticalAlignment() == VerticalAlignment.BOTTOM) {
+
+                yStartRelative = cell.getTextHeight() + cell.getPaddingBottom();
+
+                if (cell.getRowSpan() > 1) {
+                    float rowSpanAdaption = cell.calculateHeightForRowSpan() - cell.getRow().getHeight();
+                    yStartRelative -= rowSpanAdaption;
+                }
+            }
+        }
+
+        float yOffset = startY + yStartRelative;
+        for (int i = 0; i < lines.size(); i++) {
+            final String line = lines.get(i);
+
+            float xOffset = startX + cell.getPaddingLeft();
+            yOffset -= (
+                    PdfUtil.getFontHeight(currentFont, currentFontSize) // font height
+                            + (i > 0 ? PdfUtil.getFontHeight(currentFont, currentFontSize) * cell.getLineSpacing() : 0f) // line spacing
+            );
+
+            final float textWidth = PdfUtil.getStringWidth(line, currentFont, currentFontSize);
+
+            // Handle horizontal alignment by adjusting the xOffset
+            if (cell.getSettings().getHorizontalAlignment() == HorizontalAlignment.RIGHT) {
+                xOffset = startX + (cell.getWidth() - (textWidth + cell.getPaddingRight()));
+
+            } else if (cell.getSettings().getHorizontalAlignment() == HorizontalAlignment.CENTER) {
+                final float diff = (cell.getWidth() - textWidth) / 2;
+                xOffset = startX + diff;
+
+            } else if (cell.getSettings().getHorizontalAlignment() == HorizontalAlignment.JUSTIFY) {
+
+                // Code from https://stackoverflow.com/questions/20680430/is-it-possible-to-justify-text-in-pdfbox
+                float charSpacing = 0;
+                if (line.length() > 1) {
+                    float size = PdfUtil.getStringWidth(line, cell.getFont(), cell.getFontSize());
+                    float free = cell.getWidthOfText() - size;
+                    if (free > 0) {
+                        charSpacing = free / (line.length() - 1);
+                    }
+                }
+
+                // Don't justify the last line
+                if (i < lines.size() -1) {
+
+                    // setCharacterSpacing() is available in PDFBox version 2.0.4 and higher.
+                    drawingContext.getContentStream().setCharacterSpacing(charSpacing);
+                }
+            }
+
+            TableDrawer.drawText(line, currentFont, currentFontSize, currentTextColor, xOffset, yOffset, drawingContext.getContentStream());
+        }
+    }
+
+}

@@ -2,7 +2,7 @@ package org.vandeseer.easytable.structure;
 
 import org.junit.Test;
 import org.vandeseer.easytable.structure.Table.TableBuilder;
-import org.vandeseer.easytable.structure.cell.CellBaseData;
+import org.vandeseer.easytable.structure.cell.AbstractCell;
 import org.vandeseer.easytable.structure.cell.CellText;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -68,7 +68,7 @@ public class TableTest {
     @Test
     public void tableBuilder_shouldConnectStructureCorrectly() {
         // We are spanning two columns in the first cell
-        CellBaseData lastCell = CellText.builder().text("").build();
+        AbstractCell lastCell = CellText.builder().text("").build();
 
         Table table = Table.builder()
                 .addColumnOfWidth(10)

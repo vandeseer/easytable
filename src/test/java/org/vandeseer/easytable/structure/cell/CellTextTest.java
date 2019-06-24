@@ -143,7 +143,7 @@ public class CellTextTest {
                 .add(originalCell1.toBuilder().borderWidthBottom(1F).build()) // add the border
                 .add(originalCell2.toBuilder().borderWidthBottom(1F).build()) // add the border
                 .build();
-        for(CellBaseData cell : row.getCells())
+        for(AbstractCell cell : row.getCells())
         {
         	assertEquals(1F,cell.getBorderWidthBottom(),0F); // test if border exists
         }
@@ -151,7 +151,7 @@ public class CellTextTest {
 
     @Test
     public void getHeight_shouldThrowExceptionIfTableNotYetBuilt() {
-        CellBaseData cell = CellText.builder().text("abc").paddingTop(35).paddingBottom(15).build();
+        AbstractCell cell = CellText.builder().text("abc").paddingTop(35).paddingBottom(15).build();
 
         exception.expect(TableNotYetBuiltException.class);
         cell.getHeight();

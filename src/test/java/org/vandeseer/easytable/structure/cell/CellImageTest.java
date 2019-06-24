@@ -20,7 +20,7 @@ public class CellImageTest {
         final byte[] bytes = IOUtils.toByteArray(getClass().getClassLoader().getResourceAsStream("pic1.jpg"));
         final PDImageXObject image = PDImageXObject.createFromByteArray(new PDDocument(), bytes, "test1");
 
-        CellBaseData cell = CellImage.builder().image(image).build();
+        AbstractCell cell = CellImage.builder().image(image).build();
 
         exception.expect(TableNotYetBuiltException.class);
         cell.getHeight();

@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
+import org.vandeseer.easytable.drawing.Drawable;
 import org.vandeseer.easytable.settings.HorizontalAlignment;
 import org.vandeseer.easytable.settings.Settings;
 import org.vandeseer.easytable.settings.VerticalAlignment;
@@ -16,7 +17,7 @@ import java.awt.*;
 
 @SuperBuilder(toBuilder = true)
 @Getter
-public abstract class CellBaseData {
+public abstract class AbstractCell implements Drawable {
 
     @Setter
     private Row row;
@@ -122,7 +123,7 @@ public abstract class CellBaseData {
     }
 
     // This is used for customizations of the Lombok generated (Super)Builder
-    public abstract static class CellBaseDataBuilder<C extends CellBaseData, B extends CellBaseData.CellBaseDataBuilder<C, B>> {
+    public abstract static class AbstractCellBuilder<C extends AbstractCell, B extends AbstractCell.AbstractCellBuilder<C, B>> {
 
         protected Settings settings = Settings.builder().build();
 

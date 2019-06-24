@@ -1,17 +1,18 @@
 package org.vandeseer.easytable.structure.cell;
 
-
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.experimental.SuperBuilder;
 import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
+import org.vandeseer.easytable.drawing.CellDrawer;
+import org.vandeseer.easytable.drawing.CellImageDrawer;
 
 import java.awt.geom.Point2D;
 
 @Getter
 @SuperBuilder(toBuilder = true)
-public class CellImage extends CellBaseData {
+public class CellImage extends AbstractCell {
 
     @NonNull
     private PDImageXObject image;
@@ -52,6 +53,11 @@ public class CellImage extends CellBaseData {
         sizes.y = scaledHeight;
 
         return sizes;
+    }
+
+    @Override
+    public CellDrawer getDrawer() {
+        return new CellImageDrawer(this);
     }
 
 }

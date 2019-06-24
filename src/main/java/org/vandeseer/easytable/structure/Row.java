@@ -8,7 +8,7 @@ import org.apache.pdfbox.pdmodel.font.PDFont;
 import org.vandeseer.easytable.settings.HorizontalAlignment;
 import org.vandeseer.easytable.settings.Settings;
 import org.vandeseer.easytable.settings.VerticalAlignment;
-import org.vandeseer.easytable.structure.cell.CellBaseData;
+import org.vandeseer.easytable.structure.cell.AbstractCell;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -23,7 +23,7 @@ public class Row {
 
     private Table table;
 
-    private List<CellBaseData> cells;
+    private List<AbstractCell> cells;
 
     @Setter(AccessLevel.NONE)
     private Settings settings;
@@ -33,7 +33,7 @@ public class Row {
     private Row next;
 
 
-    private Row(final List<CellBaseData> cells) {
+    private Row(final List<AbstractCell> cells) {
         super();
         this.cells = cells;
     }
@@ -49,7 +49,7 @@ public class Row {
 
         final float maxCellHeight = getCells().stream()
                 .filter(cell -> cell.getRowSpan() == 1)
-                .map(CellBaseData::getHeight)
+                .map(AbstractCell::getHeight)
                 .max(naturalOrder())
                 .orElseThrow(RuntimeException::new);
 
@@ -59,14 +59,14 @@ public class Row {
 
     public static class RowBuilder {
 
-        private List<CellBaseData> cells = new ArrayList<>();
+        private List<AbstractCell> cells = new ArrayList<>();
         private Settings settings = Settings.builder().build();
 
         private RowBuilder() {
 
         }
 
-        public RowBuilder add(final CellBaseData cell) {
+        public RowBuilder add(final AbstractCell cell) {
             cells.add(cell);
             return this;
         }

@@ -8,21 +8,16 @@ import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.font.PDFont;
-import org.vandeseer.easytable.settings.HorizontalAlignment;
-import org.vandeseer.easytable.settings.VerticalAlignment;
+import org.vandeseer.easytable.drawing.DrawingContext;
 import org.vandeseer.easytable.structure.Row;
 import org.vandeseer.easytable.structure.Table;
-import org.vandeseer.easytable.structure.cell.CellBaseData;
-import org.vandeseer.easytable.structure.cell.CellImage;
-import org.vandeseer.easytable.structure.cell.CellText;
+import org.vandeseer.easytable.structure.cell.AbstractCell;
 import org.vandeseer.easytable.util.PdfUtil;
 
 import java.awt.*;
 import java.awt.geom.Point2D;
 import java.io.IOException;
-import java.util.Collections;
 import java.util.Comparator;
-import java.util.List;
 import java.util.function.Supplier;
 
 @SuperBuilder(toBuilder = true)
@@ -88,7 +83,7 @@ public class TableDrawer {
 
             // First of all, we need to check whether we should draw any further ...
             final float lowestPoint = y - row.getCells().stream()
-                    .map(CellBaseData::getHeight)
+                    .map(AbstractCell::getHeight)
                     .max(Comparator.naturalOrder())
                     .orElse(row.getHeight());
 
@@ -102,7 +97,7 @@ public class TableDrawer {
             float x = startingPoint.x;
             y -= row.getHeight();
 
-            for (CellBaseData cell : row.getCells()) {
+            for (AbstractCell cell : row.getCells()) {
 
                 while (table.isRowSpanAt(i, columnCounter)) {
                     x += table.getColumns().get(columnCounter).getWidth();
@@ -110,7 +105,7 @@ public class TableDrawer {
                 }
 
                 // This is the interesting part :)
-                function.accept(new Point2D.Float(x, y), row, cell);
+                function.accept(new Point2D.Float(x, y), cell);
 
                 x += cell.getWidth();
                 columnCounter += cell.getColSpan();
@@ -122,27 +117,22 @@ public class TableDrawer {
         }
     }
 
-    protected void drawBackgroundColorAndCellContent(Point2D.Float start, Row row, CellBaseData cell) throws IOException {
+    protected void drawBackgroundColorAndCellContent(Point2D.Float start, AbstractCell cell) throws IOException {
 
-        final float rowHeight = row.getHeight();
+        final float rowHeight = cell.getRow().getHeight();
         final float height = cell.getHeight() > rowHeight ? cell.getHeight() : rowHeight;
         final float y = cell.getHeight() > rowHeight ? start.y + rowHeight - cell.getHeight() : start.y;
 
         // Handle the cell's background color
         if (cell.hasBackgroundColor()) {
-            drawCellBackground(cell, start.x, y, cell.getWidth(), height);
+            drawCellBackground(cell, new Point2D.Float(start.x, y), height);
         }
 
-        // Handle the cell's content
-        if (cell instanceof CellText) {
-            drawTextCell((CellText) cell, start.x, start.y);
-        } else if (cell instanceof CellImage) {
-            drawImageCell((CellImage) cell, start.x, start.y);
-        }
+        cell.getDrawer().draw(new DrawingContext(contentStream, start));
     }
 
-    protected void drawBorders(Point2D.Float start, Row row, CellBaseData cell) throws IOException {
-        final float rowHeight = row.getHeight();
+    protected void drawBorders(Point2D.Float start, AbstractCell cell) throws IOException {
+        final float rowHeight = cell.getRow().getHeight();
         final float cellWidth = cell.getWidth();
 
         final float height = cell.getHeight() > rowHeight ? cell.getHeight() : rowHeight;
@@ -150,7 +140,7 @@ public class TableDrawer {
 
         // Handle the cell's borders
         final Color cellBorderColor = cell.getBorderColor();
-        final Color rowBorderColor = row.getSettings().getBorderColor();
+        final Color rowBorderColor = cell.getRow().getSettings().getBorderColor();
 
         if (cell.hasBorderTop() || cell.hasBorderBottom()) {
             final float correctionLeft = cell.getBorderWidthLeft() / 2;
@@ -187,133 +177,6 @@ public class TableDrawer {
         }
     }
 
-    protected void drawTextCell(final CellText cell, final float moveX, float moveY) throws IOException {
-        final PDFont currentFont = cell.getFont();
-        final int currentFontSize = cell.getFontSize();
-        final Color currentTextColor = cell.getTextColor();
-
-        float maxWidth = cell.getWidthOfText();
-
-        final List<String> lines = cell.isWordBreak()
-                ? PdfUtil.getOptimalTextBreakLines(cell.getText(), currentFont, currentFontSize, maxWidth)
-                : Collections.singletonList(cell.getText());
-
-        // Vertical alignment
-        float yStartRelative = cell.getRow().getHeight() - cell.getPaddingTop(); // top position
-        if (cell.getRow().getHeight() > cell.getHeight() || cell.getRowSpan() > 1) {
-
-            if (cell.getSettings().getVerticalAlignment() == VerticalAlignment.MIDDLE) {
-
-                float outerHeight = cell.getRowSpan() > 1 ? cell.getHeight() : cell.getRow().getHeight();
-                yStartRelative = outerHeight / 2 + cell.getTextHeight() / 2;
-
-                if (cell.getRowSpan() > 1) {
-                    float rowSpanAdaption = cell.calculateHeightForRowSpan() - cell.getRow().getHeight();
-                    yStartRelative -= rowSpanAdaption;
-                }
-
-            } else if (cell.getSettings().getVerticalAlignment() == VerticalAlignment.BOTTOM) {
-
-                yStartRelative = cell.getTextHeight() + cell.getPaddingBottom();
-
-                if (cell.getRowSpan() > 1) {
-                    float rowSpanAdaption = cell.calculateHeightForRowSpan() - cell.getRow().getHeight();
-                    yStartRelative -= rowSpanAdaption;
-                }
-            }
-        }
-
-        float yOffset = moveY + yStartRelative;
-        for (int i = 0; i < lines.size(); i++) {
-            final String line = lines.get(i);
-
-            float xOffset = moveX + cell.getPaddingLeft();
-            yOffset -= (
-                    PdfUtil.getFontHeight(currentFont, currentFontSize) // font height
-                            + (i > 0 ? PdfUtil.getFontHeight(currentFont, currentFontSize) * cell.getLineSpacing() : 0f) // line spacing
-            );
-
-            final float textWidth = PdfUtil.getStringWidth(line, currentFont, currentFontSize);
-
-            // Handle horizontal alignment by adjusting the xOffset
-            if (cell.getSettings().getHorizontalAlignment() == HorizontalAlignment.RIGHT) {
-                xOffset = moveX + (cell.getWidth() - (textWidth + cell.getPaddingRight()));
-
-            } else if (cell.getSettings().getHorizontalAlignment() == HorizontalAlignment.CENTER) {
-                final float diff = (cell.getWidth() - textWidth) / 2;
-                xOffset = moveX + diff;
-
-            } else if (cell.getSettings().getHorizontalAlignment() == HorizontalAlignment.JUSTIFY) {
-
-                // Code from https://stackoverflow.com/questions/20680430/is-it-possible-to-justify-text-in-pdfbox
-                float charSpacing = 0;
-                if (line.length() > 1) {
-                    float size = PdfUtil.getStringWidth(line, cell.getFont(), cell.getFontSize());
-                    float free = cell.getWidthOfText() - size;
-                    if (free > 0) {
-                        charSpacing = free / (line.length() - 1);
-                    }
-                }
-
-                // Don't justify the last line
-                if (i < lines.size() -1) {
-
-                    // setCharacterSpacing() is available in PDFBox version 2.0.4 and higher.
-                    contentStream.setCharacterSpacing(charSpacing);
-                }
-            }
-
-            drawText(line, currentFont, currentFontSize, currentTextColor, xOffset, yOffset);
-        }
-    }
-
-    protected void drawImageCell(final CellImage cell, final float moveX, final float moveY) throws IOException {
-        final Point2D.Float size = cell.getFitSize();
-        final Point2D.Float drawAt = new Point2D.Float();
-
-        // TODO Refactor out vertical alignment for image and text cells? The logic is the same for both types ...
-        // Vertical alignment
-        float yStartRelative = cell.getRow().getHeight() - cell.getPaddingTop(); // top position
-        if (cell.getRow().getHeight() > cell.getHeight() || cell.getRowSpan() > 1) {
-
-            if (cell.getSettings().getVerticalAlignment() == VerticalAlignment.MIDDLE) {
-
-                float outerHeight = cell.getRowSpan() > 1 ? cell.getHeight() : cell.getRow().getHeight();
-                yStartRelative = outerHeight / 2 + size.y / 2;
-
-                if (cell.getRowSpan() > 1) {
-                    float rowSpanAdaption = cell.calculateHeightForRowSpan() - cell.getRow().getHeight();
-                    yStartRelative -= rowSpanAdaption;
-                }
-
-            } else if (cell.getSettings().getVerticalAlignment() == VerticalAlignment.BOTTOM) {
-
-                yStartRelative = size.y + cell.getPaddingBottom();
-
-                if (cell.getRowSpan() > 1) {
-                    float rowSpanAdaption = cell.calculateHeightForRowSpan() - cell.getRow().getHeight();
-                    yStartRelative -= rowSpanAdaption;
-                }
-            }
-        }
-
-        // Handle horizontal alignment by adjusting the xOffset
-        float xOffset = moveX + cell.getPaddingLeft();
-        if (cell.getSettings().getHorizontalAlignment() == HorizontalAlignment.RIGHT) {
-            xOffset = moveX + (cell.getWidth() - (size.x + cell.getPaddingRight()));
-
-        } else if (cell.getSettings().getHorizontalAlignment() == HorizontalAlignment.CENTER) {
-            final float diff = (cell.getWidth() - size.x) / 2;
-            xOffset = moveX + diff;
-
-        }
-
-        drawAt.x = xOffset;
-        drawAt.y = moveY + yStartRelative - size.y;
-
-        contentStream.drawImage(cell.getImage(), drawAt.x, drawAt.y, size.x, size.y);
-    }
-
     protected void drawLine(Color color, float width, float toX, float toY) throws IOException {
         contentStream.setLineWidth(width);
         contentStream.lineTo(toX, toY);
@@ -321,11 +184,11 @@ public class TableDrawer {
         contentStream.stroke();
     }
 
-    protected void drawCellBackground(final CellBaseData cell, final float startX, final float startY, final float width, final float height)
+    protected void drawCellBackground(final AbstractCell cell, Point2D.Float start, final float height)
             throws IOException {
         contentStream.setNonStrokingColor(cell.getBackgroundColor());
 
-        contentStream.addRect(startX, startY, width, height);
+        contentStream.addRect(start.x, start.y, cell.getWidth(), height);
         contentStream.fill();
         contentStream.closePath();
 
@@ -333,7 +196,9 @@ public class TableDrawer {
         contentStream.setNonStrokingColor(Color.BLACK);
     }
 
-    protected void drawText(String text, PDFont font, int fontSize, Color color, float x, float y) throws IOException {
+    // TODO Muss wieder erweiterbar bzw vererbar sein!
+    public static void drawText(String text, PDFont font, int fontSize, Color color, float x, float y, PDPageContentStream contentStream)
+            throws IOException {
         contentStream.beginText();
         contentStream.setNonStrokingColor(color);
         contentStream.setFont(font, fontSize);
