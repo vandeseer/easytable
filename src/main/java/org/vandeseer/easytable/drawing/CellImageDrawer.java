@@ -8,7 +8,7 @@ import org.vandeseer.easytable.structure.cell.CellImage;
 import java.awt.geom.Point2D;
 import java.io.IOException;
 
-public class CellImageDrawer implements CellDrawer {
+public class CellImageDrawer implements Drawer {
 
     private final CellImage cell;
 

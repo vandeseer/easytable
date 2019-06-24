@@ -1,7 +1,7 @@
 package org.vandeseer.easytable.drawing;
 
+import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.font.PDFont;
-import org.vandeseer.easytable.TableDrawer;
 import org.vandeseer.easytable.settings.HorizontalAlignment;
 import org.vandeseer.easytable.settings.VerticalAlignment;
 import org.vandeseer.easytable.structure.cell.CellText;
@@ -12,7 +12,7 @@ import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
 
-public class CellTextDrawer implements CellDrawer {
+public class CellTextDrawer implements Drawer {
 
     private final CellText cell;
 
@@ -99,8 +99,12 @@ public class CellTextDrawer implements CellDrawer {
                 }
             }
 
-            TableDrawer.drawText(line, currentFont, currentFontSize, currentTextColor, xOffset, yOffset, drawingContext.getContentStream());
+            drawText(line, currentFont, currentFontSize, currentTextColor, xOffset, yOffset, drawingContext.getContentStream());
         }
+    }
+
+    protected void drawText(String text, PDFont font, int fontSize, Color color, float x, float y, PDPageContentStream contentStream) throws IOException {
+        DrawingUtil.drawText(text, font, fontSize, color, x, y, contentStream);
     }
 
 }

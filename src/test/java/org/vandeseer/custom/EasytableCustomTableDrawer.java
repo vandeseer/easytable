@@ -7,6 +7,8 @@ import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.common.PDRectangle;
 import org.apache.pdfbox.pdmodel.font.PDFont;
 import org.vandeseer.easytable.TableDrawer;
+import org.vandeseer.easytable.drawing.CellTextDrawer;
+import org.vandeseer.easytable.drawing.Drawer;
 import org.vandeseer.easytable.structure.Row;
 import org.vandeseer.easytable.structure.Table;
 import org.vandeseer.easytable.structure.cell.CellText;
@@ -19,19 +21,19 @@ import static org.apache.pdfbox.pdmodel.font.PDType1Font.HELVETICA;
 public class EasytableCustomTableDrawer {
 
     @SuperBuilder
-    private static class CustomTableDrawer extends TableDrawer {
+    private static class MyCustomCell extends CellText {
 
-        CustomTableDrawer(float startX, float startY, PDPageContentStream contentStream, Table table, float endY) {
-            super(startX, startY, contentStream, table, endY);
+        @Override
+        public Drawer getDrawer() {
+            return new CellTextDrawer(this) {
+                @Override
+                protected void drawText(String text, PDFont font, int fontSize, Color color, float x, float y, PDPageContentStream contentStream)
+                        throws IOException {
+                    System.out.println("My custom drawer is called :-)");
+                    super.drawText(text.toUpperCase(), font, fontSize, color, x, y, contentStream);
+                }
+            };
         }
-
-        // TODO!!
-
-//        @Override
-//        protected void drawText(String text, PDFont font, int fontSize, Color color, float x, float y) throws IOException {
-//            System.out.println("My custom table drawer is called :-)");
-//            super.drawText(text.toUpperCase(), font, fontSize, color, x, y, super.contentStream);
-//        }
 
     }
 
@@ -42,7 +44,7 @@ public class EasytableCustomTableDrawer {
 
         try (final PDPageContentStream contentStream = new PDPageContentStream(document, page)) {
 
-            CustomTableDrawer.builder()
+            TableDrawer.builder()
                     .contentStream(contentStream)
                     .table(createSimpleTable())
                     .startX(50)
@@ -63,10 +65,10 @@ public class EasytableCustomTableDrawer {
                 .font(HELVETICA);
 
         tableBuilder.addRow(Row.builder()
-                .add(CellText.builder().borderWidth(1).text("One").build())
-                .add(CellText.builder().borderWidth(1).text("Two").build())
-                .add(CellText.builder().borderWidth(1).text("Three").build())
-                .add(CellText.builder().borderWidth(1).text("Four").build())
+                .add(MyCustomCell.builder().borderWidth(1).text("One").build())
+                .add(MyCustomCell.builder().borderWidth(1).text("Two").build())
+                .add(MyCustomCell.builder().borderWidth(1).text("Three").build())
+                .add(MyCustomCell.builder().borderWidth(1).text("Four").build())
                 .build());
 
         return tableBuilder.build();

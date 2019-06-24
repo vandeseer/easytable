@@ -7,7 +7,6 @@ import lombok.experimental.SuperBuilder;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
-import org.apache.pdfbox.pdmodel.font.PDFont;
 import org.vandeseer.easytable.drawing.DrawingContext;
 import org.vandeseer.easytable.structure.Row;
 import org.vandeseer.easytable.structure.Table;

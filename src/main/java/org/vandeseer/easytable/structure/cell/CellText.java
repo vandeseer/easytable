@@ -5,7 +5,7 @@ import lombok.Getter;
 import lombok.NonNull;
 import lombok.experimental.SuperBuilder;
 import org.apache.pdfbox.pdmodel.font.PDFont;
-import org.vandeseer.easytable.drawing.CellDrawer;
+import org.vandeseer.easytable.drawing.Drawer;
 import org.vandeseer.easytable.drawing.CellTextDrawer;
 import org.vandeseer.easytable.structure.Column;
 import org.vandeseer.easytable.util.PdfUtil;
@@ -102,7 +102,7 @@ public class CellText extends AbstractCell {
     }
 
     @Override
-    public CellDrawer getDrawer() {
+    public Drawer getDrawer() {
         return new CellTextDrawer(this);
     }
 

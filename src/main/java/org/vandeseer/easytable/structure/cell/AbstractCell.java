@@ -5,7 +5,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
-import org.vandeseer.easytable.drawing.Drawable;
+import org.vandeseer.easytable.drawing.Drawer;
 import org.vandeseer.easytable.settings.HorizontalAlignment;
 import org.vandeseer.easytable.settings.Settings;
 import org.vandeseer.easytable.settings.VerticalAlignment;
@@ -17,7 +17,7 @@ import java.awt.*;
 
 @SuperBuilder(toBuilder = true)
 @Getter
-public abstract class AbstractCell implements Drawable {
+public abstract class AbstractCell {
 
     @Setter
     private Row row;
@@ -103,6 +103,8 @@ public abstract class AbstractCell implements Drawable {
     }
 
     public abstract float getHeight();
+
+    public abstract Drawer getDrawer();
 
     public float calculateHeightForRowSpan() {
         Row currentRow = row;

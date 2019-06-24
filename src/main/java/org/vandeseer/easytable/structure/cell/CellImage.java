@@ -5,7 +5,7 @@ import lombok.Getter;
 import lombok.NonNull;
 import lombok.experimental.SuperBuilder;
 import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
-import org.vandeseer.easytable.drawing.CellDrawer;
+import org.vandeseer.easytable.drawing.Drawer;
 import org.vandeseer.easytable.drawing.CellImageDrawer;
 
 import java.awt.geom.Point2D;
@@ -56,7 +56,7 @@ public class CellImage extends AbstractCell {
     }
 
     @Override
-    public CellDrawer getDrawer() {
+    public Drawer getDrawer() {
         return new CellImageDrawer(this);
     }
 
