@@ -5,8 +5,8 @@ import lombok.Getter;
 import lombok.NonNull;
 import lombok.experimental.SuperBuilder;
 import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
-import org.vandeseer.easytable.drawing.Drawer;
 import org.vandeseer.easytable.drawing.CellImageDrawer;
+import org.vandeseer.easytable.drawing.Drawer;
 
 import java.awt.geom.Point2D;
 
@@ -32,6 +32,11 @@ public class CellImage extends AbstractCell {
                 : getFitSize().y + getVerticalPadding();
     }
 
+    @Override
+    protected Drawer createDefaultDrawer() {
+        return new CellImageDrawer(this);
+    }
+
     public Point2D.Float getFitSize() {
         final Point2D.Float sizes = new Point2D.Float();
         float scaledWidth = image.getWidth() * getScale();
@@ -53,11 +58,6 @@ public class CellImage extends AbstractCell {
         sizes.y = scaledHeight;
 
         return sizes;
-    }
-
-    @Override
-    public Drawer getDrawer() {
-        return new CellImageDrawer(this);
     }
 
 }

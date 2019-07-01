@@ -5,8 +5,8 @@ import lombok.Getter;
 import lombok.NonNull;
 import lombok.experimental.SuperBuilder;
 import org.apache.pdfbox.pdmodel.font.PDFont;
-import org.vandeseer.easytable.drawing.Drawer;
 import org.vandeseer.easytable.drawing.CellTextDrawer;
+import org.vandeseer.easytable.drawing.Drawer;
 import org.vandeseer.easytable.structure.Column;
 import org.vandeseer.easytable.util.PdfUtil;
 
@@ -42,6 +42,10 @@ public class CellText extends AbstractCell {
 
     //endregion
 
+    @Override
+    protected Drawer createDefaultDrawer() {
+        return new CellTextDrawer(this);
+    }
 
     @Override
     public float getHeight() {
@@ -99,11 +103,6 @@ public class CellText extends AbstractCell {
             return notBrokenTextWidth;
         }
 
-    }
-
-    @Override
-    public Drawer getDrawer() {
-        return new CellTextDrawer(this);
     }
 
     public abstract static class CellTextBuilder<C extends CellText, B extends CellText.CellTextBuilder<C, B>> extends AbstractCellBuilder<C, B> {

@@ -65,9 +65,10 @@ improvements
 
 ### Can I customize the `TableDrawer` for my own specific needs?
 
-Yep, have a look at those two classes: 
-- (Using [Lombok](https://projectlombok.org/)): [EasytableCustomTableDrawer](src/test/java/org/vandeseer/custom/EasytableCustomTableDrawer.java)
-- (Not using [Lombok](https://projectlombok.org/)): [EasytableNoLombokCustomTableDrawer](src/test/java/org/vandeseer/custom/EasytableNoLombokCustomTableDrawer.java)
+Yep, you can customize the `TableDrawer` itself or (depending on your use case)
+you can just create a custom cell. To get an idea, have a look at those two classes: 
+- Using [Lombok](https://projectlombok.org/): [EasytableCustomCellDrawer](src/test/java/org/vandeseer/custom/EasytableCustomCellDrawer.java)
+- Not using [Lombok](https://projectlombok.org/): [EasytableNoLombokCustomCellDrawer](src/test/java/org/vandeseer/custom/EasytableNoLombokCustomCellDrawer.java)
 
 ### Does it work with Java < 8?
 

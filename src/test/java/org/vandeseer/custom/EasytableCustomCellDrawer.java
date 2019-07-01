@@ -18,7 +18,7 @@ import java.io.IOException;
 
 import static org.apache.pdfbox.pdmodel.font.PDType1Font.HELVETICA;
 
-public class EasytableCustomTableDrawer {
+public class EasytableCustomCellDrawer {
 
     @SuperBuilder
     private static class MyCustomCell extends CellText {
@@ -54,7 +54,7 @@ public class EasytableCustomTableDrawer {
 
         }
 
-        document.save("target/customTableDrawer.pdf");
+        document.save("target/customCellDrawer.pdf");
         document.close();
     }
 

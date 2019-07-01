@@ -62,6 +62,9 @@ public abstract class AbstractCell {
     @Builder.Default
     private float borderWidthBottom = 0;
 
+    @Setter
+    protected Drawer drawer;
+
     public float getHorizontalPadding() {
         return getPaddingLeft() + getPaddingRight();
     }
@@ -104,7 +107,16 @@ public abstract class AbstractCell {
 
     public abstract float getHeight();
 
-    public abstract Drawer getDrawer();
+    public Drawer getDrawer() {
+        if (this.drawer != null) {
+            this.drawer.setCell(this);
+            return this.drawer;
+        }
+
+        return createDefaultDrawer();
+    }
+
+    protected abstract Drawer createDefaultDrawer();
 
     public float calculateHeightForRowSpan() {
         Row currentRow = row;
@@ -130,11 +142,17 @@ public abstract class AbstractCell {
         protected Settings settings = Settings.builder().build();
 
         public B borderWidth(final float borderWidth) {
-            return this.borderWidthTop(borderWidth).borderWidthBottom(borderWidth).borderWidthLeft(borderWidth).borderWidthRight(borderWidth);
+            return this.borderWidthTop(borderWidth)
+                    .borderWidthBottom(borderWidth)
+                    .borderWidthLeft(borderWidth)
+                    .borderWidthRight(borderWidth);
         }
 
         public B padding(final float padding) {
-            return this.paddingTop(padding).paddingBottom(padding).paddingLeft(padding).paddingRight(padding);
+            return this.paddingTop(padding)
+                    .paddingBottom(padding)
+                    .paddingLeft(padding)
+                    .paddingRight(padding);
         }
 
         public B horizontalAlignment(final HorizontalAlignment alignment) {

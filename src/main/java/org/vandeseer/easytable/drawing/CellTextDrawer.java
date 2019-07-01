@@ -4,6 +4,7 @@ import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.font.PDFont;
 import org.vandeseer.easytable.settings.HorizontalAlignment;
 import org.vandeseer.easytable.settings.VerticalAlignment;
+import org.vandeseer.easytable.structure.cell.AbstractCell;
 import org.vandeseer.easytable.structure.cell.CellText;
 import org.vandeseer.easytable.util.PdfUtil;
 
@@ -14,10 +15,18 @@ import java.util.List;
 
 public class CellTextDrawer implements Drawer {
 
-    private final CellText cell;
+    private CellText cell;
+
+    public CellTextDrawer() {
+    }
 
     public CellTextDrawer(CellText cell) {
         this.cell = cell;
+    }
+
+    @Override
+    public void setCell(AbstractCell cell) {
+        this.cell = (CellText) cell;
     }
 
     public void draw(DrawingContext drawingContext) throws IOException {
