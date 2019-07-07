@@ -19,12 +19,12 @@ import java.util.List;
 public class CellText extends AbstractCell {
 
     @NonNull
-    private String text;
+    protected String text;
 
-    private Color textColor;
+    protected Color textColor;
 
     @Builder.Default
-    private float lineSpacing = 1f;
+    protected float lineSpacing = 1f;
 
     //region Custom Getter
 
@@ -80,18 +80,7 @@ public class CellText extends AbstractCell {
 
         if (settings.isWordBreak()) {
 
-            float columnsWidth = getColumn().getWidth();
-
-            // We have to take column spanning into account
-            if (getColSpan() > 1) {
-                Column currentColumn = getColumn();
-                for (int i = 1; i < getColSpan(); i++) {
-                    columnsWidth += currentColumn.getNext().getWidth();
-                    currentColumn = currentColumn.getNext();
-                }
-            }
-
-            final float maxWidth = columnsWidth - getHorizontalPadding();
+            final float maxWidth = getMaxWidthOfText() - getHorizontalPadding();
             List<String> textLines = PdfUtil.getOptimalTextBreakLines(text, getFont(), getFontSize(), maxWidth);
 
             return textLines.stream()
@@ -103,6 +92,20 @@ public class CellText extends AbstractCell {
             return notBrokenTextWidth;
         }
 
+    }
+
+    private float getMaxWidthOfText() {
+        float columnsWidth = getColumn().getWidth();
+
+        // We have to take column spanning into account
+        if (getColSpan() > 1) {
+            Column currentColumn = getColumn();
+            for (int i = 1; i < getColSpan(); i++) {
+                columnsWidth += currentColumn.getNext().getWidth();
+                currentColumn = currentColumn.getNext();
+            }
+        }
+        return columnsWidth;
     }
 
     public abstract static class CellTextBuilder<C extends CellText, B extends CellText.CellTextBuilder<C, B>> extends AbstractCellBuilder<C, B> {

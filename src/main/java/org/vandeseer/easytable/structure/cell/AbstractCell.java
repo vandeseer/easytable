@@ -130,7 +130,7 @@ public abstract class AbstractCell {
         return result;
     }
 
-    void assertIsRendered() {
+    protected void assertIsRendered() {
         if (column == null || row == null) {
             throw new TableNotYetBuiltException();
         }

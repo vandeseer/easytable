@@ -39,10 +39,6 @@ public class CellTextDrawer implements Drawer {
 
         float maxWidth = cell.getWidthOfText();
 
-        final List<String> lines = cell.isWordBreak()
-                ? PdfUtil.getOptimalTextBreakLines(cell.getText(), currentFont, currentFontSize, maxWidth)
-                : Collections.singletonList(cell.getText());
-
         // Vertical alignment
         float yStartRelative = cell.getRow().getHeight() - cell.getPaddingTop(); // top position
         if (cell.getRow().getHeight() > cell.getHeight() || cell.getRowSpan() > 1) {
@@ -69,6 +65,11 @@ public class CellTextDrawer implements Drawer {
         }
 
         float yOffset = startY + yStartRelative;
+
+        final List<String> lines = cell.isWordBreak()
+                ? PdfUtil.getOptimalTextBreakLines(cell.getText(), currentFont, currentFontSize, maxWidth)
+                : Collections.singletonList(cell.getText());
+
         for (int i = 0; i < lines.size(); i++) {
             final String line = lines.get(i);
 
