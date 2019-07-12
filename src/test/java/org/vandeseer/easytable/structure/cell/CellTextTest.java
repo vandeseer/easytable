@@ -139,12 +139,13 @@ public class CellTextTest {
     	// Create two cells without border
     	CellText originalCell1 = CellText.builder().text("11").paddingTop(35).paddingBottom(15).build();
         CellText originalCell2 = CellText.builder().text("12").paddingTop(15).paddingBottom(25).build();
+
         final Row row = Row.builder()
                 .add(originalCell1.toBuilder().borderWidthBottom(1F).build()) // add the border
                 .add(originalCell2.toBuilder().borderWidthBottom(1F).build()) // add the border
                 .build();
-        for(AbstractCell cell : row.getCells())
-        {
+
+        for(AbstractCell cell : row.getCells()) {
         	assertEquals(1F,cell.getBorderWidthBottom(),0F); // test if border exists
         }
     }

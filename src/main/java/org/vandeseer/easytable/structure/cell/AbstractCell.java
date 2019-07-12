@@ -15,8 +15,8 @@ import org.vandeseer.easytable.structure.TableNotYetBuiltException;
 
 import java.awt.*;
 
-@SuperBuilder(toBuilder = true)
 @Getter
+@SuperBuilder(toBuilder = true)
 public abstract class AbstractCell {
 
     @Setter

@@ -29,6 +29,7 @@ public class CellTextDrawer implements Drawer {
         this.cell = (CellText) cell;
     }
 
+    @Override
     public void draw(DrawingContext drawingContext) throws IOException {
         final float startX = drawingContext.getStartingPoint().x;
         final float startY = drawingContext.getStartingPoint().y;
