@@ -3,7 +3,7 @@ package org.vandeseer.easytable.structure;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
-import org.vandeseer.easytable.structure.cell.CellText;
+import org.vandeseer.easytable.structure.cell.TextCell;
 
 import static org.apache.pdfbox.pdmodel.font.PDType1Font.COURIER_BOLD;
 import static org.apache.pdfbox.pdmodel.font.PDType1Font.HELVETICA;
@@ -19,8 +19,8 @@ public class RowTest {
     @Test
     public void getHeightShouldThrowExceptionIfNotYetRendered() {
         final Row row = Row.builder()
-                .add(CellText.builder().text("This text should break because too long").colSpan(2).borderWidth(1).build())
-                .add(CellText.builder().text("Booz").build())
+                .add(TextCell.builder().text("This text should break because too long").colSpan(2).borderWidth(1).build())
+                .add(TextCell.builder().text("Booz").build())
                 .wordBreak(true)
                 .font(COURIER_BOLD).fontSize(8)
                 .build();
@@ -38,8 +38,8 @@ public class RowTest {
                 .wordBreak(false);
 
         final Row row = Row.builder()
-                .add(CellText.builder().text("iVgebALheQlBkxtDyNDrhKv").colSpan(2).borderWidth(1).build())
-                .add(CellText.builder().text("Booz").build())
+                .add(TextCell.builder().text("iVgebALheQlBkxtDyNDrhKv").colSpan(2).borderWidth(1).build())
+                .add(TextCell.builder().text("Booz").build())
                 .font(COURIER_BOLD).fontSize(8)
                 .build();
 

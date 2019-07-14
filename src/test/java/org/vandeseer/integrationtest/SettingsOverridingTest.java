@@ -4,7 +4,7 @@ import org.junit.Test;
 import org.vandeseer.TestUtils;
 import org.vandeseer.easytable.structure.Row;
 import org.vandeseer.easytable.structure.Table;
-import org.vandeseer.easytable.structure.cell.CellText;
+import org.vandeseer.easytable.structure.cell.TextCell;
 
 import java.awt.*;
 
@@ -32,31 +32,31 @@ public class SettingsOverridingTest {
 
         tableBuilder.addRow(
                 Row.builder()
-                        .add(CellText.builder().text("FCmjGVylqCjoxxfFWhehSrm").colSpan(2).borderWidth(1).build())
-                        .add(CellText.builder().text("Booz").build())
+                        .add(TextCell.builder().text("FCmjGVylqCjoxxfFWhehSrm").colSpan(2).borderWidth(1).build())
+                        .add(TextCell.builder().text("Booz").build())
                         .font(COURIER_BOLD).fontSize(8)
                         .build());
 
         tableBuilder.addRow(
                 Row.builder()
-                        .add(CellText.builder().text("Pur").backgroundColor(Color.YELLOW).build())
-                        .add(CellText.builder().text("Booz").build())
-                        .add(CellText.builder().text("baz").build())
+                        .add(TextCell.builder().text("Pur").backgroundColor(Color.YELLOW).build())
+                        .add(TextCell.builder().text("Booz").build())
+                        .add(TextCell.builder().text("baz").build())
                         .font(COURIER_BOLD).fontSize(8).build());
 
         tableBuilder.addRow(
                 Row.builder()
-                        .add(CellText.builder().text("Pur").borderWidthRight(1).borderWidthBottom(1).backgroundColor(Color.YELLOW).build())
-                        .add(CellText.builder().text("Booz").borderWidthTop(1).borderWidthLeft(1).build())
-                        .add(CellText.builder().text("baz").borderWidthBottom(1).build())
+                        .add(TextCell.builder().text("Pur").borderWidthRight(1).borderWidthBottom(1).backgroundColor(Color.YELLOW).build())
+                        .add(TextCell.builder().text("Booz").borderWidthTop(1).borderWidthLeft(1).build())
+                        .add(TextCell.builder().text("baz").borderWidthBottom(1).build())
                         .borderColor(Color.GREEN)
                         .font(COURIER_BOLD).fontSize(8).build());
 
         tableBuilder.addRow(
                 Row.builder()
-                        .add(CellText.builder().text("Pur").backgroundColor(Color.YELLOW).borderWidth(1).build())
-                        .add(CellText.builder().text("Booz").build())
-                        .add(CellText.builder().text("baz").borderColor(Color.CYAN).borderWidthBottom(1).font(HELVETICA_OBLIQUE).fontSize(5).build())
+                        .add(TextCell.builder().text("Pur").backgroundColor(Color.YELLOW).borderWidth(1).build())
+                        .add(TextCell.builder().text("Booz").build())
+                        .add(TextCell.builder().text("baz").borderColor(Color.CYAN).borderWidthBottom(1).font(HELVETICA_OBLIQUE).fontSize(5).build())
                         .build());
 
         return tableBuilder.build();
@@ -72,24 +72,24 @@ public class SettingsOverridingTest {
 
         tableBuilder.addRow(
                 Row.builder()
-                        .add(CellText.builder().text("OWpTlEgQPoSmoyjdNcQdVbc").colSpan(2).borderWidth(1).build())
-                        .add(CellText.builder().text("Booz").borderWidth(1).build())
+                        .add(TextCell.builder().text("OWpTlEgQPoSmoyjdNcQdVbc").colSpan(2).borderWidth(1).build())
+                        .add(TextCell.builder().text("Booz").borderWidth(1).build())
                         .build());
 
         tableBuilder.addRow(
                 Row.builder()
-                        .add(CellText.builder().text("Pur").borderWidth(1).build())
-                        .add(CellText.builder().text("Booz").borderWidth(1).build())
-                        .add(CellText.builder().text("baz").borderWidth(1).build())
+                        .add(TextCell.builder().text("Pur").borderWidth(1).build())
+                        .add(TextCell.builder().text("Booz").borderWidth(1).build())
+                        .add(TextCell.builder().text("baz").borderWidth(1).build())
                         .backgroundColor(Color.YELLOW)
                         .textColor(Color.BLACK)
                         .build());
 
         tableBuilder.addRow(
                 Row.builder()
-                        .add(CellText.builder().text("Pur").borderWidth(1).backgroundColor(Color.ORANGE).build())
-                        .add(CellText.builder().text("Booz").borderWidth(1).build())
-                        .add(CellText.builder().text("baz").borderWidth(1).textColor(Color.PINK).build())
+                        .add(TextCell.builder().text("Pur").borderWidth(1).backgroundColor(Color.ORANGE).build())
+                        .add(TextCell.builder().text("Booz").borderWidth(1).build())
+                        .add(TextCell.builder().text("baz").borderWidth(1).textColor(Color.PINK).build())
                         .build());
 
         return tableBuilder.build();
@@ -102,24 +102,24 @@ public class SettingsOverridingTest {
 
         tableBuilder.addRow(
                 Row.builder()
-                        .add(CellText.builder().text("This is long and should therefore break. This is long and should therefore break. This is long and should therefore break.")
+                        .add(TextCell.builder().text("This is long and should therefore break. This is long and should therefore break. This is long and should therefore break.")
                                 .colSpan(2).borderWidth(1).wordBreak(true).build())
-                        .add(CellText.builder().text("This, too, is too long for not breaking.").borderWidth(1).build())
+                        .add(TextCell.builder().text("This, too, is too long for not breaking.").borderWidth(1).build())
                         .wordBreak(false)
                         .build());
 
         tableBuilder.addRow(
                 Row.builder()
-                        .add(CellText.builder().text("This should break, because the row uses overriding.").borderWidth(1).build())
-                        .add(CellText.builder().text("This uses the overriding and should hence not break!").borderWidth(1).wordBreak(false).build())
-                        .add(CellText.builder().text("This should break, because the row uses overriding.").borderWidth(1).build())
+                        .add(TextCell.builder().text("This should break, because the row uses overriding.").borderWidth(1).build())
+                        .add(TextCell.builder().text("This uses the overriding and should hence not break!").borderWidth(1).wordBreak(false).build())
+                        .add(TextCell.builder().text("This should break, because the row uses overriding.").borderWidth(1).build())
                         .build());
 
         tableBuilder.addRow(
                 Row.builder()
-                        .add(CellText.builder().text("This should break, because the table uses overriding.").borderWidth(1).build())
-                        .add(CellText.builder().text("This should break, because the table uses overriding.").borderWidth(1).build())
-                        .add(CellText.builder().text("This should break, because the table uses overriding.").borderWidth(1).build())
+                        .add(TextCell.builder().text("This should break, because the table uses overriding.").borderWidth(1).build())
+                        .add(TextCell.builder().text("This should break, because the table uses overriding.").borderWidth(1).build())
+                        .add(TextCell.builder().text("This should break, because the table uses overriding.").borderWidth(1).build())
                         .build());
 
         return tableBuilder.build();

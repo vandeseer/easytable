@@ -8,8 +8,8 @@ import org.vandeseer.easytable.settings.HorizontalAlignment;
 import org.vandeseer.easytable.settings.VerticalAlignment;
 import org.vandeseer.easytable.structure.Row;
 import org.vandeseer.easytable.structure.Table;
-import org.vandeseer.easytable.structure.cell.CellImage;
-import org.vandeseer.easytable.structure.cell.CellText;
+import org.vandeseer.easytable.structure.cell.ImageCell;
+import org.vandeseer.easytable.structure.cell.TextCell;
 
 import java.io.IOException;
 
@@ -42,22 +42,22 @@ public class ImageCellAlignmentTest {
                 .wordBreak(true);
 
         Row.RowBuilder rowBuilder = Row.builder()
-                .add(CellText.builder()
+                .add(TextCell.builder()
                         .borderWidth(1)
                         .padding(4)
                         .text("Cell 1")
                         .build())
-                .add(CellText.builder()
+                .add(TextCell.builder()
                         .borderWidth(1)
                         .padding(4)
                         .text("Cell 2")
                         .build())
-                .add(CellText.builder()
+                .add(TextCell.builder()
                         .borderWidth(1)
                         .padding(4)
                         .text("Cell 3")
                         .build())
-                .add(CellText.builder()
+                .add(TextCell.builder()
                         .colSpan(4)
                         .borderWidth(1)
                         .padding(4)
@@ -65,12 +65,12 @@ public class ImageCellAlignmentTest {
                         .text("Cell 4\nMore text\nEven more text\nEven more text\n" +
                                 "Even more text\nEven more text\nEven more text")
                         .build())
-                .add(CellText.builder()
+                .add(TextCell.builder()
                         .borderWidth(1)
                         .padding(4)
                         .text(verticalAlignment.toString() + ", " + horizontalAlignment.toString())
                         .build())
-                .add(CellImage.builder()
+                .add(ImageCell.builder()
                         .verticalAlignment(verticalAlignment)
                         .horizontalAlignment(horizontalAlignment)
                         .borderWidth(1)

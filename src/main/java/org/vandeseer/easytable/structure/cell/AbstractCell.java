@@ -19,6 +19,8 @@ import java.awt.*;
 @SuperBuilder(toBuilder = true)
 public abstract class AbstractCell {
 
+    public static final float DEFAULT_MIN_HEIGHT = 10f;
+
     @Setter
     private Row row;
 
@@ -61,6 +63,9 @@ public abstract class AbstractCell {
 
     @Builder.Default
     private float borderWidthBottom = 0;
+
+    @Builder.Default
+    private float minHeight = DEFAULT_MIN_HEIGHT;
 
     @Setter
     protected Drawer drawer;
@@ -105,7 +110,13 @@ public abstract class AbstractCell {
         return  settings.isWordBreak();
     }
 
-    public abstract float getHeight();
+    public float getHeight() {
+        assertIsRendered();
+
+        return getRowSpan() > 1
+                ? calculateHeightForRowSpan()
+                : getMinHeight();
+    }
 
     public Drawer getDrawer() {
         if (this.drawer != null) {

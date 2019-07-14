@@ -8,11 +8,12 @@ import org.junit.Test;
 import org.vandeseer.easytable.TableDrawer;
 import org.vandeseer.easytable.structure.Row;
 import org.vandeseer.easytable.structure.Table;
-import org.vandeseer.easytable.structure.cell.CellVerticalText;
+import org.vandeseer.easytable.structure.cell.TextCell;
 
 import java.io.IOException;
 
 import static org.apache.pdfbox.pdmodel.font.PDType1Font.HELVETICA;
+import static org.vandeseer.easytable.settings.Orientation.VERTICAL;
 
 public class VerticalTextCellTest {
 
@@ -46,16 +47,15 @@ public class VerticalTextCellTest {
 
         tableBuilder
             .addRow(Row.builder()
-                .add(CellVerticalText.builder().minHeight(30).borderWidth(1).text("This is a super long text that does not fit in one line").build())
-                .add(CellVerticalText.builder().minHeight(30).borderWidth(1).text("Two").build())
-                .add(CellVerticalText.builder().minHeight(50).borderWidth(1).text("Three").build())
-                .add(CellVerticalText.builder().minHeight(30).borderWidth(1).text("Four").build())
+                .add(TextCell.builder().minHeight(80f).textOrientation(VERTICAL).borderWidth(1).text("This is a super long text that does not fit in one line").build())
+                .add(TextCell.builder().textOrientation(VERTICAL).borderWidth(1).text("Two").build())
+                .add(TextCell.builder().rowSpan(2).textOrientation(VERTICAL).borderWidth(1).text("This is again a very long text that will break at one point :)").build())
+                .add(TextCell.builder().textOrientation(VERTICAL).borderWidth(1).text("Four").build())
                 .build())
             .addRow(Row.builder()
-                .add(CellVerticalText.builder().borderWidth(1).text("One 1\nFubarbar").build())
-                .add(CellVerticalText.builder().borderWidth(1).text("Two").build())
-                .add(CellVerticalText.builder().borderWidth(1).text("Three").build())
-                .add(CellVerticalText.builder().borderWidth(1).text("Four").build())
+                .add(TextCell.builder().borderWidth(1).text("One 1\nFubarbar").build())
+                .add(TextCell.builder().borderWidth(1).text("Abc").build())
+                .add(TextCell.builder().borderWidth(1).text("Four").build())
                 .build());
 
         return tableBuilder.build();

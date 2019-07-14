@@ -10,7 +10,7 @@ import org.vandeseer.easytable.structure.TableNotYetBuiltException;
 
 import java.io.IOException;
 
-public class CellImageTest {
+public class ImageCellTest {
 
     @Rule
     public final ExpectedException exception = ExpectedException.none();
@@ -20,7 +20,7 @@ public class CellImageTest {
         final byte[] bytes = IOUtils.toByteArray(getClass().getClassLoader().getResourceAsStream("pic1.jpg"));
         final PDImageXObject image = PDImageXObject.createFromByteArray(new PDDocument(), bytes, "test1");
 
-        AbstractCell cell = CellImage.builder().image(image).build();
+        AbstractCell cell = ImageCell.builder().image(image).build();
 
         exception.expect(TableNotYetBuiltException.class);
         cell.getHeight();

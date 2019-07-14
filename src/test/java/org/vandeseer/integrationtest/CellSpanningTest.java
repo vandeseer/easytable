@@ -9,8 +9,8 @@ import org.vandeseer.TestUtils;
 import org.vandeseer.easytable.TableDrawer;
 import org.vandeseer.easytable.structure.Row;
 import org.vandeseer.easytable.structure.Table;
-import org.vandeseer.easytable.structure.cell.CellImage;
-import org.vandeseer.easytable.structure.cell.CellText;
+import org.vandeseer.easytable.structure.cell.ImageCell;
+import org.vandeseer.easytable.structure.cell.TextCell;
 
 import java.awt.*;
 import java.io.IOException;
@@ -71,21 +71,21 @@ public class CellSpanningTest {
 
 
         tableBuilder.addRow(Row.builder()
-                .add(CellText.builder().text("Pur").colSpan(2).backgroundColor(Color.YELLOW).horizontalAlignment(CENTER).borderWidth(1).build())
-                .add(CellText.builder().text("Booz").build())
+                .add(TextCell.builder().text("Pur").colSpan(2).backgroundColor(Color.YELLOW).horizontalAlignment(CENTER).borderWidth(1).build())
+                .add(TextCell.builder().text("Booz").build())
                 .backgroundColor(Color.BLUE)
                 .build());
 
         tableBuilder.addRow(Row.builder()
-                .add(CellText.builder().text("Hey").horizontalAlignment(RIGHT).build())
-                .add(CellText.builder().text("Ho!").build())
-                .add(CellText.builder().text("Fu.").backgroundColor(Color.ORANGE).build())
+                .add(TextCell.builder().text("Hey").horizontalAlignment(RIGHT).build())
+                .add(TextCell.builder().text("Ho!").build())
+                .add(TextCell.builder().text("Fu.").backgroundColor(Color.ORANGE).build())
                 .backgroundColor(Color.BLUE)
                 .build());
 
         tableBuilder.addRow(Row.builder()
-                .add(CellText.builder().text("Bar").horizontalAlignment(RIGHT).build())
-                .add(CellText.builder().text("Baz").colSpan(2).backgroundColor(Color.CYAN).horizontalAlignment(CENTER).borderWidth(1).build())
+                .add(TextCell.builder().text("Bar").horizontalAlignment(RIGHT).build())
+                .add(TextCell.builder().text("Baz").colSpan(2).backgroundColor(Color.CYAN).horizontalAlignment(CENTER).borderWidth(1).build())
                 .backgroundColor(Color.GREEN)
                 .build());
 
@@ -100,22 +100,22 @@ public class CellSpanningTest {
 
 
         tableBuilder.addRow(Row.builder()
-                .add(CellText.builder().text("Pur").backgroundColor(Color.YELLOW).horizontalAlignment(CENTER).borderWidth(1).build())
-                .add(CellText.builder().text("Pur").backgroundColor(Color.YELLOW).horizontalAlignment(CENTER).borderWidth(1).build())
-                .add(CellText.builder().text("Booz").build())
+                .add(TextCell.builder().text("Pur").backgroundColor(Color.YELLOW).horizontalAlignment(CENTER).borderWidth(1).build())
+                .add(TextCell.builder().text("Pur").backgroundColor(Color.YELLOW).horizontalAlignment(CENTER).borderWidth(1).build())
+                .add(TextCell.builder().text("Booz").build())
                 .backgroundColor(Color.BLUE)
                 .build());
 
         tableBuilder.addRow(Row.builder()
-                .add(CellText.builder().text("Hey").horizontalAlignment(RIGHT).build())
-                .add(CellText.builder().text("Fu.").rowSpan(2).backgroundColor(Color.ORANGE).borderWidth(1).build())
-                .add(CellText.builder().text("Ho!").build())
+                .add(TextCell.builder().text("Hey").horizontalAlignment(RIGHT).build())
+                .add(TextCell.builder().text("Fu.").rowSpan(2).backgroundColor(Color.ORANGE).borderWidth(1).build())
+                .add(TextCell.builder().text("Ho!").build())
                 .backgroundColor(Color.BLUE)
                 .build());
 
         tableBuilder.addRow(Row.builder()
-                .add(CellText.builder().text("Bar").horizontalAlignment(RIGHT).build())
-                .add(CellText.builder().text("Bar").horizontalAlignment(RIGHT).build())
+                .add(TextCell.builder().text("Bar").horizontalAlignment(RIGHT).build())
+                .add(TextCell.builder().text("Bar").horizontalAlignment(RIGHT).build())
                 .backgroundColor(Color.GREEN)
                 .build());
 
@@ -130,27 +130,27 @@ public class CellSpanningTest {
 
 
         tableBuilder.addRow(Row.builder()
-                .add(CellText.builder().text("This is\nrow span 2").rowSpan(2).backgroundColor(Color.YELLOW).horizontalAlignment(CENTER).borderWidth(1).build())
-                .add(CellText.builder().text("Two").backgroundColor(Color.YELLOW).horizontalAlignment(CENTER).borderWidth(1).build())
-                .add(CellText.builder().text("Three").borderWidth(1).build())
+                .add(TextCell.builder().text("This is\nrow span 2").rowSpan(2).backgroundColor(Color.YELLOW).horizontalAlignment(CENTER).borderWidth(1).build())
+                .add(TextCell.builder().text("Two").backgroundColor(Color.YELLOW).horizontalAlignment(CENTER).borderWidth(1).build())
+                .add(TextCell.builder().text("Three").borderWidth(1).build())
                 .backgroundColor(Color.BLUE)
                 .build());
 
         tableBuilder.addRow(Row.builder()
-                .add(CellText.builder().text("This is\nrow span 3").rowSpan(3).backgroundColor(Color.ORANGE).borderWidth(1).build())
-                .add(CellText.builder().text("Three").borderWidth(1).build())
+                .add(TextCell.builder().text("This is\nrow span 3").rowSpan(3).backgroundColor(Color.ORANGE).borderWidth(1).build())
+                .add(TextCell.builder().text("Three").borderWidth(1).build())
                 .backgroundColor(Color.BLUE)
                 .build());
 
         tableBuilder.addRow(Row.builder()
-                .add(CellText.builder().text("One").horizontalAlignment(RIGHT).borderWidth(1).build())
-                .add(CellText.builder().text("Three").horizontalAlignment(RIGHT).borderWidth(1).build())
+                .add(TextCell.builder().text("One").horizontalAlignment(RIGHT).borderWidth(1).build())
+                .add(TextCell.builder().text("Three").horizontalAlignment(RIGHT).borderWidth(1).build())
                 .backgroundColor(Color.GREEN)
                 .build());
 
         tableBuilder.addRow(Row.builder()
-                .add(CellText.builder().text("One").horizontalAlignment(RIGHT).borderWidth(1).build())
-                .add(CellText.builder().text("Three").horizontalAlignment(RIGHT).borderWidth(1).build())
+                .add(TextCell.builder().text("One").horizontalAlignment(RIGHT).borderWidth(1).build())
+                .add(TextCell.builder().text("Three").horizontalAlignment(RIGHT).borderWidth(1).build())
                 .backgroundColor(Color.GREEN)
                 .build());
 
@@ -164,32 +164,32 @@ public class CellSpanningTest {
                 .font(HELVETICA);
 
         tableBuilder.addRow(Row.builder()
-                .add(CellText.builder().text("This is\nrow span 4").rowSpan(4).borderWidth(1).verticalAlignment(MIDDLE).horizontalAlignment(CENTER).build())
-                .add(CellText.builder().text("Pur").backgroundColor(Color.YELLOW).borderWidth(1).horizontalAlignment(CENTER).build())
-                .add(CellText.builder().text("Booz").borderWidth(1).build())
+                .add(TextCell.builder().text("This is\nrow span 4").rowSpan(4).borderWidth(1).verticalAlignment(MIDDLE).horizontalAlignment(CENTER).build())
+                .add(TextCell.builder().text("Pur").backgroundColor(Color.YELLOW).borderWidth(1).horizontalAlignment(CENTER).build())
+                .add(TextCell.builder().text("Booz").borderWidth(1).build())
                 .backgroundColor(Color.BLUE)
                 .build());
 
         tableBuilder.addRow(Row.builder()
-                .add(CellText.builder().text("This is\nrow span 3").rowSpan(3).borderWidth(1).backgroundColor(Color.ORANGE).build())
-                .add(CellText.builder().text("Ho!").borderWidth(1).build())
+                .add(TextCell.builder().text("This is\nrow span 3").rowSpan(3).borderWidth(1).backgroundColor(Color.ORANGE).build())
+                .add(TextCell.builder().text("Ho!").borderWidth(1).build())
                 .backgroundColor(Color.BLUE)
                 .build());
 
         tableBuilder.addRow(Row.builder()
-                .add(CellText.builder().text("Three").borderWidth(1).build())
+                .add(TextCell.builder().text("Three").borderWidth(1).build())
                 .backgroundColor(Color.GREEN)
                 .build());
 
         tableBuilder.addRow(Row.builder()
-                .add(CellText.builder().text("Three").borderWidth(1).build())
+                .add(TextCell.builder().text("Three").borderWidth(1).build())
                 .backgroundColor(Color.GREEN)
                 .build());
 
         tableBuilder.addRow(Row.builder()
-                .add(CellText.builder().text("One").borderWidth(1).horizontalAlignment(RIGHT).build())
-                .add(CellText.builder().text("Two").borderWidth(1).horizontalAlignment(RIGHT).build())
-                .add(CellText.builder().text("Three").borderWidth(1).horizontalAlignment(RIGHT).build())
+                .add(TextCell.builder().text("One").borderWidth(1).horizontalAlignment(RIGHT).build())
+                .add(TextCell.builder().text("Two").borderWidth(1).horizontalAlignment(RIGHT).build())
+                .add(TextCell.builder().text("Three").borderWidth(1).horizontalAlignment(RIGHT).build())
                 .backgroundColor(Color.CYAN)
                 .build());
 
@@ -203,33 +203,33 @@ public class CellSpanningTest {
                 .font(HELVETICA);
 
         tableBuilder.addRow(Row.builder()
-                .add(CellText.builder().text("This is\nrow span 4").rowSpan(4).borderWidth(1).verticalAlignment(MIDDLE).horizontalAlignment(CENTER).build())
-                .add(CellText.builder().text("Pur").backgroundColor(Color.YELLOW).borderWidth(1).horizontalAlignment(CENTER).build())
-                .add(CellText.builder().text("Booz").borderWidth(1).build())
+                .add(TextCell.builder().text("This is\nrow span 4").rowSpan(4).borderWidth(1).verticalAlignment(MIDDLE).horizontalAlignment(CENTER).build())
+                .add(TextCell.builder().text("Pur").backgroundColor(Color.YELLOW).borderWidth(1).horizontalAlignment(CENTER).build())
+                .add(TextCell.builder().text("Booz").borderWidth(1).build())
                 .backgroundColor(Color.BLUE)
                 .build());
 
         tableBuilder.addRow(Row.builder()
-                .add(CellText.builder().text("This is\nrow span 3, bottom aligned").rowSpan(3).borderWidth(1)
+                .add(TextCell.builder().text("This is\nrow span 3, bottom aligned").rowSpan(3).borderWidth(1)
                         .backgroundColor(Color.ORANGE).verticalAlignment(BOTTOM).paddingBottom(2).build())
-                .add(CellText.builder().text("Ho!").borderWidth(1).build())
+                .add(TextCell.builder().text("Ho!").borderWidth(1).build())
                 .backgroundColor(Color.BLUE)
                 .build());
 
         tableBuilder.addRow(Row.builder()
-                .add(CellText.builder().text("Three").borderWidth(1).build())
+                .add(TextCell.builder().text("Three").borderWidth(1).build())
                 .backgroundColor(Color.GREEN)
                 .build());
 
         tableBuilder.addRow(Row.builder()
-                .add(CellText.builder().text("Three").borderWidth(1).build())
+                .add(TextCell.builder().text("Three").borderWidth(1).build())
                 .backgroundColor(Color.GREEN)
                 .build());
 
         tableBuilder.addRow(Row.builder()
-                .add(CellText.builder().text("One").borderWidth(1).horizontalAlignment(RIGHT).build())
-                .add(CellText.builder().text("Two").borderWidth(1).horizontalAlignment(CENTER).build())
-                .add(CellText.builder().text("Three").borderWidth(1).horizontalAlignment(CENTER).build())
+                .add(TextCell.builder().text("One").borderWidth(1).horizontalAlignment(RIGHT).build())
+                .add(TextCell.builder().text("Two").borderWidth(1).horizontalAlignment(CENTER).build())
+                .add(TextCell.builder().text("Three").borderWidth(1).horizontalAlignment(CENTER).build())
                 .backgroundColor(Color.CYAN)
                 .build());
 
@@ -243,28 +243,28 @@ public class CellSpanningTest {
                 .font(HELVETICA);
 
         tableBuilder.addRow(Row.builder()
-                .add(CellText.builder().borderWidth(1).text("One").build())
-                .add(CellText.builder().borderWidth(1).text("Two").build())
-                .add(CellText.builder().borderWidth(1).text("Three").build())
-                .add(CellText.builder().borderWidth(1).text("Four").build())
+                .add(TextCell.builder().borderWidth(1).text("One").build())
+                .add(TextCell.builder().borderWidth(1).text("Two").build())
+                .add(TextCell.builder().borderWidth(1).text("Three").build())
+                .add(TextCell.builder().borderWidth(1).text("Four").build())
                 .build());
 
         tableBuilder.addRow(Row.builder()
-                .add(CellText.builder().borderWidth(1).text("One").build())
-                .add(CellText.builder().borderWidth(1).text("Spanning 2x2").colSpan(2).rowSpan(2).build())
-                .add(CellText.builder().borderWidth(1).text("Four").build())
+                .add(TextCell.builder().borderWidth(1).text("One").build())
+                .add(TextCell.builder().borderWidth(1).text("Spanning 2x2").colSpan(2).rowSpan(2).build())
+                .add(TextCell.builder().borderWidth(1).text("Four").build())
                 .build());
 
         tableBuilder.addRow(Row.builder()
-                .add(CellText.builder().borderWidth(1).text("One").build())
-                .add(CellText.builder().borderWidth(1).text("Four").build())
+                .add(TextCell.builder().borderWidth(1).text("One").build())
+                .add(TextCell.builder().borderWidth(1).text("Four").build())
                 .build());
 
         tableBuilder.addRow(Row.builder()
-                .add(CellText.builder().borderWidth(1).text("One").build())
-                .add(CellText.builder().borderWidth(1).text("Two").build())
-                .add(CellText.builder().borderWidth(1).text("Three").build())
-                .add(CellText.builder().borderWidth(1).text("Four").build())
+                .add(TextCell.builder().borderWidth(1).text("One").build())
+                .add(TextCell.builder().borderWidth(1).text("Two").build())
+                .add(TextCell.builder().borderWidth(1).text("Three").build())
+                .add(TextCell.builder().borderWidth(1).text("Four").build())
                 .build());
 
         return tableBuilder.build();
@@ -279,28 +279,28 @@ public class CellSpanningTest {
                 .font(HELVETICA);
 
         tableBuilder.addRow(Row.builder()
-                .add(CellImage.builder().borderWidth(1).image(createTuxImage()).scale(0.1f).build())
-                .add(CellImage.builder().borderWidth(1).image(createGliderImage()).scale(0.1f).build())
-                .add(CellImage.builder().borderWidth(1).image(createGliderImage()).scale(0.1f).build())
-                .add(CellImage.builder().borderWidth(1).image(createTuxImage()).scale(0.1f).build())
+                .add(ImageCell.builder().borderWidth(1).image(createTuxImage()).scale(0.1f).build())
+                .add(ImageCell.builder().borderWidth(1).image(createGliderImage()).scale(0.1f).build())
+                .add(ImageCell.builder().borderWidth(1).image(createGliderImage()).scale(0.1f).build())
+                .add(ImageCell.builder().borderWidth(1).image(createTuxImage()).scale(0.1f).build())
                 .build());
 
         tableBuilder.addRow(Row.builder()
-                .add(CellImage.builder().borderWidth(1).image(createTuxImage()).scale(0.1f).build())
-                .add(CellImage.builder().borderWidth(1).image(createGliderImage()).scale(0.2f).colSpan(2).rowSpan(2).build())
-                .add(CellImage.builder().borderWidth(1).image(createTuxImage()).scale(0.1f).build())
+                .add(ImageCell.builder().borderWidth(1).image(createTuxImage()).scale(0.1f).build())
+                .add(ImageCell.builder().borderWidth(1).image(createGliderImage()).scale(0.2f).colSpan(2).rowSpan(2).build())
+                .add(ImageCell.builder().borderWidth(1).image(createTuxImage()).scale(0.1f).build())
                 .build());
 
         tableBuilder.addRow(Row.builder()
-                .add(CellImage.builder().borderWidth(1).image(createTuxImage()).scale(0.1f).build())
-                .add(CellImage.builder().borderWidth(1).image(createTuxImage()).scale(0.1f).build())
+                .add(ImageCell.builder().borderWidth(1).image(createTuxImage()).scale(0.1f).build())
+                .add(ImageCell.builder().borderWidth(1).image(createTuxImage()).scale(0.1f).build())
                 .build());
 
         tableBuilder.addRow(Row.builder()
-                .add(CellImage.builder().borderWidth(1).image(createGliderImage()).scale(0.1f).build())
-                .add(CellImage.builder().borderWidth(1).image(createTuxImage()).scale(0.1f).build())
-                .add(CellImage.builder().borderWidth(1).image(createTuxImage()).scale(0.1f).build())
-                .add(CellImage.builder().borderWidth(1).image(createGliderImage()).scale(0.1f).build())
+                .add(ImageCell.builder().borderWidth(1).image(createGliderImage()).scale(0.1f).build())
+                .add(ImageCell.builder().borderWidth(1).image(createTuxImage()).scale(0.1f).build())
+                .add(ImageCell.builder().borderWidth(1).image(createTuxImage()).scale(0.1f).build())
+                .add(ImageCell.builder().borderWidth(1).image(createGliderImage()).scale(0.1f).build())
                 .build());
 
         return tableBuilder.build();
@@ -316,55 +316,55 @@ public class CellSpanningTest {
         for (int i = 0; i < 50; i++) {
             if (i % 2 == 0) {
                 tableBuilder.addRow(Row.builder()
-                        .add(CellText.builder().text("This is\nrow span 4").rowSpan(4).borderWidth(1).verticalAlignment(MIDDLE).horizontalAlignment(CENTER).build())
-                        .add(CellText.builder().text("Pur").backgroundColor(Color.YELLOW).borderWidth(1).horizontalAlignment(CENTER).build())
-                        .add(CellText.builder().text("Booz").borderWidth(1).build())
+                        .add(TextCell.builder().text("This is\nrow span 4").rowSpan(4).borderWidth(1).verticalAlignment(MIDDLE).horizontalAlignment(CENTER).build())
+                        .add(TextCell.builder().text("Pur").backgroundColor(Color.YELLOW).borderWidth(1).horizontalAlignment(CENTER).build())
+                        .add(TextCell.builder().text("Booz").borderWidth(1).build())
                         .backgroundColor(Color.BLUE)
                         .build());
 
                 tableBuilder.addRow(Row.builder()
-                        .add(CellText.builder().text("This is\nrow span 3").rowSpan(3).borderWidth(1)
+                        .add(TextCell.builder().text("This is\nrow span 3").rowSpan(3).borderWidth(1)
                                 .backgroundColor(Color.ORANGE).verticalAlignment(BOTTOM).build())
-                        .add(CellText.builder().text("Ho!").borderWidth(1).build())
+                        .add(TextCell.builder().text("Ho!").borderWidth(1).build())
                         .backgroundColor(Color.BLUE)
                         .build());
 
                 tableBuilder.addRow(Row.builder()
-                        .add(CellText.builder().text("Three").borderWidth(1).build())
+                        .add(TextCell.builder().text("Three").borderWidth(1).build())
                         .backgroundColor(Color.GREEN)
                         .build());
 
                 tableBuilder.addRow(Row.builder()
-                        .add(CellText.builder().text("Three").borderWidth(1).build())
+                        .add(TextCell.builder().text("Three").borderWidth(1).build())
                         .backgroundColor(Color.GREEN)
                         .build());
 
                 tableBuilder.addRow(Row.builder()
-                        .add(CellText.builder().text("Spanning 2 cols").colSpan(2).borderWidth(1).build())
-                        .add(CellText.builder().text("Three").borderWidth(1).horizontalAlignment(CENTER).build())
+                        .add(TextCell.builder().text("Spanning 2 cols").colSpan(2).borderWidth(1).build())
+                        .add(TextCell.builder().text("Three").borderWidth(1).horizontalAlignment(CENTER).build())
                         .backgroundColor(Color.CYAN)
                         .build());
             }
 
             tableBuilder.addRow(Row.builder()
-                    .add(CellText.builder().borderWidth(1).text(String.valueOf(count++)).build())
-                    .add(CellText.builder().borderWidth(1).text("Two").build())
-                    .add(CellText.builder().borderWidth(1).text("Three").build())
+                    .add(TextCell.builder().borderWidth(1).text(String.valueOf(count++)).build())
+                    .add(TextCell.builder().borderWidth(1).text("Two").build())
+                    .add(TextCell.builder().borderWidth(1).text("Three").build())
                     .build());
 
             tableBuilder.addRow(Row.builder()
-                    .add(CellText.builder().borderWidth(1).text(String.valueOf(count++)).build())
-                    .add(CellText.builder().borderWidth(1).text("Spanning 2x2").colSpan(2).rowSpan(2).build())
+                    .add(TextCell.builder().borderWidth(1).text(String.valueOf(count++)).build())
+                    .add(TextCell.builder().borderWidth(1).text("Spanning 2x2").colSpan(2).rowSpan(2).build())
                     .build());
 
             tableBuilder.addRow(Row.builder()
-                    .add(CellText.builder().borderWidth(1).text(String.valueOf(count++)).build())
+                    .add(TextCell.builder().borderWidth(1).text(String.valueOf(count++)).build())
                     .build());
 
             tableBuilder.addRow(Row.builder()
-                    .add(CellText.builder().borderWidth(1).text(String.valueOf(count++)).build())
-                    .add(CellText.builder().borderWidth(1).text("Two").build())
-                    .add(CellText.builder().borderWidth(1).text("Three").build())
+                    .add(TextCell.builder().borderWidth(1).text(String.valueOf(count++)).build())
+                    .add(TextCell.builder().borderWidth(1).text("Two").build())
+                    .add(TextCell.builder().borderWidth(1).text("Three").build())
                     .build());
         }
 

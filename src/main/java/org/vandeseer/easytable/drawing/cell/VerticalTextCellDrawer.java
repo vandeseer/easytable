@@ -1,9 +1,12 @@
-package org.vandeseer.easytable.drawing;
+package org.vandeseer.easytable.drawing.cell;
 
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.font.PDFont;
+import org.apache.pdfbox.util.Matrix;
+import org.vandeseer.easytable.drawing.Drawer;
+import org.vandeseer.easytable.drawing.DrawingContext;
 import org.vandeseer.easytable.structure.cell.AbstractCell;
-import org.vandeseer.easytable.structure.cell.CellVerticalText;
+import org.vandeseer.easytable.structure.cell.TextCell;
 import org.vandeseer.easytable.util.PdfUtil;
 
 import java.awt.*;
@@ -12,20 +15,20 @@ import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
 
-public class CellVerticalTextDrawer implements Drawer {
+public class VerticalTextCellDrawer implements Drawer {
 
-    private CellVerticalText cell;
+    private TextCell cell;
 
-    public CellVerticalTextDrawer() {
+    public VerticalTextCellDrawer() {
     }
 
-    public CellVerticalTextDrawer(CellVerticalText cell) {
+    public VerticalTextCellDrawer(TextCell cell) {
         this.cell = cell;
     }
 
     @Override
     public void setCell(AbstractCell cell) {
-        this.cell = (CellVerticalText) cell;
+        this.cell = (TextCell) cell;
     }
 
     // As of now: No support for Alignments ...
@@ -42,8 +45,17 @@ public class CellVerticalTextDrawer implements Drawer {
 
         float yOffset = startY + cell.getPaddingBottom();
 
+        float height = cell.getRow().getHeight();
+
+        if (cell.getRowSpan() > 1) {
+            float rowSpanAdaption = cell.calculateHeightForRowSpan() - cell.getRow().getHeight();
+            yOffset -= rowSpanAdaption;
+
+            height = cell.calculateHeightForRowSpan();
+        }
+
         final List<String> lines = cell.isWordBreak()
-                ? PdfUtil.getOptimalTextBreakLines(cell.getText(), currentFont, currentFontSize, (cell.getRow().getHeight() - cell.getVerticalPadding()))
+                ? PdfUtil.getOptimalTextBreakLines(cell.getText(), currentFont, currentFontSize, (height - cell.getVerticalPadding()))
                 : Collections.singletonList(cell.getText());
 
         float xOffset = startX + cell.getPaddingLeft() - PdfUtil.getFontHeight(currentFont, currentFontSize);
@@ -70,7 +82,7 @@ public class CellVerticalTextDrawer implements Drawer {
         contentStream.beginText();
 
         // Do the transformation :)
-        contentStream.setTextMatrix(transform);
+        contentStream.setTextMatrix(new Matrix(transform));
 
         contentStream.setNonStrokingColor(color);
         contentStream.setFont(font, fontSize);

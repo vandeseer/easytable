@@ -3,7 +3,8 @@ package org.vandeseer.easytable.structure;
 import org.junit.Test;
 import org.vandeseer.easytable.structure.Table.TableBuilder;
 import org.vandeseer.easytable.structure.cell.AbstractCell;
-import org.vandeseer.easytable.structure.cell.CellText;
+import org.vandeseer.easytable.structure.cell.TextCell;
+import org.vandeseer.easytable.util.PdfUtil;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
@@ -38,8 +39,8 @@ public class TableTest {
         tableBuilder.addColumnOfWidth(12)
                 .addColumnOfWidth(34);
         final Row row = Row.builder()
-                .add(CellText.builder().text("11").build())
-                .add(CellText.builder().text("12").build())
+                .add(TextCell.builder().text("11").build())
+                .add(TextCell.builder().text("12").build())
                 .build();
         tableBuilder.addRow(row);
         final Table table = tableBuilder.build();
@@ -49,33 +50,32 @@ public class TableTest {
 
     @Test
     public void getHeight_twoRowsWithDifferentPaddings() {
-        final TableBuilder tableBuilder = Table.builder();
-        tableBuilder.addColumnOfWidth(12)
-                .addColumnOfWidth(34);
-        final Row row = Row.builder()
-                .add(CellText.builder().text("11").paddingTop(35).paddingBottom(15).build())
-                .add(CellText.builder().text("12").paddingTop(15).paddingBottom(25).build())
-                .build();
-        tableBuilder.addRow(row);
-        final Table table = tableBuilder
-                .fontSize(12) // this will have a font height withText 13.872
+        final Table table = Table.builder()
+                .addColumnOfWidth(12)
+                .addColumnOfWidth(34)
+                .fontSize(12)
+                .addRow(Row.builder()
+                        .add(TextCell.builder().text("11").paddingTop(35).paddingBottom(15).build())
+                        .add(TextCell.builder().text("12").paddingTop(15).paddingBottom(25).build())
+                        .build())
                 .build();
 
-        // highest cell (60) + font height
-        assertThat(table.getHeight(), equalTo(58.616f));
+        // highest cell (50) + actual font height
+        final float actualFontHeight = PdfUtil.getFontHeight(table.getSettings().getFont(), 12);
+        assertThat(table.getHeight(), equalTo(50 + actualFontHeight));
     }
 
     @Test
     public void tableBuilder_shouldConnectStructureCorrectly() {
         // We are spanning two columns in the first cell
-        AbstractCell lastCell = CellText.builder().text("").build();
+        AbstractCell lastCell = TextCell.builder().text("").build();
 
         Table table = Table.builder()
                 .addColumnOfWidth(10)
                 .addColumnOfWidth(20)
                 .addColumnOfWidth(30)
                 .addRow(Row.builder()
-                    .add(CellText.builder().text("").colSpan(2).build())
+                    .add(TextCell.builder().text("").colSpan(2).build())
                     .add(lastCell)
                     .build())
                 .build();

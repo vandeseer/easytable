@@ -20,7 +20,7 @@ import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-public class CellTextTest {
+public class TextCellTest {
 
     @Mock
     private Row row;
@@ -47,8 +47,8 @@ public class CellTextTest {
     public void getWidth_regularCellWithNoWrappingText() {
         final String text = "abc";
 
-        final CellText cell = prepareForTest(
-                CellText.builder()
+        final TextCell cell = prepareForTest(
+                TextCell.builder()
                 .font(font)
                 .fontSize(fontSize)
                 .text(text)
@@ -62,8 +62,8 @@ public class CellTextTest {
     public void getWidth_cellWithWrappingText_columnSizeOk() {
         setColumnWidthTo(9f); // smaller than the size of the text "abc"
 
-        final CellText cell = prepareForTest(
-                CellText.builder()
+        final TextCell cell = prepareForTest(
+                TextCell.builder()
                 .font(font)
                 .fontSize(fontSize)
                 .text("abc abc abc abc")
@@ -80,8 +80,8 @@ public class CellTextTest {
     public void getWidth_cellWithWrappingText_columnTooSmall() {
         setColumnWidthTo(5f);
 
-        final CellText cell = prepareForTest(
-                CellText.builder()
+        final TextCell cell = prepareForTest(
+                TextCell.builder()
                         .font(font)
                         .fontSize(fontSize)
                         .text("a")
@@ -100,8 +100,8 @@ public class CellTextTest {
 
         final String text = "abc";
 
-        final CellText cell = prepareForTest(
-                CellText.builder()
+        final TextCell cell = prepareForTest(
+                TextCell.builder()
                 .font(font)
                 .fontSize(fontSize)
                 .text(text)
@@ -117,8 +117,8 @@ public class CellTextTest {
         prepareTwoSpanningColumnsOfSize(35f, 15f);
 
         final String text = "abc abc abc abc abc abc abc abc abc abc";
-        final CellText cell = prepareForTest(
-                CellText.builder()
+        final TextCell cell = prepareForTest(
+                TextCell.builder()
                 .text(text)
                 .font(font)
                 .fontSize(fontSize)
@@ -137,8 +137,8 @@ public class CellTextTest {
     @Test
     public void getCell_toBuilderFeature() {
     	// Create two cells without border
-    	CellText originalCell1 = CellText.builder().text("11").paddingTop(35).paddingBottom(15).build();
-        CellText originalCell2 = CellText.builder().text("12").paddingTop(15).paddingBottom(25).build();
+    	TextCell originalCell1 = TextCell.builder().text("11").paddingTop(35).paddingBottom(15).build();
+        TextCell originalCell2 = TextCell.builder().text("12").paddingTop(15).paddingBottom(25).build();
 
         final Row row = Row.builder()
                 .add(originalCell1.toBuilder().borderWidthBottom(1F).build()) // add the border
@@ -152,7 +152,7 @@ public class CellTextTest {
 
     @Test
     public void getHeight_shouldThrowExceptionIfTableNotYetBuilt() {
-        AbstractCell cell = CellText.builder().text("abc").paddingTop(35).paddingBottom(15).build();
+        AbstractCell cell = TextCell.builder().text("abc").paddingTop(35).paddingBottom(15).build();
 
         exception.expect(TableNotYetBuiltException.class);
         cell.getHeight();
@@ -165,7 +165,7 @@ public class CellTextTest {
         when(column.getNext()).thenReturn(nextColumn);
     }
 
-    private CellText prepareForTest(CellText cell) {
+    private TextCell prepareForTest(TextCell cell) {
         when(row.getTable()).thenReturn(table);
         cell.setRow(row);
         cell.setColumn(column);

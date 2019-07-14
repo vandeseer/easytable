@@ -7,8 +7,8 @@ import org.junit.Test;
 import org.vandeseer.TestUtils;
 import org.vandeseer.easytable.structure.Row;
 import org.vandeseer.easytable.structure.Table;
-import org.vandeseer.easytable.structure.cell.CellImage;
-import org.vandeseer.easytable.structure.cell.CellText;
+import org.vandeseer.easytable.structure.cell.ImageCell;
+import org.vandeseer.easytable.structure.cell.TextCell;
 
 import static org.vandeseer.easytable.settings.HorizontalAlignment.RIGHT;
 
@@ -28,20 +28,20 @@ public class ImagesTest {
 
         tableBuilder.addRow(
                 Row.builder()
-                        .add(CellText.builder().text("first").build())
-                        .add(CellText.builder().text("second").horizontalAlignment(RIGHT).build())
+                        .add(TextCell.builder().text("first").build())
+                        .add(TextCell.builder().text("second").horizontalAlignment(RIGHT).build())
                         .build());
 
 
         tableBuilder.addRow(
                 Row.builder()
-                        .add(CellImage.builder().image(image1).borderWidth(1).build())
-                        .add(CellImage.builder().image(image2).borderWidth(1).build())
+                        .add(ImageCell.builder().image(image1).borderWidth(1).build())
+                        .add(ImageCell.builder().image(image2).borderWidth(1).build())
                         .build());
 
         tableBuilder.addRow(
                 Row.builder()
-                        .add(CellText.builder()
+                        .add(TextCell.builder()
                                 .text("images from \"https://www.techrepublic.com/pictures/the-21-best-it-and-tech-memes-on-the-internet/5/\"")
                                 .colSpan(2)
                                 .fontSize(6)

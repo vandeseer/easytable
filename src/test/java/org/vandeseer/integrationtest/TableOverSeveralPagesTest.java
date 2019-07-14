@@ -8,7 +8,7 @@ import org.vandeseer.easytable.RepeatedHeaderTableDrawer;
 import org.vandeseer.easytable.TableDrawer;
 import org.vandeseer.easytable.structure.Row;
 import org.vandeseer.easytable.structure.Table;
-import org.vandeseer.easytable.structure.cell.CellText;
+import org.vandeseer.easytable.structure.cell.TextCell;
 
 import java.awt.*;
 import java.io.IOException;
@@ -56,14 +56,14 @@ public class TableOverSeveralPagesTest {
                 .addColumnOfWidth(200)
                 .addColumnOfWidth(200);
 
-        CellText dummyHeaderCell = CellText.builder()
+        TextCell dummyHeaderCell = TextCell.builder()
                 .text("Header dummy")
                 .backgroundColor(Color.BLUE)
                 .textColor(Color.WHITE)
                 .borderWidth(1F)
                 .build();
 
-        CellText dummyCell = CellText.builder()
+        TextCell dummyCell = TextCell.builder()
                 .text("dummy")
                 .borderWidth(1F)
                 .build();

@@ -1,28 +1,30 @@
-package org.vandeseer.easytable.drawing;
+package org.vandeseer.easytable.drawing.cell;
 
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
+import org.vandeseer.easytable.drawing.Drawer;
+import org.vandeseer.easytable.drawing.DrawingContext;
 import org.vandeseer.easytable.settings.HorizontalAlignment;
 import org.vandeseer.easytable.settings.VerticalAlignment;
 import org.vandeseer.easytable.structure.cell.AbstractCell;
-import org.vandeseer.easytable.structure.cell.CellImage;
+import org.vandeseer.easytable.structure.cell.ImageCell;
 
 import java.awt.geom.Point2D;
 import java.io.IOException;
 
-public class CellImageDrawer implements Drawer {
+public class ImageCellDrawer implements Drawer {
 
-    private CellImage cell;
+    private ImageCell cell;
 
-    public CellImageDrawer() {
+    public ImageCellDrawer() {
     }
 
-    public CellImageDrawer(CellImage cell) {
+    public ImageCellDrawer(ImageCell cell) {
         this.cell = cell;
     }
 
     @Override
     public void setCell(AbstractCell cell) {
-        this.cell = (CellImage) cell;
+        this.cell = (ImageCell) cell;
     }
 
     @Override

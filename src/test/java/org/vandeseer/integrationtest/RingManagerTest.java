@@ -9,7 +9,7 @@ import org.vandeseer.easytable.TableDrawer;
 import org.vandeseer.easytable.structure.Row;
 import org.vandeseer.easytable.structure.Table;
 import org.vandeseer.easytable.structure.Table.TableBuilder;
-import org.vandeseer.easytable.structure.cell.CellText;
+import org.vandeseer.easytable.structure.cell.TextCell;
 
 import java.awt.*;
 
@@ -55,57 +55,57 @@ public class RingManagerTest {
         final float borderWidthInner = 1.0f;
 
         tableBuilder.addRow(Row.builder().add(
-                CellText.builder().text("1.")
+                TextCell.builder().text("1.")
                         .borderWidthTop(borderWidthOuter)
                         .borderWidthLeft(borderWidthOuter)
                         .borderWidthRight(borderWidthInner)
                         .build())
                 .add(
-                        CellText.builder().text("WK DBV(s)")
+                        TextCell.builder().text("WK DBV(s)")
                                 .borderWidthTop(borderWidthOuter)
                                 .borderWidthRight(borderWidthInner)
                                 .borderWidthLeft(borderWidthInner)
                                 .build())
                 .add(
-                        CellText.builder().text("Rote Ecke:")
+                        TextCell.builder().text("Rote Ecke:")
                                 .borderWidthTop(borderWidthOuter)
                                 .borderWidthRight(borderWidthOuter)
                                 .build()
                 ).build());
 
         tableBuilder.addRow(Row.builder().add(
-                CellText.builder().text("").borderWidthLeft(borderWidthOuter).build())
+                TextCell.builder().text("").borderWidthLeft(borderWidthOuter).build())
                 .add(
-                        CellText.builder().text("Jugend")
+                        TextCell.builder().text("Jugend")
                                 .borderWidthRight(borderWidthInner)
                                 .borderWidthLeft(borderWidthInner)
                                 .build())
                 .add(
-                        CellText.builder().text("Thomas Test, m, FC St. Pauli, 01.01.1998, Jugend, 67,5 kg, 12K (8S, 4N, 0U)")
+                        TextCell.builder().text("Thomas Test, m, FC St. Pauli, 01.01.1998, Jugend, 67,5 kg, 12K (8S, 4N, 0U)")
                                 .borderWidthBottom(borderWidthInner)
                                 .borderWidthRight(borderWidthOuter)
                                 .build())
                 .build());
 
         tableBuilder.addRow(Row.builder().add(
-                CellText.builder().text("").borderWidthLeft(borderWidthOuter).build()).add(
-                CellText.builder().text("3x3")
+                TextCell.builder().text("").borderWidthLeft(borderWidthOuter).build()).add(
+                TextCell.builder().text("3x3")
                         .borderWidthRight(borderWidthInner)
                         .borderWidthLeft(borderWidthInner)
                         .build()).add(
-                CellText.builder().text("Blaue Ecke:").borderWidthRight(borderWidthOuter).build()).build());
+                TextCell.builder().text("Blaue Ecke:").borderWidthRight(borderWidthOuter).build()).build());
 
         tableBuilder.addRow(Row.builder().add(
-                CellText.builder().text("")
+                TextCell.builder().text("")
                         .borderWidthLeft(borderWidthOuter)
                         .borderWidthBottom(borderWidthOuter)
                         .build()).add(
-                CellText.builder().text("10 Uz, KS")
+                TextCell.builder().text("10 Uz, KS")
                         .borderWidthRight(borderWidthInner)
                         .borderWidthLeft(borderWidthInner)
                         .borderWidthBottom(borderWidthOuter)
                         .build()).add(
-                CellText.builder().text("Bernd Beispiel, m, Wedeler TSV, 02.01.1999, Jugend, 68,2 kg, 9K (7S, 2N, 0U)")
+                TextCell.builder().text("Bernd Beispiel, m, Wedeler TSV, 02.01.1999, Jugend, 68,2 kg, 9K (7S, 2N, 0U)")
                         .borderWidthBottom(borderWidthOuter)
                         .borderWidthRight(borderWidthOuter)
                         .build()).build());

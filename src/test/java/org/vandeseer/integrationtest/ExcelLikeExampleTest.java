@@ -7,8 +7,8 @@ import org.vandeseer.easytable.settings.VerticalAlignment;
 import org.vandeseer.easytable.structure.Row;
 import org.vandeseer.easytable.structure.Table;
 import org.vandeseer.easytable.structure.Table.TableBuilder;
-import org.vandeseer.easytable.structure.cell.CellImage;
-import org.vandeseer.easytable.structure.cell.CellText;
+import org.vandeseer.easytable.structure.cell.ImageCell;
+import org.vandeseer.easytable.structure.cell.TextCell;
 
 import java.awt.*;
 import java.io.IOException;
@@ -58,10 +58,10 @@ public class ExcelLikeExampleTest {
 
         // Add the header row ...
         final Row headerRow = Row.builder()
-                .add(CellText.builder().text("Product").horizontalAlignment(LEFT).borderWidth(1).build())
-                .add(CellText.builder().text("2018").borderWidth(1).build())
-                .add(CellText.builder().text("2019").borderWidth(1).build())
-                .add(CellText.builder().text("Total").borderWidth(1).build())
+                .add(TextCell.builder().text("Product").horizontalAlignment(LEFT).borderWidth(1).build())
+                .add(TextCell.builder().text("2018").borderWidth(1).build())
+                .add(TextCell.builder().text("2019").borderWidth(1).build())
+                .add(TextCell.builder().text("Total").borderWidth(1).build())
                 .backgroundColor(BLUE_DARK)
                 .textColor(Color.WHITE)
                 .font(PDType1Font.HELVETICA_BOLD).fontSize(9)
@@ -78,10 +78,10 @@ public class ExcelLikeExampleTest {
             grandTotal += total;
 
             tableBuilder.addRow(Row.builder()
-                    .add(CellText.builder().text(String.valueOf(dataRow[0])).horizontalAlignment(LEFT).borderWidth(1).build())
-                    .add(CellText.builder().text(dataRow[1] + " €").borderWidth(1).build())
-                    .add(CellText.builder().text(dataRow[2] + " €").borderWidth(1).build())
-                    .add(CellText.builder().text(total + " €").borderWidth(1).build())
+                    .add(TextCell.builder().text(String.valueOf(dataRow[0])).horizontalAlignment(LEFT).borderWidth(1).build())
+                    .add(TextCell.builder().text(dataRow[1] + " €").borderWidth(1).build())
+                    .add(TextCell.builder().text(dataRow[2] + " €").borderWidth(1).build())
+                    .add(TextCell.builder().text(total + " €").borderWidth(1).build())
                     .backgroundColor(i % 2 == 0 ? BLUE_LIGHT_1 : BLUE_LIGHT_2)
                     .horizontalAlignment(RIGHT)
                     .build())
@@ -90,7 +90,7 @@ public class ExcelLikeExampleTest {
 
         // Add a final row
         tableBuilder.addRow(Row.builder()
-                .add(CellText.builder().text("This spans over 3 cells, is right aligned and its text is so long that it even breaks. " +
+                .add(TextCell.builder().text("This spans over 3 cells, is right aligned and its text is so long that it even breaks. " +
                         "Also it shows the grand total in the next cell and furthermore vertical alignment is shown:")
                         .colSpan(3)
                         .lineSpacing(1f)
@@ -101,7 +101,7 @@ public class ExcelLikeExampleTest {
                         .font(HELVETICA_OBLIQUE)
                         .borderWidth(1)
                         .build())
-                .add(CellText.builder().text(grandTotal + " €").backgroundColor(LIGHT_GRAY)
+                .add(TextCell.builder().text(grandTotal + " €").backgroundColor(LIGHT_GRAY)
                         .font(HELVETICA_BOLD_OBLIQUE)
                         .verticalAlignment(VerticalAlignment.TOP)
                         .borderWidth(1)
@@ -123,9 +123,9 @@ public class ExcelLikeExampleTest {
 
         // Header row
         tableBuilder.addRow(Row.builder()
-                .add(CellText.builder().borderWidth(1).padding(6).text("Left").build())
-                .add(CellText.builder().borderWidth(1).padding(6).text("Middle").colSpan(3).build())
-                .add(CellText.builder().borderWidth(1).padding(6).text("Right").build())
+                .add(TextCell.builder().borderWidth(1).padding(6).text("Left").build())
+                .add(TextCell.builder().borderWidth(1).padding(6).text("Middle").colSpan(3).build())
+                .add(TextCell.builder().borderWidth(1).padding(6).text("Right").build())
                 .backgroundColor(ORANGE)
                 .textColor(WHITE)
                 .font(HELVETICA_BOLD)
@@ -135,13 +135,13 @@ public class ExcelLikeExampleTest {
         );
 
         tableBuilder.addRow(Row.builder()
-                .add(CellText.builder().borderWidth(1).text("Glider")
+                .add(TextCell.builder().borderWidth(1).text("Glider")
                         .verticalAlignment(MIDDLE)
                         .horizontalAlignment(CENTER)
                         .backgroundColor(GRAY_LIGHT_1)
                         .rowSpan(7)
                         .build())
-                .add(CellImage.builder()
+                .add(ImageCell.builder()
                         .verticalAlignment(MIDDLE)
                         .horizontalAlignment(CENTER)
                         .borderWidth(1)
@@ -149,8 +149,8 @@ public class ExcelLikeExampleTest {
                         .scale(0.4f)
                         .rowSpan(6)
                         .build())
-                .add(CellText.builder().borderWidth(1).text("Gray").colSpan(2).backgroundColor(GRAY_LIGHT_2).build())
-                .add(CellText.builder().borderWidth(1)
+                .add(TextCell.builder().borderWidth(1).text("Gray").colSpan(2).backgroundColor(GRAY_LIGHT_2).build())
+                .add(TextCell.builder().borderWidth(1)
                         .text("\"I'm doing a (free) operating system (just a hobby, " +
                                 "won't be big and professional like gnu) for 386(486) AT clones\" \n\n " +
                                 "– Linus Torvalds")
@@ -165,46 +165,46 @@ public class ExcelLikeExampleTest {
         );
 
         tableBuilder.addRow(Row.builder()
-                .add(CellText.builder().borderWidth(1).text("Darker Gray").colSpan(2).backgroundColor(GRAY_LIGHT_3).build())
+                .add(TextCell.builder().borderWidth(1).text("Darker Gray").colSpan(2).backgroundColor(GRAY_LIGHT_3).build())
                 .build()
         );
 
         tableBuilder.addRow(Row.builder()
-                .add(CellText.builder().borderWidth(1).text("Gray Again").colSpan(2).backgroundColor(GRAY_LIGHT_2).build())
+                .add(TextCell.builder().borderWidth(1).text("Gray Again").colSpan(2).backgroundColor(GRAY_LIGHT_2).build())
                 .build()
         );
 
         tableBuilder.addRow(Row.builder()
-                .add(CellText.builder().borderWidth(1).text("And Darker Gray").colSpan(2).backgroundColor(GRAY_LIGHT_3).build())
+                .add(TextCell.builder().borderWidth(1).text("And Darker Gray").colSpan(2).backgroundColor(GRAY_LIGHT_3).build())
                 .build()
         );
 
         tableBuilder.addRow(Row.builder()
-                .add(CellText.builder().borderWidth(1).text("Right!").rowSpan(2).backgroundColor(GRAY_LIGHT_2).build())
-                .add(CellText.builder().borderWidth(1).text("Aligned!").horizontalAlignment(RIGHT).backgroundColor(GRAY_LIGHT_2).build())
+                .add(TextCell.builder().borderWidth(1).text("Right!").rowSpan(2).backgroundColor(GRAY_LIGHT_2).build())
+                .add(TextCell.builder().borderWidth(1).text("Aligned!").horizontalAlignment(RIGHT).backgroundColor(GRAY_LIGHT_2).build())
                 .build()
         );
 
         tableBuilder.addRow(Row.builder()
-                .add(CellText.builder().borderWidth(1).text("Left.").backgroundColor(GRAY_LIGHT_3).build())
+                .add(TextCell.builder().borderWidth(1).text("Left.").backgroundColor(GRAY_LIGHT_3).build())
                 .build()
         );
 
         tableBuilder.addRow(Row.builder()
-                .add(CellText.builder().borderWidth(1).text("Here some text.").backgroundColor(GRAY_LIGHT_2).colSpan(3).build())
+                .add(TextCell.builder().borderWidth(1).text("Here some text.").backgroundColor(GRAY_LIGHT_2).colSpan(3).build())
                 .build()
         );
 
         // Second part
 
         tableBuilder.addRow(Row.builder()
-                .add(CellText.builder().borderWidth(1).text("Tux")
+                .add(TextCell.builder().borderWidth(1).text("Tux")
                         .verticalAlignment(MIDDLE)
                         .horizontalAlignment(CENTER)
                         .backgroundColor(GRAY_LIGHT_1)
                         .rowSpan(7)
                         .build())
-                .add(CellImage.builder()
+                .add(ImageCell.builder()
                         .verticalAlignment(MIDDLE)
                         .horizontalAlignment(CENTER)
                         .borderWidth(1)
@@ -212,28 +212,28 @@ public class ExcelLikeExampleTest {
                         .scale(0.4f)
                         .rowSpan(6)
                         .build())
-                .add(CellText.builder().borderWidth(1).text("Darker Gray Again.").colSpan(2).backgroundColor(GRAY_LIGHT_3).build())
+                .add(TextCell.builder().borderWidth(1).text("Darker Gray Again.").colSpan(2).backgroundColor(GRAY_LIGHT_3).build())
                 .build()
         );
 
         tableBuilder.addRow(Row.builder()
-                .add(CellText.builder().borderWidth(1).text("Bit Lighter.").colSpan(2).backgroundColor(GRAY_LIGHT_2).build())
+                .add(TextCell.builder().borderWidth(1).text("Bit Lighter.").colSpan(2).backgroundColor(GRAY_LIGHT_2).build())
                 .build()
         );
 
         tableBuilder.addRow(Row.builder()
-                .add(CellText.builder().borderWidth(1).text("Well. Actually not.").colSpan(2).backgroundColor(GRAY_LIGHT_3).build())
+                .add(TextCell.builder().borderWidth(1).text("Well. Actually not.").colSpan(2).backgroundColor(GRAY_LIGHT_3).build())
                 .build()
         );
 
         tableBuilder.addRow(Row.builder()
-                .add(CellText.builder().borderWidth(1).text("Now.").colSpan(2).backgroundColor(GRAY_LIGHT_2).build())
+                .add(TextCell.builder().borderWidth(1).text("Now.").colSpan(2).backgroundColor(GRAY_LIGHT_2).build())
                 .build()
         );
 
         tableBuilder.addRow(Row.builder()
-                .add(CellText.builder().borderWidth(1).text("Yeah.").rowSpan(2).backgroundColor(GRAY_LIGHT_3).build())
-                .add(CellText.builder().borderWidth(1).text("This and ...")
+                .add(TextCell.builder().borderWidth(1).text("Yeah.").rowSpan(2).backgroundColor(GRAY_LIGHT_3).build())
+                .add(TextCell.builder().borderWidth(1).text("This and ...")
                         .horizontalAlignment(RIGHT)
                         .backgroundColor(GRAY_LIGHT_3)
                         .build())
@@ -241,7 +241,7 @@ public class ExcelLikeExampleTest {
         );
 
         tableBuilder.addRow(Row.builder()
-                .add(CellText.builder().borderWidth(1).text("... that: right aligned!")
+                .add(TextCell.builder().borderWidth(1).text("... that: right aligned!")
                         .backgroundColor(GRAY_LIGHT_2)
                         .horizontalAlignment(RIGHT)
                         .build())
@@ -249,7 +249,7 @@ public class ExcelLikeExampleTest {
         );
 
         tableBuilder.addRow(Row.builder()
-                .add(CellText.builder().borderWidth(1).text("Here some text, too.").backgroundColor(GRAY_LIGHT_3).colSpan(3).build())
+                .add(TextCell.builder().borderWidth(1).text("Here some text, too.").backgroundColor(GRAY_LIGHT_3).colSpan(3).build())
                 .build()
         );
 

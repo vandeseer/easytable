@@ -6,7 +6,7 @@ import org.vandeseer.TestUtils;
 import org.vandeseer.easytable.settings.VerticalAlignment;
 import org.vandeseer.easytable.structure.Row;
 import org.vandeseer.easytable.structure.Table;
-import org.vandeseer.easytable.structure.cell.CellText;
+import org.vandeseer.easytable.structure.cell.TextCell;
 
 import java.awt.*;
 import java.io.IOException;
@@ -33,21 +33,21 @@ public class SettingsTest {
                 .wordBreak(true);
 
         tableBuilder.addRow(Row.builder()
-                .add(CellText.builder().text("This is top right aligned without a border." +
+                .add(TextCell.builder().text("This is top right aligned without a border." +
                         "It has a tiny font and a pretty big padding")
                         .horizontalAlignment(RIGHT)
                         .verticalAlignment(TOP)
                         .fontSize(5)
                         .padding(20)
                         .build())
-                .add(CellText.builder().text("Another cell with a" +
+                .add(TextCell.builder().text("Another cell with a" +
                         " useless story, because I am to lazy to get a lorem-ipsum. It is bottom aligned.")
                         .lineSpacing(1.8f)
                         .padding(30)
                         .verticalAlignment(BOTTOM)
                         .backgroundColor(PURPLE_LIGHT_1)
                         .build())
-                .add(CellText.builder().text("This is center and middle aligned with a line spacing of 1.1")
+                .add(TextCell.builder().text("This is center and middle aligned with a line spacing of 1.1")
                         .verticalAlignment(VerticalAlignment.MIDDLE)
                         .horizontalAlignment(CENTER)
                         .lineSpacing(1.1f)
@@ -58,7 +58,7 @@ public class SettingsTest {
                 .build());
 
         tableBuilder.addRow(Row.builder()
-                .add(CellText.builder().text("This is left bottom aligned.")
+                .add(TextCell.builder().text("This is left bottom aligned.")
                         .horizontalAlignment(LEFT)
                         .verticalAlignment(BOTTOM)
                         .textColor(Color.BLACK)
@@ -66,7 +66,7 @@ public class SettingsTest {
                         .fontSize(16)
                         .padding(30)
                         .build())
-                .add(CellText.builder().text("Bavaria ipsum dolor sit amet Schaung kost nix des Biagadn obandeln. " +
+                .add(TextCell.builder().text("Bavaria ipsum dolor sit amet Schaung kost nix des Biagadn obandeln. " +
                         "Di gscheit des is hoid aso kummd Haberertanz heitzdog de Sonn des is a gmahde Wiesn, " +
                         "Jo mei Kuaschwanz wia ned woar pfenningguat. Wos griasd eich midnand hi om auf’n Gipfe des " +
                         "wiad a Mordsgaudi lem und lem lossn Weibaleid obacht mei ebba, in da. " +
@@ -78,7 +78,7 @@ public class SettingsTest {
                         .lineSpacing(0.9f)
                         .font(COURIER_BOLD)
                         .build())
-                .add(CellText.builder().text("This is bottom right aligned and does have a padding of 10, " +
+                .add(TextCell.builder().text("This is bottom right aligned and does have a padding of 10, " +
                         "but a line spacing of 0.6")
                         .verticalAlignment(BOTTOM)
                         .horizontalAlignment(RIGHT)
@@ -89,7 +89,7 @@ public class SettingsTest {
                 .build());
 
         tableBuilder.addRow(Row.builder()
-                .add(CellText.builder().text("Fubar! Top right!")
+                .add(TextCell.builder().text("Fubar! Top right!")
                         .horizontalAlignment(RIGHT)
                         .verticalAlignment(TOP)
                         .textColor(Color.BLACK)
@@ -97,13 +97,13 @@ public class SettingsTest {
                         .fontSize(14)
                         .padding(8)
                         .build())
-                .add(CellText.builder().text("Here\nwe\nhave\n\nseveral\nnew\nlines")
+                .add(TextCell.builder().text("Here\nwe\nhave\n\nseveral\nnew\nlines")
                         .padding(20)
                         .backgroundColor(PURPLE_LIGHT_1)
                         .lineSpacing(0.9f)
                         .font(COURIER_BOLD)
                         .build())
-                .add(CellText.builder().text("Bottom. Center.")
+                .add(TextCell.builder().text("Bottom. Center.")
                         .verticalAlignment(BOTTOM)
                         .horizontalAlignment(CENTER)
                         .padding(14)

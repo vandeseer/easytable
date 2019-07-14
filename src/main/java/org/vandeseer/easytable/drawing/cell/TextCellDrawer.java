@@ -1,11 +1,14 @@
-package org.vandeseer.easytable.drawing;
+package org.vandeseer.easytable.drawing.cell;
 
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.font.PDFont;
+import org.vandeseer.easytable.drawing.Drawer;
+import org.vandeseer.easytable.drawing.DrawingContext;
+import org.vandeseer.easytable.drawing.DrawingUtil;
 import org.vandeseer.easytable.settings.HorizontalAlignment;
 import org.vandeseer.easytable.settings.VerticalAlignment;
 import org.vandeseer.easytable.structure.cell.AbstractCell;
-import org.vandeseer.easytable.structure.cell.CellText;
+import org.vandeseer.easytable.structure.cell.TextCell;
 import org.vandeseer.easytable.util.PdfUtil;
 
 import java.awt.*;
@@ -13,20 +16,20 @@ import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
 
-public class CellTextDrawer implements Drawer {
+public class TextCellDrawer implements Drawer {
 
-    private CellText cell;
+    private TextCell cell;
 
-    public CellTextDrawer() {
+    public TextCellDrawer() {
     }
 
-    public CellTextDrawer(CellText cell) {
+    public TextCellDrawer(TextCell cell) {
         this.cell = cell;
     }
 
     @Override
     public void setCell(AbstractCell cell) {
-        this.cell = (CellText) cell;
+        this.cell = (TextCell) cell;
     }
 
     @Override
