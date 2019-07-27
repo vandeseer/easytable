@@ -15,6 +15,9 @@ crucial features. Nevertheless there is:
 * cell spanning and row spanning 
 * line breaking and line spacing
 * images in cells
+* experimental: vertical text
+
+Furthermore you can override drawing classes such that you can fully customize their drawing behaviour.
 
 ## Example
 
@@ -33,6 +36,12 @@ There are more examples (just see the folder), for instance this one:
 
 Again, just have a look at the [code](src/test/java/org/vandeseer/integrationtest/SettingsTest.java).
 
+The last one illustrates the use of vertical text in text cells. The code for 
+it can be found [here](src/test/java/org/vandeseer/integrationtest/VerticalTextCellTest.java). 
+
+![easytable table](doc/example4.png)
+
+
 If you run the tests with `mvn clean test` there also some PDF documents created which you can find in the `target` folder.
 The corresponding sources (in order to understand how to use the code) can be found in the test package.
 
@@ -43,7 +52,7 @@ Add this to your `pom.xml`:
     <dependency>
         <groupId>com.github.vandeseer</groupId>
         <artifactId>easytable</artifactId>
-        <version>0.4.3</version>
+        <version>0.5.0</version>
     </dependency>
 
 Or checkout the repository and install it locally with maven (e.g. for the`develop` branch):
@@ -63,12 +72,12 @@ improvements
 
 ## Q&A
 
-### Can I customize the `TableDrawer` for my own specific needs?
+### Can I customize the drawers for my own specific needs?
 
-Yep, you can customize the `TableDrawer` itself or (depending on your use case)
+Yep, you can customize the cell drawers itself or (depending on your use case)
 you can just create a custom cell. To get an idea, have a look at those two classes: 
-- Using [Lombok](https://projectlombok.org/): [EasytableCustomCellDrawer](src/test/java/org/vandeseer/custom/EasytableCustomCellDrawer.java)
-- Not using [Lombok](https://projectlombok.org/): [EasytableNoLombokCustomCellDrawer](src/test/java/org/vandeseer/custom/EasytableNoLombokCustomCellDrawer.java)
+- Using [Lombok](https://projectlombok.org/): [EasytableCustomCellDrawer](src/test/java/org/vandeseer/integrationtest/custom/EasytableCustomCellDrawer.java)
+- Not using [Lombok](https://projectlombok.org/): [EasytableNoLombokCustomCellDrawer](src/test/java/org/vandeseer/integrationtest/custom/EasytableNoLombokCustomCellDrawer.java)
 
 ### Does it work with Java < 8?
 

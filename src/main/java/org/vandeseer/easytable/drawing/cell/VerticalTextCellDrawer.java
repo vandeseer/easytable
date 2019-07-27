@@ -2,7 +2,6 @@ package org.vandeseer.easytable.drawing.cell;
 
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.font.PDFont;
-import org.apache.pdfbox.util.Matrix;
 import org.vandeseer.easytable.drawing.Drawer;
 import org.vandeseer.easytable.drawing.DrawingContext;
 import org.vandeseer.easytable.structure.cell.AbstractCell;
@@ -15,6 +14,10 @@ import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
 
+/**
+ * Allows vertical text drawing. Note that this class is still not fully
+ * developed, e.g. there is no support for text alignment settings yet.
+ */
 public class VerticalTextCellDrawer implements Drawer {
 
     private TextCell cell;
@@ -31,9 +34,12 @@ public class VerticalTextCellDrawer implements Drawer {
         this.cell = (TextCell) cell;
     }
 
-    // As of now: No support for Alignments ...
-    // Only Left, Bottom is supported.
-    // Need to think about it ;)
+    /**
+     * Does not yet support the settings of alignments.
+     *
+     * @param drawingContext
+     * @throws IOException
+     */
     @Override
     public void draw(DrawingContext drawingContext) throws IOException {
         final float startX = drawingContext.getStartingPoint().x;
@@ -82,7 +88,7 @@ public class VerticalTextCellDrawer implements Drawer {
         contentStream.beginText();
 
         // Do the transformation :)
-        contentStream.setTextMatrix(new Matrix(transform));
+        contentStream.setTextMatrix(transform);
 
         contentStream.setNonStrokingColor(color);
         contentStream.setFont(font, fontSize);

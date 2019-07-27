@@ -54,9 +54,15 @@ public class TextCell extends AbstractCell {
         // For vertical alignment we can't simply calculate the min width, the users should
         // just set it themselves ;)
         if (textOrientation == Orientation.VERTICAL) {
-            return super.getMinHeight();
+            // But in order not to run into https://github.com/vandeseer/easytable/issues/20
+            // we assume a min height that is the width of three chars (which are turned by 90 degrees).
+            float widthOfThreeChars = (getFont().getAverageFontWidth() * getFontSize() / 1000F) * 3;
+            return (getVerticalPadding() + widthOfThreeChars) > super.getMinHeight()
+                    ? (getVerticalPadding() + widthOfThreeChars)
+                    : super.getMinHeight();
         }
 
+        // In case we have regular horizontal alignment ...
         return (getVerticalPadding() + getTextHeight()) > super.getMinHeight()
                 ? (getVerticalPadding() + getTextHeight())
                 : super.getMinHeight();

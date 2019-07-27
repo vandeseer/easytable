@@ -27,8 +27,11 @@ public class TestUtils {
     }
 
     public static void createAndSaveDocumentWithTables(String outputFileName, Table... tables) throws IOException {
+        createAndSaveDocumentWithTables(new PDDocument(), outputFileName, tables);
+    }
 
-        final PDDocument document = new PDDocument();
+    public static void createAndSaveDocumentWithTables(PDDocument document, String outputFileName, Table... tables) throws IOException {
+
         final PDPage page = new PDPage(PDRectangle.A4);
         document.addPage(page);
 
