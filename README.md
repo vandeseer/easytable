@@ -17,27 +17,24 @@ crucial features. Nevertheless there is:
 * images in cells
 * experimental: vertical text
 
-Furthermore you can override drawing classes such that you can fully customize their drawing behaviour.
+One can also override classes that are responsible for table/cell drawing, i.e. 
+their drawing behaviour can be customized to a pretty high extent.
 
-## Example
+## Examples
 
-In order to produce a whole PDF document with a table that looks like this one:
+[This code](src/test/java/org/vandeseer/integrationtest/ExcelLikeExampleTest.java) is needed in order to produce a 
+PDF document with the following two tables:
 
 ![easytable table](doc/example.png)
 
-You will need [this code](src/test/java/org/vandeseer/integrationtest/ExcelLikeExampleTest.java).
-In the same file you find the code for this table: 
-
 ![easytable table](doc/example2.png)
 
-There are more examples (just see the folder), for instance this one: 
+For the next example have a look at the [SettingsTest.java](src/test/java/org/vandeseer/integrationtest/SettingsTest.java):
 
 ![easytable table](doc/example3.png)
 
-Again, just have a look at the [code](src/test/java/org/vandeseer/integrationtest/SettingsTest.java).
-
 The last one illustrates the use of vertical text in text cells. The code for 
-it can be found [here](src/test/java/org/vandeseer/integrationtest/VerticalTextCellTest.java). 
+it can be found [here](src/test/java/org/vandeseer/integrationtest/VerticalTextCellTest.java):
 
 ![easytable table](doc/example4.png)
 
@@ -75,13 +72,19 @@ improvements
 ### Can I customize the drawers for my own specific needs?
 
 Yep, you can customize the cell drawers itself or (depending on your use case)
-you can just create a custom cell. To get an idea, have a look at those two classes: 
-- Using [Lombok](https://projectlombok.org/): [EasytableCustomCellDrawer](src/test/java/org/vandeseer/integrationtest/custom/EasytableCustomCellDrawer.java)
-- Not using [Lombok](https://projectlombok.org/): [EasytableNoLombokCustomCellDrawer](src/test/java/org/vandeseer/integrationtest/custom/EasytableNoLombokCustomCellDrawer.java)
+you can just create a custom cell. 
+
+For using a customized cell drawer, have a look at 
+[CustomCellDrawer](src/test/java/org/vandeseer/integrationtest/custom/CustomCellDrawer.java).
+
+In case you want to create your own type of cell (which shouldn't really be necessary since the 
+drawing can be completely adapted) you will need to use [Lombok](https://projectlombok.org/)'s `@SuperBuilder`
+annotation. Again, just have a look at the code: 
+[CustomCellWithCustomDrawerUsingLombok](src/test/java/org/vandeseer/integrationtest/custom/CustomCellWithCustomDrawerUsingLombok.java)
 
 ### Does it work with Java < 8?
 
-Nope. You will need Java 8.
+Nope. You will need at least Java 8.
 
 ### Does it work with PDFBox 1.8.9?
 
@@ -91,7 +94,7 @@ Well, Using it with PDFBox 1.8.9 requires you to check out version
     git checkout v0.0.7
     mvn clean install
 
-Note though that the API will have changed in the meantime ...
+Note though that the API has changed quite a bit in the meantime ...
 
 ### Cool, I like it, can I buy you a beer?
 

@@ -26,7 +26,6 @@ public class ExcelLikeExampleTest {
     private final static Color BLUE_LIGHT_1 = new Color(186, 206, 230);
     private final static Color BLUE_LIGHT_2 = new Color(218, 230, 242);
 
-    private final static Color ORANGE = new Color(255, 180, 0);
     private final static Color GRAY_LIGHT_1 = new Color(245, 245, 245);
     private final static Color GRAY_LIGHT_2 = new Color(240, 240, 240);
     private final static Color GRAY_LIGHT_3 = new Color(216, 216, 216);
@@ -43,10 +42,10 @@ public class ExcelLikeExampleTest {
         
         // Some data
         final Object[][] data = {
-                {"Whisky", 134.4, 145.98},
-                {"Beer", 768.2, 677.9},
-                {"Gin", 456.45, 612.0},
-                {"Vodka", 302.71, 465.2}
+                {"Whisky", 134.0, 145.0},
+                {"Beer",   768.0, 677.0},
+                {"Gin",    456.2, 612.0},
+                {"Vodka",  302.3, 467.0}
         };
 
         // Define the table structure first
@@ -126,7 +125,7 @@ public class ExcelLikeExampleTest {
                 .add(TextCell.builder().borderWidth(1).padding(6).text("Left").build())
                 .add(TextCell.builder().borderWidth(1).padding(6).text("Middle").colSpan(3).build())
                 .add(TextCell.builder().borderWidth(1).padding(6).text("Right").build())
-                .backgroundColor(ORANGE)
+                .backgroundColor(GRAY)
                 .textColor(WHITE)
                 .font(HELVETICA_BOLD)
                 .fontSize(8)
