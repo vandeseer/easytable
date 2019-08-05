@@ -20,6 +20,9 @@ crucial features. Nevertheless there is:
 One can also override classes that are responsible for table/cell drawing, i.e. 
 their drawing behaviour can be customized to a pretty high extent.
 
+It is also possible to draw a table over multiple pages (even with the 
+header row being repeated on every new page).
+
 ## Examples
 
 [This code](src/test/java/org/vandeseer/integrationtest/ExcelLikeExampleTest.java) is needed in order to produce a 
@@ -81,6 +84,19 @@ In case you want to create your own type of cell (which shouldn't really be nece
 drawing can be completely adapted) you will need to use [Lombok](https://projectlombok.org/)'s `@SuperBuilder`
 annotation. Again, just have a look at the code: 
 [CustomCellWithCustomDrawerUsingLombok](src/test/java/org/vandeseer/integrationtest/custom/CustomCellWithCustomDrawerUsingLombok.java)
+
+### Can I draw a table over multiple pages?
+
+Yes, have a look at [TableOverSeveralPagesTest.java](src/test/java/org/vandeseer/integrationtest/TableOverSeveralPagesTest.java).
+Just use `startY(...)`  and `endY(..)` in order to restrict the vertical part of the page 
+where the table should be drawn: 
+
+    RepeatedHeaderTableDrawer.builder()
+        .table(createTable())
+        .startX(50)
+        .startY(100F)
+        .endY(50F) // <-- If the table is bigger, a new page is started
+        .build()
 
 ### Does it work with Java < 8?
 
