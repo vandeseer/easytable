@@ -105,7 +105,7 @@ public class PdfUtil {
         List<String> result = new ArrayList<>();
         result.add(line);
 
-        final List<String> splitValues = List.of(" ", ".", ",");
+        final List<String> splitValues = List.of(" ", "\\.", ",");
 
         for (final String splitWith : splitValues) {
             result = result.stream()
