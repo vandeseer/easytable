@@ -4,9 +4,9 @@ package org.vandeseer.easytable.util;
 import lombok.SneakyThrows;
 import org.apache.pdfbox.pdmodel.font.PDFont;
 
-import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * Provides some helping functions.
@@ -102,13 +102,38 @@ public class PdfUtil {
             return Collections.singletonList(line);
         }
 
-        final List<String> resultLines = PdfUtil.splitByWords(line, font, fontSize, maxWidth);
+        List<String> result = new ArrayList<>();
+        result.add(line);
 
-        if (resultLines.isEmpty()) {
-            resultLines.addAll(PdfUtil.splitBySize(line, font, fontSize, maxWidth));
+        final List<String> splitValues = List.of(" ", ".", ",");
+
+        for (final String splitWith : splitValues) {
+            result = result.stream()
+                    .flatMap(subLine -> {
+                        List<String> newLines = PdfUtil.splitBy(splitWith, subLine, font, fontSize, maxWidth);
+
+                        if (newLines.isEmpty()) {
+                            newLines.add(line);
+                        }
+
+                        return newLines.stream();
+                    })
+                    .collect(Collectors.toList());
+
+            if (result.stream().allMatch(subLine -> PdfUtil.doesTextLineFit(subLine, font, fontSize, maxWidth))) {
+                break;
+            }
         }
 
-        return resultLines;
+        return result.stream().flatMap(subLine -> {
+            if (PdfUtil.doesTextLineFit(subLine, font, fontSize, maxWidth)) {
+                return Stream.of(subLine);
+            } else {
+                return PdfUtil.splitBySize(subLine, font, fontSize, maxWidth).stream();
+            }
+        }).collect(Collectors.toList());
+
+
     }
 
     private static List<String> splitBySize(final String line, final PDFont font, final int fontSize, final float maxWidth) {
@@ -129,16 +154,33 @@ public class PdfUtil {
         return returnList;
     }
 
-    private static List<String> splitByWords(final String line, final PDFont font, final int fontSize, final float maxWidth) {
-        final List<String> returnList = new ArrayList<>();
-        final List<String> splitBySpace = Arrays.asList(line.split(" "));
 
-        for (int i = splitBySpace.size() - 1; i >= 0; i--) {
-            final String fittedNewLine = String.join(" ", splitBySpace.subList(0, i));
-            final String remains = String.join(" ", splitBySpace.subList(i, splitBySpace.size()));
+    /**
+     * Try to find the optimal split so the text is not larger than maxWidth.
+     *
+     * @param by       Try to split optimal with this value
+     * @param line     Raw line, which has to be smaller as maxWidth
+     * @param font     Used font (to determine the text-width)
+     * @param fontSize Used font-size (to determine the text-width)
+     * @param maxWidth Maximum width for the text
+     * @return Parts of line that are smaller than maxWidth.
+     * Its possible that these parts are larger (so there was not a split possible)
+     */
+    private static List<String> splitBy(final String by,
+                                        final String line,
+                                        final PDFont font,
+                                        final int fontSize,
+                                        final float maxWidth) {
+
+        final List<String> returnList = new ArrayList<>();
+        final List<String> splitBy = Arrays.asList(line.split(by));
+
+        for (int i = splitBy.size() - 1; i >= 0; i--) {
+            final String fittedNewLine = String.join(by, splitBy.subList(0, i));
+            final String remains = String.join(by, splitBy.subList(i, splitBy.size()));
 
             if (!fittedNewLine.isEmpty() && PdfUtil.doesTextLineFit(fittedNewLine, font, fontSize, maxWidth)) {
-                returnList.add(fittedNewLine);
+                returnList.add(String.format("%s%s", fittedNewLine, by).trim());
 
                 if (!Objects.equals(remains, line)) {
                     returnList.addAll(PdfUtil.wrapLine(remains, font, fontSize, maxWidth));
