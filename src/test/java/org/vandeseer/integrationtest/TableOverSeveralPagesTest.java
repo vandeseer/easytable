@@ -28,7 +28,33 @@ public class TableOverSeveralPagesTest {
             .build()
             .draw(() -> document, () -> new PDPage(PDRectangle.A4), 50f);
 
-        document.save("target/severalPagesTable.pdf");
+        document.save("target/severalPagesTable1.pdf");
+        document.close();
+
+    }
+
+    @Test
+    public void createTwoTwoPageTable() throws IOException {
+
+        final PDDocument document = new PDDocument();
+
+        TableDrawer.builder()
+                .table(createTable())
+                .startX(50)
+                .startY(100F)
+                .endY(50F) // note: if not set, table is drawn over the end of the page
+                .build()
+                .draw(() -> document, () -> new PDPage(PDRectangle.A4), 50f);
+
+        TableDrawer.builder()
+                .table(createTable())
+                .startX(50)
+                .startY(100F)
+                .endY(50F) // note: if not set, table is drawn over the end of the page
+                .build()
+                .draw(() -> document, () -> new PDPage(PDRectangle.A4), 50f);
+
+        document.save("target/severalPagesTable2.pdf");
         document.close();
 
     }

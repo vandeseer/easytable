@@ -61,16 +61,21 @@ public class TableDrawer {
     public void draw(Supplier<PDDocument> documentSupplier, Supplier<PDPage> pageSupplier, float yOffset) throws IOException {
         final PDDocument document = documentSupplier.get();
 
-        do {
-            PDPage page = pageSupplier.get();
-            document.addPage(page);
+        for (int i=0; !isFinished(); i++) {
+            PDPage page;
+            if (i > 0 || document.getNumberOfPages() == 0) {
+                page = pageSupplier.get();
+                document.addPage(page);
+            } else {
+                page = document.getPage(document.getNumberOfPages() - 1);
+            }
 
-            try (final PDPageContentStream newPageContentStream = new PDPageContentStream(document, page)) {
+            try (final PDPageContentStream newPageContentStream = new PDPageContentStream(document, page, PDPageContentStream.AppendMode.APPEND, false)) {
                 contentStream(newPageContentStream).draw();
             }
 
             startY(page.getMediaBox().getHeight() - yOffset);
-        } while (!isFinished());
+        }
     }
 
     protected void drawWithFunction(Point2D.Float startingPoint, TableDrawerFunction function, boolean isLastAction) throws IOException {
