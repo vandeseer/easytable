@@ -106,11 +106,17 @@ public class PdfUtil {
         result.add(line);
 
         final List<String> splitValues = List.of(" ", "\\.", ",");
+        final Map<String, String> splitByAndReplacementMap = Map.of(" ", " ",
+                "\\.", ".",
+                ",", ",");
 
-        for (final String splitWith : splitValues) {
+        for (Map.Entry<String, String> entry : splitByAndReplacementMap.entrySet()) {
+            final String splitRegex = entry.getKey();
+            final String replacement = entry.getValue();
+
             result = result.stream()
                     .flatMap(subLine -> {
-                        List<String> newLines = PdfUtil.splitBy(splitWith, subLine, font, fontSize, maxWidth);
+                        List<String> newLines = PdfUtil.splitBy(splitRegex, subLine, font, fontSize, maxWidth, replacement);
 
                         if (newLines.isEmpty()) {
                             newLines.add(line);
@@ -170,17 +176,18 @@ public class PdfUtil {
                                         final String line,
                                         final PDFont font,
                                         final int fontSize,
-                                        final float maxWidth) {
+                                        final float maxWidth,
+                                        final String replacementString) {
 
         final List<String> returnList = new ArrayList<>();
         final List<String> splitBy = Arrays.asList(line.split(by));
 
         for (int i = splitBy.size() - 1; i >= 0; i--) {
-            final String fittedNewLine = String.join(by, splitBy.subList(0, i));
-            final String remains = String.join(by, splitBy.subList(i, splitBy.size()));
+            final String fittedNewLine = String.join(replacementString, splitBy.subList(0, i));
+            final String remains = String.join(replacementString, splitBy.subList(i, splitBy.size()));
 
             if (!fittedNewLine.isEmpty() && PdfUtil.doesTextLineFit(fittedNewLine, font, fontSize, maxWidth)) {
-                returnList.add(String.format("%s%s", fittedNewLine, by).trim());
+                returnList.add(String.format("%s%s", fittedNewLine, replacementString).trim());
 
                 if (!Objects.equals(remains, line)) {
                     returnList.addAll(PdfUtil.wrapLine(remains, font, fontSize, maxWidth));
