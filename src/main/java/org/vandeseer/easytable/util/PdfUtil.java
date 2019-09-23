@@ -105,7 +105,6 @@ public class PdfUtil {
         List<String> result = new ArrayList<>();
         result.add(line);
 
-        final List<String> splitValues = List.of(" ", "\\.", ",");
         final Map<String, String> splitByAndReplacementMap = Map.of(" ", " ",
                 "\\.", ".",
                 ",", ",");
@@ -221,10 +220,6 @@ public class PdfUtil {
     private static class CouldNotDetermineStringWidthException extends RuntimeException {
         CouldNotDetermineStringWidthException() {
             super();
-        }
-
-        CouldNotDetermineStringWidthException(Exception exception) {
-            super(exception);
         }
     }
 
