@@ -31,7 +31,7 @@ public class PdfUtilTest {
         // We don't have to break in case we have two times the size ;)
         final float maxWidth = 2f * PdfUtil.getStringWidth(text, PDType1Font.HELVETICA, 12);
 
-        assertThat(PdfUtil.getOptimalTextBreakLines(text, PDType1Font.HELVETICA, 12, 100).size(), is(1));
+        assertThat(PdfUtil.getOptimalTextBreakLines(text, PDType1Font.HELVETICA, 12, maxWidth).size(), is(1));
     }
 
     @Test
@@ -41,7 +41,7 @@ public class PdfUtilTest {
         // Since we have new lines
         final float maxWidth = 2f * PdfUtil.getStringWidth(text, PDType1Font.HELVETICA, 12);
 
-        assertThat(PdfUtil.getOptimalTextBreakLines(text, PDType1Font.HELVETICA, 12, 100).size(), is(3));
+        assertThat(PdfUtil.getOptimalTextBreakLines(text, PDType1Font.HELVETICA, 12, maxWidth).size(), is(3));
     }
 
 }

@@ -105,9 +105,10 @@ public class PdfUtil {
         List<String> result = new ArrayList<>();
         result.add(line);
 
-        final Map<String, String> splitByAndReplacementMap = Map.of(" ", " ",
-                "\\.", ".",
-                ",", ",");
+        final Map<String, String> splitByAndReplacementMap = new HashMap<>();
+        splitByAndReplacementMap.put(" ", " ");
+        splitByAndReplacementMap.put("\\.", ".");
+        splitByAndReplacementMap.put(",", ",");
 
         for (Map.Entry<String, String> entry : splitByAndReplacementMap.entrySet()) {
             final String splitRegex = entry.getKey();
