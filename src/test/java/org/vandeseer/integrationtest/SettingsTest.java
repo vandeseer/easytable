@@ -54,7 +54,7 @@ public class SettingsTest {
                         .font(TIMES_ROMAN)
                         .build())
                 .backgroundColor(PURPLE_LIGHT_2)
-                .height(200)
+                .height(200f)
                 .build());
 
         tableBuilder.addRow(Row.builder()
