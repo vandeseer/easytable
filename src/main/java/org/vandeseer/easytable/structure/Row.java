@@ -28,7 +28,7 @@ public class Row {
     @Setter(AccessLevel.NONE)
     private Settings settings;
 
-    @Setter(AccessLevel.PRIVATE)
+    @Setter(AccessLevel.PACKAGE)
     private Float height;
 
     private Row next;
