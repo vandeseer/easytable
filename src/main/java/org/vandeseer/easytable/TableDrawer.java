@@ -123,9 +123,8 @@ public class TableDrawer {
 
     protected void drawBackgroundColorAndCellContent(Point2D.Float start, AbstractCell cell) throws IOException {
 
-        final float rowHeight = cell.getRow().getHeight();
-        final float height = Math.max(cell.getHeight(), rowHeight);
-        final float y = cell.getHeight() > rowHeight ? start.y + rowHeight - cell.getHeight() : start.y;
+        final float height = cell.getRow().getHeight();
+        final float y = start.y;
 
         // Handle the cell's background color
         if (cell.hasBackgroundColor()) {
@@ -139,7 +138,6 @@ public class TableDrawer {
         final float rowHeight = cell.getRow().getHeight();
         final float cellWidth = cell.getWidth();
 
-        final float height = Math.max(cell.getHeight(), rowHeight);
         final float sY = cell.getHeight() > rowHeight ? start.y + rowHeight - cell.getHeight() : start.y;
 
         // Handle the cell's borders
@@ -169,13 +167,13 @@ public class TableDrawer {
 
             if (cell.hasBorderLeft()) {
                 contentStream.moveTo(start.x, sY - correctionBottom);
-                drawLine(cellBorderColor, cell.getBorderWidthLeft(), start.x, sY + height + correctionTop);
+                drawLine(cellBorderColor, cell.getBorderWidthLeft(), start.x, sY + rowHeight + correctionTop);
                 contentStream.setStrokingColor(rowBorderColor);
             }
 
             if (cell.hasBorderRight()) {
                 contentStream.moveTo(start.x + cellWidth, sY - correctionBottom);
-                drawLine(cellBorderColor, cell.getBorderWidthRight(), start.x + cellWidth, sY + height + correctionTop);
+                drawLine(cellBorderColor, cell.getBorderWidthRight(), start.x + cellWidth, sY + rowHeight + correctionTop);
                 contentStream.setStrokingColor(rowBorderColor);
             }
         }

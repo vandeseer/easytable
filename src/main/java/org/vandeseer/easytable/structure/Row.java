@@ -28,7 +28,8 @@ public class Row {
     @Setter(AccessLevel.NONE)
     private Settings settings;
 
-    private float height;
+    @Setter(AccessLevel.PRIVATE)
+    private Float height;
 
     private Row next;
 
@@ -38,22 +39,20 @@ public class Row {
         this.cells = cells;
     }
 
-    boolean hasNext() {
-        return next != null;
-    }
-
     public float getHeight() {
         if (table == null) {
             throw new TableNotYetBuiltException();
         }
 
-        final float maxCellHeight = getCells().stream()
-                .filter(cell -> cell.getRowSpan() == 1)
-                .map(AbstractCell::getHeight)
-                .max(naturalOrder())
-                .orElseThrow(RuntimeException::new);
+        if (height == null) {
+            this.height = getCells().stream()
+                    .filter(cell -> cell.getRowSpan() == 1)
+                    .map(AbstractCell::getHeight)
+                    .max(naturalOrder())
+                    .orElseThrow(RuntimeException::new);
+        }
 
-        return Math.max(height, maxCellHeight);
+        return height;
     }
 
 

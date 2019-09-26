@@ -11,7 +11,7 @@
 
     <groupId>com.github.vandeseer</groupId>
     <artifactId>easytable</artifactId>
-    <version>0.5.3-TEST</version>
+    <version>0.5.4-DEV</version>
     <packaging>jar</packaging>
 
     <properties>
