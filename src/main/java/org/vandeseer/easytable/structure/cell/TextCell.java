@@ -20,18 +20,14 @@ import java.util.List;
 @SuperBuilder(toBuilder = true)
 public class TextCell extends AbstractCell {
 
-    private Float textHeight;
-
     @NonNull
     protected String text;
-
     protected Color textColor;
-
     @Builder.Default
     protected float lineSpacing = 1f;
-
     @Builder.Default
     protected Orientation textOrientation = Orientation.HORIZONTAL;
+    private Float textHeight;
 
     public PDFont getFont() {
         return settings.getFont();
@@ -116,7 +112,7 @@ public class TextCell extends AbstractCell {
         return notBrokenTextWidth;
     }
 
-    private float getMaxWidthOfText()  {
+    private float getMaxWidthOfText() {
         float columnsWidth = getColumn().getWidth();
 
         // We have to take column spanning into account

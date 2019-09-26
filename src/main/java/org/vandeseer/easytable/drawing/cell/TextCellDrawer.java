@@ -104,7 +104,7 @@ public class TextCellDrawer implements Drawer {
                 }
 
                 // Don't justify the last line
-                if (i < lines.size() -1) {
+                if (i < lines.size() - 1) {
 
                     // setCharacterSpacing() is available in PDFBox version 2.0.4 and higher.
                     drawingContext.getContentStream().setCharacterSpacing(charSpacing);

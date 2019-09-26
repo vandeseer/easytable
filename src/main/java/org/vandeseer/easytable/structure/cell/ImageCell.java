@@ -14,13 +14,11 @@ import java.awt.geom.Point2D;
 @SuperBuilder(toBuilder = true)
 public class ImageCell extends AbstractCell {
 
-    @NonNull
-    private PDImageXObject image;
-
-    private float maxHeight;
-
     @Builder.Default
     private final float scale = 1.0f;
+    @NonNull
+    private PDImageXObject image;
+    private float maxHeight;
 
     @Override
     public float getMinHeight() {

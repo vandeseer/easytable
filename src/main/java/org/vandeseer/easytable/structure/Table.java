@@ -59,7 +59,7 @@ public class Table {
         return cellWidth;
     }
 
-    public boolean isRowSpanAt(int rowIndex,int columnIndex) {
+    public boolean isRowSpanAt(int rowIndex, int columnIndex) {
         return rowSpanCells.contains(new Point(rowIndex, columnIndex));
     }
 
@@ -69,12 +69,12 @@ public class Table {
         private List<Column> columns = new LinkedList<>();
 
         private Settings settings = Settings.builder()
-                                                .font(DEFAULT_FONT)
-                                                .fontSize(DEFAULT_FONT_SIZE)
-                                                .textColor(DEFAULT_TEXT_COLOR)
-                                                .borderColor(DEFAULT_BORDER_COLOR)
-                                                .wordBreak(true)
-                                                .build();
+                .font(DEFAULT_FONT)
+                .fontSize(DEFAULT_FONT_SIZE)
+                .textColor(DEFAULT_TEXT_COLOR)
+                .borderColor(DEFAULT_BORDER_COLOR)
+                .wordBreak(true)
+                .build();
 
         private Set<Point> rowSpanCells = new HashSet<>();
 
