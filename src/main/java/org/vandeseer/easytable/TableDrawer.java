@@ -124,7 +124,7 @@ public class TableDrawer {
     protected void drawBackgroundColorAndCellContent(Point2D.Float start, AbstractCell cell) throws IOException {
 
         final float rowHeight = cell.getRow().getHeight();
-        final float height = cell.getHeight() > rowHeight ? cell.getHeight() : rowHeight;
+        final float height = Math.max(cell.getHeight(), rowHeight);
         final float y = cell.getHeight() > rowHeight ? start.y + rowHeight - cell.getHeight() : start.y;
 
         // Handle the cell's background color
@@ -139,7 +139,7 @@ public class TableDrawer {
         final float rowHeight = cell.getRow().getHeight();
         final float cellWidth = cell.getWidth();
 
-        final float height = cell.getHeight() > rowHeight ? cell.getHeight() : rowHeight;
+        final float height = Math.max(cell.getHeight(), rowHeight);
         final float sY = cell.getHeight() > rowHeight ? start.y + rowHeight - cell.getHeight() : start.y;
 
         // Handle the cell's borders
