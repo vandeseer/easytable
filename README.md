@@ -69,6 +69,7 @@ improvements
 - to [AdrianMiska](https://github.com/AdrianMiska) for finding and fixing an issue with cell height
 - to [TheRealSourceSeeker](https://github.com/TheRealSourceSeeker) for finding a bug caused by using `float`s
 - to [Drummond Dawson](https://github.com/drumonii) for code changes that allowed removing a dependency
+- to [styssi](https://github.com/styssi) for allowing several multipage tables being drawn on the same page
 
 ## Q&A
 
