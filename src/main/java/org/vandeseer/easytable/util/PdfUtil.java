@@ -20,6 +20,13 @@ public class PdfUtil {
      */
     private static final double EPSILON = 0.0001;
 
+    private static final Map<String, String> SPLIT_BY_AND_REPLACEMENT_MAP = new LinkedHashMap<>();
+    static {
+        SPLIT_BY_AND_REPLACEMENT_MAP.put(" ", " ");
+        SPLIT_BY_AND_REPLACEMENT_MAP.put("\\.", ".");
+        SPLIT_BY_AND_REPLACEMENT_MAP.put(",", ",");
+    }
+
     private PdfUtil() {
 
     }
@@ -105,12 +112,7 @@ public class PdfUtil {
         List<String> result = new ArrayList<>();
         result.add(line);
 
-        final Map<String, String> splitByAndReplacementMap = new HashMap<>();
-        splitByAndReplacementMap.put(" ", " ");
-        splitByAndReplacementMap.put("\\.", ".");
-        splitByAndReplacementMap.put(",", ",");
-
-        for (Map.Entry<String, String> entry : splitByAndReplacementMap.entrySet()) {
+        for (Map.Entry<String, String> entry : SPLIT_BY_AND_REPLACEMENT_MAP.entrySet()) {
             final String splitRegex = entry.getKey();
             final String replacement = entry.getValue();
 
@@ -170,7 +172,7 @@ public class PdfUtil {
      * @param fontSize Used font-size (to determine the text-width)
      * @param maxWidth Maximum width for the text
      * @return Parts of line that are smaller than maxWidth.
-     * Its possible that these parts are larger (so there was not a split possible)
+     * It's possible that these parts are larger (so there was not a split possible)
      */
     private static List<String> splitBy(final String by,
                                         final String line,
@@ -190,7 +192,7 @@ public class PdfUtil {
                 returnList.add(String.format("%s%s", fittedNewLine, replacementString).trim());
 
                 if (!Objects.equals(remains, line)) {
-                    returnList.addAll(PdfUtil.wrapLine(remains, font, fontSize, maxWidth));
+                    returnList.addAll(PdfUtil.wrapLine(String.format("%s%s", remains, replacementString).trim(), font, fontSize, maxWidth));
                 }
                 break;
             }

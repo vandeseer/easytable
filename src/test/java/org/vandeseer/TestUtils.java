@@ -14,7 +14,7 @@ import java.util.Objects;
 
 public class TestUtils {
 
-    private static final String TARGET_FOLDER = "target";
+    public static final String TARGET_FOLDER = "target";
     private static final float PADDING = 50f;
 
     private static final PDDocument PD_DOCUMENT_FOR_IMAGES = new PDDocument();

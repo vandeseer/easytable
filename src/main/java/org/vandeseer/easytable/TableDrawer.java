@@ -62,7 +62,7 @@ public class TableDrawer {
         final PDDocument document = documentSupplier.get();
 
         for (int i=0; !isFinished(); i++) {
-            PDPage page;
+            final PDPage page;
             if (i > 0 || document.getNumberOfPages() == 0) {
                 page = pageSupplier.get();
                 document.addPage(page);
