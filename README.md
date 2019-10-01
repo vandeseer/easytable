@@ -1,7 +1,7 @@
 # easytable
 
 This is a (very) small project that builds upon
-[Apache's PDFBox](http://pdfbox.apache.org) (>= 2.0.4) and should allow you
+[Apache's PDFBox](http://pdfbox.apache.org) and should allow you
 to create tables in a fairly simple way.
 It emerged from the need in another project. Therefore it also may miss some
 crucial features. Nevertheless there is:
@@ -52,7 +52,7 @@ Add this to your `pom.xml`:
     <dependency>
         <groupId>com.github.vandeseer</groupId>
         <artifactId>easytable</artifactId>
-        <version>0.5.0</version>
+        <version>0.5.1</version>
     </dependency>
 
 Or checkout the repository and install it locally with maven (e.g. for the`develop` branch):
@@ -69,6 +69,7 @@ improvements
 - to [AdrianMiska](https://github.com/AdrianMiska) for finding and fixing an issue with cell height
 - to [TheRealSourceSeeker](https://github.com/TheRealSourceSeeker) for finding a bug caused by using `float`s
 - to [Drummond Dawson](https://github.com/drumonii) for code changes that allowed removing a dependency
+- to [styssi](https://github.com/styssi) for allowing several multipage tables being drawn on the same page
 
 ## Q&A
 

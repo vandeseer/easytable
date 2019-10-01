@@ -33,13 +33,13 @@
         <dependency>
             <groupId>org.apache.pdfbox</groupId>
             <artifactId>pdfbox</artifactId>
-            <version>2.0.16</version>
+            <version>2.0.17</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
-            <version>1.18.4</version>
+            <version>1.18.10</version>
             <scope>provided</scope>
         </dependency>
 
@@ -84,10 +84,11 @@
             <plugin>
                 <groupId>org.owasp</groupId>
                 <artifactId>dependency-check-maven</artifactId>
-                <version>5.1.1</version>
+                <version>5.2.1</version>
                 <configuration>
                     <cveValidForHours>12</cveValidForHours>
                     <failBuildOnCVSS>4</failBuildOnCVSS>
+                    <failOnError>false</failOnError>
                 </configuration>
                 <executions>
                     <execution>
@@ -103,8 +104,8 @@
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.8.0</version>
                 <configuration>
-                    <source>11</source>
-                    <target>11</target>
+                    <source>1.8</source>
+                    <target>1.8</target>
                     <annotationProcessorPaths>
                         <path>
                             <groupId>org.projectlombok</groupId>

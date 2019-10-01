@@ -4,6 +4,7 @@ import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.common.PDRectangle;
 import org.junit.Test;
+import org.vandeseer.TestUtils;
 import org.vandeseer.easytable.RepeatedHeaderTableDrawer;
 import org.vandeseer.easytable.TableDrawer;
 import org.vandeseer.easytable.structure.Row;
@@ -16,65 +17,53 @@ import java.io.IOException;
 public class TableOverSeveralPagesTest {
 
     @Test
-    public void createTwoPageTable() throws IOException {
+    public void drawMultipageTable() throws IOException {
 
-        final PDDocument document = new PDDocument();
-
-        TableDrawer.builder()
-            .table(createTable())
-            .startX(50)
-            .startY(100F)
-            .endY(50F) // note: if not set, table is drawn over the end of the page
-            .build()
-            .draw(() -> document, () -> new PDPage(PDRectangle.A4), 50f);
-
-        document.save("target/severalPagesTable1.pdf");
-        document.close();
+        try (final PDDocument document = new PDDocument()) {
+            drawMultipageTableOn(document);
+            document.save(TestUtils.TARGET_FOLDER + "/severalPagesTable1.pdf");
+        }
 
     }
 
     @Test
-    public void createTwoTwoPageTable() throws IOException {
+    public void drawSeveralMultipageTableOnSameDocument() throws IOException {
 
-        final PDDocument document = new PDDocument();
+        try (final PDDocument document = new PDDocument()) {
+            drawMultipageTableOn(document);
+            drawMultipageTableOn(document);
 
-        TableDrawer.builder()
-                .table(createTable())
-                .startX(50)
-                .startY(100F)
-                .endY(50F) // note: if not set, table is drawn over the end of the page
-                .build()
-                .draw(() -> document, () -> new PDPage(PDRectangle.A4), 50f);
-
-        TableDrawer.builder()
-                .table(createTable())
-                .startX(50)
-                .startY(100F)
-                .endY(50F) // note: if not set, table is drawn over the end of the page
-                .build()
-                .draw(() -> document, () -> new PDPage(PDRectangle.A4), 50f);
-
-        document.save("target/severalPagesTable2.pdf");
-        document.close();
+            document.save(TestUtils.TARGET_FOLDER + "/severalPagesTable2.pdf");
+        }
 
     }
 
     @Test
     public void createTwoPageTableWithRepeatedHeader() throws IOException {
 
-        final PDDocument document = new PDDocument();
+        try (final PDDocument document = new PDDocument()) {
 
-        RepeatedHeaderTableDrawer.builder()
-            .table(createTable())
-            .startX(50)
-            .startY(100F)
-            .endY(50F) // note: if not set, table is drawn over the end of the page
-            .build()
-            .draw(() -> document, () -> new PDPage(PDRectangle.A4), 50f);
+            RepeatedHeaderTableDrawer.builder()
+                    .table(createTable())
+                    .startX(50)
+                    .startY(100F)
+                    .endY(50F) // note: if not set, table is drawn over the end of the page
+                    .build()
+                    .draw(() -> document, () -> new PDPage(PDRectangle.A4), 50f);
 
-        document.save("target/severalPagesTableRepeatedHeader.pdf");
-        document.close();
+            document.save(TestUtils.TARGET_FOLDER + "/severalPagesTableRepeatedHeader.pdf");
+        }
 
+    }
+
+    private void drawMultipageTableOn(PDDocument document) throws IOException {
+        TableDrawer.builder()
+                .table(createTable())
+                .startX(50)
+                .startY(100F)
+                .endY(50F) // note: if not set, table is drawn over the end of the page
+                .build()
+                .draw(() -> document, () -> new PDPage(PDRectangle.A4), 50f);
     }
 
     private Table createTable() {

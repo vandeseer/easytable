@@ -59,8 +59,10 @@ public class TableDrawer {
     public void draw(Supplier<PDDocument> documentSupplier, Supplier<PDPage> pageSupplier, float yOffset) throws IOException {
         final PDDocument document = documentSupplier.get();
 
+
         for (int i = 0; !isFinished(); i++) {
             PDPage page;
+
             if (i > 0 || document.getNumberOfPages() == 0) {
                 page = pageSupplier.get();
                 document.addPage(page);
