@@ -91,7 +91,7 @@ public class PdfUtil {
      * @return A list of lines, where all are smaller than maxWidth
      */
     public static List<String> getOptimalTextBreakLines(final String text, final PDFont font, final int fontSize, final float maxWidth) {
-        final List<String> result = new LinkedList<>();
+        final List<String> result = new ArrayList<>();
 
         for (final String line : text.split(NEW_LINE_REGEX)) {
             if (PdfUtil.doesTextLineFit(line, font, fontSize, maxWidth)) {

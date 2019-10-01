@@ -22,14 +22,12 @@ public class TextCell extends AbstractCell {
 
     @NonNull
     protected String text;
-
     protected Color textColor;
-
     @Builder.Default
     protected float lineSpacing = 1f;
-
     @Builder.Default
     protected Orientation textOrientation = Orientation.HORIZONTAL;
+    private Float textHeight;
 
     public PDFont getFont() {
         return settings.getFont();
@@ -74,20 +72,24 @@ public class TextCell extends AbstractCell {
      * @return the height of the cell's text taking into account spacing and line breaks
      */
     public float getTextHeight() {
-        final float fontHeight = PdfUtil.getFontHeight(getFont(), getFontSize());
+
+        if (this.textHeight != null) {
+            return this.textHeight;
+        }
+
+        this.textHeight = PdfUtil.getFontHeight(getFont(), getFontSize());
 
         if (settings.isWordBreak()) {
 
             final int size = PdfUtil.getOptimalTextBreakLines(text, getFont(), getFontSize(), getWidthOfText()).size();
 
-            final float heightOfTextLines = size * fontHeight;
-            final float heightOfLineSpacing = (size - 1) * fontHeight * getLineSpacing();
+            final float heightOfTextLines = size * this.textHeight;
+            final float heightOfLineSpacing = (size - 1) * this.textHeight * getLineSpacing();
 
-            return heightOfTextLines + heightOfLineSpacing;
-
+            this.textHeight = heightOfTextLines + heightOfLineSpacing;
         }
 
-        return fontHeight;
+        return this.textHeight;
     }
 
     public float getWidthOfText() {
@@ -110,7 +112,7 @@ public class TextCell extends AbstractCell {
         return notBrokenTextWidth;
     }
 
-    private float getMaxWidthOfText()  {
+    private float getMaxWidthOfText() {
         float columnsWidth = getColumn().getWidth();
 
         // We have to take column spanning into account

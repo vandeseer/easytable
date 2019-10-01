@@ -1,5 +1,7 @@
 package org.vandeseer.easytable.drawing.cell;
 
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.font.PDFont;
 import org.vandeseer.easytable.drawing.Drawer;
@@ -16,16 +18,12 @@ import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
 
+@NoArgsConstructor
+@AllArgsConstructor
 public class TextCellDrawer implements Drawer {
 
     private TextCell cell;
 
-    public TextCellDrawer() {
-    }
-
-    public TextCellDrawer(TextCell cell) {
-        this.cell = cell;
-    }
 
     @Override
     public void setCell(AbstractCell cell) {
@@ -106,7 +104,7 @@ public class TextCellDrawer implements Drawer {
                 }
 
                 // Don't justify the last line
-                if (i < lines.size() -1) {
+                if (i < lines.size() - 1) {
 
                     // setCharacterSpacing() is available in PDFBox version 2.0.4 and higher.
                     drawingContext.getContentStream().setCharacterSpacing(charSpacing);
