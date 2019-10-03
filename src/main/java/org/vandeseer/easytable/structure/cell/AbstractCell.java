@@ -20,39 +20,55 @@ import java.awt.*;
 public abstract class AbstractCell {
 
     public static final float DEFAULT_MIN_HEIGHT = 10f;
+
     @Builder.Default
     private final int colSpan = 1;
+
     @Builder.Default
     private final int rowSpan = 1;
+
+    @Setter
+    protected Drawer drawer;
+
+    @Setter
+    private Row row;
+
+    @Setter
+    private Column column;
+
+    @Setter
+    private float width;
+
     @Builder.Default
-    private final float paddingLeft = 4;
-    @Builder.Default
-    private final float paddingRight = 4;
-    @Builder.Default
-    private final float paddingTop = 4;
-    @Builder.Default
-    private final float paddingBottom = 4;
+    private float minHeight = DEFAULT_MIN_HEIGHT;
+
     @Getter
     @Setter(AccessLevel.PROTECTED)
     protected Settings settings;
-    @Setter
-    protected Drawer drawer;
-    @Setter
-    private Row row;
-    @Setter
-    private Column column;
-    @Setter
-    private float width;
+
+    @Builder.Default
+    private final float paddingLeft = 4;
+
+    @Builder.Default
+    private final float paddingRight = 4;
+
+    @Builder.Default
+    private final float paddingTop = 4;
+
+    @Builder.Default
+    private final float paddingBottom = 4;
+
     @Builder.Default
     private float borderWidthTop = 0;
+
     @Builder.Default
     private float borderWidthLeft = 0;
+
     @Builder.Default
     private float borderWidthRight = 0;
+
     @Builder.Default
     private float borderWidthBottom = 0;
-    @Builder.Default
-    private float minHeight = DEFAULT_MIN_HEIGHT;
 
     public float getHorizontalPadding() {
         return getPaddingLeft() + getPaddingRight();

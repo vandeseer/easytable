@@ -9,8 +9,8 @@ import org.vandeseer.easytable.settings.VerticalAlignment;
 import org.vandeseer.easytable.structure.cell.AbstractCell;
 
 import java.awt.*;
+import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
@@ -65,8 +65,8 @@ public class Table {
 
     public static class TableBuilder {
 
-        private List<Row> rows = new LinkedList<>();
-        private List<Column> columns = new LinkedList<>();
+        private List<Row> rows = new ArrayList<>();
+        private List<Column> columns = new ArrayList<>();
 
         private Settings settings = Settings.builder()
                 .font(DEFAULT_FONT)
@@ -106,19 +106,18 @@ public class Table {
 
             for (AbstractCell cell : cells) {
 
+                while (rowSpanCells.contains(new Point(rows.size(), currentColumn))) {
+                    currentColumn++;
+                }
+
                 if (cell.getRowSpan() > 1) {
-                    // First we need to skip the cells in columns where we have row spanning from rows above
-                    int skipped = 0;
-                    while (rowSpanCells.contains(new Point(rows.size(), currentColumn + skipped))) {
-                        skipped++;
-                    }
 
                     for (int rowsToSpan = 0; rowsToSpan < cell.getRowSpan(); rowsToSpan++) {
 
                         // Skip first row's cell, because that is a regular cell
                         if (rowsToSpan >= 1) {
                             for (int colSpan = 0; colSpan < cell.getColSpan(); colSpan++) {
-                                rowSpanCells.add(new Point(rows.size() + rowsToSpan, currentColumn + skipped + colSpan));
+                                rowSpanCells.add(new Point(rows.size() + rowsToSpan, currentColumn + colSpan));
                             }
                         }
                     }
@@ -202,7 +201,7 @@ public class Table {
                 // Fill up the settings of the row that are not set there directly
                 row.getSettings().fillingMergeBy(table.getSettings());
 
-                int columnNumber = 0;
+                int columnIndex = 0;
                 for (AbstractCell cell : row.getCells()) {
 
                     // Fill up the settings of the cell that are not set there directly
@@ -211,16 +210,16 @@ public class Table {
                     cell.setRow(row);
 
                     // We need to take into account row spanning ...
-                    while (table.isRowSpanAt(rowIndex, columnNumber)) {
-                        columnNumber++;
+                    while (table.isRowSpanAt(rowIndex, columnIndex)) {
+                        columnIndex++;
                     }
 
-                    Column column = table.getColumns().get(columnNumber);
+                    Column column = table.getColumns().get(columnIndex);
                     cell.setColumn(column);
 
-                    cell.setWidth(table.getAvailableCellWidthRespectingSpan(columnNumber, cell.getColSpan()));
+                    cell.setWidth(table.getAvailableCellWidthRespectingSpan(columnIndex, cell.getColSpan()));
 
-                    columnNumber += cell.getColSpan();
+                    columnIndex += cell.getColSpan();
                 }
             }
 
