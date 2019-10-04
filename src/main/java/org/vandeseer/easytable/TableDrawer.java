@@ -43,7 +43,7 @@ public class TableDrawer {
     @Getter
     protected boolean isFinished = false;
 
-    private final DrawingGuard drawingGuard = new DrawingGuard();
+    protected final DrawingGuard drawingGuard = new DrawingGuard();
 
     protected TableDrawer(float startX, float startY, PDPageContentStream contentStream, Table table, float endY) {
         this.contentStream = contentStream;
