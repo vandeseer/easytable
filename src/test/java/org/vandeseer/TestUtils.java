@@ -9,12 +9,15 @@ import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
 import org.vandeseer.easytable.TableDrawer;
 import org.vandeseer.easytable.structure.Table;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.Objects;
 
 public class TestUtils {
 
     public static final String TARGET_FOLDER = "target";
+    public static final String TARGET_SUBFOLDER_REGRESSION = "/regression";
+
     private static final float PADDING = 50f;
 
     private static final PDDocument PD_DOCUMENT_FOR_IMAGES = new PDDocument();
@@ -36,7 +39,6 @@ public class TestUtils {
         document.addPage(page);
 
         float startY = page.getMediaBox().getHeight() - PADDING;
-
 
         try (final PDPageContentStream contentStream = new PDPageContentStream(document, page)) {
 
@@ -75,4 +77,7 @@ public class TestUtils {
         return PDImageXObject.createFromByteArray(PD_DOCUMENT_FOR_IMAGES, sampleBytes, "sample");
     }
 
+    public static void assertRegressionFolderExists() {
+        new File(TARGET_FOLDER + TARGET_SUBFOLDER_REGRESSION).mkdirs();
+    }
 }
