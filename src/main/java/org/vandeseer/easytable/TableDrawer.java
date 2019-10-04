@@ -23,9 +23,11 @@ import java.util.function.Supplier;
 public class TableDrawer {
 
     protected final Table table;
+
     @Setter
     @Accessors(chain = true, fluent = true)
     protected PDPageContentStream contentStream;
+
     @Setter
     @Accessors(chain = true, fluent = true)
     protected float startX;
@@ -124,12 +126,13 @@ public class TableDrawer {
     protected void drawBackgroundColorAndCellContent(Point2D.Float start, AbstractCell cell) throws IOException {
 
         final float rowHeight = cell.getRow().getHeight();
-        final float height = cell.getHeight() > rowHeight ? cell.getHeight() : rowHeight;
-        final float y = cell.getHeight() > rowHeight ? start.y + rowHeight - cell.getHeight() : start.y;
+        final float y = cell.getHeight() > rowHeight
+                ? start.y + rowHeight - cell.getHeight()
+                : start.y;
 
         // Handle the cell's background color
         if (cell.hasBackgroundColor()) {
-            drawCellBackground(cell, new Point2D.Float(start.x, y), height);
+            drawCellBackground(cell, new Point2D.Float(start.x, y), Math.max(cell.getHeight(), rowHeight));
         }
 
         cell.getDrawer().draw(new DrawingContext(contentStream, start));
@@ -139,7 +142,7 @@ public class TableDrawer {
         final float rowHeight = cell.getRow().getHeight();
         final float cellWidth = cell.getWidth();
 
-        final float height = cell.getHeight() > rowHeight ? cell.getHeight() : rowHeight;
+        final float height = Math.max(cell.getHeight(), rowHeight);
         final float sY = cell.getHeight() > rowHeight ? start.y + rowHeight - cell.getHeight() : start.y;
 
         // Handle the cell's borders

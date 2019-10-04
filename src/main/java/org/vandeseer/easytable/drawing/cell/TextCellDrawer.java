@@ -18,12 +18,11 @@ import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
 
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 public class TextCellDrawer implements Drawer {
 
     private TextCell cell;
-
 
     @Override
     public void setCell(AbstractCell cell) {

@@ -1,5 +1,7 @@
 package org.vandeseer.easytable.drawing.cell;
 
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.font.PDFont;
 import org.vandeseer.easytable.drawing.Drawer;
@@ -18,16 +20,11 @@ import java.util.List;
  * Allows vertical text drawing. Note that this class is still not fully
  * developed, e.g. there is no support for text alignment settings yet.
  */
+@AllArgsConstructor
+@NoArgsConstructor
 public class VerticalTextCellDrawer implements Drawer {
 
     private TextCell cell;
-
-    public VerticalTextCellDrawer() {
-    }
-
-    public VerticalTextCellDrawer(TextCell cell) {
-        this.cell = cell;
-    }
 
     @Override
     public void setCell(AbstractCell cell) {

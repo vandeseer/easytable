@@ -44,19 +44,9 @@ public class Table {
     private float borderWidth = 0.2f;
 
     public float getHeight() {
-        float height = 0;
-        for (final Row row : rows) {
-            height += (row.getHeight());
-        }
-        return height;
-    }
-
-    public float getAvailableCellWidthRespectingSpan(int columnIndex, int span) {
-        float cellWidth = 0;
-        for (int i = 0; i < span; i++) {
-            cellWidth += getColumns().get(columnIndex + i).getWidth();
-        }
-        return cellWidth;
+        return rows.stream()
+                .map(Row::getHeight)
+                .reduce(0F, Float::sum);
     }
 
     public boolean isRowSpanAt(int rowIndex, int columnIndex) {
@@ -83,11 +73,9 @@ public class Table {
         }
 
         public TableBuilder addRow(final Row row) {
-            final List<AbstractCell> cells = row.getCells();
-
             // Store how many cells can or better have to be omitted in the next rows
             // due to cells in this row that declare row spanning
-            updateRowSpanCellsSet(cells);
+            updateRowSpanCellsSet(row.getCells());
 
             if (!rows.isEmpty()) {
                 rows.get(rows.size() - 1).setNext(row);
@@ -95,6 +83,14 @@ public class Table {
             rows.add(row);
 
             return this;
+        }
+
+        private float getAvailableCellWidthRespectingSpan(int columnIndex, int span) {
+            float cellWidth = 0;
+            for (int i = 0; i < span; i++) {
+                cellWidth += columns.get(columnIndex + i).getWidth();
+            }
+            return cellWidth;
         }
 
         // This method is unfortunately a bit complex, but what it does is basically:
@@ -217,7 +213,7 @@ public class Table {
                     Column column = table.getColumns().get(columnIndex);
                     cell.setColumn(column);
 
-                    cell.setWidth(table.getAvailableCellWidthRespectingSpan(columnIndex, cell.getColSpan()));
+                    cell.setWidth(getAvailableCellWidthRespectingSpan(columnIndex, cell.getColSpan()));
 
                     columnIndex += cell.getColSpan();
                 }

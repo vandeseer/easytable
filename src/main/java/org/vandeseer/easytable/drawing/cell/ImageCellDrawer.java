@@ -1,5 +1,7 @@
 package org.vandeseer.easytable.drawing.cell;
 
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import org.vandeseer.easytable.drawing.Drawer;
 import org.vandeseer.easytable.drawing.DrawingContext;
@@ -11,16 +13,11 @@ import org.vandeseer.easytable.structure.cell.ImageCell;
 import java.awt.geom.Point2D;
 import java.io.IOException;
 
+@AllArgsConstructor
+@NoArgsConstructor
 public class ImageCellDrawer implements Drawer {
 
     private ImageCell cell;
-
-    public ImageCellDrawer() {
-    }
-
-    public ImageCellDrawer(ImageCell cell) {
-        this.cell = cell;
-    }
 
     @Override
     public void setCell(AbstractCell cell) {

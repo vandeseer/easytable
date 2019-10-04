@@ -22,11 +22,15 @@ public class TextCell extends AbstractCell {
 
     @NonNull
     protected String text;
+
     protected Color textColor;
+
     @Builder.Default
     protected float lineSpacing = 1f;
+
     @Builder.Default
     protected Orientation textOrientation = Orientation.HORIZONTAL;
+
     private Float textHeight;
 
     public PDFont getFont() {
