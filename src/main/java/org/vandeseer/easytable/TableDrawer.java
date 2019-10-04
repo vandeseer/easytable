@@ -43,6 +43,8 @@ public class TableDrawer {
     @Getter
     protected boolean isFinished = false;
 
+    private final DrawingGuard drawingGuard = new DrawingGuard();
+
     protected TableDrawer(float startX, float startY, PDPageContentStream contentStream, Table table, float endY) {
         this.contentStream = contentStream;
         this.table = table;
@@ -61,9 +63,8 @@ public class TableDrawer {
     public void draw(Supplier<PDDocument> documentSupplier, Supplier<PDPage> pageSupplier, float yOffset) throws IOException {
         final PDDocument document = documentSupplier.get();
 
-
         for (int i = 0; !isFinished(); i++) {
-            PDPage page;
+            final PDPage page;
 
             if (i > 0 || document.getNumberOfPages() == 0) {
                 page = pageSupplier.get();
@@ -97,6 +98,13 @@ public class TableDrawer {
                 if (isLastAction) {
                     rowToDraw = i;
                 }
+
+                drawingGuard.noteRowNotFinishedSuccessfully();
+                if (drawingGuard.isNoticingDrawingIssue()) {
+                    throw new TooManyAttemptsException("Could not successfully draw, most likely a cell's content is " +
+                            "bigger than the page it should be drawn onto.");
+                }
+
                 return;
             }
 
@@ -116,6 +124,7 @@ public class TableDrawer {
                 x += cell.getWidth();
                 columnCounter += cell.getColSpan();
             }
+            drawingGuard.noteRowFinishedSuccessfully();
         }
 
         if (isLastAction) {
