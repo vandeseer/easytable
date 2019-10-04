@@ -124,7 +124,7 @@ public class Issue20WordWrappingTest {
                         .build())
                 .wordBreak(true);
 
-        TestUtils.createAndSaveDocumentWithTable("wordWrapping_issue20_3.pdf", tableBuilder.build());
+        TestUtils.createAndSaveDocumentWithTable(TestUtils.TARGET_SUBFOLDER_REGRESSION + "/wordWrapping_issue20_3.pdf", tableBuilder.build());
     }
 
 }
