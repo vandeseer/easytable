@@ -51,8 +51,6 @@ public class TableDrawer {
         this.drawerList.add(Drawer::drawBorders);
     }
 
-    protected final DrawingGuard drawingGuard = new DrawingGuard();
-
     public static class PageData {
 
         public final int firstRowOnPage;
