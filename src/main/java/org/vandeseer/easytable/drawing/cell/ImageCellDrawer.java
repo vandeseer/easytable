@@ -1,31 +1,25 @@
 package org.vandeseer.easytable.drawing.cell;
 
-import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
+import lombok.SneakyThrows;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
-import org.vandeseer.easytable.drawing.Drawer;
 import org.vandeseer.easytable.drawing.DrawingContext;
 import org.vandeseer.easytable.settings.HorizontalAlignment;
 import org.vandeseer.easytable.settings.VerticalAlignment;
-import org.vandeseer.easytable.structure.cell.AbstractCell;
 import org.vandeseer.easytable.structure.cell.ImageCell;
 
 import java.awt.geom.Point2D;
-import java.io.IOException;
 
-@AllArgsConstructor
 @NoArgsConstructor
-public class ImageCellDrawer implements Drawer {
+public class ImageCellDrawer extends AbstractCellDrawer<ImageCell> {
 
-    private ImageCell cell;
-
-    @Override
-    public void setCell(AbstractCell cell) {
-        this.cell = (ImageCell) cell;
+    public ImageCellDrawer(ImageCell cell) {
+        this.cell = cell;
     }
 
     @Override
-    public void draw(DrawingContext drawingContext) throws IOException {
+    @SneakyThrows
+    public void drawContent(DrawingContext drawingContext) {
         final PDPageContentStream contentStream = drawingContext.getContentStream();
         final float moveX = drawingContext.getStartingPoint().x;
         final float moveY = drawingContext.getStartingPoint().y;

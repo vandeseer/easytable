@@ -78,11 +78,6 @@ public class TableOverSeveralPagesTest {
                 .borderWidth(1F)
                 .build();
 
-        TextCell dummyCell = TextCell.builder()
-                .text("dummy")
-                .borderWidth(1F)
-                .build();
-
         tableBuilder.addRow(
                 Row.builder()
                         .add(dummyHeaderCell)
@@ -92,8 +87,14 @@ public class TableOverSeveralPagesTest {
         for (int i = 0; i < 50; i++) {
             tableBuilder.addRow(
                     Row.builder()
-                            .add(dummyCell)
-                            .add(dummyCell)
+                            .add(TextCell.builder()
+                                    .text("dummy " + i)
+                                    .borderWidth(1F)
+                                    .build())
+                            .add(TextCell.builder()
+                                    .text("dummy " + i)
+                                    .borderWidth(1F)
+                                    .build())
                             .build());
         }
 

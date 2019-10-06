@@ -2,9 +2,7 @@ package org.vandeseer.easytable;
 
 import lombok.experimental.SuperBuilder;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
-import org.vandeseer.easytable.structure.Row;
 import org.vandeseer.easytable.structure.Table;
-import org.vandeseer.easytable.structure.cell.AbstractCell;
 
 import java.awt.geom.Point2D;
 import java.io.IOException;
@@ -18,39 +16,16 @@ public class RepeatedHeaderTableDrawer extends TableDrawer {
 
     @Override
     public void draw() throws IOException {
-        // If we have drawn already some rows and we are called again we are on a new page and we need to
-        // draw the header first of all ...
+
         if (rowToDraw > 0) {
-            drawHeaderWithFunction(new Point2D.Float(this.startX, this.startY), this::drawBackgroundColorAndCellContent);
-            drawHeaderWithFunction(new Point2D.Float(this.startX, this.startY), this::drawBorders);
-            this.startY -= table.getRows().get(0).getHeight();
+            drawRow(new Point2D.Float(this.startX, this.startY), table.getRows().get(0), 0, (drawer, drawingContext) -> {
+                drawer.drawBackground(drawingContext);
+                drawer.drawContent(drawingContext);
+                drawer.drawBorders(drawingContext);
+            });
         }
 
-        drawWithFunction(new Point2D.Float(this.startX, this.startY), this::drawBackgroundColorAndCellContent, false);
-        drawWithFunction(new Point2D.Float(this.startX, this.startY), this::drawBorders, true);
-    }
-
-    protected void drawHeaderWithFunction(Point2D.Float startingPoint, TableDrawerFunction function) throws IOException {
-        float x = startingPoint.x;
-        float y = startingPoint.y;
-
-        final Row headerRow = table.getRows().get(0);
-        int columnCounter = 0;
-
-        y -= headerRow.getHeight();
-
-        for (AbstractCell cell : headerRow.getCells()) {
-
-            while (table.isRowSpanAt(0, columnCounter)) {
-                x += table.getColumns().get(columnCounter).getWidth();
-                columnCounter++;
-            }
-
-            function.accept(new Point2D.Float(x, y), cell);
-
-            x += cell.getWidth();
-            columnCounter += cell.getColSpan();
-        }
+        super.draw();
     }
 
 }

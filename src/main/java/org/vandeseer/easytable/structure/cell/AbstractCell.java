@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 import org.vandeseer.easytable.drawing.Drawer;
+import org.vandeseer.easytable.drawing.cell.AbstractCellDrawer;
 import org.vandeseer.easytable.settings.HorizontalAlignment;
 import org.vandeseer.easytable.settings.Settings;
 import org.vandeseer.easytable.settings.VerticalAlignment;
@@ -28,7 +29,7 @@ public abstract class AbstractCell {
     private final int rowSpan = 1;
 
     @Setter
-    protected Drawer drawer;
+    protected AbstractCellDrawer drawer;
 
     @Setter
     private Row row;
@@ -119,12 +120,9 @@ public abstract class AbstractCell {
     }
 
     public Drawer getDrawer() {
-        if (this.drawer != null) {
-            this.drawer.setCell(this);
-            return this.drawer;
-        }
-
-        return createDefaultDrawer();
+        return this.drawer != null
+                ? this.drawer.withCell(this)
+                : createDefaultDrawer();
     }
 
     protected abstract Drawer createDefaultDrawer();

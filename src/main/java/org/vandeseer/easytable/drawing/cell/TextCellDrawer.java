@@ -1,15 +1,13 @@
 package org.vandeseer.easytable.drawing.cell;
 
-import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
+import lombok.SneakyThrows;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.font.PDFont;
-import org.vandeseer.easytable.drawing.Drawer;
 import org.vandeseer.easytable.drawing.DrawingContext;
 import org.vandeseer.easytable.drawing.DrawingUtil;
 import org.vandeseer.easytable.settings.HorizontalAlignment;
 import org.vandeseer.easytable.settings.VerticalAlignment;
-import org.vandeseer.easytable.structure.cell.AbstractCell;
 import org.vandeseer.easytable.structure.cell.TextCell;
 import org.vandeseer.easytable.util.PdfUtil;
 
@@ -18,19 +16,16 @@ import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
 
-@AllArgsConstructor
 @NoArgsConstructor
-public class TextCellDrawer implements Drawer {
+public class TextCellDrawer extends AbstractCellDrawer<TextCell> {
 
-    private TextCell cell;
-
-    @Override
-    public void setCell(AbstractCell cell) {
-        this.cell = (TextCell) cell;
+    public TextCellDrawer(TextCell cell) {
+        this.cell = cell;
     }
 
     @Override
-    public void draw(DrawingContext drawingContext) throws IOException {
+    @SneakyThrows
+    public void drawContent(DrawingContext drawingContext) {
         final float startX = drawingContext.getStartingPoint().x;
         final float startY = drawingContext.getStartingPoint().y;
 
@@ -115,7 +110,7 @@ public class TextCellDrawer implements Drawer {
     }
 
     protected void drawText(String text, PDFont font, int fontSize, Color color, float x, float y, PDPageContentStream contentStream) throws IOException {
-        DrawingUtil.drawText(text, font, fontSize, color, x, y, contentStream);
+        DrawingUtil.drawText(contentStream, x, y, text, font, fontSize, color);
     }
 
 }
