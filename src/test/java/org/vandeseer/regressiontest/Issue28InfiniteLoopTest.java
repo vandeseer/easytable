@@ -2,12 +2,11 @@ package org.vandeseer.regressiontest;
 
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
-import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.common.PDRectangle;
 import org.junit.Test;
 import org.vandeseer.TestUtils;
+import org.vandeseer.easytable.RowIsToHighException;
 import org.vandeseer.easytable.TableDrawer;
-import org.vandeseer.easytable.TooManyAttemptsException;
 import org.vandeseer.easytable.structure.Row;
 import org.vandeseer.easytable.structure.Table;
 import org.vandeseer.easytable.structure.cell.TextCell;
@@ -17,7 +16,7 @@ import java.io.IOException;
 
 public class Issue28InfiniteLoopTest {
 
-    @Test(expected = TooManyAttemptsException.class)
+    @Test(expected = RowIsToHighException.class)
     public void createTwoPageTable() throws IOException {
         final Table.TableBuilder tableBuilder = Table.builder()
                 .addColumnOfWidth(200)
@@ -77,20 +76,14 @@ public class Issue28InfiniteLoopTest {
 
         final PDDocument document = new PDDocument();
 
-        PDPage page = new PDPage(PDRectangle.A4);
         TableDrawer drawer = TableDrawer.builder()
                 .table(tableBuilder.build())
-                .startX(50)
-                .startY(page.getMediaBox().getHeight() - 50)
+                .startX(50F)
+                .startY(50F)
                 .endY(50F) // note: if not set, table is drawn over the end of the page
                 .build();
 
-        do {
-            document.addPage(page);
-            try (PDPageContentStream contentStream = new PDPageContentStream(document, page)) {
-                drawer.contentStream(contentStream).draw();
-            }
-        } while (!drawer.isFinished());
+        drawer.draw(() -> document, () -> new PDPage(PDRectangle.A4), 50f);
 
         document.save(TestUtils.TARGET_FOLDER + TestUtils.TARGET_SUBFOLDER_REGRESSION + "/twoPageTable.pdf");
         document.close();
