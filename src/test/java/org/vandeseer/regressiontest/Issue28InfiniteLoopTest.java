@@ -5,7 +5,7 @@ import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.common.PDRectangle;
 import org.junit.Test;
 import org.vandeseer.TestUtils;
-import org.vandeseer.easytable.RowIsToHighException;
+import org.vandeseer.easytable.RowIsTooHighException;
 import org.vandeseer.easytable.TableDrawer;
 import org.vandeseer.easytable.structure.Row;
 import org.vandeseer.easytable.structure.Table;
@@ -16,7 +16,7 @@ import java.io.IOException;
 
 public class Issue28InfiniteLoopTest {
 
-    @Test(expected = RowIsToHighException.class)
+    @Test(expected = RowIsTooHighException.class)
     public void createTwoPageTable() throws IOException {
         final Table.TableBuilder tableBuilder = Table.builder()
                 .addColumnOfWidth(200)

@@ -82,7 +82,7 @@ public class TableDrawer {
 
         for (final Row row : table.getRows()) {
             if (isRowTooHighToBeDrawnOnPage(row, yOffsetOnNewPage)) {
-                throw new RowIsToHighException("There is a row that is too high to be drawn on a single page");
+                throw new RowIsTooHighException("There is a row that is too high to be drawn on a single page");
             }
 
             if (isNotDrawableOnPage(y, row)) {
