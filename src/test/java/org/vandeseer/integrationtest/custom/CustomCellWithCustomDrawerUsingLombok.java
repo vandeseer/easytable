@@ -38,24 +38,27 @@ public class CustomCellWithCustomDrawerUsingLombok {
     }
 
     public static void main(String[] args) throws IOException {
-        final PDDocument document = new PDDocument();
-        final PDPage page = new PDPage(PDRectangle.A4);
-        document.addPage(page);
 
-        try (final PDPageContentStream contentStream = new PDPageContentStream(document, page)) {
+        try (final PDDocument document = new PDDocument()) {
 
-            TableDrawer.builder()
-                    .contentStream(contentStream)
-                    .table(createSimpleTable())
-                    .startX(50)
-                    .startY(page.getMediaBox().getHeight() - 50)
-                    .build()
-                    .draw();
+            final PDPage page = new PDPage(PDRectangle.A4);
+            document.addPage(page);
 
+            try (final PDPageContentStream contentStream = new PDPageContentStream(document, page)) {
+
+                TableDrawer.builder()
+                        .contentStream(contentStream)
+                        .table(createSimpleTable())
+                        .startX(50)
+                        .startY(page.getMediaBox().getHeight() - 50)
+                        .build()
+                        .draw();
+
+            }
+
+            document.save("target/customCellDrawer.pdf");
         }
 
-        document.save("target/customCellDrawer.pdf");
-        document.close();
     }
 
     private static Table createSimpleTable() {

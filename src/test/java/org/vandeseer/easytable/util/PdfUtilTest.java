@@ -50,7 +50,7 @@ public class PdfUtilTest {
     public void getOptimalTextBreakLines_noSpacesInText_shouldSplitOnDot() {
         final String text = "This.should.be.splitted.on.a.dot.No.spaces.in.here.";
 
-        final float maxWidth = PdfUtil.getStringWidth("This.should.be.splitted.on.a.dot.", PDType1Font.HELVETICA, 12);;
+        final float maxWidth = PdfUtil.getStringWidth("This.should.be.splitted.on.a.dot.", PDType1Font.HELVETICA, 12);
 
         final List<String> lines = PdfUtil.getOptimalTextBreakLines(text, PDType1Font.HELVETICA, 12, maxWidth);
 
@@ -63,7 +63,7 @@ public class PdfUtilTest {
     public void getOptimalTextBreakLines_noSpacesNorDotsInText_shouldSplitOnComma() {
         final String text = "This,should,be,splitted,on,a,comma,no,space,nor,dots,in,here,";
 
-        final float maxWidth = PdfUtil.getStringWidth("This,should,be,splitted,on,a,comma,", PDType1Font.HELVETICA, 12);;
+        final float maxWidth = PdfUtil.getStringWidth("This,should,be,splitted,on,a,comma,", PDType1Font.HELVETICA, 12);
 
         final List<String> lines = PdfUtil.getOptimalTextBreakLines(text, PDType1Font.HELVETICA, 12, maxWidth);
 
@@ -76,7 +76,7 @@ public class PdfUtilTest {
     public void getOptimalTextBreakLines_noSpacesNorDotsNorCommasInText_shouldSplitBySize() {
         final String text = "ThisDoesNotHaveAnyCharactersWhereWeCouldBreakMoreEasilySoWeBreakBySize";
 
-        final float maxWidth = PdfUtil.getStringWidth("ThisDoesNotHaveAnyCharacters", PDType1Font.HELVETICA, 12);;
+        final float maxWidth = PdfUtil.getStringWidth("ThisDoesNotHaveAnyCharacters", PDType1Font.HELVETICA, 12);
 
         final List<String> lines = PdfUtil.getOptimalTextBreakLines(text, PDType1Font.HELVETICA, 12, maxWidth);
 
