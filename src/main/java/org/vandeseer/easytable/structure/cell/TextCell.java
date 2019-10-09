@@ -1,70 +1,27 @@
 package org.vandeseer.easytable.structure.cell;
 
-import lombok.Builder;
 import lombok.Getter;
-import lombok.NonNull;
 import lombok.experimental.SuperBuilder;
-import org.apache.pdfbox.pdmodel.font.PDFont;
 import org.vandeseer.easytable.drawing.Drawer;
 import org.vandeseer.easytable.drawing.cell.TextCellDrawer;
-import org.vandeseer.easytable.drawing.cell.VerticalTextCellDrawer;
-import org.vandeseer.easytable.settings.Orientation;
 import org.vandeseer.easytable.structure.Column;
 import org.vandeseer.easytable.util.PdfUtil;
 
-import java.awt.*;
 import java.util.Comparator;
 import java.util.List;
 
 @Getter
 @SuperBuilder(toBuilder = true)
-public class TextCell extends AbstractCell {
-
-    @NonNull
-    protected String text;
-
-    protected Color textColor;
-
-    @Builder.Default
-    protected float lineSpacing = 1f;
-
-    @Builder.Default
-    protected Orientation textOrientation = Orientation.HORIZONTAL;
+public class TextCell extends AbstractTextCell {
 
     private Float textHeight;
 
-    public PDFont getFont() {
-        return settings.getFont();
-    }
-
-    public Integer getFontSize() {
-        return settings.getFontSize();
-    }
-
-    public Color getTextColor() {
-        return settings.getTextColor();
-    }
-
     protected Drawer createDefaultDrawer() {
-        return textOrientation == Orientation.HORIZONTAL
-                ? new TextCellDrawer(this)
-                : new VerticalTextCellDrawer(this);
+        return new TextCellDrawer(this);
     }
 
     @Override
     public float getMinHeight() {
-        // For vertical alignment we can't simply calculate the min width, the users should
-        // just set it themselves ;)
-        if (textOrientation == Orientation.VERTICAL) {
-            // But in order not to run into https://github.com/vandeseer/easytable/issues/20
-            // we assume a min height that is the width of three chars (which are turned by 90 degrees).
-            float widthOfThreeChars = (getFont().getAverageFontWidth() * getFontSize() / 1000F) * 3;
-            return (getVerticalPadding() + widthOfThreeChars) > super.getMinHeight()
-                    ? (getVerticalPadding() + widthOfThreeChars)
-                    : super.getMinHeight();
-        }
-
-        // In case we have regular horizontal alignment ...
         return (getVerticalPadding() + getTextHeight()) > super.getMinHeight()
                 ? (getVerticalPadding() + getTextHeight())
                 : super.getMinHeight();
@@ -128,26 +85,6 @@ public class TextCell extends AbstractCell {
             }
         }
         return columnsWidth;
-    }
-
-    // Adaption for Lombok
-    public abstract static class TextCellBuilder<C extends TextCell, B extends TextCell.TextCellBuilder<C, B>> extends AbstractCellBuilder<C, B> {
-
-        public B font(final PDFont font) {
-            settings.setFont(font);
-            return this.self();
-        }
-
-        public B fontSize(final Integer fontSize) {
-            settings.setFontSize(fontSize);
-            return this.self();
-        }
-
-        public B textColor(final Color textColor) {
-            settings.setTextColor(textColor);
-            return this.self();
-        }
-
     }
 
 }

@@ -5,7 +5,7 @@ import lombok.SneakyThrows;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.font.PDFont;
 import org.vandeseer.easytable.drawing.DrawingContext;
-import org.vandeseer.easytable.structure.cell.TextCell;
+import org.vandeseer.easytable.structure.cell.VerticalTextCell;
 import org.vandeseer.easytable.util.PdfUtil;
 
 import java.awt.*;
@@ -19,9 +19,9 @@ import java.util.List;
  * developed, e.g. there is no support for text alignment settings yet.
  */
 @NoArgsConstructor
-public class VerticalTextCellDrawer extends AbstractCellDrawer<TextCell> {
+public class VerticalTextCellDrawer extends AbstractCellDrawer<VerticalTextCell> {
 
-    public VerticalTextCellDrawer(TextCell cell) {
+    public VerticalTextCellDrawer(VerticalTextCell cell) {
         this.cell = cell;
     }
 
