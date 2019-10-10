@@ -5,6 +5,7 @@ import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import org.vandeseer.easytable.drawing.Drawer;
 import org.vandeseer.easytable.drawing.DrawingContext;
 import org.vandeseer.easytable.drawing.DrawingUtil;
+import org.vandeseer.easytable.drawing.Line;
 import org.vandeseer.easytable.structure.cell.AbstractCell;
 
 import java.awt.*;
@@ -27,12 +28,12 @@ public abstract class AbstractCellDrawer<T extends AbstractCell> implements Draw
             final Point2D.Float start = drawingContext.getStartingPoint();
 
             final float rowHeight = cell.getRow().getHeight();
-            final float y = cell.getHeight() > rowHeight
+            final float height = Math.max(cell.getHeight(), rowHeight);
+            final float y = rowHeight < cell.getHeight()
                     ? start.y + rowHeight - cell.getHeight()
                     : start.y;
 
-            final Point2D.Float start1 = new Point2D.Float(start.x, y);
-            DrawingUtil.drawRectangle(contentStream, start1.x, start1.y, Math.max(cell.getHeight(), rowHeight), cell.getWidth(), cell.getBackgroundColor());
+            DrawingUtil.drawRectangle(contentStream, start.x, y, height, cell.getWidth(), cell.getBackgroundColor());
         }
     }
 
@@ -45,11 +46,13 @@ public abstract class AbstractCellDrawer<T extends AbstractCell> implements Draw
         final Point2D.Float start = drawingContext.getStartingPoint();
         final PDPageContentStream contentStream = drawingContext.getContentStream();
 
-        final float rowHeight = cell.getRow().getHeight();
         final float cellWidth = cell.getWidth();
 
+        final float rowHeight = cell.getRow().getHeight();
         final float height = Math.max(cell.getHeight(), rowHeight);
-        final float sY = cell.getHeight() > rowHeight ? start.y + rowHeight - cell.getHeight() : start.y;
+        final float sY = rowHeight < cell.getHeight()
+                ? start.y + rowHeight - cell.getHeight()
+                : start.y;
 
         // Handle the cell's borders
         final Color cellBorderColor = cell.getBorderColor();
@@ -60,15 +63,27 @@ public abstract class AbstractCellDrawer<T extends AbstractCell> implements Draw
             final float correctionRight = cell.getBorderWidthRight() / 2;
 
             if (cell.hasBorderTop()) {
-                contentStream.moveTo(start.x - correctionLeft, start.y + rowHeight);
-                DrawingUtil.drawLine(contentStream, cell.getBorderWidthTop(), start.x + cellWidth + correctionRight, start.y + rowHeight, cellBorderColor);
-                contentStream.setStrokingColor(rowBorderColor);
+                DrawingUtil.drawLine(contentStream, Line.builder()
+                        .startX(start.x - correctionLeft)
+                        .startY(start.y + rowHeight)
+                        .endX(start.x + cellWidth + correctionRight)
+                        .endY(start.y + rowHeight)
+                        .width(cell.getBorderWidthTop())
+                        .color(cellBorderColor)
+                        .resetColor(rowBorderColor)
+                        .build());
             }
 
             if (cell.hasBorderBottom()) {
-                contentStream.moveTo(start.x - correctionLeft, sY);
-                DrawingUtil.drawLine(contentStream, cell.getBorderWidthBottom(), start.x + cellWidth + correctionRight, sY, cellBorderColor);
-                contentStream.setStrokingColor(rowBorderColor);
+                DrawingUtil.drawLine(contentStream, Line.builder()
+                        .startX(start.x - correctionLeft)
+                        .startY(sY)
+                        .endX(start.x + cellWidth + correctionRight)
+                        .endY(sY)
+                        .width(cell.getBorderWidthBottom())
+                        .color(cellBorderColor)
+                        .resetColor(rowBorderColor)
+                        .build());
             }
         }
 
@@ -77,15 +92,27 @@ public abstract class AbstractCellDrawer<T extends AbstractCell> implements Draw
             final float correctionBottom = cell.getBorderWidthBottom() / 2;
 
             if (cell.hasBorderLeft()) {
-                contentStream.moveTo(start.x, sY - correctionBottom);
-                DrawingUtil.drawLine(contentStream, cell.getBorderWidthLeft(), start.x, sY + height + correctionTop, cellBorderColor);
-                contentStream.setStrokingColor(rowBorderColor);
+                DrawingUtil.drawLine(contentStream, Line.builder()
+                        .startX(start.x)
+                        .startY(sY - correctionBottom)
+                        .endX(start.x)
+                        .endY(sY + height + correctionTop)
+                        .width(cell.getBorderWidthLeft())
+                        .color(cellBorderColor)
+                        .resetColor(rowBorderColor)
+                        .build());
             }
 
             if (cell.hasBorderRight()) {
-                contentStream.moveTo(start.x + cellWidth, sY - correctionBottom);
-                DrawingUtil.drawLine(contentStream, cell.getBorderWidthRight(), start.x + cellWidth, sY + height + correctionTop, cellBorderColor);
-                contentStream.setStrokingColor(rowBorderColor);
+                DrawingUtil.drawLine(contentStream, Line.builder()
+                        .startX(start.x + cellWidth)
+                        .startY(sY - correctionBottom)
+                        .endX(start.x + cellWidth)
+                        .endY(sY + height + correctionTop)
+                        .width(cell.getBorderWidthRight())
+                        .color(cellBorderColor)
+                        .resetColor(rowBorderColor)
+                        .build());
             }
         }
     }
