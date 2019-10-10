@@ -22,11 +22,13 @@ public class DrawingUtil {
         contentStream.setCharacterSpacing(0);
     }
 
-    public static void drawLine(PDPageContentStream contentStream, float width, float toX, float toY, Color color) throws IOException {
-        contentStream.setLineWidth(width);
-        contentStream.lineTo(toX, toY);
-        contentStream.setStrokingColor(color);
+    public static void drawLine(PDPageContentStream contentStream, Line line) throws IOException {
+        contentStream.moveTo(line.getStartX(), line.getStartY());
+        contentStream.setLineWidth(line.getWidth());
+        contentStream.lineTo(line.getEndX(), line.getEndY());
+        contentStream.setStrokingColor(line.getColor());
         contentStream.stroke();
+        contentStream.setStrokingColor(line.getResetColor());
     }
 
     public static void drawRectangle(PDPageContentStream contentStream, float x, float y, final float height, float width, Color color)
