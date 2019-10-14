@@ -6,17 +6,17 @@ to create tables in a fairly simple way.
 It emerged from the need in another project. Therefore it also may miss some
 crucial features. Nevertheless there is:
 
-  * setting font and font size on table, row and cell level
-  * setting single cells with bottom-, top-, left- and right-border width separately
-  * background color on table, row and cell level
-  * padding (top, bottom, left, right) on cell level
-  * border colors (on table, row or cell level)
-  * support for text alignment (right, left, center, justified)
-  * vertical text alignment (top, middle, bottom)
-  * cell spanning and row spanning 
-  * line breaking and line spacing
-  * images in cells
-  * experimental: vertical text
+*   setting font and font size on table, row and cell level
+*   setting single cells with bottom-, top-, left- and right-border width separately
+*   background color on table, row and cell level
+*   padding (top, bottom, left, right) on cell level
+*   border colors (on table, row or cell level)
+*   support for text alignment (right, left, center, justified)
+*   vertical text alignment (top, middle, bottom)
+*   cell spanning and row spanning 
+*   line breaking and line spacing
+*   images in cells
+*   experimental: vertical text
 
 One can also override classes that are responsible for table/cell drawing, i.e. 
 their drawing behaviour can be customized to a pretty high extent.
@@ -61,15 +61,15 @@ Or checkout the repository and install it locally with maven (e.g. for the`devel
 
 ## Kudos
 
-  * to [Binghammer](https://github.com/Binghammer) for implementing cell coloring and text center alignment
-  * to [Sebastian Göhring](https://github.com/TheSilentHorizon) for finding and fixing a bug (column spanning)
-  * to [AndreKoepke](https://github.com/AndreKoepke) for the line breaking feature, some bigger nice refactorings and 
+*   to [Binghammer](https://github.com/Binghammer) for implementing cell coloring and text center alignment
+*   to [Sebastian Göhring](https://github.com/TheSilentHorizon) for finding and fixing a bug (column spanning)
+*   to [AndreKoepke](https://github.com/AndreKoepke) for the line breaking feature, some bigger nice refactorings and 
 improvements
-  * to [Wolfgang Apolinarski](https://github.com/wapolinar) for the printing over pages and bugfixes
-  * to [AdrianMiska](https://github.com/AdrianMiska) for finding and fixing an issue with cell height
-  * to [TheRealSourceSeeker](https://github.com/TheRealSourceSeeker) for finding a bug caused by using `float`s
-  * to [Drummond Dawson](https://github.com/drumonii) for code changes that allowed removing a dependency
-  * to [styssi](https://github.com/styssi) for allowing several multipage tables being drawn on the same page
+*   to [Wolfgang Apolinarski](https://github.com/wapolinar) for the printing over pages and bugfixes
+*   to [AdrianMiska](https://github.com/AdrianMiska) for finding and fixing an issue with cell height
+*   to [TheRealSourceSeeker](https://github.com/TheRealSourceSeeker) for finding a bug caused by using `float`s
+*   to [Drummond Dawson](https://github.com/drumonii) for code changes that allowed removing a dependency
+*   to [styssi](https://github.com/styssi) for allowing several multipage tables being drawn on the same page
 
 ## Q&A
 
