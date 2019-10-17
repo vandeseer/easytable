@@ -180,7 +180,7 @@ public class Table {
 
         public Table build() {
             if (getNumberOfRegularCells() != getNumberOfSpannedCells()) {
-                throw new RuntimeException("Number of table cells does not match with table setup. " +
+                throw new TableSetupException("Number of table cells does not match with table setup. " +
                         "This could be due to row or col spanning not being correct.");
             }
 
@@ -241,6 +241,11 @@ public class Table {
                     .sum();
         }
 
+        private class TableSetupException extends RuntimeException {
+            TableSetupException(String message) {
+                super(message);
+            }
+        }
     }
 
 }

@@ -62,13 +62,20 @@ Or checkout the repository and install it locally with maven (e.g. for the`devel
 ## Kudos
 
 *   to [Binghammer](https://github.com/Binghammer) for implementing cell coloring and text center alignment
+
 *   to [Sebastian Göhring](https://github.com/TheSilentHorizon) for finding and fixing a bug (column spanning)
+
 *   to [AndreKoepke](https://github.com/AndreKoepke) for the line breaking feature, some bigger nice refactorings and 
 improvements
+
 *   to [Wolfgang Apolinarski](https://github.com/wapolinar) for the printing over pages and bugfixes
+
 *   to [AdrianMiska](https://github.com/AdrianMiska) for finding and fixing an issue with cell height
+
 *   to [TheRealSourceSeeker](https://github.com/TheRealSourceSeeker) for finding a bug caused by using `float`s
+
 *   to [Drummond Dawson](https://github.com/drumonii) for code changes that allowed removing a dependency
+
 *   to [styssi](https://github.com/styssi) for allowing several multipage tables being drawn on the same page
 
 ## Q&A

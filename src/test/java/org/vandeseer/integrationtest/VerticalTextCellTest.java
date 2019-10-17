@@ -28,12 +28,11 @@ public class VerticalTextCellTest {
     private static final Color LIGHT_GREEN = new Color(221, 255, 217);
 
     private PDFont ownFont;
-    private PDDocument document;
     private PDImageXObject checkImage;
 
     @Before
     public void before() throws IOException {
-        document = new PDDocument();
+        PDDocument document = new PDDocument();
 
         // Load a custom font
         final InputStream resourceAsStream = this.getClass()
