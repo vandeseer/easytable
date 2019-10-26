@@ -5,9 +5,9 @@ import lombok.Getter;
 
 import java.awt.*;
 
-@Builder
+@Builder(toBuilder = true)
 @Getter
-public class Line {
+public class PositionedLine {
 
     private float width;
     private float startX;

@@ -135,76 +135,56 @@ public class ExcelLikeExampleTest {
                 .build();
     }
 
-    private Row create14thDataRow() {
+    private Row createHeaderRow() {
         return Row.builder()
-                .add(TextCell.builder().borderWidth(1).text("Here some text, too.").backgroundColor(GRAY_LIGHT_3).colSpan(3).build())
-                .build();
+            .add(TextCell.builder().borderWidth(1).padding(6).text("Left").build())
+            .add(TextCell.builder().borderWidth(1).padding(6).text("Middle").colSpan(3).build())
+            .add(TextCell.builder().borderWidth(1).padding(6).text("Right").build())
+            .backgroundColor(GRAY)
+            .textColor(WHITE)
+            .font(HELVETICA_BOLD)
+            .fontSize(8)
+            .horizontalAlignment(CENTER)
+            .build();
     }
 
-    private Row create13thDataRow() {
+    private Row create1stDataRow() throws IOException {
         return Row.builder()
-        .add(TextCell.builder().borderWidth(1).text("... that: right aligned!")
-                .backgroundColor(GRAY_LIGHT_2)
-                .horizontalAlignment(RIGHT)
-                .build())
-        .build();
+            .add(createAndGetGliderTextCellBuilder().rowSpan(7).build())
+            .add(createAndGetGliderImageCellBuilder().rowSpan(6).build())
+            .add(TextCell.builder().borderWidth(1).text("Gray").colSpan(2).backgroundColor(GRAY_LIGHT_2).build())
+            .add(createAndGetTorvaldsQuoteCellBuilder().rowSpan(14).build())
+            .build();
     }
 
-    private Row create12thDataRow() {
-        return Row.builder().add(TextCell.builder().borderWidth(1).text("Yeah.").rowSpan(2).backgroundColor(GRAY_LIGHT_3).build())
-        .add(TextCell.builder().borderWidth(1).text("This and ...")
-                .horizontalAlignment(RIGHT)
-                .backgroundColor(GRAY_LIGHT_3)
-                .build())
-        .build();
-    }
-
-    private Row create11thDataRow() {
-        return Row.builder().add(TextCell.builder().borderWidth(1).text("Now.").colSpan(2).backgroundColor(GRAY_LIGHT_2).build())
-        .build();
-    }
-
-    private Row create10thDataRow() {
-        return Row.builder()
-        .add(TextCell.builder().borderWidth(1).text("Well. Actually not.").colSpan(2).backgroundColor(GRAY_LIGHT_3).build())
-        .build();
-    }
-
-    private Row create9thDataRow() {
-        return Row.builder()
-        .add(TextCell.builder().borderWidth(1).text("Bit Lighter.").colSpan(2).backgroundColor(GRAY_LIGHT_2).build())
-        .build();
-    }
-
-    private Row create8thDataRow() throws IOException {
-        return Row.builder()
-                .add(createAndGetTuxTextCellBuilder().rowSpan(7).build())
-                .add(createAndGetTuxImageCellBuilder().rowSpan(6).build())
-                .add(TextCell.builder()
-                        .borderWidth(1)
-                        .text("Darker Gray Again.")
-                        .colSpan(2)
-                        .backgroundColor(GRAY_LIGHT_3)
-                        .build())
-                .build();
-    }
-
-    private Row create7thDataRow() {
+    private Row create2ndDataRow() {
         return Row.builder()
             .add(TextCell.builder()
                     .borderWidth(1)
-                    .text("Here some text.")
-                    .backgroundColor(GRAY_LIGHT_2)
-                    .colSpan(3)
+                    .text("Darker Gray")
+                    .colSpan(2)
+                    .backgroundColor(GRAY_LIGHT_3)
                     .build())
             .build();
     }
 
-    private Row create6thDataRow() {
+    private Row create3rdDataRow() {
         return Row.builder()
             .add(TextCell.builder()
                     .borderWidth(1)
-                    .text("Left.")
+                    .text("Gray Again")
+                    .colSpan(2)
+                    .backgroundColor(GRAY_LIGHT_2)
+                    .build())
+            .build();
+    }
+
+    private Row create4thDataRow() {
+        return Row.builder()
+            .add(TextCell.builder()
+                    .borderWidth(1)
+                    .text("And Darker Gray")
+                    .colSpan(2)
                     .backgroundColor(GRAY_LIGHT_3)
                     .build())
             .build();
@@ -227,59 +207,79 @@ public class ExcelLikeExampleTest {
             .build();
     }
 
-    private Row create4thDataRow() {
+    private Row create6thDataRow() {
         return Row.builder()
             .add(TextCell.builder()
                     .borderWidth(1)
-                    .text("And Darker Gray")
-                    .colSpan(2)
+                    .text("Left.")
                     .backgroundColor(GRAY_LIGHT_3)
                     .build())
             .build();
     }
 
-    private Row create3rdDataRow() {
+    private Row create7thDataRow() {
         return Row.builder()
             .add(TextCell.builder()
                     .borderWidth(1)
-                    .text("Gray Again")
-                    .colSpan(2)
+                    .text("Here some text.")
                     .backgroundColor(GRAY_LIGHT_2)
+                    .colSpan(3)
                     .build())
             .build();
     }
 
-    private Row create2ndDataRow() {
+    private Row create8thDataRow() throws IOException {
         return Row.builder()
-            .add(TextCell.builder()
-                    .borderWidth(1)
-                    .text("Darker Gray")
-                    .colSpan(2)
-                    .backgroundColor(GRAY_LIGHT_3)
-                    .build())
-            .build();
+                .add(createAndGetTuxTextCellBuilder().rowSpan(7).build())
+                .add(createAndGetTuxImageCellBuilder().rowSpan(6).build())
+                .add(TextCell.builder()
+                        .borderWidth(1)
+                        .text("Darker Gray Again.")
+                        .colSpan(2)
+                        .backgroundColor(GRAY_LIGHT_3)
+                        .build())
+                .build();
     }
 
-    private Row create1stDataRow() throws IOException {
+    private Row create9thDataRow() {
         return Row.builder()
-            .add(createAndGetGliderTextCellBuilder().rowSpan(7).build())
-            .add(createAndGetGliderImageCellBuilder().rowSpan(6).build())
-            .add(TextCell.builder().borderWidth(1).text("Gray").colSpan(2).backgroundColor(GRAY_LIGHT_2).build())
-            .add(createAndGetTorvaldsQuoteCellBuilder().rowSpan(14).build())
-            .build();
+        .add(TextCell.builder().borderWidth(1).text("Bit Lighter.").colSpan(2).backgroundColor(GRAY_LIGHT_2).build())
+        .build();
     }
 
-    private Row createHeaderRow() {
+    private Row create10thDataRow() {
         return Row.builder()
-            .add(TextCell.builder().borderWidth(1).padding(6).text("Left").build())
-            .add(TextCell.builder().borderWidth(1).padding(6).text("Middle").colSpan(3).build())
-            .add(TextCell.builder().borderWidth(1).padding(6).text("Right").build())
-            .backgroundColor(GRAY)
-            .textColor(WHITE)
-            .font(HELVETICA_BOLD)
-            .fontSize(8)
-            .horizontalAlignment(CENTER)
-            .build();
+        .add(TextCell.builder().borderWidth(1).text("Well. Actually not.").colSpan(2).backgroundColor(GRAY_LIGHT_3).build())
+        .build();
+    }
+
+    private Row create11thDataRow() {
+        return Row.builder().add(TextCell.builder().borderWidth(1).text("Now.").colSpan(2).backgroundColor(GRAY_LIGHT_2).build())
+        .build();
+    }
+
+    private Row create12thDataRow() {
+        return Row.builder().add(TextCell.builder().borderWidth(1).text("Yeah.").rowSpan(2).backgroundColor(GRAY_LIGHT_3).build())
+        .add(TextCell.builder().borderWidth(1).text("This and ...")
+                .horizontalAlignment(RIGHT)
+                .backgroundColor(GRAY_LIGHT_3)
+                .build())
+        .build();
+    }
+
+    private Row create13thDataRow() {
+        return Row.builder()
+        .add(TextCell.builder().borderWidth(1).text("... that: right aligned!")
+                .backgroundColor(GRAY_LIGHT_2)
+                .horizontalAlignment(RIGHT)
+                .build())
+        .build();
+    }
+
+    private Row create14thDataRow() {
+        return Row.builder()
+                .add(TextCell.builder().borderWidth(1).text("Here some text, too.").backgroundColor(GRAY_LIGHT_3).colSpan(3).build())
+                .build();
     }
 
     private ImageCellBuilder createAndGetTuxImageCellBuilder() throws IOException {

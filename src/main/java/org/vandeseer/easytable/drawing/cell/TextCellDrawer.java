@@ -6,6 +6,7 @@ import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.font.PDFont;
 import org.vandeseer.easytable.drawing.DrawingContext;
 import org.vandeseer.easytable.drawing.DrawingUtil;
+import org.vandeseer.easytable.drawing.PositionedStyledText;
 import org.vandeseer.easytable.structure.cell.TextCell;
 import org.vandeseer.easytable.util.PdfUtil;
 
@@ -57,7 +58,17 @@ public class TextCellDrawer extends AbstractCellDrawer<TextCell> {
                 drawingContext.getContentStream().setCharacterSpacing(calculateCharSpacingFor(line));
             }
 
-            drawText(line, currentFont, currentFontSize, currentTextColor, xOffset, yOffset, drawingContext.getContentStream());
+            drawText(
+                    drawingContext.getContentStream(),
+                    PositionedStyledText.builder()
+                            .x(xOffset)
+                            .y(yOffset)
+                            .text(line)
+                            .font(currentFont)
+                            .fontSize(currentFontSize)
+                            .color(currentTextColor)
+                            .build()
+            );
         }
     }
 
@@ -115,8 +126,11 @@ public class TextCellDrawer extends AbstractCellDrawer<TextCell> {
                 : 0;
     }
 
-    protected void drawText(String text, PDFont font, int fontSize, Color color, float x, float y, PDPageContentStream contentStream) throws IOException {
-        DrawingUtil.drawText(contentStream, x, y, text, font, fontSize, color);
+    protected void drawText(PDPageContentStream contentStream, PositionedStyledText positionedStyledText) throws IOException {
+        DrawingUtil.drawText(
+                contentStream,
+                positionedStyledText
+        );
     }
 
 }

@@ -4,14 +4,13 @@ import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.common.PDRectangle;
-import org.apache.pdfbox.pdmodel.font.PDFont;
 import org.vandeseer.easytable.TableDrawer;
+import org.vandeseer.easytable.drawing.PositionedStyledText;
 import org.vandeseer.easytable.drawing.cell.TextCellDrawer;
 import org.vandeseer.easytable.structure.Row;
 import org.vandeseer.easytable.structure.Table;
 import org.vandeseer.easytable.structure.cell.TextCell;
 
-import java.awt.*;
 import java.io.IOException;
 
 import static org.apache.pdfbox.pdmodel.font.PDType1Font.HELVETICA;
@@ -20,10 +19,9 @@ public class CustomCellDrawer {
 
     private static final TextCellDrawer CUSTOM_DRAWER = new TextCellDrawer() {
         @Override
-        protected void drawText(String text, PDFont font, int fontSize, Color color, float x, float y, PDPageContentStream contentStream)
-                        throws IOException {
+        protected void drawText(PDPageContentStream contentStream, PositionedStyledText text) throws IOException {
             System.out.println("My custom drawer is called :-)");
-            super.drawText(text.toUpperCase(), font, fontSize, color, x, y, contentStream);
+            super.drawText(contentStream, text.toBuilder().text(text.getText().toUpperCase()).build());
         }
     };
 
@@ -51,19 +49,17 @@ public class CustomCellDrawer {
     }
 
     private static Table createSimpleTable() {
-        final Table.TableBuilder tableBuilder = Table.builder()
+        return Table.builder()
                 .addColumnsOfWidth(100, 100, 100, 100)
                 .fontSize(8)
-                .font(HELVETICA);
-
-        tableBuilder.addRow(Row.builder()
-                .add(TextCell.builder().drawer(CUSTOM_DRAWER).borderWidth(1).text("One").build())
-                .add(TextCell.builder().borderWidth(1).text("Two").build())
-                .add(TextCell.builder().borderWidth(1).text("Three").build())
-                .add(TextCell.builder().borderWidth(1).text("Four").build())
-                .build());
-
-        return tableBuilder.build();
+                .font(HELVETICA)
+                .addRow(Row.builder()
+                        .add(TextCell.builder().drawer(CUSTOM_DRAWER).borderWidth(1).text("One").build())
+                        .add(TextCell.builder().borderWidth(1).text("Two").build())
+                        .add(TextCell.builder().borderWidth(1).text("Three").build())
+                        .add(TextCell.builder().borderWidth(1).text("Four").build())
+                        .build())
+                .build();
     }
 
 }

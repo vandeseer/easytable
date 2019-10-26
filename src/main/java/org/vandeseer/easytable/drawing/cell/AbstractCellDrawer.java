@@ -2,10 +2,7 @@ package org.vandeseer.easytable.drawing.cell;
 
 import lombok.SneakyThrows;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
-import org.vandeseer.easytable.drawing.Drawer;
-import org.vandeseer.easytable.drawing.DrawingContext;
-import org.vandeseer.easytable.drawing.DrawingUtil;
-import org.vandeseer.easytable.drawing.Line;
+import org.vandeseer.easytable.drawing.*;
 import org.vandeseer.easytable.structure.cell.AbstractCell;
 
 import java.awt.*;
@@ -33,7 +30,14 @@ public abstract class AbstractCellDrawer<T extends AbstractCell> implements Draw
                     ? start.y + rowHeight - cell.getHeight()
                     : start.y;
 
-            DrawingUtil.drawRectangle(contentStream, start.x, y, height, cell.getWidth(), cell.getBackgroundColor());
+            DrawingUtil.drawRectangle(contentStream,
+                    PositionedRectangle.builder()
+                            .x(start.x)
+                            .y(y)
+                            .width(cell.getWidth())
+                            .height(height)
+                            .color(cell.getBackgroundColor()).build()
+            );
         }
     }
 
@@ -63,7 +67,7 @@ public abstract class AbstractCellDrawer<T extends AbstractCell> implements Draw
             final float correctionRight = cell.getBorderWidthRight() / 2;
 
             if (cell.hasBorderTop()) {
-                DrawingUtil.drawLine(contentStream, Line.builder()
+                DrawingUtil.drawLine(contentStream, PositionedLine.builder()
                         .startX(start.x - correctionLeft)
                         .startY(start.y + rowHeight)
                         .endX(start.x + cellWidth + correctionRight)
@@ -75,7 +79,7 @@ public abstract class AbstractCellDrawer<T extends AbstractCell> implements Draw
             }
 
             if (cell.hasBorderBottom()) {
-                DrawingUtil.drawLine(contentStream, Line.builder()
+                DrawingUtil.drawLine(contentStream, PositionedLine.builder()
                         .startX(start.x - correctionLeft)
                         .startY(sY)
                         .endX(start.x + cellWidth + correctionRight)
@@ -92,7 +96,7 @@ public abstract class AbstractCellDrawer<T extends AbstractCell> implements Draw
             final float correctionBottom = cell.getBorderWidthBottom() / 2;
 
             if (cell.hasBorderLeft()) {
-                DrawingUtil.drawLine(contentStream, Line.builder()
+                DrawingUtil.drawLine(contentStream, PositionedLine.builder()
                         .startX(start.x)
                         .startY(sY - correctionBottom)
                         .endX(start.x)
@@ -104,7 +108,7 @@ public abstract class AbstractCellDrawer<T extends AbstractCell> implements Draw
             }
 
             if (cell.hasBorderRight()) {
-                DrawingUtil.drawLine(contentStream, Line.builder()
+                DrawingUtil.drawLine(contentStream, PositionedLine.builder()
                         .startX(start.x + cellWidth)
                         .startY(sY - correctionBottom)
                         .endX(start.x + cellWidth)
