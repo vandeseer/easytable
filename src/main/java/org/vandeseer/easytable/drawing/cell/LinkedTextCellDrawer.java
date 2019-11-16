@@ -7,21 +7,21 @@ import org.apache.pdfbox.pdmodel.interactive.annotation.PDBorderStyleDictionary;
 import org.vandeseer.easytable.drawing.DrawingContext;
 import org.vandeseer.easytable.drawing.PositionedStyledText;
 import org.vandeseer.easytable.structure.cell.LinkedTextCell;
+import org.vandeseer.easytable.structure.cell.LinkedTextCell.LinkedText.Link;
 import org.vandeseer.easytable.util.PdfUtil;
 
 import java.io.IOException;
 import java.util.LinkedList;
-import java.util.Map;
 
 public class LinkedTextCellDrawer extends TextCellDrawer<LinkedTextCell> {
 
     private int linkedTextStringIndex = 0;
 
-    private LinkedList<Map.Entry<Integer, LinkedTextCell.LinkedText.Link>> links = new LinkedList<>();
+    private LinkedList<Link> links = new LinkedList<>();
 
     public LinkedTextCellDrawer(LinkedTextCell cell) {
         this.cell = cell;
-        links.addAll(((LinkedTextCell) this.cell).getLinkedText().links.entrySet());
+        links.addAll(((LinkedTextCell) this.cell).getLinkedText().links);
     }
 
     @Override
@@ -33,43 +33,70 @@ public class LinkedTextCellDrawer extends TextCellDrawer<LinkedTextCell> {
         final float y = positionedStyledText.getY();
 
         final String lineString = positionedStyledText.getText();
-        System.out.println("'"+lineString+"'");
 
-        while (!links.isEmpty() && (links.getFirst().getKey() - linkedTextStringIndex) < lineString.length() - 1) {
-            // We have a link here ...
-            // TODO also check linebreaks!
-            LinkedTextCell.LinkedText.Link currentLink = links.removeFirst().getValue();
+        boolean isMultilineLink = false;
+        Link currentLink = null;
 
-            // handle the annotations ...
-            PDBorderStyleDictionary underline = new PDBorderStyleDictionary();
-            underline.setStyle(PDBorderStyleDictionary.STYLE_UNDERLINE);
-            PDAnnotationLink pdfLink = new PDAnnotationLink();
-            pdfLink.setBorderStyle(underline);
-            //pdfLink.setColor(new PDColor(new float[] { 0.6f, 1f, 0.6f }, PDDeviceRGB.INSTANCE));
+        while (!links.isEmpty() && (links.getFirst().getStart() - linkedTextStringIndex) < lineString.length() - 1) {
+            currentLink = links.removeFirst();
+            PDAnnotationLink pdfLink = createAndGetPdAnnotationLinkFrom(currentLink);
 
-            // add an action
-            PDActionURI action = new PDActionURI();
-            action.setURI(currentLink.getUrl().toString());
-            pdfLink.setAction(action);
+            float offset = PdfUtil.getStringWidth(
+                    lineString.substring(0, currentLink.getStart() - linkedTextStringIndex),
+                    cell.getFont(), cell.getFontSize()
+            );
 
-            PDRectangle position = new PDRectangle();
-
-            // TODO linebreaks
-            float offset = PdfUtil.getStringWidth(lineString.substring(0, currentLink.getStart() - linkedTextStringIndex), cell.getFont(), cell.getFontSize());
-
-            position.setLowerLeftX(x + offset);
-            position.setLowerLeftY(y);
+            PDRectangle linkRectangle = new PDRectangle();
+            linkRectangle.setLowerLeftX(x + offset);
+            linkRectangle.setLowerLeftY(y);
 
             float stringWidth = PdfUtil.getStringWidth(currentLink.getText(), cell.getFont(), cell.getFontSize());
-            position.setUpperRightX(x + offset + stringWidth);
-            position.setUpperRightY(y + PdfUtil.getFontHeight(cell.getFont(), cell.getFontSize()));
+            if (stringWidth > (cell.getWidth() - cell.getHorizontalPadding())) {
+                linkRectangle.setUpperRightX(x + (cell.getWidth() - cell.getHorizontalPadding()));
+                linkRectangle.setUpperRightY(y + PdfUtil.getFontHeight(cell.getFont(), cell.getFontSize()));
 
-            pdfLink.setRectangle(position);
+                isMultilineLink = true;
+            } else {
+                linkRectangle.setUpperRightX(x + offset + stringWidth);
+                linkRectangle.setUpperRightY(y + PdfUtil.getFontHeight(cell.getFont(), cell.getFontSize()));
+            }
+
+            pdfLink.setRectangle(linkRectangle);
             pdfLink.constructAppearances();
+
             drawingContext.getPage().getAnnotations().add(pdfLink);
         }
 
-        // new lines are stripped, hence "- sizeof(\n)" which is 2
-        linkedTextStringIndex += (lineString.length() - 1) + 2;
+        if (isMultilineLink) {
+            int newStart = linkedTextStringIndex + positionedStyledText.getText().length() + 2; // ?!
+
+            links.addFirst(
+                    new Link(
+                            newStart,
+                            currentLink.getEnd(),
+                            currentLink.getText().substring(positionedStyledText.getText().length() -2 /* ?!! */, currentLink.getText().length() - 1),
+                            currentLink.getUrl()
+                    )
+            );
+
+            linkedTextStringIndex++; // We have an extra sign for splitting ("-")!
+        }
+
+        linkedTextStringIndex += lineString.length() + "\n".length();
     }
+
+    private PDAnnotationLink createAndGetPdAnnotationLinkFrom(Link currentLink) {
+        PDBorderStyleDictionary underline = new PDBorderStyleDictionary();
+        underline.setStyle(PDBorderStyleDictionary.STYLE_UNDERLINE);
+        PDAnnotationLink pdfLink = new PDAnnotationLink();
+        pdfLink.setBorderStyle(underline);
+        //pdfLink.setColor(new PDColor(new float[] { 0.6f, 1f, 0.6f }, PDDeviceRGB.INSTANCE));
+
+        // add an action
+        PDActionURI action = new PDActionURI();
+        action.setURI(currentLink.getUrl().toString());
+        pdfLink.setAction(action);
+        return pdfLink;
+    }
+
 }

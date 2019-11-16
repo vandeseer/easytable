@@ -8,8 +8,7 @@ import org.vandeseer.easytable.drawing.Drawer;
 import org.vandeseer.easytable.drawing.cell.LinkedTextCellDrawer;
 
 import java.net.URL;
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.util.LinkedList;
 
 @Getter
 @SuperBuilder(toBuilder = true)
@@ -29,9 +28,9 @@ public class LinkedTextCell extends AbstractTextCell {
 
     public static class LinkedText {
         public final String text;
-        public final Map<Integer, Link> links;
+        public final LinkedList<Link> links;
 
-        private LinkedText(String text, Map<Integer, Link> links) {
+        private LinkedText(String text, LinkedList<Link> links) {
             this.text = text;
             this.links = links;
         }
@@ -46,7 +45,7 @@ public class LinkedTextCell extends AbstractTextCell {
 
         public static class LinkedTextBuilder {
             StringBuilder stringBuilder = new StringBuilder();
-            Map<Integer, Link> links = new LinkedHashMap<>();
+            LinkedList<Link> links = new LinkedList<>();
 
             public LinkedTextBuilder append(String text) {
                 stringBuilder.append(text);
@@ -58,7 +57,7 @@ public class LinkedTextCell extends AbstractTextCell {
                 stringBuilder.append(text);
                 int end = stringBuilder.length();
 
-                links.put(start, new Link(start, end, text, url));
+                links.add(new Link(start, end, text, url));
                 return this;
             }
 

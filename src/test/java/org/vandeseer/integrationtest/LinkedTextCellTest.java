@@ -31,7 +31,7 @@ public class LinkedTextCellTest {
         for (VerticalAlignment verticalAlignment : VerticalAlignment.values()) {
             //for (HorizontalAlignment horizontalAlignment : HorizontalAlignment.values()) {
 
-                tables.add(Table.builder().addColumnsOfWidth(200, 300)
+                tables.add(Table.builder().addColumnsOfWidth(200, 320)
                         .addRow(Row.builder()
                                 .add(TextCell.builder().text("baz").borderWidth(1).build())
                                 .add(buildLinkTextCellAligned(HorizontalAlignment.LEFT, verticalAlignment))
@@ -41,6 +41,34 @@ public class LinkedTextCellTest {
         }
 
         TestUtils.createAndSaveDocumentWithTables("linkedTextCell.pdf", tables.toArray(new Table[0]));
+    }
+
+    @Test
+    public void testLinkedTextCellLineBreak() throws IOException {
+        List<Table> tables = new LinkedList<>();
+
+//            for (HorizontalAlignment horizontalAlignment : HorizontalAlignment.values()) {
+
+                tables.add(Table.builder().addColumnsOfWidth(200, 100)
+                        .addRow(Row.builder()
+                                .add(TextCell.builder().text("baz").borderWidth(1).build())
+                                .add(LinkedTextCell.builder()
+                                        .minHeight(100f)
+//                                        .horizontalAlignment(horizontalAlignment)
+                                        .linkedText(
+                                                LinkedText.builder()
+                                                        .append("fu bar ")
+                                                        .append(
+                                                                "superLongLinkThatMustBeSplitBecauseItIsTooLong",
+                                                                new URL("http://www.stackoverflow.com")
+                                                        )
+                                                        .append(" baz ")
+                                                        .build()).borderWidth(1).build())
+                                .build())
+                        .build());
+//            }
+
+        TestUtils.createAndSaveDocumentWithTables("linkedTextCellLineBreak.pdf", tables.toArray(new Table[0]));
     }
 
     private LinkedTextCell buildLinkTextCellAligned(HorizontalAlignment horizontalAlignment, VerticalAlignment verticalAlignment) throws MalformedURLException {
