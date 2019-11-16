@@ -34,6 +34,10 @@ public class TableDrawer {
 
     @Setter
     @Accessors(chain = true, fluent = true)
+    protected PDPage page;
+
+    @Setter
+    @Accessors(chain = true, fluent = true)
     protected float startX;
 
     @Setter
@@ -113,20 +117,22 @@ public class TableDrawer {
         final Queue<PageData> pageDataQueue = computeRowsOnPagesWithNewPageStartOf(startOnNewPage);
 
         for (int i = 0; !pageDataQueue.isEmpty(); i++) {
-            final PDPage page;
+            final PDPage pageToDrawOn;
 
             if (i > 0 || document.getNumberOfPages() == 0) {
-                page = pageSupplier.get();
-                document.addPage(page);
+                pageToDrawOn = pageSupplier.get();
+                document.addPage(pageToDrawOn);
             } else {
-                page = document.getPage(document.getNumberOfPages() - 1);
+                pageToDrawOn = document.getPage(document.getNumberOfPages() - 1);
             }
 
-            try (final PDPageContentStream newPageContentStream = new PDPageContentStream(document, page, APPEND, false)) {
-                contentStream(newPageContentStream).drawPage(pageDataQueue.poll());
+            try (final PDPageContentStream newPageContentStream = new PDPageContentStream(document, pageToDrawOn, APPEND, false)) {
+                this.contentStream(newPageContentStream)
+                        .page(pageToDrawOn)
+                        .drawPage(pageDataQueue.poll());
             }
 
-            startY(page.getMediaBox().getHeight() - yOffset);
+            startY(pageToDrawOn.getMediaBox().getHeight() - yOffset);
         }
     }
 
@@ -152,7 +158,12 @@ public class TableDrawer {
             }
 
             // This is the interesting part :)
-            consumer.accept(cell.getDrawer(), new DrawingContext(contentStream, new Point2D.Float(x, start.y)));
+            consumer.accept(
+                    cell.getDrawer(),
+                    new DrawingContext(
+                            contentStream, page, new Point2D.Float(x, start.y)
+                    )
+            );
 
             x += cell.getWidth();
             columnCounter += cell.getColSpan();

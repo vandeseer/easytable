@@ -2,12 +2,11 @@ package org.vandeseer.easytable.drawing.cell;
 
 import lombok.NoArgsConstructor;
 import lombok.SneakyThrows;
-import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.font.PDFont;
 import org.vandeseer.easytable.drawing.DrawingContext;
 import org.vandeseer.easytable.drawing.DrawingUtil;
 import org.vandeseer.easytable.drawing.PositionedStyledText;
-import org.vandeseer.easytable.structure.cell.TextCell;
+import org.vandeseer.easytable.structure.cell.AbstractTextCell;
 import org.vandeseer.easytable.util.PdfUtil;
 
 import java.awt.*;
@@ -20,9 +19,9 @@ import static org.vandeseer.easytable.settings.VerticalAlignment.BOTTOM;
 import static org.vandeseer.easytable.settings.VerticalAlignment.MIDDLE;
 
 @NoArgsConstructor
-public class TextCellDrawer extends AbstractCellDrawer<TextCell> {
+public class TextCellDrawer<T extends AbstractTextCell> extends AbstractCellDrawer<AbstractTextCell> {
 
-    public TextCellDrawer(TextCell cell) {
+    public TextCellDrawer(T cell) {
         this.cell = cell;
     }
 
@@ -59,7 +58,7 @@ public class TextCellDrawer extends AbstractCellDrawer<TextCell> {
             }
 
             drawText(
-                    drawingContext.getContentStream(),
+                    drawingContext,
                     PositionedStyledText.builder()
                             .x(xOffset)
                             .y(yOffset)
@@ -126,9 +125,9 @@ public class TextCellDrawer extends AbstractCellDrawer<TextCell> {
                 : 0;
     }
 
-    protected void drawText(PDPageContentStream contentStream, PositionedStyledText positionedStyledText) throws IOException {
+    protected void drawText(DrawingContext drawingContext, PositionedStyledText positionedStyledText) throws IOException {
         DrawingUtil.drawText(
-                contentStream,
+                drawingContext.getContentStream(),
                 positionedStyledText
         );
     }

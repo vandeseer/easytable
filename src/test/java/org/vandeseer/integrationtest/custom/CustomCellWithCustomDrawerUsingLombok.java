@@ -7,6 +7,7 @@ import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.common.PDRectangle;
 import org.vandeseer.easytable.TableDrawer;
 import org.vandeseer.easytable.drawing.Drawer;
+import org.vandeseer.easytable.drawing.DrawingContext;
 import org.vandeseer.easytable.drawing.PositionedStyledText;
 import org.vandeseer.easytable.drawing.cell.TextCellDrawer;
 import org.vandeseer.easytable.structure.Row;
@@ -26,9 +27,9 @@ public class CustomCellWithCustomDrawerUsingLombok {
         public Drawer getDrawer() {
             return new TextCellDrawer(this) {
                 @Override
-                protected void drawText(PDPageContentStream contentStream, PositionedStyledText text) throws IOException {
+                protected void drawText(DrawingContext drawingContext, PositionedStyledText text) throws IOException {
                     System.out.println("My custom drawer is called :-)");
-                    super.drawText(contentStream, text.toBuilder().text(text.getText().toUpperCase()).build());
+                    super.drawText(drawingContext, text.toBuilder().text(text.getText().toUpperCase()).build());
                 }
             };
         }

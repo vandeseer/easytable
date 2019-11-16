@@ -45,6 +45,7 @@ public class TestUtils {
             for (final Table table : tables) {
 
                 TableDrawer.builder()
+                        .page(page)
                         .contentStream(contentStream)
                         .table(table)
                         .startX(PADDING)
