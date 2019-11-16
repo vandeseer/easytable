@@ -72,8 +72,8 @@ public class TextCellDrawer<T extends AbstractTextCell> extends AbstractCellDraw
     }
 
     // Vertical alignment
-    private float getAdaptionForVerticalAlignment() {
-        if (cell.getRow().getHeight() > cell.getHeight() || cell.getRowSpan() > 1) {
+    private float getAdaptionForVerticalAlignment() { // TODO Do we need epsilon comparison here as well?! !!!!!
+        if (cell.getRow().getHeight() >= cell.getHeight() || cell.getRowSpan() > 1) {
 
             if (cell.isVerticallyAligned(MIDDLE)) {
                 return (calculateOuterHeight() / 2 + cell.getTextHeight() / 2) - getRowSpanAdaption();
