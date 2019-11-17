@@ -96,12 +96,12 @@ public class TextCellDrawer<T extends AbstractTextCell> extends AbstractCellDraw
                 + (lineIndex > 0 ? PdfUtil.getFontHeight(currentFont, currentFontSize) * cell.getLineSpacing() : 0f); // line spacing
     }
 
-    private boolean isNotLastLine(List<String> lines, int i) {
+    static boolean isNotLastLine(List<String> lines, int i) {
         return i != lines.size() - 1;
     }
 
     // Code from https://stackoverflow.com/questions/20680430/is-it-possible-to-justify-text-in-pdfbox
-    private float calculateCharSpacingFor(String line) {
+    protected float calculateCharSpacingFor(String line) {
         float charSpacing = 0;
         if (line.length() > 1) {
             float size = PdfUtil.getStringWidth(line, cell.getFont(), cell.getFontSize());
@@ -113,7 +113,7 @@ public class TextCellDrawer<T extends AbstractTextCell> extends AbstractCellDraw
         return charSpacing;
     }
 
-    private List<String> calculateAndGetLines(PDFont currentFont, int currentFontSize, float maxWidth) {
+    protected List<String> calculateAndGetLines(PDFont currentFont, int currentFontSize, float maxWidth) {
         return cell.isWordBreak()
                 ? PdfUtil.getOptimalTextBreakLines(cell.getText(), currentFont, currentFontSize, maxWidth)
                 : Collections.singletonList(cell.getText());

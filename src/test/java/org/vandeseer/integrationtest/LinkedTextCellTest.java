@@ -28,13 +28,13 @@ public class LinkedTextCellTest {
     public void testLinkedTextCell() throws IOException {
         List<Table> tables = new LinkedList<>();
 
-        for (VerticalAlignment verticalAlignment : VerticalAlignment.values()) {
-            //for (HorizontalAlignment horizontalAlignment : HorizontalAlignment.values()) {
+//        for (VerticalAlignment verticalAlignment : VerticalAlignment.values()) {
+            for (HorizontalAlignment horizontalAlignment : HorizontalAlignment.values()) {
 
                 tables.add(Table.builder().addColumnsOfWidth(200, 320)
                         .addRow(Row.builder()
                                 .add(TextCell.builder().text("baz").borderWidth(1).build())
-                                .add(buildLinkTextCellAligned(HorizontalAlignment.LEFT, verticalAlignment))
+                                .add(buildLinkTextCellAligned(horizontalAlignment, VerticalAlignment.TOP))
                                 .build())
                         .build());
             //}

@@ -6,12 +6,14 @@ import org.apache.pdfbox.pdmodel.interactive.annotation.PDAnnotationLink;
 import org.apache.pdfbox.pdmodel.interactive.annotation.PDBorderStyleDictionary;
 import org.vandeseer.easytable.drawing.DrawingContext;
 import org.vandeseer.easytable.drawing.PositionedStyledText;
+import org.vandeseer.easytable.settings.HorizontalAlignment;
 import org.vandeseer.easytable.structure.cell.LinkedTextCell;
 import org.vandeseer.easytable.structure.cell.LinkedTextCell.LinkedText.Link;
 import org.vandeseer.easytable.util.PdfUtil;
 
 import java.io.IOException;
 import java.util.LinkedList;
+import java.util.List;
 
 public class LinkedTextCellDrawer extends TextCellDrawer<LinkedTextCell> {
 
@@ -19,9 +21,13 @@ public class LinkedTextCellDrawer extends TextCellDrawer<LinkedTextCell> {
 
     private LinkedList<Link> links = new LinkedList<>();
 
+    private final List<String> lines;
+    private int lineCounter = 0;
+
     public LinkedTextCellDrawer(LinkedTextCell cell) {
         this.cell = cell;
         links.addAll(((LinkedTextCell) this.cell).getLinkedText().links);
+        lines = calculateAndGetLines(cell.getFont(), cell.getFontSize(), cell.getWidthOfText());
     }
 
     @Override
@@ -41,10 +47,15 @@ public class LinkedTextCellDrawer extends TextCellDrawer<LinkedTextCell> {
             currentLink = links.removeFirst();
             PDAnnotationLink pdfLink = createAndGetPdAnnotationLinkFrom(currentLink);
 
+            final String stringBeforeLink = lineString.substring(0, currentLink.getStart() - linkedTextStringIndex);
             float offset = PdfUtil.getStringWidth(
-                    lineString.substring(0, currentLink.getStart() - linkedTextStringIndex),
+                    stringBeforeLink,
                     cell.getFont(), cell.getFontSize()
             );
+
+            if (cell.isHorizontallyAligned(HorizontalAlignment.JUSTIFY) && TextCellDrawer.isNotLastLine(lines, lineCounter)) {
+                offset += (stringBeforeLink.length() * calculateCharSpacingFor(positionedStyledText.getText()));
+            }
 
             PDRectangle linkRectangle = new PDRectangle();
             linkRectangle.setLowerLeftX(x + offset);
@@ -57,6 +68,9 @@ public class LinkedTextCellDrawer extends TextCellDrawer<LinkedTextCell> {
 
                 isMultilineLink = true;
             } else {
+                if (cell.isHorizontallyAligned(HorizontalAlignment.JUSTIFY) && TextCellDrawer.isNotLastLine(lines, lineCounter)) {
+                    stringWidth += (currentLink.getText().length() - 1) * calculateCharSpacingFor(positionedStyledText.getText());
+                }
                 linkRectangle.setUpperRightX(x + offset + stringWidth);
                 linkRectangle.setUpperRightY(y + PdfUtil.getFontHeight(cell.getFont(), cell.getFontSize()));
             }
@@ -82,6 +96,7 @@ public class LinkedTextCellDrawer extends TextCellDrawer<LinkedTextCell> {
             linkedTextStringIndex++; // We have an extra sign for splitting ("-")!
         }
 
+        lineCounter++;
         linkedTextStringIndex += lineString.length() + "\n".length();
     }
 
