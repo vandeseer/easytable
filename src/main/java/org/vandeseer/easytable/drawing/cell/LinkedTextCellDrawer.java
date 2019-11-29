@@ -15,7 +15,14 @@ import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
 
+/**
+ * Can create links in cells (even multiple links per cell).
+ */
 public class LinkedTextCellDrawer extends TextCellDrawer<LinkedTextCell> {
+
+    // Please note that this whole implementation is quite hacky due to
+    // the fact that links have to be calculated in terms of an area that
+    // is set on the document. There is no notion of "markup" in PDF.
 
     private int linkedTextStringIndex = 0;
 
@@ -57,21 +64,24 @@ public class LinkedTextCellDrawer extends TextCellDrawer<LinkedTextCell> {
                 offset += (stringBeforeLink.length() * calculateCharSpacingFor(positionedStyledText.getText()));
             }
 
-            PDRectangle linkRectangle = new PDRectangle();
+            final PDRectangle linkRectangle = new PDRectangle();
             linkRectangle.setLowerLeftX(x + offset);
-            linkRectangle.setLowerLeftY(y);
+            linkRectangle.setLowerLeftY(y - 0.15f * cell.getFontSize());
 
-            float stringWidth = PdfUtil.getStringWidth(currentLink.getText(), cell.getFont(), cell.getFontSize());
+            float stringWidth = PdfUtil.getStringWidth(stringBeforeLink + currentLink.getText(), cell.getFont(), cell.getFontSize());
+            float linkWidth = PdfUtil.getStringWidth(currentLink.getText(), cell.getFont(), cell.getFontSize());
+
             if (stringWidth > (cell.getWidth() - cell.getHorizontalPadding())) {
-                linkRectangle.setUpperRightX(x + (cell.getWidth() - cell.getHorizontalPadding()));
-                linkRectangle.setUpperRightY(y + PdfUtil.getFontHeight(cell.getFont(), cell.getFontSize()));
-
                 isMultilineLink = true;
+
+                float shortenedLinkLength = PdfUtil.getStringWidth(lineString.substring(stringBeforeLink.length()), cell.getFont(), cell.getFontSize());
+                linkRectangle.setUpperRightX(x + offset + shortenedLinkLength);
+                linkRectangle.setUpperRightY(y + PdfUtil.getFontHeight(cell.getFont(), cell.getFontSize()));
             } else {
                 if (cell.isHorizontallyAligned(HorizontalAlignment.JUSTIFY) && TextCellDrawer.isNotLastLine(lines, lineCounter)) {
-                    stringWidth += (currentLink.getText().length() - 1) * calculateCharSpacingFor(positionedStyledText.getText());
+                    linkWidth += (currentLink.getText().length() - 1) * calculateCharSpacingFor(positionedStyledText.getText());
                 }
-                linkRectangle.setUpperRightX(x + offset + stringWidth);
+                linkRectangle.setUpperRightX(x + offset + linkWidth);
                 linkRectangle.setUpperRightY(y + PdfUtil.getFontHeight(cell.getFont(), cell.getFontSize()));
             }
 
@@ -81,23 +91,20 @@ public class LinkedTextCellDrawer extends TextCellDrawer<LinkedTextCell> {
             drawingContext.getPage().getAnnotations().add(pdfLink);
         }
 
-        if (isMultilineLink) {
-            int newStart = linkedTextStringIndex + positionedStyledText.getText().length() + 2; // ?!
+        lineCounter++;
+        linkedTextStringIndex += lineString.length() + 1;
 
+        if (isMultilineLink) {
+            int newStart = linkedTextStringIndex;
             links.addFirst(
                     new Link(
                             newStart,
                             currentLink.getEnd(),
-                            currentLink.getText().substring(positionedStyledText.getText().length() -2 /* ?!! */, currentLink.getText().length() - 1),
+                            cell.getText().substring(newStart, currentLink.getEnd()),
                             currentLink.getUrl()
                     )
             );
-
-            linkedTextStringIndex++; // We have an extra sign for splitting ("-")!
         }
-
-        lineCounter++;
-        linkedTextStringIndex += lineString.length() + "\n".length();
     }
 
     private PDAnnotationLink createAndGetPdAnnotationLinkFrom(Link currentLink) {
@@ -105,7 +112,12 @@ public class LinkedTextCellDrawer extends TextCellDrawer<LinkedTextCell> {
         underline.setStyle(PDBorderStyleDictionary.STYLE_UNDERLINE);
         PDAnnotationLink pdfLink = new PDAnnotationLink();
         pdfLink.setBorderStyle(underline);
-        //pdfLink.setColor(new PDColor(new float[] { 0.6f, 1f, 0.6f }, PDDeviceRGB.INSTANCE));
+
+        // For coloring one could use something like the following, but unfortunately
+        // that only colors the border, not the text. For coloring the text a lot of this library
+        // would need to be changed though ...
+        //
+        // pdfLink.setColor(new PDColor(new float[] { 0.6f, 1f, 0.6f }, PDDeviceRGB.INSTANCE));
 
         // add an action
         PDActionURI action = new PDActionURI();

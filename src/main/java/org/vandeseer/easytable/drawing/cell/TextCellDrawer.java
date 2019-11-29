@@ -53,7 +53,6 @@ public class TextCellDrawer<T extends AbstractTextCell> extends AbstractCellDraw
                 xOffset = startX + (cell.getWidth() - textWidth) / 2;
 
             } else if (cell.isHorizontallyAligned(JUSTIFY) && isNotLastLine(lines, i)) {
-                // setCharacterSpacing() is available in PDFBox version 2.0.4 and higher.
                 drawingContext.getContentStream().setCharacterSpacing(calculateCharSpacingFor(line));
             }
 
@@ -71,9 +70,8 @@ public class TextCellDrawer<T extends AbstractTextCell> extends AbstractCellDraw
         }
     }
 
-    // Vertical alignment
-    private float getAdaptionForVerticalAlignment() { // TODO Do we need epsilon comparison here as well?! !!!!!
-        if (cell.getRow().getHeight() >= cell.getHeight() || cell.getRowSpan() > 1) {
+    private float getAdaptionForVerticalAlignment() {
+        if (rowHeightIsBiggerThanOrEqualToCellHeight() || cell.getRowSpan() > 1) {
 
             if (cell.isVerticallyAligned(MIDDLE)) {
                 return (calculateOuterHeight() / 2 + cell.getTextHeight() / 2) - getRowSpanAdaption();
@@ -85,6 +83,11 @@ public class TextCellDrawer<T extends AbstractTextCell> extends AbstractCellDraw
 
         // top alighment (default case)
         return cell.getRow().getHeight() - cell.getPaddingTop(); // top position
+    }
+
+    private boolean rowHeightIsBiggerThanOrEqualToCellHeight() {
+        return cell.getRow().getHeight() > cell.getHeight()
+                || Math.abs(cell.getRow().getHeight() - cell.getHeight()) < PdfUtil.EPSILON;
     }
 
     private float calculateOuterHeight() {

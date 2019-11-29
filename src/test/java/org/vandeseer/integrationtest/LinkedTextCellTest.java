@@ -1,5 +1,7 @@
 package org.vandeseer.integrationtest;
 
+import org.apache.pdfbox.pdmodel.font.PDFont;
+import org.apache.pdfbox.pdmodel.font.PDType1Font;
 import org.junit.Test;
 import org.vandeseer.TestUtils;
 import org.vandeseer.easytable.settings.HorizontalAlignment;
@@ -13,48 +15,50 @@ import org.vandeseer.easytable.structure.cell.TextCell;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 
 public class LinkedTextCellTest {
 
-    // TODO Test different alignemnts (horizontal, vertical)
-    // TODO Test different fonts! (sans, serif etc.)
-    // TODO Test line breaks (again with different alignments and different fonts!)
-
-    // TODO Extend Test Util, that it automatically creates new pages
-
     @Test
     public void testLinkedTextCell() throws IOException {
         List<Table> tables = new LinkedList<>();
 
-//        for (VerticalAlignment verticalAlignment : VerticalAlignment.values()) {
-            for (HorizontalAlignment horizontalAlignment : HorizontalAlignment.values()) {
+        Table.TableBuilder tableBuilder = Table.builder().addColumnsOfWidth(200, 320);
+        tableBuilder.fontSize(14);
 
-                tables.add(Table.builder().addColumnsOfWidth(200, 320)
-                        .addRow(Row.builder()
-                                .add(TextCell.builder().text("baz").borderWidth(1).build())
-                                .add(buildLinkTextCellAligned(horizontalAlignment, VerticalAlignment.TOP))
-                                .build())
-                        .build());
-            //}
+        for (VerticalAlignment verticalAlignment : VerticalAlignment.values()) {
+            for (HorizontalAlignment horizontalAlignment : HorizontalAlignment.values()) {
+                for (PDFont font : new HashSet<>(Arrays.asList(PDType1Font.COURIER_BOLD, PDType1Font.HELVETICA))) {
+
+                    tableBuilder
+                            .addRow(Row.builder()
+                                    .font(font)
+                                    .add(TextCell.builder().text("baz").borderWidth(1).build())
+                                    .add(buildLinkTextCellAligned(horizontalAlignment, verticalAlignment))
+                                    .build());
+                }
+            }
         }
 
-        TestUtils.createAndSaveDocumentWithTables("linkedTextCell.pdf", tables.toArray(new Table[0]));
+        tables.add(tableBuilder.build());
+        TestUtils.createAndSaveDocumentWithTables("linkedTextCell.pdf", tables);
     }
 
     @Test
     public void testLinkedTextCellLineBreak() throws IOException {
         List<Table> tables = new LinkedList<>();
 
-//            for (HorizontalAlignment horizontalAlignment : HorizontalAlignment.values()) {
+            for (HorizontalAlignment horizontalAlignment : HorizontalAlignment.values()) {
 
                 tables.add(Table.builder().addColumnsOfWidth(200, 100)
                         .addRow(Row.builder()
                                 .add(TextCell.builder().text("baz").borderWidth(1).build())
                                 .add(LinkedTextCell.builder()
                                         .minHeight(100f)
-//                                        .horizontalAlignment(horizontalAlignment)
+                                        .horizontalAlignment(horizontalAlignment)
                                         .linkedText(
                                                 LinkedText.builder()
                                                         .append("fu bar ")
@@ -66,9 +70,9 @@ public class LinkedTextCellTest {
                                                         .build()).borderWidth(1).build())
                                 .build())
                         .build());
-//            }
+            }
 
-        TestUtils.createAndSaveDocumentWithTables("linkedTextCellLineBreak.pdf", tables.toArray(new Table[0]));
+        TestUtils.createAndSaveDocumentWithTables("linkedTextCellLineBreak.pdf", tables);
     }
 
     private LinkedTextCell buildLinkTextCellAligned(HorizontalAlignment horizontalAlignment, VerticalAlignment verticalAlignment) throws MalformedURLException {
@@ -100,6 +104,7 @@ public class LinkedTextCellTest {
                     .append(" ha! ")
                     .append("new link", new URL("http://www.apache.com"))
                     .append(" ho. ho.")
+                    .append("last link", new URL("http://www.google.com"))
                 .build()).borderWidth(1).build();
     }
 

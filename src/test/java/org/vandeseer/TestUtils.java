@@ -11,6 +11,7 @@ import org.vandeseer.easytable.structure.Table;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Collection;
 import java.util.Objects;
 
 public class TestUtils {
@@ -29,11 +30,15 @@ public class TestUtils {
         createAndSaveDocumentWithTables(outputFileName, table);
     }
 
+    public static void createAndSaveDocumentWithTables(String outputFileName, Collection<Table> tables) throws IOException {
+        createAndSaveDocumentWithTables(new PDDocument(), outputFileName, tables.toArray(new Table[0]));
+    }
+
     public static void createAndSaveDocumentWithTables(String outputFileName, Table... tables) throws IOException {
         createAndSaveDocumentWithTables(new PDDocument(), outputFileName, tables);
     }
 
-    public static void createAndSaveDocumentWithTables(PDDocument document, String outputFileName, Table... tables) throws IOException {
+    private static void createAndSaveDocumentWithTables(PDDocument document, String outputFileName, Table... tables) throws IOException {
 
         final PDPage page = new PDPage(PDRectangle.A4);
         document.addPage(page);
@@ -50,8 +55,9 @@ public class TestUtils {
                         .table(table)
                         .startX(PADDING)
                         .startY(startY)
+                        .endY(PADDING)
                         .build()
-                        .draw();
+                        .draw(() -> document, () -> new PDPage(PDRectangle.A4), PADDING);
 
                 startY -= (table.getHeight() + PADDING);
             }
@@ -81,4 +87,5 @@ public class TestUtils {
     public static void assertRegressionFolderExists() {
         new File(TARGET_FOLDER + TARGET_SUBFOLDER_REGRESSION).mkdirs();
     }
+
 }

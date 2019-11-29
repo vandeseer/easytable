@@ -18,7 +18,7 @@ public class PdfUtil {
     /**
      * The delta that is still acceptable in float comparisons.
      */
-    private static final double EPSILON = 0.0001;
+    public static final double EPSILON = 0.0001;
 
     private static final Map<String, String> SPLIT_BY_AND_REPLACEMENT_MAP = new LinkedHashMap<>();
     static {
