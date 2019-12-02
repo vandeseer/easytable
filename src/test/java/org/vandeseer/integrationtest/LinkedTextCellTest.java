@@ -67,6 +67,7 @@ public class LinkedTextCellTest {
                                                                 new URL("http://www.stackoverflow.com")
                                                         )
                                                         .append(" baz ")
+                                                        .append("last link", new URL("http://github.com"))
                                                         .build()).borderWidth(1).build())
                                 .build())
                         .build());

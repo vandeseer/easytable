@@ -95,12 +95,11 @@ public class LinkedTextCellDrawer extends TextCellDrawer<LinkedTextCell> {
         linkedTextStringIndex += lineString.length() + 1;
 
         if (isMultilineLink) {
-            int newStart = linkedTextStringIndex;
             links.addFirst(
                     new Link(
-                            newStart,
+                            linkedTextStringIndex,
                             currentLink.getEnd(),
-                            cell.getText().substring(newStart, currentLink.getEnd()),
+                            cell.getText().substring(linkedTextStringIndex, currentLink.getEnd()),
                             currentLink.getUrl()
                     )
             );
