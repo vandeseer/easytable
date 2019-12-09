@@ -4,9 +4,13 @@ import lombok.SneakyThrows;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import org.vandeseer.easytable.drawing.*;
 import org.vandeseer.easytable.structure.cell.AbstractCell;
+import org.vandeseer.easytable.util.PdfUtil;
 
 import java.awt.*;
 import java.awt.geom.Point2D;
+
+import static org.vandeseer.easytable.settings.VerticalAlignment.BOTTOM;
+import static org.vandeseer.easytable.settings.VerticalAlignment.MIDDLE;
 
 public abstract class AbstractCellDrawer<T extends AbstractCell> implements Drawer {
 
@@ -121,4 +125,35 @@ public abstract class AbstractCellDrawer<T extends AbstractCell> implements Draw
         }
     }
 
+    protected boolean rowHeightIsBiggerThanOrEqualToCellHeight() {
+        return cell.getRow().getHeight() > cell.getHeight()
+                || Math.abs(cell.getRow().getHeight() - cell.getHeight()) < PdfUtil.EPSILON;
+    }
+
+    protected float getRowSpanAdaption() {
+        return cell.getRowSpan() > 1
+                ? cell.calculateHeightForRowSpan() - cell.getRow().getHeight()
+                : 0;
+    }
+
+    protected float calculateOuterHeight() {
+        return cell.getRowSpan() > 1 ? cell.getHeight() : cell.getRow().getHeight();
+    }
+
+    protected float getAdaptionForVerticalAlignment() {
+        if (rowHeightIsBiggerThanOrEqualToCellHeight() || cell.getRowSpan() > 1) {
+
+            if (cell.isVerticallyAligned(MIDDLE)) {
+                return (calculateOuterHeight() / 2 + calculateInnerHeight() / 2) - getRowSpanAdaption();
+
+            } else if (cell.isVerticallyAligned(BOTTOM)) {
+                return (calculateInnerHeight() + cell.getPaddingBottom()) - getRowSpanAdaption();
+            }
+        }
+
+        // top alignment (default case)
+        return cell.getRow().getHeight() - cell.getPaddingTop(); // top position
+    }
+
+    protected abstract float calculateInnerHeight();
 }

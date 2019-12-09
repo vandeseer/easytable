@@ -15,8 +15,6 @@ import java.util.Collections;
 import java.util.List;
 
 import static org.vandeseer.easytable.settings.HorizontalAlignment.*;
-import static org.vandeseer.easytable.settings.VerticalAlignment.BOTTOM;
-import static org.vandeseer.easytable.settings.VerticalAlignment.MIDDLE;
 
 @NoArgsConstructor
 public class TextCellDrawer<T extends AbstractTextCell> extends AbstractCellDrawer<AbstractTextCell> {
@@ -70,29 +68,11 @@ public class TextCellDrawer<T extends AbstractTextCell> extends AbstractCellDraw
         }
     }
 
-    private float getAdaptionForVerticalAlignment() {
-        if (rowHeightIsBiggerThanOrEqualToCellHeight() || cell.getRowSpan() > 1) {
-
-            if (cell.isVerticallyAligned(MIDDLE)) {
-                return (calculateOuterHeight() / 2 + cell.getTextHeight() / 2) - getRowSpanAdaption();
-
-            } else if (cell.isVerticallyAligned(BOTTOM)) {
-                return (cell.getTextHeight() + cell.getPaddingBottom()) - getRowSpanAdaption();
-            }
-        }
-
-        // top alighment (default case)
-        return cell.getRow().getHeight() - cell.getPaddingTop(); // top position
+    @Override
+    protected float calculateInnerHeight() {
+        return cell.getTextHeight();
     }
 
-    private boolean rowHeightIsBiggerThanOrEqualToCellHeight() {
-        return cell.getRow().getHeight() > cell.getHeight()
-                || Math.abs(cell.getRow().getHeight() - cell.getHeight()) < PdfUtil.EPSILON;
-    }
-
-    private float calculateOuterHeight() {
-        return cell.getRowSpan() > 1 ? cell.getHeight() : cell.getRow().getHeight();
-    }
 
     private float calculateYOffset(PDFont currentFont, int currentFontSize, int lineIndex) {
         return PdfUtil.getFontHeight(currentFont, currentFontSize) // font height
@@ -120,12 +100,6 @@ public class TextCellDrawer<T extends AbstractTextCell> extends AbstractCellDraw
         return cell.isWordBreak()
                 ? PdfUtil.getOptimalTextBreakLines(cell.getText(), currentFont, currentFontSize, maxWidth)
                 : Collections.singletonList(cell.getText());
-    }
-
-    private float getRowSpanAdaption() {
-        return cell.getRowSpan() > 1
-                ? cell.calculateHeightForRowSpan() - cell.getRow().getHeight()
-                : 0;
     }
 
     protected void drawText(DrawingContext drawingContext, PositionedStyledText positionedStyledText) throws IOException {

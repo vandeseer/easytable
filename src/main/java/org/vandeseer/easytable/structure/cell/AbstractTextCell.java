@@ -4,8 +4,6 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.experimental.SuperBuilder;
 import org.apache.pdfbox.pdmodel.font.PDFont;
-import org.vandeseer.easytable.settings.HorizontalAlignment;
-import org.vandeseer.easytable.settings.VerticalAlignment;
 import org.vandeseer.easytable.structure.Column;
 import org.vandeseer.easytable.util.PdfUtil;
 
@@ -103,14 +101,6 @@ public abstract class AbstractTextCell extends AbstractCell {
             }
         }
         return columnsWidth;
-    }
-
-    public boolean isHorizontallyAligned(HorizontalAlignment alignment) {
-        return getSettings().getHorizontalAlignment() == alignment;
-    }
-
-    public boolean isVerticallyAligned(VerticalAlignment middle) {
-        return getSettings().getVerticalAlignment() == middle;
     }
 
     // Adaption for Lombok

@@ -145,6 +145,14 @@ public abstract class AbstractCell {
         }
     }
 
+    public boolean isHorizontallyAligned(HorizontalAlignment alignment) {
+        return getSettings().getHorizontalAlignment() == alignment;
+    }
+
+    public boolean isVerticallyAligned(VerticalAlignment alignment) {
+        return getSettings().getVerticalAlignment() == alignment;
+    }
+
     // This is used for customizations of the Lombok generated (Super)Builder
     public abstract static class AbstractCellBuilder<C extends AbstractCell, B extends AbstractCell.AbstractCellBuilder<C, B>> {
 

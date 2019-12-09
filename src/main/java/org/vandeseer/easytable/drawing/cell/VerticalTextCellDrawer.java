@@ -68,6 +68,12 @@ public class VerticalTextCellDrawer extends AbstractCellDrawer<VerticalTextCell>
         }
     }
 
+    // TODO this is currently not used!
+    @Override
+    protected float calculateInnerHeight() {
+        return 0;
+    }
+
 
     protected void drawText(String text, PDFont font, int fontSize, Color color, float x, float y, PDPageContentStream contentStream) throws IOException {
         // Rotate by 90 degrees counter clockwise
