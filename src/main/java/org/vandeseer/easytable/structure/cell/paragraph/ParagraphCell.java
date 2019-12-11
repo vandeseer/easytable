@@ -4,10 +4,12 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.SneakyThrows;
 import lombok.experimental.SuperBuilder;
+import org.apache.pdfbox.pdmodel.font.PDFont;
 import org.vandeseer.easytable.drawing.Drawer;
 import org.vandeseer.easytable.drawing.cell.ParagraphCellDrawer;
 import org.vandeseer.easytable.structure.cell.AbstractCell;
 
+import java.awt.*;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -20,14 +22,14 @@ public class ParagraphCell extends AbstractCell {
 
     private Paragraph paragraph;
 
-    // Custom builder (Lombok)
-    public static ParagraphCellBuilder<?, ?> builder() {
-        return new CustomParagraphCellBuilderImpl();
-    }
-
     @Override
     public void setWidth(float width) {
         super.setWidth(width);
+
+        getParagraph().getProcessables().forEach(
+                processable -> processable.process(getParagraph().getWrappedParagraph(), getSettings())
+        );
+
         rst.pdfbox.layout.elements.Paragraph wrappedParagraph = paragraph.getWrappedParagraph();
         wrappedParagraph.setLineSpacing(getLineSpacing());
         wrappedParagraph.setApplyLineSpacingToFirstLine(false);
@@ -96,25 +98,24 @@ public class ParagraphCell extends AbstractCell {
         }
     }
 
-    private static final class CustomParagraphCellBuilderImpl extends ParagraphCell.ParagraphCellBuilder<ParagraphCell, ParagraphCell.CustomParagraphCellBuilderImpl> {
-        private CustomParagraphCellBuilderImpl() {
+    // Adaption for Lombok
+    public abstract static class ParagraphCellBuilder<C extends ParagraphCell, B extends ParagraphCell.ParagraphCellBuilder<C, B>> extends AbstractCellBuilder<C, B> {
+
+        public B font(final PDFont font) {
+            settings.setFont(font);
+            return this.self();
         }
 
-        @Override
-        protected CustomParagraphCellBuilderImpl self() {
-            return this;
+        public B fontSize(final Integer fontSize) {
+            settings.setFontSize(fontSize);
+            return this.self();
         }
 
-        @Override
-        public ParagraphCell build() {
-            ParagraphCell paragraphCell = new ParagraphCell(this);
-            paragraphCell.buildWrappedParagraph();
-            return paragraphCell;
+        public B textColor(final Color textColor) {
+            settings.setTextColor(textColor);
+            return this.self();
         }
-    }
 
-    private void buildWrappedParagraph() {
-        this.paragraph.getProcessables().forEach(__ -> __.process(this.paragraph.getWrappedParagraph(), this.getSettings()));
     }
 
 }

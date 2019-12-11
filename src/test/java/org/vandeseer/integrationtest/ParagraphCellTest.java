@@ -16,6 +16,7 @@ import org.vandeseer.easytable.structure.cell.paragraph.StyledText;
 import java.awt.*;
 import java.io.IOException;
 
+import static org.apache.pdfbox.pdmodel.font.PDType1Font.COURIER;
 import static org.apache.pdfbox.pdmodel.font.PDType1Font.HELVETICA;
 
 public class ParagraphCellTest {
@@ -47,6 +48,15 @@ public class ParagraphCellTest {
                         .add(ParagraphCell.builder().horizontalAlignment(HorizontalAlignment.CENTER).backgroundColor(Color.GRAY).borderWidth(1).paragraph(createParagraph3()).build())
                         .add(ParagraphCell.builder().horizontalAlignment(HorizontalAlignment.JUSTIFY).backgroundColor(Color.LIGHT_GRAY).borderWidth(1).paragraph(createParagraph3()).build())
                         .build())
+                .addRow(Row.builder()
+                        .font(COURIER)
+                        .fontSize(5)
+                        .add(ParagraphCell.builder().horizontalAlignment(HorizontalAlignment.RIGHT).backgroundColor(Color.LIGHT_GRAY).borderWidth(1).paragraph(createParagraph4()).build())
+                        .add(ParagraphCell.builder().font(PDType1Font.TIMES_ROMAN).horizontalAlignment(HorizontalAlignment.LEFT).backgroundColor(Color.GRAY).borderWidth(1).paragraph(createParagraph4()).build())
+                        .add(ParagraphCell.builder().horizontalAlignment(HorizontalAlignment.CENTER).backgroundColor(Color.LIGHT_GRAY).borderWidth(1).paragraph(createParagraph4()).build())
+                        // TODO The coloring does not work yet!
+                        .add(ParagraphCell.builder().textColor(Color.WHITE).horizontalAlignment(HorizontalAlignment.JUSTIFY).backgroundColor(Color.GRAY).borderWidth(1).paragraph(createParagraph4()).build())
+                        .build())
                 .build();
     }
 
@@ -77,6 +87,15 @@ public class ParagraphCellTest {
                 .append(StyledText.builder().text("text").fontSize(7f).font(PDType1Font.HELVETICA).build())
                 .append(Markup.builder().markup("This is a link to {link[http://www.pdfbox.org]}PDFBox{link}").fontSize(11f).font(Markup.MarkupSupportedFont.HELVETICA).build())
                 .append(Hyperlink.builder().font(HELVETICA).fontSize(18f).text("Pdfbox-Link").url("https://github.com/ralfstuckert/pdfbox-layout").build())
+                .build();
+    }
+
+    private static ParagraphCell.Paragraph createParagraph4() {
+        return ParagraphCell.Paragraph.builder()
+                .append(StyledText.builder().text("This placeholder text is gonna be HUGE. " +
+                        "You have so many different things placeholder " +
+                        "text has to be able to do, and I don't believe Lorem " +
+                        "Ipsum has the stamina.").build())
                 .build();
     }
 
