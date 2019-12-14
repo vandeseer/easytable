@@ -77,7 +77,7 @@ Paragraphs can contain:
 Therefore I created a wrapper cell type (named `ParagraphCell`) which allows you to 
 create such tables for instance: 
 
-TODO: Image
+![table with markup](doc/example_paragraph_cell.png)
 
 This is still a bit experimental. 
 

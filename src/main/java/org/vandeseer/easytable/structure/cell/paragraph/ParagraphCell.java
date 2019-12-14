@@ -56,7 +56,7 @@ public class ParagraphCell extends AbstractCell {
         @Getter(AccessLevel.PACKAGE)
         private final List<ParagraphProcessable> processables;
 
-        @Getter(AccessLevel.PACKAGE)
+        @Getter
         private rst.pdfbox.layout.elements.Paragraph wrappedParagraph = new rst.pdfbox.layout.elements.Paragraph();
 
         public Paragraph(List<ParagraphProcessable> processables) {

@@ -29,9 +29,10 @@ public class Markup implements ParagraphProcessable {
     @NonNull
     private String markup;
 
-    private Float fontSize;
-
+    @NonNull
     private MarkupSupportedFont font;
+
+    private Float fontSize;
 
     @SneakyThrows
     @Override

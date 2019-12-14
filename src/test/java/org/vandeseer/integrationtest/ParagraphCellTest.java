@@ -6,16 +6,17 @@ import org.junit.Test;
 import org.vandeseer.TestUtils;
 import org.vandeseer.easytable.structure.Row;
 import org.vandeseer.easytable.structure.Table;
+import org.vandeseer.easytable.structure.cell.TextCell;
 import org.vandeseer.easytable.structure.cell.paragraph.Hyperlink;
 import org.vandeseer.easytable.structure.cell.paragraph.Markup;
 import org.vandeseer.easytable.structure.cell.paragraph.ParagraphCell;
+import org.vandeseer.easytable.structure.cell.paragraph.ParagraphCell.Paragraph;
 import org.vandeseer.easytable.structure.cell.paragraph.StyledText;
 
 import java.awt.*;
 import java.io.IOException;
 
-import static java.awt.Color.GRAY;
-import static java.awt.Color.LIGHT_GRAY;
+import static java.awt.Color.*;
 import static org.apache.pdfbox.pdmodel.font.PDType1Font.*;
 import static org.vandeseer.easytable.settings.HorizontalAlignment.*;
 import static org.vandeseer.easytable.settings.VerticalAlignment.*;
@@ -25,8 +26,55 @@ public class ParagraphCellTest {
     @Test
     public void testParagraphCell() throws IOException {
         TestUtils.createAndSaveDocumentWithTables("paragraphCell.pdf",
-                createSimpleTable()
+                createSimpleTable(), createParagraphTable()
         );
+    }
+
+    private Table createParagraphTable() {
+        return Table.builder()
+                .addColumnsOfWidth(200, 200)
+                .borderColor(GRAY)
+                .fontSize(8)
+                .font(HELVETICA_BOLD_OBLIQUE)
+                .addRow(Row.builder()
+                        .backgroundColor(LIGHT_GRAY)
+                        .textColor(WHITE)
+                        .horizontalAlignment(CENTER)
+                        .add(TextCell.builder().borderWidth(1).text("Markup").build())
+                        .add(TextCell.builder().borderWidth(1).text("No Markup").build())
+                        .build())
+                .addRow(Row.builder()
+                        .add(ParagraphCell.builder()
+                        .borderWidth(1)
+                        .padding(8)
+                        .lineSpacing(1.2f)
+                        .paragraph(Paragraph.builder()
+                                .append(Markup.builder()
+                                        .markup(
+                                                "This is using Markup where you can {color:#34deeb}color your text, " +
+                                                "{color:#000000}or also just *emphasize* whatever you think" +
+                                                "should be *emphasized*). You can also *{color:#34deeb}combine both*" +
+                                                "{color:#000000}. Furthermore you can add links like this one " +
+                                                "that is pointing to {link[https://github.com/ralfstuckert/pdfbox-layout/wiki/Markup]}" +
+                                                "markup-information{link} and which is underlined."
+                                        )
+                                        .font(Markup.MarkupSupportedFont.TIMES)
+                                        .build())
+                                .build())
+                        .build())
+                .add(ParagraphCell.builder()
+                        .borderWidth(1)
+                        .padding(8)
+                        .lineSpacing(1.2f)
+                        .paragraph(Paragraph.builder()
+                                .append(StyledText.builder().text("This is some text in one font. ").font(HELVETICA).build())
+                                .append(StyledText.builder().text("But this text that introduces a link that follows is different. Here comes the link: ").font(COURIER_BOLD).fontSize(6f).build())
+                                .append(Hyperlink.builder().text("github").url("http://www.github.com").build())
+                                .append(StyledText.builder().text(" There was the link. And here we have the font from the cell.").build())
+                                .build())
+                        .build())
+                .build())
+            .build();
     }
 
     private static Table createSimpleTable() throws IOException {
@@ -58,8 +106,8 @@ public class ParagraphCellTest {
     }
 
     @SneakyThrows
-    private static ParagraphCell.Paragraph createParagraph1() {
-        return ParagraphCell.Paragraph.builder()
+    private static Paragraph createParagraph1() {
+        return Paragraph.builder()
                 .append(StyledText.builder().text("Some people have an ability to write placeholder text... " +
                         "It's an art you're basically born with. You either have it or you don't. " +
                         "Look at that text! Would anyone use that? Can you imagine that, " +
@@ -69,16 +117,16 @@ public class ParagraphCellTest {
     }
 
     @SneakyThrows
-    private static ParagraphCell.Paragraph createParagraph2() {
-        return ParagraphCell.Paragraph.builder()
+    private static Paragraph createParagraph2() {
+        return Paragraph.builder()
                 .append(StyledText.builder().text("Some people have an ability to write placeholder text... " +
                         "\n\nIt's an art you're basically born with.").fontSize(6f).font(PDType1Font.COURIER).build())
                 .build();
     }
 
     @SneakyThrows
-    private static ParagraphCell.Paragraph createParagraph3() {
-        return ParagraphCell.Paragraph.builder()
+    private static Paragraph createParagraph3() {
+        return Paragraph.builder()
                 .append(StyledText.builder().text("This is some ").fontSize(11f).font(PDType1Font.COURIER).build())
                 .append(StyledText.builder().text("simple example ").fontSize(20f).font(PDType1Font.HELVETICA_BOLD_OBLIQUE).build())
                 .append(StyledText.builder().text("text").fontSize(7f).font(PDType1Font.HELVETICA).build())
@@ -87,8 +135,8 @@ public class ParagraphCellTest {
                 .build();
     }
 
-    private static ParagraphCell.Paragraph createParagraph4() {
-        return ParagraphCell.Paragraph.builder()
+    private static Paragraph createParagraph4() {
+        return Paragraph.builder()
                 .append(StyledText.builder().text("This placeholder text is gonna be HUGE.\n" +
                         "You have so many different things placeholder " +
                         "text has to be able to do, and I don't believe Lorem " +
@@ -96,8 +144,8 @@ public class ParagraphCellTest {
                 .build();
     }
 
-    private static ParagraphCell.Paragraph createParagraph5() {
-        return ParagraphCell.Paragraph.builder()
+    private static Paragraph createParagraph5() {
+        return Paragraph.builder()
                 .append(StyledText.builder().text("This placeholder text is gonna be ").build())
                 .append(StyledText.builder().text("HUGE").font(COURIER_BOLD_OBLIQUE).build())
                 .append(StyledText.builder().text(". And there is also ").build())
