@@ -13,7 +13,7 @@ import java.util.stream.Stream;
  */
 public class PdfUtil {
 
-    private static final String NEW_LINE_REGEX = "\\r?\\n";
+    public static final String NEW_LINE_REGEX = "\\r?\\n";
 
     /**
      * The delta that is still acceptable in float comparisons.

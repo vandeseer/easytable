@@ -4,8 +4,6 @@ import lombok.SneakyThrows;
 import org.apache.pdfbox.pdmodel.font.PDType1Font;
 import org.junit.Test;
 import org.vandeseer.TestUtils;
-import org.vandeseer.easytable.settings.HorizontalAlignment;
-import org.vandeseer.easytable.settings.VerticalAlignment;
 import org.vandeseer.easytable.structure.Row;
 import org.vandeseer.easytable.structure.Table;
 import org.vandeseer.easytable.structure.cell.paragraph.Hyperlink;
@@ -16,13 +14,13 @@ import org.vandeseer.easytable.structure.cell.paragraph.StyledText;
 import java.awt.*;
 import java.io.IOException;
 
-import static org.apache.pdfbox.pdmodel.font.PDType1Font.COURIER;
-import static org.apache.pdfbox.pdmodel.font.PDType1Font.HELVETICA;
+import static java.awt.Color.GRAY;
+import static java.awt.Color.LIGHT_GRAY;
+import static org.apache.pdfbox.pdmodel.font.PDType1Font.*;
+import static org.vandeseer.easytable.settings.HorizontalAlignment.*;
+import static org.vandeseer.easytable.settings.VerticalAlignment.*;
 
 public class ParagraphCellTest {
-
-    // TODO are omitted font settings handled correctly?!
-    // TODO are linebreaks handled correctly?
 
     @Test
     public void testParagraphCell() throws IOException {
@@ -38,24 +36,23 @@ public class ParagraphCellTest {
                 .font(HELVETICA)
                 .addRow(Row.builder()
                         .add(ParagraphCell.builder().lineSpacing(2f).borderWidth(1).paragraph(createParagraph1()).build())
-                        .add(ParagraphCell.builder().borderWidth(1).verticalAlignment(VerticalAlignment.TOP).paragraph(createParagraph2()).build())
-                        .add(ParagraphCell.builder().borderWidth(1).verticalAlignment(VerticalAlignment.MIDDLE).paragraph(createParagraph2()).build())
-                        .add(ParagraphCell.builder().borderWidth(1).verticalAlignment(VerticalAlignment.BOTTOM).paragraph(createParagraph2()).build())
+                        .add(ParagraphCell.builder().borderWidth(1).verticalAlignment(TOP).paragraph(createParagraph2()).build())
+                        .add(ParagraphCell.builder().borderWidth(1).verticalAlignment(MIDDLE).paragraph(createParagraph2()).build())
+                        .add(ParagraphCell.builder().borderWidth(1).verticalAlignment(BOTTOM).paragraph(createParagraph2()).build())
                         .build())
                 .addRow(Row.builder()
-                        .add(ParagraphCell.builder().horizontalAlignment(HorizontalAlignment.RIGHT).backgroundColor(Color.GRAY).borderWidth(1).paragraph(createParagraph3()).build())
-                        .add(ParagraphCell.builder().horizontalAlignment(HorizontalAlignment.LEFT).backgroundColor(Color.LIGHT_GRAY).borderWidth(1).paragraph(createParagraph3()).build())
-                        .add(ParagraphCell.builder().horizontalAlignment(HorizontalAlignment.CENTER).backgroundColor(Color.GRAY).borderWidth(1).paragraph(createParagraph3()).build())
-                        .add(ParagraphCell.builder().horizontalAlignment(HorizontalAlignment.JUSTIFY).backgroundColor(Color.LIGHT_GRAY).borderWidth(1).paragraph(createParagraph3()).build())
+                        .add(ParagraphCell.builder().horizontalAlignment(RIGHT).backgroundColor(GRAY).borderWidth(1).paragraph(createParagraph3()).build())
+                        .add(ParagraphCell.builder().horizontalAlignment(LEFT).backgroundColor(LIGHT_GRAY).borderWidth(1).paragraph(createParagraph3()).build())
+                        .add(ParagraphCell.builder().horizontalAlignment(CENTER).backgroundColor(GRAY).borderWidth(1).paragraph(createParagraph3()).build())
+                        .add(ParagraphCell.builder().horizontalAlignment(JUSTIFY).backgroundColor(LIGHT_GRAY).borderWidth(1).paragraph(createParagraph3()).build())
                         .build())
                 .addRow(Row.builder()
                         .font(COURIER)
                         .fontSize(5)
-                        .add(ParagraphCell.builder().horizontalAlignment(HorizontalAlignment.RIGHT).backgroundColor(Color.LIGHT_GRAY).borderWidth(1).paragraph(createParagraph4()).build())
-                        .add(ParagraphCell.builder().font(PDType1Font.TIMES_ROMAN).horizontalAlignment(HorizontalAlignment.LEFT).backgroundColor(Color.GRAY).borderWidth(1).paragraph(createParagraph4()).build())
-                        .add(ParagraphCell.builder().horizontalAlignment(HorizontalAlignment.CENTER).backgroundColor(Color.LIGHT_GRAY).borderWidth(1).paragraph(createParagraph4()).build())
-                        // TODO The coloring does not work yet!
-                        .add(ParagraphCell.builder().textColor(Color.WHITE).horizontalAlignment(HorizontalAlignment.JUSTIFY).backgroundColor(Color.GRAY).borderWidth(1).paragraph(createParagraph4()).build())
+                        .add(ParagraphCell.builder().font(PDType1Font.TIMES_ROMAN).horizontalAlignment(LEFT).backgroundColor(GRAY).borderWidth(1).paragraph(createParagraph4()).build())
+                        .add(ParagraphCell.builder().horizontalAlignment(CENTER).backgroundColor(LIGHT_GRAY).borderWidth(1).paragraph(createParagraph4()).build())
+                        .add(ParagraphCell.builder().textColor(Color.WHITE).horizontalAlignment(JUSTIFY).backgroundColor(GRAY).borderWidth(1).paragraph(createParagraph4()).build())
+                        .add(ParagraphCell.builder().fontSize(8).horizontalAlignment(RIGHT).backgroundColor(LIGHT_GRAY).borderWidth(1).paragraph(createParagraph5()).build())
                         .build())
                 .build();
     }
@@ -75,7 +72,7 @@ public class ParagraphCellTest {
     private static ParagraphCell.Paragraph createParagraph2() {
         return ParagraphCell.Paragraph.builder()
                 .append(StyledText.builder().text("Some people have an ability to write placeholder text... " +
-                        "It's an art you're basically born with.").fontSize(6f).font(PDType1Font.COURIER).build())
+                        "\n\nIt's an art you're basically born with.").fontSize(6f).font(PDType1Font.COURIER).build())
                 .build();
     }
 
@@ -92,10 +89,19 @@ public class ParagraphCellTest {
 
     private static ParagraphCell.Paragraph createParagraph4() {
         return ParagraphCell.Paragraph.builder()
-                .append(StyledText.builder().text("This placeholder text is gonna be HUGE. " +
+                .append(StyledText.builder().text("This placeholder text is gonna be HUGE.\n" +
                         "You have so many different things placeholder " +
                         "text has to be able to do, and I don't believe Lorem " +
                         "Ipsum has the stamina.").build())
+                .build();
+    }
+
+    private static ParagraphCell.Paragraph createParagraph5() {
+        return ParagraphCell.Paragraph.builder()
+                .append(StyledText.builder().text("This placeholder text is gonna be ").build())
+                .append(StyledText.builder().text("HUGE").font(COURIER_BOLD_OBLIQUE).build())
+                .append(StyledText.builder().text(". And there is also ").build())
+                .append(StyledText.builder().text("COLOR!").color(Color.RED).font(COURIER_BOLD_OBLIQUE).build())
                 .build();
     }
 
