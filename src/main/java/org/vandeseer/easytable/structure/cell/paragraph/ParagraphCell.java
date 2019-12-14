@@ -1,5 +1,6 @@
 package org.vandeseer.easytable.structure.cell.paragraph;
 
+import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.SneakyThrows;
@@ -52,10 +53,10 @@ public class ParagraphCell extends AbstractCell {
 
     public static class Paragraph {
 
-        @Getter
+        @Getter(AccessLevel.PACKAGE)
         private final List<ParagraphProcessable> processables;
 
-        @Getter
+        @Getter(AccessLevel.PACKAGE)
         private rst.pdfbox.layout.elements.Paragraph wrappedParagraph = new rst.pdfbox.layout.elements.Paragraph();
 
         public Paragraph(List<ParagraphProcessable> processables) {

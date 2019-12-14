@@ -16,7 +16,7 @@ crucial features. Nevertheless there is:
 *   cell spanning and row spanning 
 *   line breaking and line spacing
 *   images in cells
-*   experimental: links in cells, vertical text
+*   experimental: vertical text, links and [paragraphs within cells](#paragraph-cells)
 
 One can also override classes that are responsible for table/cell drawing, i.e. 
 their drawing behaviour can be customized to a pretty high extent.
@@ -24,10 +24,27 @@ their drawing behaviour can be customized to a pretty high extent.
 It is also possible to draw a table over multiple pages (even with the 
 header row being repeated on every new page).
 
+## Installation
+
+Add this to your `pom.xml`:
+
+    <dependency>
+        <groupId>com.github.vandeseer</groupId>
+        <artifactId>easytable</artifactId>
+        <version>0.6.0</version>
+    </dependency>
+
+Or checkout the repository and install it locally with maven (e.g. for the`develop` branch):
+
+    mvn install -DskipTests -Dgpg.skip
+
 ## Examples
 
-[This code](src/test/java/org/vandeseer/integrationtest/ExcelLikeExampleTest.java) is needed in order to produce a 
-PDF document with the following two tables:
+There is a [minimal full working example](src/test/java/org/vandeseer/MinimumWorkingExample.java) 
+which should help you getting started.  
+
+For a bit more involved tables have a look at [this code](src/test/java/org/vandeseer/integrationtest/ExcelLikeExampleTest.java) 
+which is needed for creating a PDF document with the following two tables:
 
 ![easytable table](doc/example.png)
 
@@ -45,38 +62,62 @@ it can be found [here](src/test/java/org/vandeseer/integrationtest/VerticalTextC
 If you run the tests with `mvn clean test` there also some PDF documents created which you can find in the `target` folder.
 The corresponding sources (in order to understand how to use the code) can be found in the test package.
 
-## Installation
+## Paragraph Cells
 
-Add this to your `pom.xml`:
+Since several people asked me to include a way to add hyperlinks within cells I did a bit of research
+and stumbled across a really nice library named [pdfbox-layout](https://github.com/ralfstuckert/pdfbox-layout). Unfortunately it will not be developed 
+any further, but it still provides a very nice API for creating paragraphs with "styled text" (including links
+as well as markup). 
 
+Paragraphs can contain:
+- Hyperlinks
+- StyledText (i.e. colorable text with a font and font size)
+- Markup
+
+Therefore I created a wrapper cell type (named `ParagraphCell`) which allows you to 
+create such tables for instance: 
+
+TODO: Image
+
+This is still a bit experimental. 
+
+If you want to use this feature you need to add pdfbox-layout as a dependency. 
+In case you are using maven for instance in your `pom.xml`:
+
+    <repositories>
+        <repository>
+            <id>jitpack.io</id>
+            <url>https://jitpack.io</url>
+        </repository>
+    </repositories>
+    ...
     <dependency>
-        <groupId>com.github.vandeseer</groupId>
-        <artifactId>easytable</artifactId>
-        <version>0.5.2</version>
+        <groupId>com.github.ralfstuckert.pdfbox-layout</groupId>
+        <artifactId>pdfbox2-layout</artifactId>
+        <version>1.0.0</version>
+        <exclusions>
+            <exclusion>
+                <groupId>org.apache.pdfbox</groupId>
+                <artifactId>pdfbox</artifactId>
+            </exclusion>
+        </exclusions>
     </dependency>
 
-Or checkout the repository and install it locally with maven (e.g. for the`develop` branch):
-
-    mvn install -DskipTests -Dgpg.skip
+Please note that you also need to set the `page(...)` on the `TableDrawer` you are using
+in case you want to add hyperlinks! Otherwise you will get a `NullPointerException`.
 
 ## Kudos
 
 *   to [Binghammer](https://github.com/Binghammer) for implementing cell coloring and text center alignment
-
 *   to [Sebastian Göhring](https://github.com/TheSilentHorizon) for finding and fixing a bug (column spanning)
-
 *   to [AndreKoepke](https://github.com/AndreKoepke) for the line breaking feature, some bigger nice refactorings and 
 improvements
-
 *   to [Wolfgang Apolinarski](https://github.com/wapolinar) for the printing over pages and bugfixes
-
 *   to [AdrianMiska](https://github.com/AdrianMiska) for finding and fixing an issue with cell height
-
 *   to [TheRealSourceSeeker](https://github.com/TheRealSourceSeeker) for finding a bug caused by using `float`s
-
 *   to [Drummond Dawson](https://github.com/drumonii) for code changes that allowed removing a dependency
-
 *   to [styssi](https://github.com/styssi) for allowing several multipage tables being drawn on the same page
+*   to [Ralf Stuckert](https://github.com/ralfstuckert) for creating [pdfbox-layout](https://github.com/ralfstuckert/pdfbox-layout)
 
 ## Q&A
 
