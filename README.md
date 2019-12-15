@@ -67,7 +67,7 @@ The corresponding sources (in order to understand how to use the code) can be fo
 Since several people asked me to include a way to add hyperlinks within cells I did a bit of research
 and stumbled across a really nice library named [pdfbox-layout](https://github.com/ralfstuckert/pdfbox-layout). 
 Unfortunately that library will not be developed 
-any further, but it still provides a very nice API for creating paragraphs with "styled text" (including links
+any further, but it still provides a very powerful API for creating paragraphs with "styled text" (including links
 as well as markup). 
 
 Therefore I created a wrapper cell type (named `ParagraphCell`) which allows to append
@@ -81,9 +81,10 @@ on how to create such a table:
 
 ![table with markup](doc/example_paragraph_cell.png)
 
-This is still a bit experimental. 
+### Adding Needed Dependency
 
-If you want to use this feature you need to add pdfbox-layout as a dependency. 
+This is still a bit experimental and there may be changes in the future. 
+If you want to use this feature nevertheless you need to add pdfbox-layout as a dependency. 
 In case you are using maven for instance in your `pom.xml`:
 
     <repositories>
@@ -105,8 +106,19 @@ In case you are using maven for instance in your `pom.xml`:
         </exclusions>
     </dependency>
 
+### Enable Links
+
 Please note that you also need to set the `page(...)` on the `TableDrawer` you are using
-in case you want to add hyperlinks! Otherwise you will get a `NullPointerException`.
+in case you want to add hyperlinks! Otherwise you will get a `NullPointerException`. 
+For instance: 
+
+    TableDrawer.builder()
+        .page(page) // <-- This is needed for links to work!
+        .contentStream(contentStream)
+        .table(table)
+        ...
+        .build()
+        .draw()
 
 ## Kudos
 
