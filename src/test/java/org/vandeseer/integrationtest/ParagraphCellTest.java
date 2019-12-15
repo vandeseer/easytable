@@ -80,7 +80,7 @@ public class ParagraphCellTest {
             .build();
     }
 
-    private static Table createSimpleTable() throws IOException {
+    private static Table createSimpleTable() {
         return Table.builder()
                 .addColumnsOfWidth(120, 120, 120, 120)
                 .fontSize(8)

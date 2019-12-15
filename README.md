@@ -65,17 +65,19 @@ The corresponding sources (in order to understand how to use the code) can be fo
 ## Paragraph Cells
 
 Since several people asked me to include a way to add hyperlinks within cells I did a bit of research
-and stumbled across a really nice library named [pdfbox-layout](https://github.com/ralfstuckert/pdfbox-layout). Unfortunately it will not be developed 
+and stumbled across a really nice library named [pdfbox-layout](https://github.com/ralfstuckert/pdfbox-layout). 
+Unfortunately that library will not be developed 
 any further, but it still provides a very nice API for creating paragraphs with "styled text" (including links
 as well as markup). 
 
-Paragraphs can contain:
-- Hyperlinks
-- StyledText (i.e. colorable text with a font and font size)
-- Markup
+Therefore I created a wrapper cell type (named `ParagraphCell`) which allows to append
+- hyperlinks
+- styled text (i.e. colorable text with a font and font size) as well as
+- markup (please see this [documentation](https://github.com/ralfstuckert/pdfbox-layout/wiki/Markup)).
 
-Therefore I created a wrapper cell type (named `ParagraphCell`) which allows you to 
-create such tables for instance: 
+Note that the easytable API may be a bit different to what you find in the linked documentation.
+Anyway, in order to get your hands dirty look at [this code](src/test/java/org/vandeseer/integrationtest/ParagraphCellTest.java) 
+on how to create such a table: 
 
 ![table with markup](doc/example_paragraph_cell.png)
 
