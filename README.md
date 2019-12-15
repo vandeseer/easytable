@@ -16,7 +16,7 @@ crucial features. Nevertheless there is:
 *   cell spanning and row spanning 
 *   line breaking and line spacing
 *   images in cells
-*   experimental: vertical text, links and [paragraphs within cells](#paragraph-cells)
+*   experimental: vertical text, [links and paragraphs within cells](#paragraph-cells)
 
 One can also override classes that are responsible for table/cell drawing, i.e. 
 their drawing behaviour can be customized to a pretty high extent.
