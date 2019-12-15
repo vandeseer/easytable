@@ -33,27 +33,28 @@ public class ParagraphCellTest {
     private Table createParagraphTable() {
         return Table.builder()
                 .addColumnsOfWidth(200, 200)
-                .borderColor(GRAY)
+                .borderColor(WHITE)
                 .fontSize(8)
                 .font(HELVETICA_BOLD_OBLIQUE)
                 .addRow(Row.builder()
-                        .backgroundColor(LIGHT_GRAY)
+                        .backgroundColor(GRAY)
                         .textColor(WHITE)
                         .horizontalAlignment(CENTER)
                         .add(TextCell.builder().borderWidth(1).text("Markup").build())
                         .add(TextCell.builder().borderWidth(1).text("No Markup").build())
                         .build())
                 .addRow(Row.builder()
+                        .backgroundColor(LIGHT_GRAY)
                         .add(ParagraphCell.builder()
-                        .borderWidth(1)
-                        .padding(8)
-                        .lineSpacing(1.2f)
-                        .paragraph(Paragraph.builder()
+                            .borderWidth(1)
+                            .padding(8)
+                            .lineSpacing(1.2f)
+                            .paragraph(Paragraph.builder()
                                 .append(Markup.builder()
                                         .markup(
-                                                "This is using Markup where you can {color:#34deeb}color your text, " +
-                                                "{color:#000000}or also just *emphasize* whatever you think" +
-                                                "should be *emphasized*). You can also *{color:#34deeb}combine both*" +
+                                                "This is using Markup where you can {color:#efefef}color your text, " +
+                                                "{color:#000000}or also just *emphasize* whatever you think " +
+                                                "should be *emphasized*). You can also *{color:#efefef}combine both*" +
                                                 "{color:#000000}. Furthermore you can add links like this one " +
                                                 "that is pointing to {link[https://github.com/ralfstuckert/pdfbox-layout/wiki/Markup]}" +
                                                 "markup-information{link} and which is underlined."
@@ -61,18 +62,20 @@ public class ParagraphCellTest {
                                         .font(Markup.MarkupSupportedFont.TIMES)
                                         .build())
                                 .build())
-                        .build())
-                .add(ParagraphCell.builder()
-                        .borderWidth(1)
-                        .padding(8)
-                        .lineSpacing(1.2f)
-                        .paragraph(Paragraph.builder()
-                                .append(StyledText.builder().text("This is some text in one font. ").font(HELVETICA).build())
-                                .append(StyledText.builder().text("But this text that introduces a link that follows is different. Here comes the link: ").font(COURIER_BOLD).fontSize(6f).build())
-                                .append(Hyperlink.builder().text("github").url("http://www.github.com").build())
-                                .append(StyledText.builder().text(" There was the link. And here we have the font from the cell.").build())
-                                .build())
-                        .build())
+                            .build())
+                        .add(ParagraphCell.builder()
+                            .borderWidth(1)
+                            .padding(8)
+                            .lineSpacing(1.2f)
+                            .paragraph(Paragraph.builder()
+                                    .append(StyledText.builder().text("This is some text in one font.").font(HELVETICA).build())
+                                    .appendNewLine()
+                                    .append(StyledText.builder().text("But this text that introduces a link that follows is different. Here comes the link: ").font(COURIER_BOLD).fontSize(6f).build())
+                                    .append(Hyperlink.builder().text("github!").url("http://www.github.com").font(COURIER_BOLD).fontSize(6f).color(WHITE).build())
+                                    .appendNewLine(6f)
+                                    .append(StyledText.builder().text("There was the link. And now we are using the default font from the cell.").build())
+                                    .build())
+                            .build())
                 .build())
             .build();
     }

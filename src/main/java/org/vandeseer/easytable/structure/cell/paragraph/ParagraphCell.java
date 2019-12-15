@@ -89,6 +89,16 @@ public class ParagraphCell extends AbstractCell {
                 return this;
             }
 
+            public ParagraphBuilder appendNewLine() {
+                processables.add(new NewLine());
+                return this;
+            }
+
+            public ParagraphBuilder appendNewLine(float fontSize) {
+                processables.add(new NewLine(fontSize));
+                return this;
+            }
+
             public Paragraph build() {
                 return new Paragraph(processables);
             }
