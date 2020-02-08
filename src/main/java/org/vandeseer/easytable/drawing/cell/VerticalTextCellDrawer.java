@@ -28,7 +28,7 @@ public class VerticalTextCellDrawer extends AbstractCellDrawer<VerticalTextCell>
     /**
      * Does not yet support the settings of alignments.
      *
-     * @param drawingContext
+     * drawingContext
      */
     @Override
     @SneakyThrows
