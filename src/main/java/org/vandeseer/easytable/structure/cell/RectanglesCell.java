@@ -1,9 +1,11 @@
 package org.vandeseer.easytable.structure.cell;
 
 import java.awt.Color;
+import java.util.List;
 
 import org.vandeseer.easytable.drawing.Drawer;
 import org.vandeseer.easytable.drawing.cell.RectanglesCellDrawer;
+
 
 import lombok.Getter;
 import lombok.experimental.SuperBuilder;
@@ -21,14 +23,9 @@ public class RectanglesCell extends AbstractCell {
 		super(b);
 	}
 
-	public float color1Percentage;
-	public Color color1Color;
-
-	public float color2Percentage;
-	public Color color2Color;
-
-	public float color3Percentage;
-	public Color color3Color;
+	public List<RectangleCellDetails> rectangleCellDetails;
+    
+    private boolean isMultiColumn;
 
 	 @Override
      public float getMinHeight() {

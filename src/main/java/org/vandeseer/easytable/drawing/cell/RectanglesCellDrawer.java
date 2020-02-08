@@ -6,6 +6,7 @@ import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import org.vandeseer.easytable.drawing.DrawingContext;
 import org.vandeseer.easytable.drawing.DrawingUtil;
 import org.vandeseer.easytable.drawing.PositionedRectangle;
+import org.vandeseer.easytable.structure.cell.RectangleCellDetails;
 import org.vandeseer.easytable.structure.cell.RectanglesCell;
 
 import lombok.SneakyThrows;
@@ -33,55 +34,65 @@ public class RectanglesCellDrawer extends AbstractCellDrawer<RectanglesCell> {
 
          final float rowHeight = cell.getRow().getHeight();
          float startY = rowHeight < cell.getHeight() ? start.y + rowHeight - cell.getHeight() : start.y;
-
          final float calculatedRectangleHeight = cell.getHeight() * 80/ 100;
-         float rectHeight = calculatedRectangleHeight * cell.color1Percentage;
-         startY = startY + cell.getPaddingBottom();
-         System.out.println("RectHeight 1 :" + rectHeight + " startY1 :" + startY);
-         float totalRectHeight = rectHeight;
-         // Actual
-         DrawingUtil.drawRectangle(contentStream,
-                 PositionedRectangle.builder()
-                         .x(start.x + cell.getPaddingLeft())
-                         .y(startY)
-                         .width(cell.getWidth() - cell.getHorizontalPadding())
-                         .height(rectHeight)
-                         .color(cell.getColor1Color()).build()
-         );
-
-         // Unused
-         if(cell.color2Percentage > 0f) {
-         	startY = startY + rectHeight ; //cell.getPaddingBottom() + RectanglesCell.RECTANGLE_HEIGHT * cell.color1Percentage;
-         	rectHeight = calculatedRectangleHeight * cell.color2Percentage;
+         float startX = start.x + cell.getPaddingLeft();
+         float rectCellWidth = cell.getWidth() - cell.getHorizontalPadding();
+         if(cell.isMultiColumn()) {
+         	rectCellWidth = rectCellWidth/2;
+         }
+         for(RectangleCellDetails rectangleCellDetails:cell.getRectangleCellDetails()) {
          	
-         	System.out.println("RectHeight 2 :" + rectHeight + " startY2 :" + startY);
-         	totalRectHeight += rectHeight;
-         	DrawingUtil.drawRectangle(contentStream,
+         	float rectHeight = calculatedRectangleHeight * rectangleCellDetails.getColor1Percentage();
+         	startY = startY + cell.getPaddingBottom();
+             System.out.println("RectHeight 1 :" + rectHeight + " startY1 :" + startY);
+             float totalRectHeight = rectHeight;
+             // Actual
+             DrawingUtil.drawRectangle(contentStream,
                      PositionedRectangle.builder()
-                             .x(start.x + cell.getPaddingLeft())
+                             .x(startX)
                              .y(startY)
-                             .width(cell.getWidth() - cell.getHorizontalPadding())
+                             .width(rectCellWidth)
                              .height(rectHeight)
-                             .color(cell.getColor2Color()).build()
+                             .color(rectangleCellDetails.getColor1Color()).build()
              );
+             
+             if(rectangleCellDetails.getColor2Percentage() > 0f) {
+             	startY = startY + rectHeight ; //cell.getPaddingBottom() + RectanglesCell.RECTANGLE_HEIGHT * cell.color1Percentage;
+             	rectHeight = calculatedRectangleHeight * rectangleCellDetails.getColor2Percentage();
+             	
+             	System.out.println("RectHeight 2 :" + rectHeight + " startY2 :" + startY);
+             	totalRectHeight += rectHeight;
+             	DrawingUtil.drawRectangle(contentStream,
+                         PositionedRectangle.builder()
+                                 .x(startX)
+                                 .y(startY)
+                                 .width(rectCellWidth)
+                                 .height(rectHeight)
+                                 .color(rectangleCellDetails.getColor2Color()).build()
+                 );
+             }
+             
+             if(rectangleCellDetails.getColor3Percentage() > 0f) {
+             	startY = startY + rectHeight;//cell.getPaddingBottom() + RectanglesCell.RECTANGLE_HEIGHT * cell.color2Percentage;
+             	rectHeight = calculatedRectangleHeight * rectangleCellDetails.getColor3Percentage();
+             	
+             	System.out.println("RectHeight 3 :" + rectHeight + " startY3 :" + startY);
+             	totalRectHeight += rectHeight;
+             	 DrawingUtil.drawRectangle(contentStream,
+                          PositionedRectangle.builder()
+                                  .x(startX)
+                                  .y(startY)
+                                  .width(rectCellWidth)
+                                  .height(rectHeight)
+                                  .color(rectangleCellDetails.getColor3Color()).build()
+                  );
+             }
+             System.out.println("Total Rect Height :" + totalRectHeight);
+             System.out.println("START X " + startX);
+             startX = startX + rectCellWidth + 1;
+             startY = rowHeight < cell.getHeight() ? start.y + rowHeight - cell.getHeight() : start.y;
+             
          }
-         if(cell.color3Percentage > 0f) {
-         	startY = startY + rectHeight;//cell.getPaddingBottom() + RectanglesCell.RECTANGLE_HEIGHT * cell.color2Percentage;
-         	rectHeight = calculatedRectangleHeight * cell.color3Percentage;
-         	
-         	System.out.println("RectHeight 3 :" + rectHeight + " startY3 :" + startY);
-         	totalRectHeight += rectHeight;
-         	 DrawingUtil.drawRectangle(contentStream,
-                      PositionedRectangle.builder()
-                              .x(start.x + cell.getPaddingLeft())
-                              .y(startY)
-                              .width(cell.getWidth() - cell.getHorizontalPadding())
-                              .height(rectHeight)
-                              .color(cell.getColor3Color()).build()
-              );
-         }
-         System.out.println("Total Rect Height :" + totalRectHeight);
-        
      }
 
 	
