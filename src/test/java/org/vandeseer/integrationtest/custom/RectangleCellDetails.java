@@ -19,4 +19,7 @@ public class RectangleCellDetails {
      
      private float color3Percentage;
      private Color color3Color;
+     
+     private String cellText;
+     private Color cellTextColor;
 }

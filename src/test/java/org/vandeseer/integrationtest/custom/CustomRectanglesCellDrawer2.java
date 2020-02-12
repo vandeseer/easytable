@@ -12,11 +12,14 @@ import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.common.PDRectangle;
+import org.apache.pdfbox.pdmodel.font.PDFont;
+import org.apache.pdfbox.pdmodel.font.PDType1Font;
 import org.vandeseer.easytable.TableDrawer;
 import org.vandeseer.easytable.drawing.Drawer;
 import org.vandeseer.easytable.drawing.DrawingContext;
 import org.vandeseer.easytable.drawing.DrawingUtil;
 import org.vandeseer.easytable.drawing.PositionedRectangle;
+import org.vandeseer.easytable.drawing.PositionedStyledText;
 import org.vandeseer.easytable.drawing.cell.AbstractCellDrawer;
 import org.vandeseer.easytable.structure.Row;
 import org.vandeseer.easytable.structure.Table;
@@ -74,8 +77,14 @@ public class CustomRectanglesCellDrawer2 {
                 	
                 	float rectHeight = calculatedRectangleHeight * rectangleCellDetails.getColor1Percentage();
                 	startY = startY + cell.getPaddingBottom();
-                    System.out.println("RectHeight 1 :" + rectHeight + " startY1 :" + startY);
+                    System.out.println("RectHeight 1 :" + rectHeight + " startY1 :" + startY + " Color : " + rectangleCellDetails.getColor1Color());
                     float totalRectHeight = rectHeight;
+                    if(cell.isMultiColumn) {
+                    	DrawingUtil.drawText(contentStream, PositionedStyledText.builder().x(startX+5).y(startY).font(PDType1Font.HELVETICA_BOLD).fontSize(6).color(Color.BLACK).text("10.0").build());
+                    }else {
+                    	DrawingUtil.drawText(contentStream, PositionedStyledText.builder().x(startX+10).y(startY).font(PDType1Font.HELVETICA_BOLD).fontSize(6).color(Color.BLACK).text("10.0").build());
+                    }
+                    startY = startY + 5f;
                     // Actual
                     DrawingUtil.drawRectangle(contentStream,
                             PositionedRectangle.builder()
@@ -117,6 +126,7 @@ public class CustomRectanglesCellDrawer2 {
                                          .color(rectangleCellDetails.getColor3Color()).build()
                          );
                     }
+                   
                     System.out.println("Total Rect Height :" + totalRectHeight);
                     System.out.println("START X " + startX);
                     startX = startX + rectCellWidth + 1;
@@ -250,6 +260,18 @@ public class CustomRectanglesCellDrawer2 {
                         .add(RectanglesCell.builder().borderWidth(1).rectangleCellDetails(rectangleCellDetailsRow2Col7).build())
                         .build())
                 .build();
+    	
+    	/*return Table.builder()
+                .addColumnsOfWidth(COLUMN_WIDTH)
+                .fontSize(8)
+                .font(HELVETICA)
+                .addRow(Row.builder()
+                        .add(TextCell.builder().borderWidth(1).text("MON").build())
+                        .build())
+                .addRow(Row.builder().height(60f)
+                       .add(RectanglesCell.builder().borderWidth(1).rectangleCellDetails(rectangleCellDetailsRow1Col7).build())
+                        .build())
+               .build();*/
     }
 
 }

@@ -23,7 +23,7 @@ public class RectanglesCell extends AbstractCell {
 		super(b);
 	}
 
-	public List<RectangleCellDetails> rectangleCellDetails;
+	private List<RectangleCellDetails> rectangleCellDetails;
     
     private boolean isMultiColumn;
 

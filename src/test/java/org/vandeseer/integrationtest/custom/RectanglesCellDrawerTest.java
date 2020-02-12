@@ -20,6 +20,7 @@ import org.vandeseer.easytable.structure.cell.RectangleCellDetails;
 public class RectanglesCellDrawerTest {
 	public static final float COLUMN_WIDTH = 50f;
 	public static void main(String[] args) throws IOException {
+		
 		try(final PDDocument document = new PDDocument()) {
 
             final PDPage page = new PDPage(PDRectangle.A4);
@@ -36,21 +37,20 @@ public class RectanglesCellDrawerTest {
                         .draw();
 
             }
-
             document.save("target/customCellDrawerWithRectangles.pdf");
         }
 	}
 	
 	private static Table createSimpleTable() {
 		List<RectangleCellDetails> rectangleCellDetailsRow1Col1 = new ArrayList<>();
-    	RectangleCellDetails rectDetails1 = RectangleCellDetails.builder().color1Color(Color.GRAY).color1Percentage(0.2f).color2Color(Color.BLUE).color2Percentage(0.3f).color3Color(Color.RED).color3Percentage(0.5f).build();
-    	RectangleCellDetails rectDetails2 = RectangleCellDetails.builder().color1Color(Color.GRAY).color1Percentage(0.8f).color2Color(Color.BLUE).color2Percentage(0.2f).build();
+    	RectangleCellDetails rectDetails1 = RectangleCellDetails.builder().cellText("8.00").color1Color(Color.GRAY).color1Percentage(0.2f).color2Color(Color.BLUE).color2Percentage(0.3f).color3Color(Color.RED).color3Percentage(0.5f).build();
+    	RectangleCellDetails rectDetails2 = RectangleCellDetails.builder().cellText("12.00").color1Color(Color.GRAY).color1Percentage(0.8f).color2Color(Color.BLUE).color2Percentage(0.2f).build();
     	rectangleCellDetailsRow1Col1.add(rectDetails1);
     	rectangleCellDetailsRow1Col1.add(rectDetails2);
     	
     	
     	List<RectangleCellDetails> rectangleCellDetailsRow1Col2 = new ArrayList<>();
-    	RectangleCellDetails rectDetailsRow1Col2 = RectangleCellDetails.builder().color1Color(Color.GRAY).color1Percentage(0.33f).color2Color(Color.BLUE).color2Percentage(0.33f).color3Color(Color.RED).color3Percentage(0.34f).build();
+    	RectangleCellDetails rectDetailsRow1Col2 = RectangleCellDetails.builder().cellText("2.00").color1Color(Color.GRAY).color1Percentage(0.33f).color2Color(Color.BLUE).color2Percentage(0.33f).color3Color(Color.RED).color3Percentage(0.34f).build();
     	rectangleCellDetailsRow1Col2.add(rectDetailsRow1Col2);
     	
     	List<RectangleCellDetails> rectangleCellDetailsRow1Col3 = new ArrayList<>();
@@ -115,7 +115,7 @@ public class RectanglesCellDrawerTest {
                         .add(TextCell.builder().borderWidth(1).text("SAT").build())
                         .add(TextCell.builder().borderWidth(1).text("SUN").build())
                         .build())
-                .addRow(Row.builder().height(40f)
+                .addRow(Row.builder().height(60f)
                         .add(RectanglesCell.builder().borderWidth(1).isMultiColumn(true).rectangleCellDetails(rectangleCellDetailsRow1Col1).build())
                         .add(RectanglesCell.builder().borderWidth(1).rectangleCellDetails(rectangleCellDetailsRow1Col2).build())
                         .add(RectanglesCell.builder().borderWidth(1).rectangleCellDetails(rectangleCellDetailsRow1Col3).build())

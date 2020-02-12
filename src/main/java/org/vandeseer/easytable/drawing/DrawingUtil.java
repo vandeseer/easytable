@@ -10,6 +10,16 @@ public class DrawingUtil {
     private DrawingUtil() {
     }
 
+    /*public static void drawText(PDPageContentStream contentStream, PositionedStyledText styledText) throws IOException {
+        contentStream.beginText();
+        contentStream.setNonStrokingColor(styledText.getColor());
+        contentStream.setFont(styledText.getFont(), styledText.getFontSize());
+        contentStream.newLineAtOffset(styledText.getX(), styledText.getY());
+        contentStream.showText(styledText.getText());
+        contentStream.endText();
+        contentStream.setCharacterSpacing(0);
+    }*/
+    
     public static void drawText(PDPageContentStream contentStream, PositionedStyledText styledText) throws IOException {
         contentStream.beginText();
         contentStream.setNonStrokingColor(styledText.getColor());
