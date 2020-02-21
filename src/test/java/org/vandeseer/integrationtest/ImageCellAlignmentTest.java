@@ -76,6 +76,7 @@ public class ImageCellAlignmentTest {
                         .borderWidth(1)
                         .padding(2)
                         .image(TestUtils.createSampleImage())
+                        .scale(0.2f)
                         .colSpan(2)
                         .build());
 

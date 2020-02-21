@@ -106,14 +106,13 @@ In case you are using maven for instance in your `pom.xml`:
         </exclusions>
     </dependency>
 
-### Enable Links
+### Setting the Page on `TableDrawer`
 
-Please note that you also need to set the `page(...)` on the `TableDrawer` you are using
-in case you want to add hyperlinks! Otherwise you will get a `NullPointerException`. 
-For instance: 
+Please note that you also need to set the `page(...)` on the `TableDrawer` in case you 
+are using a `ParagraphCell`.
 
     TableDrawer.builder()
-        .page(page) // <-- This is needed for links to work!
+        .page(page) // <-- This is needed!
         .contentStream(contentStream)
         .table(table)
         ...
@@ -160,6 +159,15 @@ where the table should be drawn:
         .startY(100F)
         .endY(50F) // <-- If the table is bigger, a new page is started
         .build()
+
+### Is there a way to repeat the header on every page?
+
+Depending on whether you want to repeat the header row or not you 
+should use `RepeatedHeaderTableDrawer` or `TableDrawer` respectively.
+
+### Can I get the `y` coordinate of the end of a drawn table?
+
+Yes. Just use the `.getFinalY()` method. Also see [FinalYTest.java](src/test/java/org/vandeseer/integrationtest/FinalYTest.java).
 
 ### Does it work with Java < 8?
 

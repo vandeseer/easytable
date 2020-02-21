@@ -1,5 +1,6 @@
 package org.vandeseer.easytable;
 
+import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 import lombok.experimental.SuperBuilder;
@@ -45,6 +46,9 @@ public class TableDrawer {
     protected float startY;
 
     protected float endY;
+
+    @Getter
+    private float finalY;
 
     protected final List<BiConsumer<Drawer, DrawingContext>> drawerList = new LinkedList<>();
     {
@@ -143,6 +147,7 @@ public class TableDrawer {
             final Row row = table.getRows().get(rowIndex);
             y -= row.getHeight();
             drawRow(new Point2D.Float(startingPoint.x, y), row, rowIndex, consumer);
+            finalY = y;
         }
     }
 

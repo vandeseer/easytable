@@ -35,7 +35,7 @@ public class ImagesTest {
 
         tableBuilder.addRow(
                 Row.builder()
-                        .add(ImageCell.builder().image(image1).borderWidth(1).build())
+                        .add(ImageCell.builder().image(image1).scale(0.13f).borderWidth(1).build())
                         .add(ImageCell.builder().image(image2).borderWidth(1).build())
                         .build());
 
