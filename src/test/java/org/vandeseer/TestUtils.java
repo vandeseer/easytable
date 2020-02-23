@@ -88,4 +88,8 @@ public class TestUtils {
         new File(TARGET_FOLDER + TARGET_SUBFOLDER_REGRESSION).mkdirs();
     }
 
+    public static String getRegressionFolder() {
+        return TARGET_FOLDER + TARGET_SUBFOLDER_REGRESSION;
+    }
+
 }

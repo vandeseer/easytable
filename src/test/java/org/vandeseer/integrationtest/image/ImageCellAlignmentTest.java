@@ -1,4 +1,4 @@
-package org.vandeseer.integrationtest;
+package org.vandeseer.integrationtest.image;
 
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.font.PDType1Font;

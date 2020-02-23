@@ -1,4 +1,4 @@
-package org.vandeseer.integrationtest;
+package org.vandeseer.integrationtest.image;
 
 import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
 import org.junit.Test;

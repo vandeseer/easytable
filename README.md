@@ -50,7 +50,7 @@ which is needed for creating a PDF document with the following two tables:
 
 ![easytable table](doc/example2.png)
 
-For the next example have a look at the [SettingsTest.java](src/test/java/org/vandeseer/integrationtest/SettingsTest.java):
+For the next example have a look at the [SettingsTest.java](src/test/java/org/vandeseer/integrationtest/settings/SettingsTest.java):
 
 ![easytable table](doc/example3.png)
 

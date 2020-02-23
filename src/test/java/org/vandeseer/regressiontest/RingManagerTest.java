@@ -1,10 +1,12 @@
-package org.vandeseer.integrationtest;
+package org.vandeseer.regressiontest;
 
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.common.PDRectangle;
+import org.junit.Before;
 import org.junit.Test;
+import org.vandeseer.TestUtils;
 import org.vandeseer.easytable.TableDrawer;
 import org.vandeseer.easytable.structure.Row;
 import org.vandeseer.easytable.structure.Table;
@@ -17,31 +19,41 @@ import static org.apache.pdfbox.pdmodel.font.PDType1Font.HELVETICA;
 
 public class RingManagerTest {
 
+    @Before
+    public void before() {
+        TestUtils.assertRegressionFolderExists();
+    }
+
     @Test
     public void createRingManagerDocument() throws Exception {
-        final PDDocument document = new PDDocument();
-        final PDPage page = new PDPage(PDRectangle.A4);
-        document.addPage(page);
+        try (final PDDocument document = new PDDocument()) {
+            final PDPage page = new PDPage(PDRectangle.A4);
+            document.addPage(page);
 
-        final float startY = page.getMediaBox().getHeight() - 150;
-        final int startX = 56;
+            final float startY = page.getMediaBox().getHeight() - 150;
+            final int startX = 56;
 
-        final PDPageContentStream contentStream = new PDPageContentStream(document, page);
-        final Table table = getRingManagerTable();
+            try(final PDPageContentStream contentStream = new PDPageContentStream(document, page)) {
+                final Table table = getRingManagerTable();
 
-        TableDrawer.builder().contentStream(contentStream).table(table).startX(startX).startY(startY).build().draw();
+                TableDrawer.builder()
+                        .contentStream(contentStream)
+                        .table(table)
+                        .startX(startX)
+                        .startY(startY)
+                        .build()
+                        .draw();
 
-        contentStream.setFont(HELVETICA, 8.0f);
-        contentStream.beginText();
+                contentStream.setFont(HELVETICA, 8.0f);
+                contentStream.beginText();
 
-        contentStream.newLineAtOffset(startX, startY - (table.getHeight() + 22));
-        contentStream.showText("Dieser Kampf muss der WB nicht entsprechen, da als Sparringskampf angesetzt.");
-        contentStream.endText();
+                contentStream.newLineAtOffset(startX, startY - (table.getHeight() + 22));
+                contentStream.showText("Dieser Kampf muss der WB nicht entsprechen, da als Sparringskampf angesetzt.");
+                contentStream.endText();
+            }
 
-        contentStream.close();
-
-        document.save("target/ringmanager.pdf");
-        document.close();
+            document.save(TestUtils.getRegressionFolder() + "/ringmanager.pdf");
+        }
     }
 
     private Table getRingManagerTable() {
