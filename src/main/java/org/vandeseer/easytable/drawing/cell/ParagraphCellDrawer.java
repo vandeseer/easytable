@@ -34,6 +34,10 @@ public class ParagraphCellDrawer extends AbstractCellDrawer<ParagraphCell> {
     @SneakyThrows
     @Override
     public void drawContent(DrawingContext drawingContext) {
+        if (drawingContext.getPage() == null) {
+            throw new PageNotSetException("Page is not set in drawing context. Please ensure the page is set on table drawer.");
+        }
+
         Paragraph paragraph = cell.getParagraph().getWrappedParagraph();
 
         AnnotationDrawListener annotationDrawListener = createAndGetAnnotationDrawListenerWith(drawingContext);
@@ -77,4 +81,9 @@ public class ParagraphCellDrawer extends AbstractCellDrawer<ParagraphCell> {
             });
     }
 
+    private class PageNotSetException extends RuntimeException {
+        public PageNotSetException(String message) {
+            super(message);
+        }
+    }
 }

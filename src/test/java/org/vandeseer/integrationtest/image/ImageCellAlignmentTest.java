@@ -1,4 +1,4 @@
-package org.vandeseer.integrationtest;
+package org.vandeseer.integrationtest.image;
 
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.font.PDType1Font;
@@ -76,6 +76,7 @@ public class ImageCellAlignmentTest {
                         .borderWidth(1)
                         .padding(2)
                         .image(TestUtils.createSampleImage())
+                        .scale(0.2f)
                         .colSpan(2)
                         .build());
 

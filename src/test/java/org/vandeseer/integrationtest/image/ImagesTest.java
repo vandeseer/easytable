@@ -1,4 +1,4 @@
-package org.vandeseer.integrationtest;
+package org.vandeseer.integrationtest.image;
 
 import org.apache.pdfbox.io.IOUtils;
 import org.apache.pdfbox.pdmodel.PDDocument;
@@ -35,7 +35,7 @@ public class ImagesTest {
 
         tableBuilder.addRow(
                 Row.builder()
-                        .add(ImageCell.builder().image(image1).borderWidth(1).build())
+                        .add(ImageCell.builder().image(image1).scale(0.13f).borderWidth(1).build())
                         .add(ImageCell.builder().image(image2).borderWidth(1).build())
                         .build());
 

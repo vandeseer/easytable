@@ -1,4 +1,4 @@
-package org.vandeseer.integrationtest;
+package org.vandeseer.integrationtest.settings;
 
 import org.junit.Test;
 import org.vandeseer.TestUtils;

@@ -5,6 +5,7 @@ import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.common.PDRectangle;
+import org.junit.Test;
 import org.vandeseer.easytable.TableDrawer;
 import org.vandeseer.easytable.drawing.Drawer;
 import org.vandeseer.easytable.drawing.DrawingContext;
@@ -36,7 +37,8 @@ public class CustomCellWithCustomDrawerUsingLombok {
 
     }
 
-    public static void main(String[] args) throws IOException {
+    @Test
+    public void testCustomCellDrawer() throws IOException {
 
         try (final PDDocument document = new PDDocument()) {
 
