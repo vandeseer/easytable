@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.geom.Point2D;
 
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
+import org.apache.pdfbox.pdmodel.font.PDFont;
 import org.apache.pdfbox.pdmodel.font.PDType1Font;
 import org.vandeseer.easytable.drawing.DrawingContext;
 import org.vandeseer.easytable.drawing.DrawingUtil;
@@ -46,15 +47,16 @@ public class RectanglesCellDrawer extends AbstractCellDrawer<RectanglesCell> {
          for(RectangleCellDetails rectangleCellDetails:cell.getRectangleCellDetails()) {
          	float rectHeight = calculatedRectangleHeight * rectangleCellDetails.getColor1Percentage();
          	startY = startY + cell.getPaddingBottom();
-         	int fontSize = rectangleCellDetails.getTextFontSize()>0 ? rectangleCellDetails.getTextFontSize() : 6; 
+         	int fontSize = rectangleCellDetails.getCellTextFontSize()>0 ? rectangleCellDetails.getCellTextFontSize() : 6; 
          	Color cellTextColor = rectangleCellDetails.getCellTextColor() != null ? rectangleCellDetails.getCellTextColor() : Color.BLACK;
+         	PDFont cellTextFont = rectangleCellDetails.getCellTextFont() != null ? rectangleCellDetails.getCellTextFont() : PDType1Font.HELVETICA;
          	String cellText = rectangleCellDetails.getCellText() != null ? rectangleCellDetails.getCellText() : "";
          	float textStartX = startX + ((rectCellWidth/2)-cell.getPaddingLeft());
          	if(cell.isMultiColumn()) {
-            	DrawingUtil.drawText(contentStream, PositionedStyledText.builder().x(textStartX).y(startY).font(PDType1Font.HELVETICA).fontSize(fontSize).color(cellTextColor).text(cellText).build());
+            	DrawingUtil.drawText(contentStream, PositionedStyledText.builder().x(textStartX).y(startY).font(cellTextFont).fontSize(fontSize).color(cellTextColor).text(cellText).build());
             }else {
             	textStartX = startX + ((rectCellWidth/2)-cell.getPaddingLeft());
-            	DrawingUtil.drawText(contentStream, PositionedStyledText.builder().x(textStartX).y(startY).font(PDType1Font.HELVETICA).fontSize(fontSize).color(cellTextColor).text(cellText).build());
+            	DrawingUtil.drawText(contentStream, PositionedStyledText.builder().x(textStartX).y(startY).font(cellTextFont).fontSize(fontSize).color(cellTextColor).text(cellText).build());
             }
             startY = startY + 5f;
             DrawingUtil.drawRectangle(contentStream,

@@ -18,7 +18,7 @@ public class ImagesTest {
     public void testImage() throws Exception {
 
         final Table.TableBuilder tableBuilder = Table.builder()
-                .addColumnsOfWidth(200, 200);
+                .addColumnsOfWidth(50, 50);
 
         final byte[] bytes1 = IOUtils.toByteArray(getClass().getClassLoader().getResourceAsStream("pic1.jpg"));
         final PDImageXObject image1 = PDImageXObject.createFromByteArray(new PDDocument(), bytes1, "test1");

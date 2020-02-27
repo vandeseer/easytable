@@ -2,6 +2,8 @@ package org.vandeseer.easytable.structure.cell;
 
 import java.awt.Color;
 
+import org.apache.pdfbox.pdmodel.font.PDFont;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.experimental.SuperBuilder;
@@ -21,6 +23,7 @@ public class RectangleCellDetails {
      private Color color3Color;
      
      private String cellText;
-     private int textFontSize;
+     private int cellTextFontSize;
      private Color cellTextColor;
+     private PDFont cellTextFont;
 }
