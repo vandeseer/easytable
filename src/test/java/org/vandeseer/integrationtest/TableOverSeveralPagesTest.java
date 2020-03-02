@@ -3,10 +3,12 @@ package org.vandeseer.integrationtest;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.common.PDRectangle;
+import org.apache.pdfbox.pdmodel.font.PDType1Font;
 import org.junit.Test;
 import org.vandeseer.TestUtils;
 import org.vandeseer.easytable.RepeatedHeaderTableDrawer;
 import org.vandeseer.easytable.TableDrawer;
+import org.vandeseer.easytable.settings.HorizontalAlignment;
 import org.vandeseer.easytable.structure.Row;
 import org.vandeseer.easytable.structure.Table;
 import org.vandeseer.easytable.structure.cell.TextCell;
@@ -15,6 +17,9 @@ import java.awt.*;
 import java.io.IOException;
 
 public class TableOverSeveralPagesTest {
+
+    private static final Color DARK_BLUE = new Color(46, 77, 97);
+    private static final Color CUSTOM_GRAY = new Color(136, 136, 136);
 
     @Test
     public void drawMultipageTable() throws IOException {
@@ -54,6 +59,81 @@ public class TableOverSeveralPagesTest {
             document.save(TestUtils.TARGET_FOLDER + "/severalPagesTableRepeatedHeader.pdf");
         }
 
+    }
+
+    @Test
+    public void createTwoPageTableWithRepeatedHeaderOfThreeRows() throws IOException {
+
+        try (final PDDocument document = new PDDocument()) {
+
+            RepeatedHeaderTableDrawer.builder()
+                    .table(createTableWithThreeHeaderRows())
+                    .startX(50)
+                    .startY(200F)
+                    .endY(50F) // note: if not set, table is drawn over the end of the page
+                    .numberOfRowsToRepeat(2)
+                    .build()
+                    .draw(() -> document, () -> new PDPage(PDRectangle.A4), 50f);
+
+            document.save(TestUtils.TARGET_FOLDER + "/severalPagesTableRepeatedHeaderMultipleRows.pdf");
+        }
+
+    }
+
+    private Table createTableWithThreeHeaderRows() {
+        final Table.TableBuilder tableBuilder = Table.builder()
+                .addColumnsOfWidth(200, 200);
+
+        tableBuilder
+                .addRow(Row.builder()
+                        .add(createHeaderCell("Some"))
+                        .add(createHeaderCell("Header"))
+                        .build())
+                .addRow(Row.builder()
+                        .add(TextCell.builder().text("This is a longer text that could be used to describe some " +
+                                "data of the header. It is only used as a placeholder here.")
+                                .colSpan(2)
+                                .fontSize(6)
+                                .horizontalAlignment(HorizontalAlignment.CENTER)
+                                .padding(12)
+                                .borderColor(DARK_BLUE)
+                                .borderWidthBottom(2f)
+                                .build())
+                        .build());
+
+        for (int i = 0; i < 150; i++) {
+            tableBuilder.addRow(
+                    Row.builder()
+                            .add(TextCell.builder()
+                                    .text("Row " + i)
+                                    .textColor(CUSTOM_GRAY)
+                                    .borderColor(CUSTOM_GRAY)
+                                    .borderWidthBottom(2f)
+                                    .padding(12f)
+                                    .build())
+                            .add(TextCell.builder()
+                                    .text("Value " + i)
+                                    .textColor(CUSTOM_GRAY)
+                                    .borderColor(CUSTOM_GRAY)
+                                    .borderWidthBottom(2f)
+                                    .padding(12f)
+                                    .build())
+                            .build());
+        }
+
+        return tableBuilder.build();
+    }
+
+    private TextCell createHeaderCell(String text) {
+        return TextCell.builder()
+                .font(PDType1Font.HELVETICA_BOLD)
+                .text(text.toUpperCase())
+                .backgroundColor(DARK_BLUE)
+                .padding(16f)
+                .textColor(Color.WHITE)
+                .borderColor(Color.WHITE)
+                .borderWidth(2f)
+                .build();
     }
 
     private void drawMultipageTableOn(PDDocument document) throws IOException {
