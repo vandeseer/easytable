@@ -15,10 +15,10 @@ import lombok.experimental.SuperBuilder;
 public class RepeatedHeaderTableDrawer extends TableDrawer {
 
 	@Builder.Default
-	int headerRows = 1;
+	private int numberOfRowsToRepeat = 1;
 
-	List<Integer> headerRowsIndexs;
-
+	private List<Integer> headerRowsIndexs;
+	
 	@Override
 	protected void drawPage(PageData pageData) {
 		if (pageData.firstRowOnPage != 0) {
@@ -35,10 +35,10 @@ public class RepeatedHeaderTableDrawer extends TableDrawer {
 							});
 				}
 			}else {
-				for (int idx = 0; idx < headerRows; idx++) {
+				for (int idx = 0; idx < numberOfRowsToRepeat ; idx++) {
 					adaption += table.getRows().get(idx).getHeight();
 					drawRow(new Point2D.Float(this.startX,
-							this.startY + calculateHeightForFirstRows(headerRows) - adaption), table.getRows().get(idx),
+							this.startY + calculateHeightForFirstRows(numberOfRowsToRepeat) - adaption), table.getRows().get(idx),
 							idx, (drawer, drawingContext) -> {
 								drawer.drawBackground(drawingContext);
 								drawer.drawContent(drawingContext);
@@ -58,7 +58,7 @@ public class RepeatedHeaderTableDrawer extends TableDrawer {
 		if(headerRowsIndexs != null) {
 			super.draw(documentSupplier, pageSupplier, yOffset + calculateHeightForSelectedHeaderRows(headerRowsIndexs));
 		}else {
-			super.draw(documentSupplier, pageSupplier, yOffset + calculateHeightForFirstRows(headerRows));
+			super.draw(documentSupplier, pageSupplier, yOffset + calculateHeightForFirstRows(numberOfRowsToRepeat));
 		}
 		
 	}

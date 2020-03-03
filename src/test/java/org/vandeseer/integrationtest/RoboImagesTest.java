@@ -8,14 +8,15 @@ import org.vandeseer.TestUtils;
 import org.vandeseer.easytable.structure.Row;
 import org.vandeseer.easytable.structure.Table;
 import org.vandeseer.easytable.structure.cell.ImageCell;
+import org.vandeseer.easytable.structure.cell.RoboImageCell;
 import org.vandeseer.easytable.structure.cell.TextCell;
 
 import static org.vandeseer.easytable.settings.HorizontalAlignment.RIGHT;
 
-public class ImagesTest {
+public class RoboImagesTest {
 
     @Test
-    public void testImage() throws Exception {
+    public void testRoboImage() throws Exception {
 
         final Table.TableBuilder tableBuilder = Table.builder()
                 .addColumnsOfWidth(50, 50);
@@ -38,19 +39,19 @@ public class ImagesTest {
 
         tableBuilder.addRow(
                 Row.builder()
-                        .add(ImageCell.builder().image(image1).borderWidth(0).build())
+                        .add(RoboImageCell.builder().image(image1).imageText("10").borderWidth(0).build())
                         .add(ImageCell.builder().image(image2).borderWidth(0).build())
                         .build());
         
         tableBuilder.addRow(
                 Row.builder()
-                        .add(ImageCell.builder().image(image3).borderWidth(0).build())
+                        .add(RoboImageCell.builder().image(image3).imageText("3").borderWidth(0).build())
                         .add(TextCell.builder().text("third").build())
                         .build());
         
         tableBuilder.addRow(
                 Row.builder()
-                        .add(ImageCell.builder().image(image3).borderWidth(0).build())
+                        .add(RoboImageCell.builder().image(image3).imageText("40").borderWidth(0).build())
                         .add(TextCell.builder().text("four").build())
                         .build());
 
@@ -75,7 +76,7 @@ public class ImagesTest {
                         .add(ImageCell.builder().image(image1).borderWidth(0).build())
                         .build());
         
-        TestUtils.createAndSaveDocumentWithTables("images.pdf", tableBuilder.build(), tableBuilder2.build());
+        TestUtils.createAndSaveDocumentWithTables("roboimages.pdf", tableBuilder.build(), tableBuilder2.build());
     }
 
 }

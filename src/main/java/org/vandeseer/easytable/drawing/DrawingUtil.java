@@ -1,9 +1,9 @@
 package org.vandeseer.easytable.drawing;
 
-import org.apache.pdfbox.pdmodel.PDPageContentStream;
-
-import java.awt.*;
+import java.awt.Color;
 import java.io.IOException;
+
+import org.apache.pdfbox.pdmodel.PDPageContentStream;
 
 public class DrawingUtil {
 
@@ -48,6 +48,19 @@ public class DrawingUtil {
         contentStream.closePath();
 
         // Reset NonStrokingColor to default value
+        contentStream.setNonStrokingColor(Color.BLACK);
+    }
+    
+    public static void drawCircle(PDPageContentStream contentStream, float cx, float cy, float r, Color rgb) throws IOException {
+    	final float k = 0.552284749831f;
+    	contentStream.setNonStrokingColor(rgb);
+    	contentStream.moveTo(cx - r, cy);
+        contentStream.curveTo(cx - r, cy + k * r, cx - k * r, cy + r, cx, cy + r);
+        contentStream.curveTo(cx + k * r, cy + r, cx + r, cy + k * r, cx + r, cy);
+        contentStream.curveTo(cx + r, cy - k * r, cx + k * r, cy - r, cx, cy - r);
+        contentStream.curveTo(cx - k * r, cy - r, cx - r, cy - k * r, cx - r, cy);
+        contentStream.fill();
+     // Reset NonStrokingColor to default value
         contentStream.setNonStrokingColor(Color.BLACK);
     }
 }

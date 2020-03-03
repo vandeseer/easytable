@@ -1,13 +1,14 @@
 package org.vandeseer.easytable.drawing.cell;
 
-import lombok.NoArgsConstructor;
-import lombok.SneakyThrows;
+import java.awt.geom.Point2D;
+
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import org.vandeseer.easytable.drawing.DrawingContext;
 import org.vandeseer.easytable.settings.HorizontalAlignment;
 import org.vandeseer.easytable.structure.cell.ImageCell;
 
-import java.awt.geom.Point2D;
+import lombok.NoArgsConstructor;
+import lombok.SneakyThrows;
 
 @NoArgsConstructor
 public class ImageCellDrawer extends AbstractCellDrawer<ImageCell> {

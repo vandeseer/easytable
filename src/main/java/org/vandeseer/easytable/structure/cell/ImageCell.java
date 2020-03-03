@@ -1,14 +1,15 @@
 package org.vandeseer.easytable.structure.cell;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NonNull;
-import lombok.experimental.SuperBuilder;
+import java.awt.geom.Point2D;
+
 import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
 import org.vandeseer.easytable.drawing.Drawer;
 import org.vandeseer.easytable.drawing.cell.ImageCellDrawer;
 
-import java.awt.geom.Point2D;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NonNull;
+import lombok.experimental.SuperBuilder;
 
 @Getter
 @SuperBuilder(toBuilder = true)
@@ -21,6 +22,7 @@ public class ImageCell extends AbstractCell {
     private PDImageXObject image;
 
     private float maxHeight;
+   
 
     @Override
     public float getMinHeight() {
