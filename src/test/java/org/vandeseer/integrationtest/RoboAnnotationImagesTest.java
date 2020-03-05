@@ -63,6 +63,9 @@ public class RoboAnnotationImagesTest {
         annotationComment1.setMarkUpJson(new JSONObject("{\"xPosition\":278.58231707317077,\"yPosition\":1036.5853658536587}"));
         annotationComment1.setCommentNumber("7");
         
+       
+        
+        
         AnnotationComment annotationComment2 = new AnnotationComment();
         annotationComment2.setMarkupTypeId(3);
         annotationComment2.setHighlightedAreaImage(highlightedAreaImage);
@@ -103,12 +106,20 @@ public class RoboAnnotationImagesTest {
         annotationComment6.setStampLabelColor("#000000");
         annotationComment6.setStampBackgroundColor("#FFCC99");
         
+        AnnotationComment annotationComment7 = new AnnotationComment();
+        annotationComment7.setMarkupTypeId(2);
+        annotationComment7.setMarkUpJson(new JSONObject("{\"xPosition\":2182.6602191459842,\"yPosition\":382.88875905478875,\"width\":103.65853658536585,\"height\":181.40238959614825}"));
+        annotationComment7.setCommentNumber("2");
+        
+        
         annotationsComments.add(annotationComment1);
         annotationsComments.add(annotationComment2);
         annotationsComments.add(annotationComment3);
         annotationsComments.add(annotationComment4);
         annotationsComments.add(annotationComment5);
         annotationsComments.add(annotationComment6);
+        annotationsComments.add(annotationComment7);
+        
         tableBuilder2.addRow(
                 Row.builder()
                         .add(RoboAnnotationImageCell.builder().image(image1).imageFooterText("1").originalHeight(2170).originalWidth(2270).annotationsComments(annotationsComments).borderWidth(0).build())

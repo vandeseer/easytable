@@ -80,8 +80,8 @@ public class RoboAnnotationImageCellDrawer extends AbstractCellDrawer<RoboAnnota
 		if (cell.getAnnotationsComments() != null && cell.getAnnotationsComments().isEmpty() == Boolean.FALSE) {
 
 			for (AnnotationComment annotationComment : cell.getAnnotationsComments()) {
-				float markUpHeight = PDF_REVIEW_COMMENT_CIRCLE_RADIUS;
-				float xPosition, yPosition;
+				float xPosition;
+				float yPosition;
 				try {
 					xPosition = (float) annotationComment.getMarkUpJson().getDouble("xPosition");
 					yPosition = (float) annotationComment.getMarkUpJson().getDouble("yPosition");
@@ -111,7 +111,7 @@ public class RoboAnnotationImageCellDrawer extends AbstractCellDrawer<RoboAnnota
 					float cy = drawAt.y + imageScaleHeight - cordinates[1];
 
 					if (annotationComment.getMarkupTypeId() == MARKUP_TYPE_HIGHLIGHTED_AREA_SELECTION) {
-						float xStart = drawAt.x + +cordinates[0];
+						float xStart = drawAt.x + cordinates[0];
 						float yStart = drawAt.y + imageScaleHeight - heightWidth[1] - cordinates[1];
 						contentStream.drawImage(annotationComment.getHighlightedAreaImage(), xStart, yStart,
 								heightWidth[0], heightWidth[1]);
@@ -129,7 +129,7 @@ public class RoboAnnotationImageCellDrawer extends AbstractCellDrawer<RoboAnnota
 						contentStream.setStrokingColor(Color.BLACK);
 
 					} else {
-						Shape shape = new RoundRect(10);
+						Shape shape = new RoundRect(1);
 						shape.draw(null, contentStream, new Position(cx, cy), heightWidth[0], heightWidth[1],
 								Color.YELLOW, new Stroke(1), null);
 					}
@@ -142,10 +142,10 @@ public class RoboAnnotationImageCellDrawer extends AbstractCellDrawer<RoboAnnota
 					if (imageText != null && imageText.length() > 0) {
 						imageText = imageText.length() == 1 ? " " + imageText : imageText;
 						float textStartX = cx - 5.5f;
-						float startY = cy - 3.5f;
+						float textStartY = cy - 3.5f;
 
 						DrawingUtil.drawText(contentStream,
-								PositionedStyledText.builder().x(textStartX).y(startY).font(PDType1Font.HELVETICA_BOLD)
+								PositionedStyledText.builder().x(textStartX).y(textStartY).font(PDType1Font.HELVETICA_BOLD)
 										.fontSize(10).color(Color.WHITE).text(imageText).build());
 					}
 				} else if (annotationComment.getMarkupTypeId() != null
@@ -153,11 +153,12 @@ public class RoboAnnotationImageCellDrawer extends AbstractCellDrawer<RoboAnnota
 					String bkgColorStr = annotationComment.getStampBackgroundColor();
 					String stampLabelText = annotationComment.getStampLabelText();
 					String labelColorStr = annotationComment.getStampLabelColor();
+					
 					float cx = drawAt.x + cordinates[0];
-					float cy = drawAt.y + imageScaleHeight - 12f - cordinates[1];
+					float cy = drawAt.y + imageScaleHeight - 2f - cordinates[1];
 					float r = 6f;
 
-					float width = 1f;
+					float width;
 					
 					if(stampLabelText.length() <= 6) {
 						width = stampLabelText.length() * 6f;
@@ -166,27 +167,29 @@ public class RoboAnnotationImageCellDrawer extends AbstractCellDrawer<RoboAnnota
 					}
 							
 					
-					Shape shape = new RoundRect(10);
+					Shape shape = new RoundRect(1);
 					
 					contentStream.setStrokingColor(new Color(Integer.valueOf(bkgColorStr.substring(1, 3), 16),
 							Integer.valueOf(bkgColorStr.substring(3, 5), 16),
 							Integer.valueOf(bkgColorStr.substring(5, 7), 16)));
 					
-					shape.draw(null, contentStream, new Position(cx, cy), width, 17,
+					shape.draw(null, contentStream, new Position(cx, cy), width, 8,
 							new Color(Integer.valueOf(bkgColorStr.substring(1, 3), 16),
 									Integer.valueOf(bkgColorStr.substring(3, 5), 16),
 									Integer.valueOf(bkgColorStr.substring(5, 7), 16)),
-							new Stroke(1), null);
+							new Stroke(8), null);
 					
+					new Stroke(1).applyTo(contentStream);
 					contentStream.setStrokingColor(Color.BLACK);
 					
-
+					
+					
 					if (stampLabelText != null && stampLabelText.length() > 0) {
 						float textStartX = cx + 4.8f;
-						float startY = cy - 9.8f;
+						float textStartY = cy - 5.8f;
 
 						DrawingUtil.drawText(contentStream,
-								PositionedStyledText.builder().x(textStartX).y(startY).font(PDType1Font.HELVETICA_BOLD)
+								PositionedStyledText.builder().x(textStartX).y(textStartY).font(PDType1Font.HELVETICA_BOLD)
 										.fontSize(7)
 										.color(new Color(Integer.valueOf(labelColorStr.substring(1, 3), 16),
 												Integer.valueOf(labelColorStr.substring(3, 5), 16),
@@ -194,18 +197,21 @@ public class RoboAnnotationImageCellDrawer extends AbstractCellDrawer<RoboAnnota
 										.text(stampLabelText).build());
 					}
 
-					String imageText = annotationComment.getCommentNumber() != null
+					String commentText = annotationComment.getCommentNumber() != null
 							? annotationComment.getCommentNumber()
 							: "";
-					DrawingUtil.drawCircle(contentStream, cx, cy, r, Color.RED);
-					if (imageText != null && imageText.length() > 0) {
-						imageText = imageText.length() == 1 ? " " + imageText : imageText;
-						float textStartX = cx - 5.5f;
-						float startY = cy - 3.5f;
+					
+					float circleX = cx - 1.8f;
+					float circleY = cy + 3.5f;			
+					DrawingUtil.drawCircle(contentStream, circleX, circleY, r, Color.RED);
+					if (commentText != null && commentText.length() > 0) {
+						commentText = commentText.length() == 1 ? " " + commentText : commentText;
+						float textStartX = circleX - 5.5f;
+						float textStartY = circleY - 3.5f;
 
 						DrawingUtil.drawText(contentStream,
-								PositionedStyledText.builder().x(textStartX).y(startY).font(PDType1Font.HELVETICA_BOLD)
-										.fontSize(10).color(Color.WHITE).text(imageText).build());
+								PositionedStyledText.builder().x(textStartX).y(textStartY).font(PDType1Font.HELVETICA_BOLD)
+										.fontSize(10).color(Color.WHITE).text(commentText).build());
 					}
 
 				} else {
@@ -221,9 +227,9 @@ public class RoboAnnotationImageCellDrawer extends AbstractCellDrawer<RoboAnnota
 						DrawingUtil.drawCircle(contentStream, cx, cy, r, Color.RED);
 
 						float textStartX = cx - 5.5f;
-						float startY = cy - 3.5f;
+						float textStartY = cy - 3.5f;
 						DrawingUtil.drawText(contentStream,
-								PositionedStyledText.builder().x(textStartX).y(startY).font(PDType1Font.HELVETICA_BOLD)
+								PositionedStyledText.builder().x(textStartX).y(textStartY).font(PDType1Font.HELVETICA_BOLD)
 										.fontSize(10).color(Color.WHITE).text(imageText).build());
 
 					}
