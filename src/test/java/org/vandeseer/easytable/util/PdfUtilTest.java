@@ -50,7 +50,7 @@ public class PdfUtilTest {
     public void getOptimalTextBreakLines_noSpacesInText_shouldSplitOnDot() {
         final String text = "This.should.be.splitted.on.a.dot.No.spaces.in.here.";
 
-        final float maxWidth = PdfUtil.getStringWidth("This.should.be.splitted.on.a.dot.", PDType1Font.HELVETICA, 12);;
+        final float maxWidth = PdfUtil.getStringWidth("This.should.be.splitted.on.a.dot.", PDType1Font.HELVETICA, 12);
 
         final List<String> lines = PdfUtil.getOptimalTextBreakLines(text, PDType1Font.HELVETICA, 12, maxWidth);
 
@@ -63,7 +63,7 @@ public class PdfUtilTest {
     public void getOptimalTextBreakLines_noSpacesNorDotsInText_shouldSplitOnComma() {
         final String text = "This,should,be,splitted,on,a,comma,no,space,nor,dots,in,here,";
 
-        final float maxWidth = PdfUtil.getStringWidth("This,should,be,splitted,on,a,comma,", PDType1Font.HELVETICA, 12);;
+        final float maxWidth = PdfUtil.getStringWidth("This,should,be,splitted,on,a,comma,", PDType1Font.HELVETICA, 12);
 
         final List<String> lines = PdfUtil.getOptimalTextBreakLines(text, PDType1Font.HELVETICA, 12, maxWidth);
 
@@ -76,7 +76,8 @@ public class PdfUtilTest {
     public void getOptimalTextBreakLines_noSpacesNorDotsNorCommasInText_shouldSplitBySize() {
         final String text = "ThisDoesNotHaveAnyCharactersWhereWeCouldBreakMoreEasilySoWeBreakBySize";
 
-        final float maxWidth = PdfUtil.getStringWidth("ThisDoesNotHaveAnyCharacters", PDType1Font.HELVETICA, 12);;
+        final float maxWidth = PdfUtil.getStringWidth("ThisDoesNotHaveAnyCharacters", PDType1Font.HELVETICA, 12);
+
 
         final List<String> lines = PdfUtil.getOptimalTextBreakLines(text, PDType1Font.HELVETICA, 12, maxWidth);
 
@@ -84,6 +85,22 @@ public class PdfUtilTest {
         assertThat(lines.get(0), is(equalTo("ThisDoesNotHaveAnyCharacter-")));
         assertThat(lines.get(1), is(equalTo("sWhereWeCouldBreakMoreEasi-")));
         assertThat(lines.get(2), is(equalTo("lySoWeBreakBySize")));
+    }
+
+
+    @Test
+    public void testVeryBigText() {
+        StringBuilder builder = new StringBuilder();
+
+        for (int i = 0; i < 50; i++) {
+            builder.append("https://averylonginternetdnsnamewhich-maybe-breaks-easytable.com ");
+        }
+
+        System.out.println("Got these lines back:");
+        PdfUtil.getOptimalTextBreakLines(builder.toString(), PDType1Font.HELVETICA, 8, 102)
+                .forEach(System.out::println);
+
+
     }
 
 }
