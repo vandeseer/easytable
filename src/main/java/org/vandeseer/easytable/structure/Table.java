@@ -267,6 +267,8 @@ public class Table {
 
                             for (int l = i; l < (i + highestSpanningCell.get().getRowSpan()); l++) {
                                 final Row rowThatNeedsAdaption = table.getRows().get(l);
+                                // TODO Don't do this right away!
+                                // Or save original height, do the adaption. Run again and correct again ...
                                 rowThatNeedsAdaption.doRowSpanSizeAdaption(heightOfHighestCell, rowsHeight);
                             }
                         }

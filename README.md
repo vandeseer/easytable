@@ -13,7 +13,7 @@ crucial features. Nevertheless there is:
 *   border colors (on table, row or cell level)
 *   support for text alignment (right, left, center, justified)
 *   vertical text alignment (top, middle, bottom)
-*   cell spanning and row spanning 
+*   column spanning and row spanning 
 *   line breaking and line spacing
 *   images in cells
 *   experimental: vertical text, [links and paragraphs within cells](#paragraph-cells)
@@ -31,12 +31,12 @@ Add this to your `pom.xml`:
     <dependency>
         <groupId>com.github.vandeseer</groupId>
         <artifactId>easytable</artifactId>
-        <version>0.6.2</version>
+        <version>0.6.3</version>
     </dependency>
 
 Or checkout the repository and install it locally with maven (e.g. for the`develop` branch):
 
-    mvn install -DskipTests -Dgpg.skip
+    mvn clean install -DskipTests -Dgpg.skip -Ddependency-check.skip=true
 
 ## Examples
 
