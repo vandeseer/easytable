@@ -1,7 +1,11 @@
 package org.vandeseer.integrationtest;
 
 import lombok.SneakyThrows;
+
+import org.apache.pdfbox.io.IOUtils;
+import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.font.PDType1Font;
+import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
 import org.junit.Test;
 import org.vandeseer.TestUtils;
 import org.vandeseer.easytable.structure.Row;
@@ -31,6 +35,17 @@ public class ParagraphCellTest {
     }
 
     private Table createParagraphTable() {
+    	byte[] bytes3;
+    	PDImageXObject image=null;
+		try {
+			bytes3 = IOUtils.toByteArray(getClass().getClassLoader().getResourceAsStream("user_no_image.png"));
+			image = PDImageXObject.createFromByteArray(new PDDocument(), bytes3, "noImage");
+			
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+       
         return Table.builder()
                 .addColumnsOfWidth(200, 200)
                 .borderColor(WHITE)
@@ -42,6 +57,20 @@ public class ParagraphCellTest {
                         .horizontalAlignment(CENTER)
                         .add(TextCell.builder().borderWidth(1).text("Markup").build())
                         .add(TextCell.builder().borderWidth(1).text("No Markup").build())
+                        .build())
+                .addRow(Row.builder()
+                        .backgroundColor(GRAY)
+                        .textColor(WHITE)
+                        .horizontalAlignment(CENTER)
+                        .add(TextCell.builder().borderWidth(1).text("Test 1").build())
+                        .add(ParagraphCell.builder().image(image).imageWidth(25).imageHeight(25)
+                                .borderWidth(1)
+                                .padding(8)
+                                .lineSpacing(1.2f)
+                                .paragraph(Paragraph.builder()
+                                        .append(StyledText.builder().text("This is some text in one font.").font(HELVETICA).build())
+                                        .build())
+                                .build())
                         .build())
                 .addRow(Row.builder()
                         .backgroundColor(LIGHT_GRAY)
@@ -63,7 +92,7 @@ public class ParagraphCellTest {
                                         .build())
                                 .build())
                             .build())
-                        .add(ParagraphCell.builder()
+                        .add(ParagraphCell.builder().image(image)
                             .borderWidth(1)
                             .padding(8)
                             .lineSpacing(1.2f)

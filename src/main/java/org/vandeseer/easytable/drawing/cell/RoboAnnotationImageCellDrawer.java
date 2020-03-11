@@ -154,7 +154,7 @@ public class RoboAnnotationImageCellDrawer extends AbstractCellDrawer<RoboAnnota
 					String stampLabelText = annotationComment.getStampLabelText();
 					String labelColorStr = annotationComment.getStampLabelColor();
 					
-					float cx = drawAt.x + cordinates[0];
+					float cx = drawAt.x + cordinates[0] + 1f;
 					float cy = drawAt.y + imageScaleHeight - 2f - cordinates[1];
 					float r = 6f;
 

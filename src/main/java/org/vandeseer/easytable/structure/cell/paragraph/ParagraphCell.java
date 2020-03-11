@@ -1,18 +1,20 @@
 package org.vandeseer.easytable.structure.cell.paragraph;
 
+import java.awt.Color;
+import java.util.LinkedList;
+import java.util.List;
+
+import org.apache.pdfbox.pdmodel.font.PDFont;
+import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
+import org.vandeseer.easytable.drawing.Drawer;
+import org.vandeseer.easytable.drawing.cell.ParagraphCellDrawer;
+import org.vandeseer.easytable.structure.cell.AbstractCell;
+
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.SneakyThrows;
 import lombok.experimental.SuperBuilder;
-import org.apache.pdfbox.pdmodel.font.PDFont;
-import org.vandeseer.easytable.drawing.Drawer;
-import org.vandeseer.easytable.drawing.cell.ParagraphCellDrawer;
-import org.vandeseer.easytable.structure.cell.AbstractCell;
-
-import java.awt.*;
-import java.util.LinkedList;
-import java.util.List;
 
 @Getter
 @SuperBuilder(toBuilder = true)
@@ -22,6 +24,11 @@ public class ParagraphCell extends AbstractCell {
     protected float lineSpacing = 1f;
 
     private Paragraph paragraph;
+    
+    private PDImageXObject image;
+    
+    float imageWidth;
+    float imageHeight;
 
     @Override
     public void setWidth(float width) {

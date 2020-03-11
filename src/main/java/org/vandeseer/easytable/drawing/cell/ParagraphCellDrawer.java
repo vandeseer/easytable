@@ -14,6 +14,7 @@ import rst.pdfbox.layout.text.DrawContext;
 import rst.pdfbox.layout.text.Position;
 import rst.pdfbox.layout.text.annotations.AnnotationDrawListener;
 
+import java.awt.geom.Point2D;
 import java.util.EnumMap;
 import java.util.Map;
 
@@ -47,9 +48,21 @@ public class ParagraphCellDrawer extends AbstractCellDrawer<ParagraphCell> {
                 ALIGNMENT_MAP.getOrDefault(cell.getSettings().getHorizontalAlignment(), Alignment.Left),
                 annotationDrawListener
         );
-
         annotationDrawListener.afterRender();
         drawingContext.getPage().getAnnotations().forEach(PDAnnotation::constructAppearances);
+        if(cell.getImage() != null) {
+        	float width = paragraph.getWidth() < 1?paragraph.getMaxWidth():paragraph.getWidth();
+       	 	final float moveX = x + width;
+       	 	final Point2D.Float drawAt = new Point2D.Float();
+         // Handle horizontal alignment by adjusting the xOffset
+         	float xOffset = moveX + cell.getPaddingRight() + cell.getPaddingLeft();
+         	
+         	drawAt.x = xOffset;
+    		drawAt.y = drawingContext.getStartingPoint().y - (paragraph.getHeight()/8);
+    		float imageWidth = cell.getImageWidth() > 0 ? cell.getImageWidth() : cell.getImage().getWidth();
+    		float imageHeight = cell.getImageHeight() > 0 ? cell.getImageHeight() : cell.getImage().getHeight();
+    		drawingContext.getContentStream().drawImage(cell.getImage(), drawAt.x, drawAt.y, imageWidth, imageHeight);
+       }
     }
 
     @SneakyThrows
