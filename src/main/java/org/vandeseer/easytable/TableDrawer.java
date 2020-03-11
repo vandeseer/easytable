@@ -7,25 +7,36 @@ import lombok.experimental.SuperBuilder;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
+import org.vandeseer.easytable.drawing.Drawer;
 import org.vandeseer.easytable.drawing.DrawingContext;
 import org.vandeseer.easytable.structure.Row;
 import org.vandeseer.easytable.structure.Table;
 import org.vandeseer.easytable.structure.cell.AbstractCell;
-import org.vandeseer.easytable.util.PdfUtil;
 
-import java.awt.*;
 import java.awt.geom.Point2D;
 import java.io.IOException;
 import java.util.Comparator;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Queue;
+import java.util.function.BiConsumer;
 import java.util.function.Supplier;
+
+import static org.apache.pdfbox.pdmodel.PDPageContentStream.AppendMode.APPEND;
 
 @SuperBuilder(toBuilder = true)
 public class TableDrawer {
 
     protected final Table table;
+
     @Setter
     @Accessors(chain = true, fluent = true)
     protected PDPageContentStream contentStream;
+
+    @Setter
+    @Accessors(chain = true, fluent = true)
+    protected PDPage page;
+
     @Setter
     @Accessors(chain = true, fluent = true)
     protected float startX;
@@ -36,166 +47,143 @@ public class TableDrawer {
 
     protected float endY;
 
-    protected int rowToDraw = 0;
-
     @Getter
-    protected boolean isFinished = false;
+    private float finalY;
 
-    protected TableDrawer(float startX, float startY, PDPageContentStream contentStream, Table table, float endY) {
-        this.contentStream = contentStream;
-        this.table = table;
-
-        this.startX = startX;
-        this.startY = startY - PdfUtil.getFontHeight(table.getSettings().getFont(), table.getSettings().getFontSize());
-
-        this.endY = endY;
+    protected final List<BiConsumer<Drawer, DrawingContext>> drawerList = new LinkedList<>();
+    {
+        this.drawerList.add((drawer, drawingContext) -> {
+            drawer.drawBackground(drawingContext);
+            drawer.drawContent(drawingContext);
+        });
+        this.drawerList.add(Drawer::drawBorders);
     }
 
-    public void draw() throws IOException {
-        drawWithFunction(new Point2D.Float(this.startX, this.startY), this::drawBackgroundColorAndCellContent, false);
-        drawWithFunction(new Point2D.Float(this.startX, this.startY), this::drawBorders, true);
+    public static class PageData {
+
+        public final int firstRowOnPage;
+        public final int firstRowOnNextPage;
+
+        public PageData(int firstRowOnPage, int firstRowOnNextPage) {
+            this.firstRowOnPage = firstRowOnPage;
+            this.firstRowOnNextPage = firstRowOnNextPage;
+        }
+    }
+
+    public void draw() {
+        drawPage(new PageData(0, table.getRows().size()));
+    }
+
+    protected void drawPage(PageData pageData) {
+        drawerList.forEach(drawer ->
+            drawWithFunction(pageData, new Point2D.Float(this.startX, this.startY), drawer)
+        );
+    }
+
+    private Queue<PageData> computeRowsOnPagesWithNewPageStartOf(float yOffsetOnNewPage) {
+        final Queue<PageData> dataForPages = new LinkedList<>();
+
+        float y = startY;
+
+        int firstRowOnPage = 0;
+        int lastRowOnPage = 0;
+
+        for (final Row row : table.getRows()) {
+            if (isRowTooHighToBeDrawnOnPage(row, yOffsetOnNewPage)) {
+                throw new RowIsTooHighException("There is a row that is too high to be drawn on a single page");
+            }
+
+            if (isNotDrawableOnPage(y, row)) {
+                dataForPages.add(new PageData(firstRowOnPage, lastRowOnPage));
+                y = yOffsetOnNewPage;
+                firstRowOnPage = lastRowOnPage;
+            }
+
+            y -= row.getHeight();
+            lastRowOnPage++;
+        }
+
+        // add the remaining page data
+        dataForPages.add(new PageData(firstRowOnPage, lastRowOnPage));
+
+        return dataForPages;
+    }
+
+    private boolean isRowTooHighToBeDrawnOnPage(Row row, float yOffsetOnNewPage) {
+        return row.getHeight() > (yOffsetOnNewPage - endY);
     }
 
     public void draw(Supplier<PDDocument> documentSupplier, Supplier<PDPage> pageSupplier, float yOffset) throws IOException {
         final PDDocument document = documentSupplier.get();
 
+        // We create one throwaway page to be able to calculate the page data upfront
+        float startOnNewPage = pageSupplier.get().getMediaBox().getHeight() - yOffset;
+        final Queue<PageData> pageDataQueue = computeRowsOnPagesWithNewPageStartOf(startOnNewPage);
 
-        for (int i = 0; !isFinished(); i++) {
-            PDPage page;
+        for (int i = 0; !pageDataQueue.isEmpty(); i++) {
+            final PDPage pageToDrawOn;
 
             if (i > 0 || document.getNumberOfPages() == 0) {
-                page = pageSupplier.get();
-                document.addPage(page);
+                pageToDrawOn = pageSupplier.get();
+                document.addPage(pageToDrawOn);
             } else {
-                page = document.getPage(document.getNumberOfPages() - 1);
+                pageToDrawOn = document.getPage(document.getNumberOfPages() - 1);
             }
 
-            try (final PDPageContentStream newPageContentStream = new PDPageContentStream(document, page, PDPageContentStream.AppendMode.APPEND, false)) {
-                contentStream(newPageContentStream).draw();
+            try (final PDPageContentStream newPageContentStream = new PDPageContentStream(document, pageToDrawOn, APPEND, false)) {
+                this.contentStream(newPageContentStream)
+                        .page(pageToDrawOn)
+                        .drawPage(pageDataQueue.poll());
             }
 
-            startY(page.getMediaBox().getHeight() - yOffset);
+            startY(pageToDrawOn.getMediaBox().getHeight() - yOffset);
         }
     }
 
-    protected void drawWithFunction(Point2D.Float startingPoint, TableDrawerFunction function, boolean isLastAction) throws IOException {
+    protected void drawWithFunction(PageData pageData, Point2D.Float startingPoint, BiConsumer<Drawer, DrawingContext> consumer) {
         float y = startingPoint.y;
 
-        for (int i = rowToDraw; i < table.getRows().size(); i++) {
-            final Row row = table.getRows().get(i);
-            int columnCounter = 0;
-
-            // First of all, we need to check whether we should draw any further ...
-            final float lowestPoint = y - row.getCells().stream()
-                    .map(AbstractCell::getHeight)
-                    .max(Comparator.naturalOrder())
-                    .orElse(row.getHeight());
-
-            if (lowestPoint < endY) {
-                if (isLastAction) {
-                    rowToDraw = i;
-                }
-                return;
-            }
-
-            float x = startingPoint.x;
+        for (int rowIndex = pageData.firstRowOnPage; rowIndex < pageData.firstRowOnNextPage; rowIndex++) {
+            final Row row = table.getRows().get(rowIndex);
             y -= row.getHeight();
-
-            for (AbstractCell cell : row.getCells()) {
-
-                while (table.isRowSpanAt(i, columnCounter)) {
-                    x += table.getColumns().get(columnCounter).getWidth();
-                    columnCounter++;
-                }
-
-                // This is the interesting part :)
-                function.accept(new Point2D.Float(x, y), cell);
-
-                x += cell.getWidth();
-                columnCounter += cell.getColSpan();
-            }
-        }
-
-        if (isLastAction) {
-            this.isFinished = true;
+            drawRow(new Point2D.Float(startingPoint.x, y), row, rowIndex, consumer);
+            finalY = y;
         }
     }
 
-    protected void drawBackgroundColorAndCellContent(Point2D.Float start, AbstractCell cell) throws IOException {
+    protected void drawRow(Point2D.Float start, Row row, int rowIndex, BiConsumer<Drawer, DrawingContext> consumer) {
+        float x = start.x;
 
-        final float height = cell.getRow().getHeight();
-        final float y = start.y;
+        int columnCounter = 0;
+        for (AbstractCell cell : row.getCells()) {
 
-        // Handle the cell's background color
-        if (cell.hasBackgroundColor()) {
-            drawCellBackground(cell, new Point2D.Float(start.x, y), height);
-        }
-
-        cell.getDrawer().draw(new DrawingContext(contentStream, start));
-    }
-
-    protected void drawBorders(Point2D.Float start, AbstractCell cell) throws IOException {
-        final float rowHeight = cell.getRow().getHeight();
-        final float cellWidth = cell.getWidth();
-
-        final float sY = cell.getHeight() > rowHeight ? start.y + rowHeight - cell.getHeight() : start.y;
-
-        // Handle the cell's borders
-        final Color cellBorderColor = cell.getBorderColor();
-        final Color rowBorderColor = cell.getRow().getSettings().getBorderColor();
-
-        if (cell.hasBorderTop() || cell.hasBorderBottom()) {
-            final float correctionLeft = cell.getBorderWidthLeft() / 2;
-            final float correctionRight = cell.getBorderWidthRight() / 2;
-
-            if (cell.hasBorderTop()) {
-                contentStream.moveTo(start.x - correctionLeft, start.y + rowHeight);
-                drawLine(cellBorderColor, cell.getBorderWidthTop(), start.x + cellWidth + correctionRight, start.y + rowHeight);
-                contentStream.setStrokingColor(rowBorderColor);
+            while (table.isRowSpanAt(rowIndex, columnCounter)) {
+                x += table.getColumns().get(columnCounter).getWidth();
+                columnCounter++;
             }
 
-            if (cell.hasBorderBottom()) {
-                contentStream.moveTo(start.x - correctionLeft, sY);
-                drawLine(cellBorderColor, cell.getBorderWidthBottom(), start.x + cellWidth + correctionRight, sY);
-                contentStream.setStrokingColor(rowBorderColor);
-            }
-        }
+            // This is the interesting part :)
+            consumer.accept(
+                    cell.getDrawer(),
+                    new DrawingContext(
+                            contentStream, page, new Point2D.Float(x, start.y)
+                    )
+            );
 
-        if (cell.hasBorderLeft() || cell.hasBorderRight()) {
-            final float correctionTop = cell.getBorderWidthTop() / 2;
-            final float correctionBottom = cell.getBorderWidthBottom() / 2;
-
-            if (cell.hasBorderLeft()) {
-                contentStream.moveTo(start.x, sY - correctionBottom);
-                drawLine(cellBorderColor, cell.getBorderWidthLeft(), start.x, sY + rowHeight + correctionTop);
-                contentStream.setStrokingColor(rowBorderColor);
-            }
-
-            if (cell.hasBorderRight()) {
-                contentStream.moveTo(start.x + cellWidth, sY - correctionBottom);
-                drawLine(cellBorderColor, cell.getBorderWidthRight(), start.x + cellWidth, sY + rowHeight + correctionTop);
-                contentStream.setStrokingColor(rowBorderColor);
-            }
+            x += cell.getWidth();
+            columnCounter += cell.getColSpan();
         }
     }
 
-    protected void drawLine(Color color, float width, float toX, float toY) throws IOException {
-        contentStream.setLineWidth(width);
-        contentStream.lineTo(toX, toY);
-        contentStream.setStrokingColor(color);
-        contentStream.stroke();
+    private boolean isNotDrawableOnPage(float startY, Row row) {
+        return startY - getHighestCellOf(row) < endY;
     }
 
-    protected void drawCellBackground(final AbstractCell cell, Point2D.Float start, final float height)
-            throws IOException {
-        contentStream.setNonStrokingColor(cell.getBackgroundColor());
-
-        contentStream.addRect(start.x, start.y, cell.getWidth(), height);
-        contentStream.fill();
-        contentStream.closePath();
-
-        // Reset NonStrokingColor to default value
-        contentStream.setNonStrokingColor(Color.BLACK);
+    private Float getHighestCellOf(Row row) {
+        return row.getCells().stream()
+                .map(AbstractCell::getHeight)
+                .max(Comparator.naturalOrder())
+                .orElse(row.getHeight());
     }
 
 }

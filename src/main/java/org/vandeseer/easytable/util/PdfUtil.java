@@ -12,12 +12,12 @@ import java.util.stream.Collectors;
  */
 public class PdfUtil {
 
-    private static final String NEW_LINE_REGEX = "\\r?\\n";
+    public static final String NEW_LINE_REGEX = "\\r?\\n";
 
     /**
      * The delta that is still acceptable in float comparisons.
      */
-    private static final double EPSILON = 0.0001;
+    public static final double EPSILON = 0.0001;
 
 
     private PdfUtil() {

@@ -9,8 +9,8 @@ import org.vandeseer.easytable.settings.VerticalAlignment;
 import org.vandeseer.easytable.structure.cell.AbstractCell;
 
 import java.awt.*;
+import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
@@ -44,19 +44,9 @@ public class Table {
     private float borderWidth = 0.2f;
 
     public float getHeight() {
-        float height = 0;
-        for (final Row row : rows) {
-            height += (row.getHeight());
-        }
-        return height;
-    }
-
-    public float getAvailableCellWidthRespectingSpan(int columnIndex, int span) {
-        float cellWidth = 0;
-        for (int i = 0; i < span; i++) {
-            cellWidth += getColumns().get(columnIndex + i).getWidth();
-        }
-        return cellWidth;
+        return rows.stream()
+                .map(Row::getHeight)
+                .reduce(0F, Float::sum);
     }
 
     public boolean isRowSpanAt(int rowIndex, int columnIndex) {
@@ -65,8 +55,8 @@ public class Table {
 
     public static class TableBuilder {
 
-        private List<Row> rows = new LinkedList<>();
-        private List<Column> columns = new LinkedList<>();
+        private List<Row> rows = new ArrayList<>();
+        private List<Column> columns = new ArrayList<>();
 
         private Settings settings = Settings.builder()
                 .font(DEFAULT_FONT)
@@ -83,11 +73,9 @@ public class Table {
         }
 
         public TableBuilder addRow(final Row row) {
-            final List<AbstractCell> cells = row.getCells();
-
             // Store how many cells can or better have to be omitted in the next rows
             // due to cells in this row that declare row spanning
-            updateRowSpanCellsSet(cells);
+            updateRowSpanCellsSet(row.getCells());
 
             if (!rows.isEmpty()) {
                 rows.get(rows.size() - 1).setNext(row);
@@ -95,6 +83,14 @@ public class Table {
             rows.add(row);
 
             return this;
+        }
+
+        private float getAvailableCellWidthRespectingSpan(int columnIndex, int span) {
+            float cellWidth = 0;
+            for (int i = 0; i < span; i++) {
+                cellWidth += columns.get(columnIndex + i).getWidth();
+            }
+            return cellWidth;
         }
 
         // This method is unfortunately a bit complex, but what it does is basically:
@@ -106,19 +102,18 @@ public class Table {
 
             for (AbstractCell cell : cells) {
 
+                while (rowSpanCells.contains(new Point(rows.size(), currentColumn))) {
+                    currentColumn++;
+                }
+
                 if (cell.getRowSpan() > 1) {
-                    // First we need to skip the cells in columns where we have row spanning from rows above
-                    int skipped = 0;
-                    while (rowSpanCells.contains(new Point(rows.size(), currentColumn + skipped))) {
-                        skipped++;
-                    }
 
                     for (int rowsToSpan = 0; rowsToSpan < cell.getRowSpan(); rowsToSpan++) {
 
                         // Skip first row's cell, because that is a regular cell
                         if (rowsToSpan >= 1) {
                             for (int colSpan = 0; colSpan < cell.getColSpan(); colSpan++) {
-                                rowSpanCells.add(new Point(rows.size() + rowsToSpan, currentColumn + skipped + colSpan));
+                                rowSpanCells.add(new Point(rows.size() + rowsToSpan, currentColumn + colSpan));
                             }
                         }
                     }
@@ -185,7 +180,7 @@ public class Table {
 
         public Table build() {
             if (getNumberOfRegularCells() != getNumberOfSpannedCells()) {
-                throw new RuntimeException("Number of table cells does not match with table setup. " +
+                throw new TableSetupException("Number of table cells does not match with table setup. " +
                         "This could be due to row or col spanning not being correct.");
             }
 
@@ -202,7 +197,7 @@ public class Table {
                 // Fill up the settings of the row that are not set there directly
                 row.getSettings().fillingMergeBy(table.getSettings());
 
-                int columnNumber = 0;
+                int columnIndex = 0;
                 for (AbstractCell cell : row.getCells()) {
 
                     // Fill up the settings of the cell that are not set there directly
@@ -211,16 +206,16 @@ public class Table {
                     cell.setRow(row);
 
                     // We need to take into account row spanning ...
-                    while (table.isRowSpanAt(rowIndex, columnNumber)) {
-                        columnNumber++;
+                    while (table.isRowSpanAt(rowIndex, columnIndex)) {
+                        columnIndex++;
                     }
 
-                    Column column = table.getColumns().get(columnNumber);
+                    Column column = table.getColumns().get(columnIndex);
                     cell.setColumn(column);
 
-                    cell.setWidth(table.getAvailableCellWidthRespectingSpan(columnNumber, cell.getColSpan()));
+                    cell.setWidth(getAvailableCellWidthRespectingSpan(columnIndex, cell.getColSpan()));
 
-                    columnNumber += cell.getColSpan();
+                    columnIndex += cell.getColSpan();
                 }
             }
 
@@ -246,6 +241,11 @@ public class Table {
                     .sum();
         }
 
+        private class TableSetupException extends RuntimeException {
+            TableSetupException(String message) {
+                super(message);
+            }
+        }
     }
 
 }

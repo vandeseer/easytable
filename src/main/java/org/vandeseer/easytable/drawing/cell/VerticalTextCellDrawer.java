@@ -1,11 +1,11 @@
 package org.vandeseer.easytable.drawing.cell;
 
+import lombok.NoArgsConstructor;
+import lombok.SneakyThrows;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.font.PDFont;
-import org.vandeseer.easytable.drawing.Drawer;
 import org.vandeseer.easytable.drawing.DrawingContext;
-import org.vandeseer.easytable.structure.cell.AbstractCell;
-import org.vandeseer.easytable.structure.cell.TextCell;
+import org.vandeseer.easytable.structure.cell.VerticalTextCell;
 import org.vandeseer.easytable.util.PdfUtil;
 
 import java.awt.*;
@@ -18,30 +18,21 @@ import java.util.List;
  * Allows vertical text drawing. Note that this class is still not fully
  * developed, e.g. there is no support for text alignment settings yet.
  */
-public class VerticalTextCellDrawer implements Drawer {
+@NoArgsConstructor
+public class VerticalTextCellDrawer extends AbstractCellDrawer<VerticalTextCell> {
 
-    private TextCell cell;
-
-    public VerticalTextCellDrawer() {
-    }
-
-    public VerticalTextCellDrawer(TextCell cell) {
+    public VerticalTextCellDrawer(VerticalTextCell cell) {
         this.cell = cell;
-    }
-
-    @Override
-    public void setCell(AbstractCell cell) {
-        this.cell = (TextCell) cell;
     }
 
     /**
      * Does not yet support the settings of alignments.
      *
      * @param drawingContext
-     * @throws IOException
      */
     @Override
-    public void draw(DrawingContext drawingContext) throws IOException {
+    @SneakyThrows
+    public void drawContent(DrawingContext drawingContext) {
         final float startX = drawingContext.getStartingPoint().x;
         final float startY = drawingContext.getStartingPoint().y;
 
@@ -75,6 +66,12 @@ public class VerticalTextCellDrawer implements Drawer {
 
             drawText(line, currentFont, currentFontSize, currentTextColor, xOffset, yOffset, drawingContext.getContentStream());
         }
+    }
+
+    // TODO this is currently not used!
+    @Override
+    protected float calculateInnerHeight() {
+        return 0;
     }
 
 

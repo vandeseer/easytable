@@ -1,56 +1,60 @@
 package org.vandeseer.easytable;
 
+import lombok.Builder;
 import lombok.experimental.SuperBuilder;
-import org.apache.pdfbox.pdmodel.PDPageContentStream;
-import org.vandeseer.easytable.structure.Row;
-import org.vandeseer.easytable.structure.Table;
-import org.vandeseer.easytable.structure.cell.AbstractCell;
+import org.apache.pdfbox.pdmodel.PDDocument;
+import org.apache.pdfbox.pdmodel.PDPage;
 
 import java.awt.geom.Point2D;
 import java.io.IOException;
+import java.util.function.Supplier;
 
 @SuperBuilder
 public class RepeatedHeaderTableDrawer extends TableDrawer {
 
-    protected RepeatedHeaderTableDrawer(float startX, float startY, PDPageContentStream contentStream, Table table, float endY) {
-        super(startX, startY, contentStream, table, endY);
+    @Builder.Default
+    private int numberOfRowsToRepeat = 1;
+
+    private Float headerHeight;
+
+    @Override
+    protected void drawPage(PageData pageData) {
+        if (pageData.firstRowOnPage != 0) {
+            float adaption = 0;
+            for (int i = 0; i < numberOfRowsToRepeat; i++) {
+                adaption += table.getRows().get(i).getHeight();
+                Point2D.Float startPoint = new Point2D.Float(this.startX, this.startY + calculateHeightForFirstRows() - adaption);
+                drawRow(startPoint, table.getRows().get(i), i, (drawer, drawingContext) -> {
+                    drawer.drawBackground(drawingContext);
+                    drawer.drawContent(drawingContext);
+                    drawer.drawBorders(drawingContext);
+                });
+            }
+        }
+
+        drawerList.forEach(drawer ->
+                drawWithFunction(pageData, new Point2D.Float(this.startX, this.startY), drawer)
+        );
     }
 
     @Override
-    public void draw() throws IOException {
-        // If we have drawn already some rows and we are called again we are on a new page and we need to
-        // draw the header first of all ...
-        if (rowToDraw > 0) {
-            drawHeaderWithFunction(new Point2D.Float(this.startX, this.startY), this::drawBackgroundColorAndCellContent);
-            drawHeaderWithFunction(new Point2D.Float(this.startX, this.startY), this::drawBorders);
-            this.startY -= table.getRows().get(0).getHeight();
-        }
-
-        drawWithFunction(new Point2D.Float(this.startX, this.startY), this::drawBackgroundColorAndCellContent, false);
-        drawWithFunction(new Point2D.Float(this.startX, this.startY), this::drawBorders, true);
+    public void draw(Supplier<PDDocument> documentSupplier, Supplier<PDPage> pageSupplier, float yOffset) throws IOException {
+        super.draw(documentSupplier, pageSupplier, yOffset + calculateHeightForFirstRows());
     }
 
-    protected void drawHeaderWithFunction(Point2D.Float startingPoint, TableDrawerFunction function) throws IOException {
-        float x = startingPoint.x;
-        float y = startingPoint.y;
-
-        final Row headerRow = table.getRows().get(0);
-        int columnCounter = 0;
-
-        y -= headerRow.getHeight();
-
-        for (AbstractCell cell : headerRow.getCells()) {
-
-            while (table.isRowSpanAt(0, columnCounter)) {
-                x += table.getColumns().get(columnCounter).getWidth();
-                columnCounter++;
-            }
-
-            function.accept(new Point2D.Float(x, y), cell);
-
-            x += cell.getWidth();
-            columnCounter += cell.getColSpan();
+    private float calculateHeightForFirstRows() {
+        if (headerHeight != null) {
+            return headerHeight;
         }
+
+        float height = 0;
+        for (int i = 0; i < numberOfRowsToRepeat; i++) {
+            height += table.getRows().get(i).getHeight();
+        }
+
+        // Cache and return
+        headerHeight = height;
+        return height;
     }
 
 }

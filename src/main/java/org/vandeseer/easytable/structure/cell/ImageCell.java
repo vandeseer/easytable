@@ -16,8 +16,10 @@ public class ImageCell extends AbstractCell {
 
     @Builder.Default
     private final float scale = 1.0f;
+
     @NonNull
     private PDImageXObject image;
+
     private float maxHeight;
 
     @Override
@@ -36,7 +38,7 @@ public class ImageCell extends AbstractCell {
         final Point2D.Float sizes = new Point2D.Float();
         float scaledWidth = image.getWidth() * getScale();
         float scaledHeight = image.getHeight() * getScale();
-        final float resultingWidth = getColumn().getWidth() - getHorizontalPadding();
+        final float resultingWidth = getWidth() - getHorizontalPadding();
 
         // maybe reduce the image to fit in column
         if (scaledWidth > resultingWidth) {

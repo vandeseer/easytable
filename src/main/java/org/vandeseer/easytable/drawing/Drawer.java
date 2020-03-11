@@ -1,13 +1,11 @@
 package org.vandeseer.easytable.drawing;
 
-import org.vandeseer.easytable.structure.cell.AbstractCell;
-
-import java.io.IOException;
-
 public interface Drawer {
 
-    void setCell(AbstractCell cell);
+    void drawContent(DrawingContext drawingContext);
 
-    void draw(DrawingContext drawingContext) throws IOException;
+    void drawBackground(DrawingContext drawingContext);
+
+    void drawBorders(DrawingContext drawingContext);
 
 }
