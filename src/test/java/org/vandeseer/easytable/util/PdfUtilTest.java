@@ -11,12 +11,26 @@ import static org.hamcrest.Matchers.is;
 
 public class PdfUtilTest {
 
+
+    /**
+     * The delta that is still acceptable in float comparisons.
+     */
+    private static final double EPSILON = 0.0001;
+
+
     @Test
     public void getStringWidth_noNewLines() {
         final String text = "this is a small text";
 
-        assertThat(PdfUtil.getStringWidth(text, PDType1Font.HELVETICA, 12), equalTo(94.692F));
+        assertThat(isEqualInEpsilon(94.692F, PdfUtil.getStringWidth(text, PDType1Font.HELVETICA, 12)), is(true));
     }
+
+    private static boolean isEqualInEpsilon(float a, float b) {
+        float difference = Math.abs(b - a);
+
+        return difference < EPSILON;
+    }
+
 
     @Test
     public void getStringWidth_withNewLines_shouldReturnWidthOfLongestLine() {

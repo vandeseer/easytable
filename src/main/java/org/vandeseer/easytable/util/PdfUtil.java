@@ -139,6 +139,12 @@ public class PdfUtil {
         float width = 0;
 
         while (!words.empty()) {
+
+            // string with length of 1 can't be split.
+            if (words.peek().length() == 1 && line.length() == 0) {
+                return words.pop();
+            }
+
             float nextWordWidth = getStringWidth(words.peek(), font, fontSize);
 
             if (doesTextLineFit(width + nextWordWidth, maxWidth)) {
@@ -158,7 +164,6 @@ public class PdfUtil {
             return buildALine(words, font, fontSize, maxWidth);
         }
 
-        // don't string-cut anything if a word fit in a line
         return line.toString().trim();
     }
 
