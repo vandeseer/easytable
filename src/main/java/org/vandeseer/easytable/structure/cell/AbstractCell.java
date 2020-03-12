@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 import org.vandeseer.easytable.drawing.Drawer;
+import org.vandeseer.easytable.drawing.cell.AbstractCellDrawer;
 import org.vandeseer.easytable.settings.HorizontalAlignment;
 import org.vandeseer.easytable.settings.Settings;
 import org.vandeseer.easytable.settings.VerticalAlignment;
@@ -20,39 +21,55 @@ import java.awt.*;
 public abstract class AbstractCell {
 
     public static final float DEFAULT_MIN_HEIGHT = 10f;
+
     @Builder.Default
     private final int colSpan = 1;
+
     @Builder.Default
     private final int rowSpan = 1;
+
+    @Setter
+    protected AbstractCellDrawer drawer;
+
+    @Setter
+    private Row row;
+
+    @Setter
+    private Column column;
+
+    @Setter
+    private float width;
+
     @Builder.Default
-    private final float paddingLeft = 4;
-    @Builder.Default
-    private final float paddingRight = 4;
-    @Builder.Default
-    private final float paddingTop = 4;
-    @Builder.Default
-    private final float paddingBottom = 4;
+    private float minHeight = DEFAULT_MIN_HEIGHT;
+
     @Getter
     @Setter(AccessLevel.PROTECTED)
     protected Settings settings;
-    @Setter
-    protected Drawer drawer;
-    @Setter
-    private Row row;
-    @Setter
-    private Column column;
-    @Setter
-    private float width;
+
+    @Builder.Default
+    private final float paddingLeft = 4;
+
+    @Builder.Default
+    private final float paddingRight = 4;
+
+    @Builder.Default
+    private final float paddingTop = 4;
+
+    @Builder.Default
+    private final float paddingBottom = 4;
+
     @Builder.Default
     private float borderWidthTop = 0;
+
     @Builder.Default
     private float borderWidthLeft = 0;
+
     @Builder.Default
     private float borderWidthRight = 0;
+
     @Builder.Default
     private float borderWidthBottom = 0;
-    @Builder.Default
-    private float minHeight = DEFAULT_MIN_HEIGHT;
 
     public float getHorizontalPadding() {
         return getPaddingLeft() + getPaddingRight();
@@ -103,12 +120,9 @@ public abstract class AbstractCell {
     }
 
     public Drawer getDrawer() {
-        if (this.drawer != null) {
-            this.drawer.setCell(this);
-            return this.drawer;
-        }
-
-        return createDefaultDrawer();
+        return this.drawer != null
+                ? this.drawer.withCell(this)
+                : createDefaultDrawer();
     }
 
     protected abstract Drawer createDefaultDrawer();
@@ -129,6 +143,14 @@ public abstract class AbstractCell {
         if (column == null || row == null) {
             throw new TableNotYetBuiltException();
         }
+    }
+
+    public boolean isHorizontallyAligned(HorizontalAlignment alignment) {
+        return getSettings().getHorizontalAlignment() == alignment;
+    }
+
+    public boolean isVerticallyAligned(VerticalAlignment alignment) {
+        return getSettings().getVerticalAlignment() == alignment;
     }
 
     // This is used for customizations of the Lombok generated (Super)Builder

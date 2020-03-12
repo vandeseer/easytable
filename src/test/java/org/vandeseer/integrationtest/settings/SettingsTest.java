@@ -1,4 +1,4 @@
-package org.vandeseer.integrationtest;
+package org.vandeseer.integrationtest.settings;
 
 import org.apache.pdfbox.pdmodel.font.PDType1Font;
 import org.junit.Test;
@@ -18,7 +18,6 @@ import static org.vandeseer.easytable.settings.VerticalAlignment.TOP;
 
 // TODO test border color on row level
 // TODO test the precedence of cell level settings of row level/table level settings
-// TODO can we somehow put the "cursor" directly to where the content stream is right now?!
 public class SettingsTest {
 
     private final static Color PURPLE_LIGHT_1 = new Color(206, 186, 230);

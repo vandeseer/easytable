@@ -1,5 +1,6 @@
-package org.vandeseer.integrationtest;
+package org.vandeseer.regressiontest;
 
+import org.junit.Before;
 import org.junit.Test;
 import org.vandeseer.TestUtils;
 import org.vandeseer.easytable.structure.Row;
@@ -12,7 +13,12 @@ import java.io.IOException;
 import static org.apache.pdfbox.pdmodel.font.PDType1Font.HELVETICA;
 import static org.vandeseer.easytable.settings.HorizontalAlignment.*;
 
-public class WordWrappingTest {
+public class Issue20WordWrappingTest {
+
+    @Before
+    public void before() {
+        TestUtils.assertRegressionFolderExists();
+    }
 
     @Test
     public void createSampleDocumentWithWordWrapping_Issue20() throws Exception {
@@ -35,7 +41,7 @@ public class WordWrappingTest {
                 .add(TextCell.builder().text("g").borderWidth(1).padding(0f).build())
                 .build());
 
-        TestUtils.createAndSaveDocumentWithTable("wordWrapping_issue20.pdf", tableBuilder.build());
+        TestUtils.createAndSaveDocumentWithTable(TestUtils.TARGET_SUBFOLDER_REGRESSION + "/wordWrapping_issue20.pdf", tableBuilder.build());
     }
 
     @Test
@@ -102,7 +108,7 @@ public class WordWrappingTest {
                 .backgroundColor(Color.LIGHT_GRAY)
                 .build());
 
-        TestUtils.createAndSaveDocumentWithTable("wordWrapping_issue20_2.pdf", tableBuilder.build());
+        TestUtils.createAndSaveDocumentWithTable(TestUtils.TARGET_SUBFOLDER_REGRESSION + "/wordWrapping_issue20_2.pdf", tableBuilder.build());
     }
 
     @Test
@@ -118,7 +124,7 @@ public class WordWrappingTest {
                         .build())
                 .wordBreak(true);
 
-        TestUtils.createAndSaveDocumentWithTable("wordWrapping_issue20_3.pdf", tableBuilder.build());
+        TestUtils.createAndSaveDocumentWithTable(TestUtils.TARGET_SUBFOLDER_REGRESSION + "/wordWrapping_issue20_3.pdf", tableBuilder.build());
     }
 
 }

@@ -2,7 +2,6 @@ package org.vandeseer.integrationtest;
 
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
-import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.common.PDRectangle;
 import org.junit.Test;
 import org.vandeseer.TestUtils;
@@ -40,27 +39,21 @@ public class CellSpanningTest {
 
     @Test
     public void createDocumentWithTableOverMultiplePages() throws Exception {
-        final PDDocument document = new PDDocument();
 
-        TableDrawer drawer = TableDrawer.builder()
-                .table(createVeryLargeTable())
-                .startX(50)
-                .endY(50F) // note: if not set, table is drawn over the end of the page
-                .build();
+        try (final PDDocument document = new PDDocument()) {
 
-        do {
-            PDPage page = new PDPage(PDRectangle.A4);
-            document.addPage(page);
+            TableDrawer drawer = TableDrawer.builder()
+                    .table(createVeryLargeTable())
+                    .startX(50F)
+                    .startY(new PDPage(PDRectangle.A4).getMediaBox().getHeight() - 50)
+                    .endY(50F) // note: if not set, table is drawn over the end of the page
+                    .build();
 
-            drawer.startY(page.getMediaBox().getHeight() - 50);
+            drawer.draw(() -> document, () -> new PDPage(PDRectangle.A4), 50F);
 
-            try (PDPageContentStream contentStream = new PDPageContentStream(document, page)) {
-                drawer.contentStream(contentStream).draw();
-            }
-        } while (!drawer.isFinished());
+            document.save("target/cellSpanningMultiplePages.pdf");
+        }
 
-        document.save("target/cellSpanningMultiplePages.pdf");
-        document.close();
     }
 
     private Table createTableWithCellColSpanning() {

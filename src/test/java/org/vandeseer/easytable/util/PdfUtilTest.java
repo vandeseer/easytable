@@ -91,8 +91,6 @@ public class PdfUtilTest {
         final String text = "ThisDoesNotHaveAnyCharactersWhereWeCouldBreakMoreEasilySoWeBreakBySize";
 
         final float maxWidth = PdfUtil.getStringWidth("ThisDoesNotHaveAnyCharacters", PDType1Font.HELVETICA, 12);
-
-
         final List<String> lines = PdfUtil.getOptimalTextBreakLines(text, PDType1Font.HELVETICA, 12, maxWidth);
 
         assertThat(lines.size(), is(3));
