@@ -4,7 +4,7 @@ import lombok.SneakyThrows;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import org.vandeseer.easytable.drawing.*;
 import org.vandeseer.easytable.structure.cell.AbstractCell;
-import org.vandeseer.easytable.util.PdfUtil;
+import org.vandeseer.easytable.util.FloatUtil;
 
 import java.awt.*;
 import java.awt.geom.Point2D;
@@ -127,7 +127,7 @@ public abstract class AbstractCellDrawer<T extends AbstractCell> implements Draw
 
     protected boolean rowHeightIsBiggerThanOrEqualToCellHeight() {
         return cell.getRow().getHeight() > cell.getHeight()
-                || Math.abs(cell.getRow().getHeight() - cell.getHeight()) < PdfUtil.EPSILON;
+                || FloatUtil.isEqualInEpsilon(cell.getRow().getHeight(), cell.getHeight());
     }
 
     protected float getRowSpanAdaption() {
