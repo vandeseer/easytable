@@ -3,33 +3,26 @@ package org.vandeseer.easytable.util;
 import org.apache.pdfbox.pdmodel.font.PDType1Font;
 import org.junit.Test;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
+import static org.vandeseer.easytable.util.FloatUtil.isEqualInEpsilon;
 
 public class PdfUtilTest {
-
-
-    /**
-     * The delta that is still acceptable in float comparisons.
-     */
-    private static final double EPSILON = 0.0001;
-
 
     @Test
     public void getStringWidth_noNewLines() {
         final String text = "this is a small text";
 
-        assertThat(isEqualInEpsilon(94.692F, PdfUtil.getStringWidth(text, PDType1Font.HELVETICA, 12)), is(true));
+        final float actualSize = PdfUtil.getStringWidth(text, PDType1Font.HELVETICA, 12);
+        final float expectedSize = 94.692F;
+
+        assertThat(isEqualInEpsilon(expectedSize, actualSize), is(true));
     }
 
-    private static boolean isEqualInEpsilon(float a, float b) {
-        float difference = Math.abs(b - a);
-
-        return difference < EPSILON;
-    }
 
 
     @Test
@@ -100,19 +93,23 @@ public class PdfUtilTest {
     }
 
 
-    @Test
+    @Test(timeout = 5000L)
     public void testVeryBigText() {
-        StringBuilder builder = new StringBuilder();
+        final StringBuilder builder = new StringBuilder();
+        final List<String> expectedOutput = new ArrayList<>();
 
         for (int i = 0; i < 50; i++) {
             builder.append("https://averylonginternetdnsnamewhich-maybe-breaks-easytable.com ");
+
+            // optimal text-break
+            expectedOutput.add("https://averylonginternetdns-");
+            expectedOutput.add("namewhich-maybe-breaks-");
+            expectedOutput.add("easytable.com");
         }
 
-        System.out.println("Got these lines back:");
-        PdfUtil.getOptimalTextBreakLines(builder.toString(), PDType1Font.HELVETICA, 8, 102)
-                .forEach(System.out::println);
+        final List<String> actualOutput = PdfUtil.getOptimalTextBreakLines(builder.toString(), PDType1Font.HELVETICA, 8, 102);
 
-
+        assertThat(actualOutput, equalTo(expectedOutput));
     }
 
 }
