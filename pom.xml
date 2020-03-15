@@ -11,7 +11,7 @@
 
     <groupId>com.github.vandeseer</groupId>
     <artifactId>easytable</artifactId>
-    <version>0.6.2</version>
+    <version>0.6.4-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <properties>
@@ -68,6 +68,12 @@
             <version>3.3.0</version>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>de.redsix</groupId>
+            <artifactId>pdfcompare</artifactId>
+            <version>1.1.45</version>
+        </dependency>
+
 
         <dependency>
             <groupId>com.github.ralfstuckert.pdfbox-layout</groupId>

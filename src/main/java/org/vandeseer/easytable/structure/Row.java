@@ -55,6 +55,10 @@ public class Row {
         return height;
     }
 
+    void doRowSpanSizeAdaption(float heightOfHighestCell, float rowsHeight) {
+        final float rowSpanSizeDifference = heightOfHighestCell - rowsHeight;
+        this.height += (this.height / (heightOfHighestCell - rowSpanSizeDifference)) * rowSpanSizeDifference;
+    }
 
     public static class RowBuilder {
 

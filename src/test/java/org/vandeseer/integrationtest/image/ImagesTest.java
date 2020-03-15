@@ -1,5 +1,7 @@
 package org.vandeseer.integrationtest.image;
 
+import de.redsix.pdfcompare.CompareResult;
+import de.redsix.pdfcompare.PdfComparator;
 import org.apache.pdfbox.io.IOUtils;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
@@ -10,9 +12,14 @@ import org.vandeseer.easytable.structure.Table;
 import org.vandeseer.easytable.structure.cell.ImageCell;
 import org.vandeseer.easytable.structure.cell.TextCell;
 
+import static junit.framework.TestCase.assertTrue;
+import static org.vandeseer.TestUtils.getActualPdfFor;
+import static org.vandeseer.TestUtils.getExpectedPdfFor;
 import static org.vandeseer.easytable.settings.HorizontalAlignment.RIGHT;
 
 public class ImagesTest {
+
+    public static final String FILE_NAME = "images.pdf";
 
     @Test
     public void testImage() throws Exception {
@@ -50,7 +57,10 @@ public class ImagesTest {
                         .build()
         );
 
-        TestUtils.createAndSaveDocumentWithTable("images.pdf", tableBuilder.build());
+        TestUtils.createAndSaveDocumentWithTable(FILE_NAME, tableBuilder.build());
+
+        CompareResult compareResult = new PdfComparator<>(getExpectedPdfFor(FILE_NAME), getActualPdfFor(FILE_NAME)).compare();
+        assertTrue(compareResult.isEqual());
     }
 
 }

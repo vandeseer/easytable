@@ -1,35 +1,24 @@
 package org.vandeseer.easytable.util;
 
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import lombok.SneakyThrows;
 import org.apache.pdfbox.pdmodel.font.PDFont;
 
 import java.util.*;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
+
+import static org.vandeseer.easytable.util.FloatUtil.isEqualInEpsilon;
 
 /**
  * Provides some helping functions.
  */
-public class PdfUtil {
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
+public final class PdfUtil {
 
     public static final String NEW_LINE_REGEX = "\\r?\\n";
 
-    /**
-     * The delta that is still acceptable in float comparisons.
-     */
-    public static final double EPSILON = 0.0001;
-
-    private static final Map<String, String> SPLIT_BY_AND_REPLACEMENT_MAP = new LinkedHashMap<>();
-    static {
-        SPLIT_BY_AND_REPLACEMENT_MAP.put(" ", " ");
-        SPLIT_BY_AND_REPLACEMENT_MAP.put("\\.", ".");
-        SPLIT_BY_AND_REPLACEMENT_MAP.put(",", ",");
-    }
-
-    private PdfUtil() {
-
-    }
 
     /**
      * Computes the width of a String (in points).
@@ -48,25 +37,22 @@ public class PdfUtil {
 
     @SneakyThrows
     private static float getWidthOfStringWithoutNewlines(String text, PDFont font, int fontSize) {
-        final StringBuilder printable = new StringBuilder();
-        int unprintable = 0;
 
         final List<String> codePointsAsString = text.codePoints()
                 .mapToObj(codePoint -> new String(new int[]{codePoint}, 0, 1))
                 .collect(Collectors.toList());
 
+        List<Float> widths = new ArrayList<>();
+
         for (final String codepoint : codePointsAsString) {
             try {
-                font.encode(codepoint);
-                printable.append(codepoint);
+                widths.add(font.getStringWidth(codepoint) * fontSize / 1000F);
             } catch (final IllegalArgumentException e) {
-                unprintable++;
+                widths.add(font.getStringWidth("–") * fontSize / 1000F);
             }
         }
 
-        final float unprintableLength = font.getStringWidth("–") * unprintable * fontSize / 1000F;
-        final float printableLength = font.getStringWidth(printable.toString()) * fontSize / 1000F;
-        return printableLength + unprintableLength;
+        return widths.stream().reduce(0.0f, Float::sum);
     }
 
 
@@ -109,39 +95,16 @@ public class PdfUtil {
             return Collections.singletonList(line);
         }
 
-        List<String> result = new ArrayList<>();
-        result.add(line);
+        List<String> goodLines = new ArrayList<>();
+        Stack<String> allWords = new Stack<>();
+        Arrays.asList(line.split("(?<=[\\\\. ,-])")).forEach(allWords::push);
+        Collections.reverse(allWords);
 
-        for (Map.Entry<String, String> entry : SPLIT_BY_AND_REPLACEMENT_MAP.entrySet()) {
-            final String splitRegex = entry.getKey();
-            final String replacement = entry.getValue();
-
-            result = result.stream()
-                    .flatMap(subLine -> {
-                        List<String> newLines = PdfUtil.splitBy(splitRegex, subLine, font, fontSize, maxWidth, replacement);
-
-                        if (newLines.isEmpty()) {
-                            newLines.add(line);
-                        }
-
-                        return newLines.stream();
-                    })
-                    .collect(Collectors.toList());
-
-            if (result.stream().allMatch(subLine -> PdfUtil.doesTextLineFit(subLine, font, fontSize, maxWidth))) {
-                break;
-            }
+        while (!allWords.empty()) {
+            goodLines.add(buildALine(allWords, font, fontSize, maxWidth));
         }
 
-        return result.stream().flatMap(subLine -> {
-            if (PdfUtil.doesTextLineFit(subLine, font, fontSize, maxWidth)) {
-                return Stream.of(subLine);
-            } else {
-                return PdfUtil.splitBySize(subLine, font, fontSize, maxWidth).stream();
-            }
-        }).collect(Collectors.toList());
-
-
+        return goodLines;
     }
 
     private static List<String> splitBySize(final String line, final PDFont font, final int fontSize, final float maxWidth) {
@@ -163,45 +126,47 @@ public class PdfUtil {
     }
 
 
-    /**
-     * Try to find the optimal split so the text is not larger than maxWidth.
-     *
-     * @param by       Try to split optimal with this value
-     * @param line     Raw line, which has to be smaller as maxWidth
-     * @param font     Used font (to determine the text-width)
-     * @param fontSize Used font-size (to determine the text-width)
-     * @param maxWidth Maximum width for the text
-     * @return Parts of line that are smaller than maxWidth.
-     * It's possible that these parts are larger (so there was not a split possible)
-     */
-    private static List<String> splitBy(final String by,
-                                        final String line,
-                                        final PDFont font,
-                                        final int fontSize,
-                                        final float maxWidth,
-                                        final String replacementString) {
+    private static String buildALine(final Stack<String> words,
+                                     final PDFont font,
+                                     final int fontSize,
+                                     final float maxWidth) {
 
-        final List<String> returnList = new ArrayList<>();
-        final List<String> splitBy = Arrays.asList(line.split(by));
+        final StringBuilder line = new StringBuilder();
+        float width = 0;
 
-        for (int i = splitBy.size() - 1; i >= 0; i--) {
-            final String fittedNewLine = String.join(replacementString, splitBy.subList(0, i));
-            final String remains = String.join(replacementString, splitBy.subList(i, splitBy.size()));
+        while (!words.empty()) {
+            float nextWordWidth = getStringWidth(words.peek(), font, fontSize);
 
-            if (!fittedNewLine.isEmpty() && PdfUtil.doesTextLineFit(fittedNewLine, font, fontSize, maxWidth)) {
-                returnList.add(String.format("%s%s", fittedNewLine, replacementString).trim());
+            // if a single char on an empty line bigger than the max-size, then there is no split possible.
+            if (line.length() == 0 && words.peek().length() == 1 && nextWordWidth > maxWidth) {
+                return words.pop();
+            }
 
-                if (!Objects.equals(remains, line)) {
-                    returnList.addAll(PdfUtil.wrapLine(String.format("%s%s", remains, replacementString).trim(), font, fontSize, maxWidth));
-                }
+            if (doesTextLineFit(width + nextWordWidth, maxWidth)) {
+                line.append(words.pop());
+                width += nextWordWidth;
+            } else {
                 break;
             }
         }
 
-        return returnList;
+        // no word found -> split by size
+        if (width == 0 && !words.empty()) {
+            List<String> cutBySize = splitBySize(words.pop(), font, fontSize, maxWidth);
+            Collections.reverse(cutBySize);
+            cutBySize.forEach(words::push);
+
+            return buildALine(words, font, fontSize, maxWidth);
+        }
+
+        return line.toString().trim();
     }
 
     private static boolean doesTextLineFit(final String textLine, final PDFont font, final int fontSize, final float maxWidth) {
+        return doesTextLineFit(PdfUtil.getStringWidth(textLine, font, fontSize), maxWidth);
+    }
+
+    private static boolean doesTextLineFit(final float stringWidth, final float maxWidth) {
         // Conceptually we want to calculate:
         //
         //     maxWidth >= PdfUtil.getStringWidth(line, font, fontSize)
@@ -209,12 +174,8 @@ public class PdfUtil {
         // But this does may not work as expected due to floating point arithmetic.
         // Hence we use a delta here that is sufficient for our purposes.
 
-        final float stringWidth = PdfUtil.getStringWidth(textLine, font, fontSize);
-        float difference = Math.abs(maxWidth - stringWidth);
-
-        if (difference < EPSILON) {
-            return true; // we consider the two numbers being equal
-        }
+        //noinspection SuspiciousNameCombination
+        if (isEqualInEpsilon(stringWidth, maxWidth)) return true; // we consider the two numbers being equal
 
         return maxWidth > stringWidth;
     }

@@ -1,5 +1,7 @@
 package org.vandeseer.integrationtest.image;
 
+import de.redsix.pdfcompare.CompareResult;
+import de.redsix.pdfcompare.PdfComparator;
 import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
 import org.junit.Test;
 import org.vandeseer.TestUtils;
@@ -8,19 +10,28 @@ import org.vandeseer.easytable.structure.Table;
 import org.vandeseer.easytable.structure.cell.ImageCell;
 import org.vandeseer.easytable.structure.cell.TextCell;
 
+import static junit.framework.TestCase.assertTrue;
+import static org.vandeseer.TestUtils.getActualPdfFor;
+import static org.vandeseer.TestUtils.getExpectedPdfFor;
+
 // Test for ISSUE-40 https://github.com/vandeseer/easytable/issues/40
 //      and ISSUE-60 https://github.com/vandeseer/easytable/issues/64
 public class ImageSizingOnRowSpanningTest {
+
+    public static final String FILE_NAME = "imageCellSizingOnRowAndColSpanning.pdf";
 
     @Test
     public void testImageSizingOnRowAndColSpanning() throws Exception {
         final PDImageXObject glider = TestUtils.createGliderImage();
 
         TestUtils.createAndSaveDocumentWithTables(
-                "imageCellSizingOnRowAndColSpanning.pdf",
+                FILE_NAME,
                 createRowSpanningTable(glider),
                 createColSpanningTable(glider)
         );
+
+        CompareResult compareResult = new PdfComparator<>(getExpectedPdfFor(FILE_NAME), getActualPdfFor(FILE_NAME)).compare();
+        assertTrue(compareResult.isEqual());
     }
 
     private Table createRowSpanningTable(PDImageXObject glider) {

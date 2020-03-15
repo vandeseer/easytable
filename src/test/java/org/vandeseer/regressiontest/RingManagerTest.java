@@ -1,5 +1,7 @@
 package org.vandeseer.regressiontest;
 
+import de.redsix.pdfcompare.CompareResult;
+import de.redsix.pdfcompare.PdfComparator;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
@@ -15,9 +17,14 @@ import org.vandeseer.easytable.structure.cell.TextCell;
 
 import java.awt.*;
 
+import static junit.framework.TestCase.assertTrue;
 import static org.apache.pdfbox.pdmodel.font.PDType1Font.HELVETICA;
+import static org.vandeseer.TestUtils.getActualPdfFor;
+import static org.vandeseer.TestUtils.getExpectedPdfFor;
 
 public class RingManagerTest {
+
+    private static final String FILE_NAME = TestUtils.TARGET_SUBFOLDER_REGRESSION + "/" + "ringmanager.pdf";
 
     @Before
     public void before() {
@@ -25,7 +32,7 @@ public class RingManagerTest {
     }
 
     @Test
-    public void createRingManagerDocument() throws Exception {
+    public void testRingManagerDocument() throws Exception {
         try (final PDDocument document = new PDDocument()) {
             final PDPage page = new PDPage(PDRectangle.A4);
             document.addPage(page);
@@ -33,7 +40,7 @@ public class RingManagerTest {
             final float startY = page.getMediaBox().getHeight() - 150;
             final int startX = 56;
 
-            try(final PDPageContentStream contentStream = new PDPageContentStream(document, page)) {
+            try (final PDPageContentStream contentStream = new PDPageContentStream(document, page)) {
                 final Table table = getRingManagerTable();
 
                 TableDrawer.builder()
@@ -52,7 +59,10 @@ public class RingManagerTest {
                 contentStream.endText();
             }
 
-            document.save(TestUtils.getRegressionFolder() + "/ringmanager.pdf");
+            document.save(TestUtils.TARGET_FOLDER + "/" + FILE_NAME);
+
+            CompareResult compareResult = new PdfComparator<>(getExpectedPdfFor(FILE_NAME), getActualPdfFor(FILE_NAME)).compare();
+            assertTrue(compareResult.isEqual());
         }
     }
 

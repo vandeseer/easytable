@@ -19,6 +19,8 @@ public class TestUtils {
     public static final String TARGET_FOLDER = "target";
     public static final String TARGET_SUBFOLDER_REGRESSION = "/regression";
 
+    public static final String REFERENCE_FOLDER = "src/test/reference/";
+
     private static final float PADDING = 50f;
 
     private static final PDDocument PD_DOCUMENT_FOR_IMAGES = new PDDocument();
@@ -92,4 +94,11 @@ public class TestUtils {
         return TARGET_FOLDER + TARGET_SUBFOLDER_REGRESSION;
     }
 
+    public static File getActualPdfFor(String fileName) {
+        return new File(TARGET_FOLDER + "/" + fileName);
+    }
+
+    public static File getExpectedPdfFor(final String fileName) {
+        return new File(REFERENCE_FOLDER + fileName);
+    }
 }

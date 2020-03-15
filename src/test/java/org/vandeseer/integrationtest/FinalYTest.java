@@ -1,11 +1,14 @@
 package org.vandeseer.integrationtest;
 
+import de.redsix.pdfcompare.CompareResult;
+import de.redsix.pdfcompare.PdfComparator;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.common.PDRectangle;
 import org.apache.pdfbox.pdmodel.font.PDType1Font;
 import org.junit.Test;
+import org.vandeseer.TestUtils;
 import org.vandeseer.easytable.TableDrawer;
 import org.vandeseer.easytable.structure.Row;
 import org.vandeseer.easytable.structure.Table;
@@ -13,10 +16,15 @@ import org.vandeseer.easytable.structure.cell.TextCell;
 
 import java.io.IOException;
 
+import static junit.framework.TestCase.assertTrue;
 import static org.apache.pdfbox.pdmodel.PDPageContentStream.AppendMode.APPEND;
 import static org.apache.pdfbox.pdmodel.font.PDType1Font.HELVETICA;
+import static org.vandeseer.TestUtils.getActualPdfFor;
+import static org.vandeseer.TestUtils.getExpectedPdfFor;
 
 public class FinalYTest {
+
+    private static final String FILE_NAME = "finalY.pdf";
 
     @Test
     public void testFinalY() throws IOException {
@@ -52,8 +60,11 @@ public class FinalYTest {
                 }
             }
 
-            document.save("target/finalY.pdf");
+            document.save(TestUtils.TARGET_FOLDER + "/" + FILE_NAME);
         }
+
+        final CompareResult compareResult = new PdfComparator<>(getExpectedPdfFor(FILE_NAME), getActualPdfFor(FILE_NAME)).compare();
+        assertTrue(compareResult.isEqual());
     }
 
     private static Table createHeaderTableForPage(int pageNumber) {

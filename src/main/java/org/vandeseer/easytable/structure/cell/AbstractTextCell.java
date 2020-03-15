@@ -58,7 +58,7 @@ public abstract class AbstractTextCell extends AbstractCell {
 
         if (settings.isWordBreak()) {
 
-            final int size = PdfUtil.getOptimalTextBreakLines(getText(), getFont(), getFontSize(), getWidthOfText()).size();
+            final int size = PdfUtil.getOptimalTextBreakLines(getText(), getFont(), getFontSize(), getMaxWidth()).size();
 
             final float heightOfTextLines = size * this.textHeight;
             final float heightOfLineSpacing = (size - 1) * this.textHeight * getLineSpacing();
@@ -101,6 +101,10 @@ public abstract class AbstractTextCell extends AbstractCell {
             }
         }
         return columnsWidth;
+    }
+
+    public float getMaxWidth() {
+        return getMaxWidthOfText() - getHorizontalPadding();
     }
 
     // Adaption for Lombok

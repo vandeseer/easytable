@@ -1,5 +1,7 @@
 package org.vandeseer.integrationtest;
 
+import de.redsix.pdfcompare.CompareResult;
+import de.redsix.pdfcompare.PdfComparator;
 import org.junit.Test;
 import org.vandeseer.TestUtils;
 import org.vandeseer.easytable.structure.Row;
@@ -14,9 +16,9 @@ import java.awt.*;
 import java.io.IOException;
 
 import static java.awt.Color.*;
+import static junit.framework.TestCase.assertTrue;
 import static org.apache.pdfbox.pdmodel.font.PDType1Font.*;
-import static org.vandeseer.TestUtils.createGliderImage;
-import static org.vandeseer.TestUtils.createTuxImage;
+import static org.vandeseer.TestUtils.*;
 import static org.vandeseer.easytable.settings.HorizontalAlignment.*;
 import static org.vandeseer.easytable.settings.VerticalAlignment.MIDDLE;
 import static org.vandeseer.easytable.settings.VerticalAlignment.TOP;
@@ -38,12 +40,17 @@ public class ExcelLikeExampleTest {
             {"Vodka",  302.3, 467.0}
     };
 
+    private static final String FILE_NAME = "excelLike.pdf";
+
     @Test
     public void createDocumentWithExcelLikeTables() throws IOException {
-        TestUtils.createAndSaveDocumentWithTables("excelLike.pdf",
+        TestUtils.createAndSaveDocumentWithTables(FILE_NAME,
                 createSimpleExampleTable(),
                 createComplexExampleTable()
         );
+
+        CompareResult compareResult = new PdfComparator<>(getExpectedPdfFor(FILE_NAME), getActualPdfFor(FILE_NAME)).compare();
+        assertTrue(compareResult.isEqual());
     }
 
     private Table createSimpleExampleTable() {

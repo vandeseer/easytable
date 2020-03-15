@@ -35,7 +35,7 @@ public class TextCellDrawer<T extends AbstractTextCell> extends AbstractCellDraw
         float yOffset = drawingContext.getStartingPoint().y + getAdaptionForVerticalAlignment();
         float xOffset = startX + cell.getPaddingLeft();
 
-        final List<String> lines = calculateAndGetLines(currentFont, currentFontSize, cell.getWidthOfText());
+        final List<String> lines = calculateAndGetLines(currentFont, currentFontSize, cell.getMaxWidth());
         for (int i = 0; i < lines.size(); i++) {
             final String line = lines.get(i);
 

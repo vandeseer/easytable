@@ -1,5 +1,7 @@
 package org.vandeseer.integrationtest;
 
+import de.redsix.pdfcompare.CompareResult;
+import de.redsix.pdfcompare.PdfComparator;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.common.PDRectangle;
@@ -14,9 +16,9 @@ import org.vandeseer.easytable.structure.cell.TextCell;
 import java.awt.*;
 import java.io.IOException;
 
+import static junit.framework.TestCase.assertTrue;
 import static org.apache.pdfbox.pdmodel.font.PDType1Font.HELVETICA;
-import static org.vandeseer.TestUtils.createGliderImage;
-import static org.vandeseer.TestUtils.createTuxImage;
+import static org.vandeseer.TestUtils.*;
 import static org.vandeseer.easytable.settings.HorizontalAlignment.CENTER;
 import static org.vandeseer.easytable.settings.HorizontalAlignment.RIGHT;
 import static org.vandeseer.easytable.settings.VerticalAlignment.BOTTOM;
@@ -24,9 +26,12 @@ import static org.vandeseer.easytable.settings.VerticalAlignment.MIDDLE;
 
 public class CellSpanningTest {
 
+    private static final String FILE_NAME = "cellSpanning.pdf";
+    private static final String FILE_NAME_MULTI_PAGE = "cellSpanningMultiplePages.pdf";
+
     @Test
     public void createDocumentWithTables() throws Exception {
-        TestUtils.createAndSaveDocumentWithTables("cellSpanning.pdf",
+        TestUtils.createAndSaveDocumentWithTables(FILE_NAME,
                 createTableWithCellColSpanning(),
                 createTableWithCellRowSpanning(),
                 createTableWithTwoCellRowSpannings(),
@@ -35,6 +40,9 @@ public class CellSpanningTest {
                 createTableWithSeveralRowAndCellSpannings(),
                 createTableWithImages()
         );
+
+        CompareResult compareResult = new PdfComparator<>(getExpectedPdfFor(FILE_NAME), getActualPdfFor(FILE_NAME)).compare();
+        assertTrue(compareResult.isEqual());
     }
 
     @Test
@@ -51,9 +59,11 @@ public class CellSpanningTest {
 
             drawer.draw(() -> document, () -> new PDPage(PDRectangle.A4), 50F);
 
-            document.save("target/cellSpanningMultiplePages.pdf");
+            document.save(TestUtils.TARGET_FOLDER + "/" + FILE_NAME_MULTI_PAGE);
         }
 
+        CompareResult compareResult = new PdfComparator<>(getExpectedPdfFor(FILE_NAME_MULTI_PAGE), getActualPdfFor(FILE_NAME_MULTI_PAGE)).compare();
+        assertTrue(compareResult.isEqual());
     }
 
     private Table createTableWithCellColSpanning() {

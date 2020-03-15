@@ -1,5 +1,7 @@
 package org.vandeseer.integrationtest.settings;
 
+import de.redsix.pdfcompare.CompareResult;
+import de.redsix.pdfcompare.PdfComparator;
 import org.junit.Test;
 import org.vandeseer.TestUtils;
 import org.vandeseer.easytable.structure.Row;
@@ -8,18 +10,26 @@ import org.vandeseer.easytable.structure.cell.TextCell;
 
 import java.awt.*;
 
+import static junit.framework.TestCase.assertTrue;
 import static org.apache.pdfbox.pdmodel.font.PDType1Font.*;
+import static org.vandeseer.TestUtils.getActualPdfFor;
+import static org.vandeseer.TestUtils.getExpectedPdfFor;
 import static org.vandeseer.easytable.settings.HorizontalAlignment.CENTER;
 
 public class SettingsOverridingTest {
 
+    public static final String FILE_NAME = "settingsOverriding.pdf";
+
     @Test
     public void createDocumentWithTables() throws Exception {
-        TestUtils.createAndSaveDocumentWithTables("settingsOverriding.pdf",
+        TestUtils.createAndSaveDocumentWithTables(FILE_NAME,
                 createTableWithFontSettingAndBorderColorOverriding(),
                 createTableWithTextColorAndBackgroundColorOverriding(),
                 createSampleDocumentWithWordBreakOverriding()
         );
+
+        CompareResult compareResult = new PdfComparator<>(getExpectedPdfFor(FILE_NAME), getActualPdfFor(FILE_NAME)).compare();
+        assertTrue(compareResult.isEqual());
     }
 
 

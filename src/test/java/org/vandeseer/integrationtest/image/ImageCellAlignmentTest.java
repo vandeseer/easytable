@@ -1,5 +1,7 @@
 package org.vandeseer.integrationtest.image;
 
+import de.redsix.pdfcompare.CompareResult;
+import de.redsix.pdfcompare.PdfComparator;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.font.PDType1Font;
 import org.junit.Test;
@@ -13,14 +15,19 @@ import org.vandeseer.easytable.structure.cell.TextCell;
 
 import java.io.IOException;
 
+import static junit.framework.TestCase.assertTrue;
+import static org.vandeseer.TestUtils.getActualPdfFor;
+import static org.vandeseer.TestUtils.getExpectedPdfFor;
 import static org.vandeseer.easytable.settings.HorizontalAlignment.*;
 import static org.vandeseer.easytable.settings.VerticalAlignment.*;
 
 public class ImageCellAlignmentTest {
 
+    public static final String FILE_NAME = "imageCellAlignment.pdf";
+
     @Test
     public void test() throws IOException {
-        TestUtils.createAndSaveDocumentWithTables("imageCellAlignment.pdf",
+        TestUtils.createAndSaveDocumentWithTables(FILE_NAME,
                 createTableWithImageCellThatHasImageAligned(TOP, LEFT),
                 createTableWithImageCellThatHasImageAligned(TOP, RIGHT),
                 createTableWithImageCellThatHasImageAligned(MIDDLE, CENTER),
@@ -28,6 +35,9 @@ public class ImageCellAlignmentTest {
                 createTableWithImageCellThatHasImageAligned(BOTTOM, LEFT),
                 createTableWithImageCellThatHasImageAligned(BOTTOM, CENTER)
         );
+
+        CompareResult compareResult = new PdfComparator<>(getExpectedPdfFor(FILE_NAME), getActualPdfFor(FILE_NAME)).compare();
+        assertTrue(compareResult.isEqual());
     }
 
     private Table createTableWithImageCellThatHasImageAligned(VerticalAlignment verticalAlignment, HorizontalAlignment horizontalAlignment) throws IOException {
