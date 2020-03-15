@@ -1,5 +1,7 @@
 package org.vandeseer.integrationtest;
 
+import de.redsix.pdfcompare.CompareResult;
+import de.redsix.pdfcompare.PdfComparator;
 import lombok.SneakyThrows;
 import org.apache.pdfbox.pdmodel.font.PDType1Font;
 import org.junit.Test;
@@ -17,17 +19,25 @@ import java.awt.*;
 import java.io.IOException;
 
 import static java.awt.Color.*;
+import static junit.framework.TestCase.assertTrue;
 import static org.apache.pdfbox.pdmodel.font.PDType1Font.*;
+import static org.vandeseer.TestUtils.getActualPdfFor;
+import static org.vandeseer.TestUtils.getExpectedPdfFor;
 import static org.vandeseer.easytable.settings.HorizontalAlignment.*;
 import static org.vandeseer.easytable.settings.VerticalAlignment.*;
 
 public class ParagraphCellTest {
 
+    private static final String FILE_NAME = "paragraphCell.pdf";
+
     @Test
     public void testParagraphCell() throws IOException {
-        TestUtils.createAndSaveDocumentWithTables("paragraphCell.pdf",
+        TestUtils.createAndSaveDocumentWithTables(FILE_NAME,
                 createSimpleTable(), createParagraphTable()
         );
+
+        CompareResult compareResult = new PdfComparator<>(getExpectedPdfFor(FILE_NAME), getActualPdfFor(FILE_NAME)).compare();
+        assertTrue(compareResult.isEqual());
     }
 
     private Table createParagraphTable() {

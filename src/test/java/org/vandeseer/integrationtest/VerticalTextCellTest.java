@@ -1,5 +1,7 @@
 package org.vandeseer.integrationtest;
 
+import de.redsix.pdfcompare.CompareResult;
+import de.redsix.pdfcompare.PdfComparator;
 import org.apache.pdfbox.io.IOUtils;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.font.PDFont;
@@ -20,12 +22,16 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Objects;
 
+import static junit.framework.TestCase.assertTrue;
 import static org.apache.pdfbox.pdmodel.font.PDType1Font.HELVETICA;
+import static org.vandeseer.TestUtils.getActualPdfFor;
+import static org.vandeseer.TestUtils.getExpectedPdfFor;
 import static org.vandeseer.easytable.settings.VerticalAlignment.MIDDLE;
 
 public class VerticalTextCellTest {
 
     private static final Color LIGHT_GREEN = new Color(221, 255, 217);
+    private static final String FILE_NAME = "cellVerticalText.pdf";
 
     private PDFont ownFont;
     private PDImageXObject checkImage;
@@ -49,10 +55,14 @@ public class VerticalTextCellTest {
 
     @Test
     public void testVerticalTextCell() throws IOException {
-        TestUtils.createAndSaveDocumentWithTables("cellVerticalText.pdf",
+        TestUtils.createAndSaveDocumentWithTables(FILE_NAME,
                 createSimpleTable(),
                 createKnowledgeBaseExampleTable()
         );
+
+
+        CompareResult compareResult = new PdfComparator<>(getExpectedPdfFor(FILE_NAME), getActualPdfFor(FILE_NAME)).compare();
+        assertTrue(compareResult.isEqual());
     }
 
     private static Table createSimpleTable() {

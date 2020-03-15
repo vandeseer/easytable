@@ -1,10 +1,13 @@
 package org.vandeseer.integrationtest.custom;
 
+import de.redsix.pdfcompare.CompareResult;
+import de.redsix.pdfcompare.PdfComparator;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.common.PDRectangle;
 import org.junit.Test;
+import org.vandeseer.TestUtils;
 import org.vandeseer.easytable.TableDrawer;
 import org.vandeseer.easytable.drawing.DrawingContext;
 import org.vandeseer.easytable.drawing.PositionedStyledText;
@@ -15,9 +18,14 @@ import org.vandeseer.easytable.structure.cell.TextCell;
 
 import java.io.IOException;
 
+import static junit.framework.TestCase.assertTrue;
 import static org.apache.pdfbox.pdmodel.font.PDType1Font.HELVETICA;
+import static org.vandeseer.TestUtils.getActualPdfFor;
+import static org.vandeseer.TestUtils.getExpectedPdfFor;
 
-public class CustomCellDrawer {
+public class CustomCellDrawerTest {
+
+    public static final String FILE_NAME = "customCellDrawerNoLombok.pdf";
 
     private static final TextCellDrawer CUSTOM_DRAWER = new TextCellDrawer() {
         @Override
@@ -30,7 +38,7 @@ public class CustomCellDrawer {
     @Test
     public void testCustomCellDrawer() throws IOException {
 
-        try(final PDDocument document = new PDDocument()) {
+        try (final PDDocument document = new PDDocument()) {
 
             final PDPage page = new PDPage(PDRectangle.A4);
             document.addPage(page);
@@ -47,8 +55,11 @@ public class CustomCellDrawer {
 
             }
 
-            document.save("target/customCellDrawerNoLombok.pdf");
+            document.save(TestUtils.TARGET_FOLDER + "/" + FILE_NAME);
         }
+
+        CompareResult compareResult = new PdfComparator<>(getExpectedPdfFor(FILE_NAME), getActualPdfFor(FILE_NAME)).compare();
+        assertTrue(compareResult.isEqual());
     }
 
     private static Table createSimpleTable() {

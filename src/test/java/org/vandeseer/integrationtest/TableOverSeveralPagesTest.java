@@ -1,5 +1,7 @@
 package org.vandeseer.integrationtest;
 
+import de.redsix.pdfcompare.CompareResult;
+import de.redsix.pdfcompare.PdfComparator;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.common.PDRectangle;
@@ -16,7 +18,14 @@ import org.vandeseer.easytable.structure.cell.TextCell;
 import java.awt.*;
 import java.io.IOException;
 
+import static junit.framework.TestCase.assertTrue;
+import static org.vandeseer.TestUtils.getActualPdfFor;
+import static org.vandeseer.TestUtils.getExpectedPdfFor;
+
 public class TableOverSeveralPagesTest {
+
+    private static final String SEVERAL_PAGES_TABLE_1_FILE_NAME = "severalPagesTable1.pdf";
+    private static final String SEVERAL_PAGES_TABLE_2_FILE_NAME = "severalPagesTable2.pdf";
 
     private static final Color DARK_BLUE = new Color(46, 77, 97);
     private static final Color CUSTOM_GRAY = new Color(136, 136, 136);
@@ -26,9 +35,15 @@ public class TableOverSeveralPagesTest {
 
         try (final PDDocument document = new PDDocument()) {
             drawMultipageTableOn(document);
-            document.save(TestUtils.TARGET_FOLDER + "/severalPagesTable1.pdf");
+            document.save(TestUtils.TARGET_FOLDER + "/" + SEVERAL_PAGES_TABLE_1_FILE_NAME);
         }
 
+        final CompareResult compareResult = new PdfComparator<>(
+                                                    getExpectedPdfFor(SEVERAL_PAGES_TABLE_1_FILE_NAME),
+                                                    getActualPdfFor(SEVERAL_PAGES_TABLE_1_FILE_NAME)
+                                                ).compare();
+
+        assertTrue(compareResult.isEqual());
     }
 
     @Test
@@ -38,9 +53,15 @@ public class TableOverSeveralPagesTest {
             drawMultipageTableOn(document);
             drawMultipageTableOn(document);
 
-            document.save(TestUtils.TARGET_FOLDER + "/severalPagesTable2.pdf");
+            document.save(TestUtils.TARGET_FOLDER + "/" + SEVERAL_PAGES_TABLE_2_FILE_NAME);
         }
 
+        final CompareResult compareResult = new PdfComparator<>(
+                getExpectedPdfFor(SEVERAL_PAGES_TABLE_2_FILE_NAME),
+                getActualPdfFor(SEVERAL_PAGES_TABLE_2_FILE_NAME)
+        ).compare();
+
+        assertTrue(compareResult.isEqual());
     }
 
     @Test

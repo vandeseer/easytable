@@ -1,5 +1,7 @@
 package org.vandeseer.integrationtest.settings;
 
+import de.redsix.pdfcompare.CompareResult;
+import de.redsix.pdfcompare.PdfComparator;
 import org.apache.pdfbox.pdmodel.font.PDType1Font;
 import org.junit.Test;
 import org.vandeseer.TestUtils;
@@ -11,7 +13,10 @@ import org.vandeseer.easytable.structure.cell.TextCell;
 import java.awt.*;
 import java.io.IOException;
 
+import static junit.framework.TestCase.assertTrue;
 import static org.apache.pdfbox.pdmodel.font.PDType1Font.*;
+import static org.vandeseer.TestUtils.getActualPdfFor;
+import static org.vandeseer.TestUtils.getExpectedPdfFor;
 import static org.vandeseer.easytable.settings.HorizontalAlignment.*;
 import static org.vandeseer.easytable.settings.VerticalAlignment.BOTTOM;
 import static org.vandeseer.easytable.settings.VerticalAlignment.TOP;
@@ -22,6 +27,8 @@ public class SettingsTest {
 
     private final static Color PURPLE_LIGHT_1 = new Color(206, 186, 230);
     private final static Color PURPLE_LIGHT_2 = new Color(230, 218, 242);
+
+    private static final String FILE_NAME = "differentFontsInCells.pdf";
 
     @Test
     public void differentSettings() throws IOException {
@@ -111,7 +118,10 @@ public class SettingsTest {
                 .backgroundColor(PURPLE_LIGHT_2)
                 .build());
 
-        TestUtils.createAndSaveDocumentWithTable("differentFontsInCells.pdf", tableBuilder.build());
+        TestUtils.createAndSaveDocumentWithTable(FILE_NAME, tableBuilder.build());
+
+        CompareResult compareResult = new PdfComparator<>(getExpectedPdfFor(FILE_NAME), getActualPdfFor(FILE_NAME)).compare();
+        assertTrue(compareResult.isEqual());
     }
 
 
