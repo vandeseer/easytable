@@ -140,12 +140,12 @@ Yep, you can customize the cell drawers itself or (depending on your use case)
 you can just create a custom cell. 
 
 For using a customized cell drawer, have a look at 
-[CustomCellDrawer](src/test/java/org/vandeseer/integrationtest/custom/CustomCellDrawer.java).
+[CustomCellDrawerTest](src/test/java/org/vandeseer/integrationtest/custom/CustomCellDrawerTest.java).
 
 In case you want to create your own type of cell (which shouldn't really be necessary since the 
 drawing can be completely adapted) you will need to use [Lombok](https://projectlombok.org/)'s `@SuperBuilder`
 annotation. Again, just have a look at the code: 
-[CustomCellWithCustomDrawerUsingLombok](src/test/java/org/vandeseer/integrationtest/custom/CustomCellWithCustomDrawerUsingLombok.java)
+[CustomCellWithCustomDrawerUsingLombokTest](src/test/java/org/vandeseer/integrationtest/custom/CustomCellWithCustomDrawerUsingLombokTest.java)
 
 ### Can I draw a table over multiple pages?
 
