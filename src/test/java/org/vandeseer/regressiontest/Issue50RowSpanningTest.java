@@ -1,5 +1,7 @@
 package org.vandeseer.regressiontest;
 
+import de.redsix.pdfcompare.CompareResult;
+import de.redsix.pdfcompare.PdfComparator;
 import org.junit.Before;
 import org.junit.Test;
 import org.vandeseer.TestUtils;
@@ -12,11 +14,16 @@ import org.vandeseer.easytable.structure.cell.TextCell;
 import java.awt.*;
 import java.io.IOException;
 
+import static junit.framework.TestCase.assertTrue;
 import static org.apache.pdfbox.pdmodel.font.PDType1Font.HELVETICA;
 import static org.apache.pdfbox.pdmodel.font.PDType1Font.HELVETICA_BOLD;
+import static org.vandeseer.TestUtils.getActualPdfFor;
+import static org.vandeseer.TestUtils.getExpectedPdfFor;
 import static org.vandeseer.easytable.settings.HorizontalAlignment.CENTER;
 
 public class Issue50RowSpanningTest {
+
+    private static final String FILE_NAME = TestUtils.TARGET_SUBFOLDER_REGRESSION + "/issue50.pdf";
 
     @Before
     public void before() {
@@ -25,7 +32,10 @@ public class Issue50RowSpanningTest {
 
     @Test
     public void testIssue50() throws IOException {
-        TestUtils.createAndSaveDocumentWithTable(TestUtils.TARGET_SUBFOLDER_REGRESSION + "/issue50.pdf", createTable());
+        TestUtils.createAndSaveDocumentWithTable(FILE_NAME, createTable());
+
+        CompareResult compareResult = new PdfComparator<>(getExpectedPdfFor(FILE_NAME), getActualPdfFor(FILE_NAME)).compare();
+        assertTrue(compareResult.isEqual());
     }
 
     private Table createTable() {
