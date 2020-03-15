@@ -135,13 +135,12 @@ public final class PdfUtil {
         float width = 0;
 
         while (!words.empty()) {
+            float nextWordWidth = getStringWidth(words.peek(), font, fontSize);
 
-            // string with length of 1 can't be split.
-            if (words.peek().length() == 1 && line.length() == 0) {
+            // if a single char on an empty line bigger than the max-size, then there is no split possible.
+            if (line.length() == 0 && words.peek().length() == 1 && nextWordWidth > maxWidth) {
                 return words.pop();
             }
-
-            float nextWordWidth = getStringWidth(words.peek(), font, fontSize);
 
             if (doesTextLineFit(width + nextWordWidth, maxWidth)) {
                 line.append(words.pop());
