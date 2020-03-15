@@ -9,10 +9,8 @@ import org.vandeseer.easytable.settings.VerticalAlignment;
 import org.vandeseer.easytable.structure.cell.AbstractCell;
 
 import java.awt.*;
-import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @AllArgsConstructor
 @Builder(buildMethodName = "internalBuild")
@@ -189,6 +187,16 @@ public class Table {
             table.setWidth(width);
             table.setNumberOfColumns(numberOfColumns);
 
+            setupConnectionsBetweenElementsFor(table);
+
+            // The method is as complex as it sounds ;)
+            correctHeightOfCellsDueToRowSpanningIfNecessaryFor(table);
+
+            return table;
+        }
+
+        private void setupConnectionsBetweenElementsFor(Table table) {
+
             // Set up the connections between table, row(s) and cell(s)
             for (int rowIndex = 0; rowIndex < rows.size(); rowIndex++) {
                 Row row = rows.get(rowIndex);
@@ -227,8 +235,46 @@ public class Table {
                     column.setNext(table.getColumns().get(i + 1));
                 }
             }
+        }
 
-            return table;
+        // Adapt the size for cells that are too small when we have very high row span cells
+        private void correctHeightOfCellsDueToRowSpanningIfNecessaryFor(Table table) {
+
+            for (int i = 0; i < table.getRows().size(); i++) {
+
+                final Optional<AbstractCell> highestSpanningCell = rows.get(i).getCells().stream()
+                        .filter(x -> x.getRowSpan() > 0)
+                        .max(Comparator.comparing(AbstractCell::getMinHeight));
+
+                if (highestSpanningCell.isPresent()) {
+
+                    final float heightOfHighestCell = highestSpanningCell.get().getMinHeight();
+
+                    float regularHeightOfRows = 0;
+                    for (int j = i; j < i + highestSpanningCell.get().getRowSpan(); j++) {
+                        regularHeightOfRows += rows.get(j).getHeight();
+                    }
+
+                    if (heightOfHighestCell > regularHeightOfRows) {
+
+                        for (int k = 0; k < table.getColumns().size(); k++) {
+
+                            // This could be cached maybe ...
+                            float rowsHeight = 0;
+                            for (int l = i; l < (i + highestSpanningCell.get().getRowSpan()); l++) {
+                                rowsHeight += table.getRows().get(l).getHeight();
+                            }
+
+                            for (int l = i; l < (i + highestSpanningCell.get().getRowSpan()); l++) {
+                                final Row rowThatNeedsAdaption = table.getRows().get(l);
+                                // TODO Don't do this right away!
+                                // Or save original height, do the adaption. Run again and correct again ...
+                                rowThatNeedsAdaption.doRowSpanSizeAdaption(heightOfHighestCell, rowsHeight);
+                            }
+                        }
+                    }
+                }
+            }
         }
 
         private int getNumberOfRegularCells() {
