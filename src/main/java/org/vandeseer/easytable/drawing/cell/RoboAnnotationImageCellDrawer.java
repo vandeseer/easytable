@@ -3,7 +3,6 @@ package org.vandeseer.easytable.drawing.cell;
 import java.awt.Color;
 import java.awt.geom.Point2D;
 
-import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.font.PDFont;
 import org.apache.pdfbox.pdmodel.font.PDType1Font;

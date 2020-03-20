@@ -209,6 +209,10 @@ public class Table {
                     while (table.isRowSpanAt(rowIndex, columnIndex)) {
                         columnIndex++;
                     }
+                    
+                    if(columnIndex == table.getColumns().size()) {
+                    	columnIndex = table.getColumns().size() - 1;
+                    }
 
                     Column column = table.getColumns().get(columnIndex);
                     cell.setColumn(column);
