@@ -40,8 +40,11 @@ public class RoboAnnotationImageCellDrawer extends AbstractCellDrawer<RoboAnnota
 	public void drawContent(DrawingContext drawingContext) {
 		final PDPageContentStream contentStream = drawingContext.getContentStream();
 
-		final float moveX = drawingContext.getStartingPoint().x;
-
+		float moveX = drawingContext.getStartingPoint().x;
+		if (cell.getImageFooterText() != null && cell.getImageFooterText().length() > 0 && moveX > 675) {
+			moveX = 293f;
+		}
+		
 		final Point2D.Float size = cell.getFitSize();
 		final Point2D.Float drawAt = new Point2D.Float();
 

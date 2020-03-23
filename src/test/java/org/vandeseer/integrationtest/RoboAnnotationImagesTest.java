@@ -55,14 +55,10 @@ public class RoboAnnotationImagesTest {
 	public void testRoboAnnotationImage() throws Exception {
 
 		testRoboHeadAnnotationPage();
+		//testRoboHeadImageDetails();
 	}
 	
-	@Test
-	public void testRoboImage() throws Exception {
-
-		testRoboHeadImageDetails();
-	}
-
+	
 	private void testRoboHeadImageDetails() throws IOException {
 		final Table.TableBuilder tableBuilder = Table.builder().addColumnsOfWidth(50, 50);
 		final byte[] bytes1 = IOUtils.toByteArray(getClass().getClassLoader().getResourceAsStream("pic1.jpg"));
@@ -509,14 +505,12 @@ public class RoboAnnotationImagesTest {
 			int actualRowSpan = (defaultRows * (noOfAnnotationComments >= rowSpan ? rowSpan : noOfAnnotationComments))
 					+ 1;
 			if (rowCounter == 1) {
-				System.out.println("Actual RowSpan is : " + actualRowSpan);
 				annotationCommentTable.addRow(
 						Row.builder().add(TextCell.builder().text("").build()).add(TextCell.builder().text("").build())
 								.add(reviewMultiPageCell.rowSpan(actualRowSpan).build()).build());
 			}
 
 			if (res == 0 && rowCounter != noOfAnnotationComments && (noOfAnnotationComments - rowCounter >= rowSpan)) {
-				System.out.println("Actual RowSpan is : " + actualRowSpan);
 				annotationCommentTable.addRow(
 						Row.builder().add(TextCell.builder().text("").build()).add(TextCell.builder().text("").build())
 								.add(reviewMultiPageCell.rowSpan(actualRowSpan).build()).build());
@@ -525,7 +519,6 @@ public class RoboAnnotationImagesTest {
 					&& isReminderCovered == Boolean.FALSE) {
 				isReminderCovered = true;
 				actualRowSpan = (defaultRows * (noOfAnnotationComments - lagerDivisibleNumber)) + 1;
-				System.out.println("Actual RowSpan is : " + actualRowSpan);
 				annotationCommentTable.addRow(
 						Row.builder().add(TextCell.builder().text("").build()).add(TextCell.builder().text("").build())
 								.add(reviewMultiPageCell.rowSpan(actualRowSpan).build()).build());
