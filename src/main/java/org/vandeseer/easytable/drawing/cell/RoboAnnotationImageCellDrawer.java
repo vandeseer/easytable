@@ -42,7 +42,7 @@ public class RoboAnnotationImageCellDrawer extends AbstractCellDrawer<RoboAnnota
 
 		float moveX = drawingContext.getStartingPoint().x;
 		if (cell.getImageFooterText() != null && cell.getImageFooterText().length() > 0 && moveX > 675) {
-			moveX = 293f;
+			moveX = 393f;
 		}
 		
 		final Point2D.Float size = cell.getFitSize();
