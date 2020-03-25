@@ -40,6 +40,18 @@ public class RoboImageAndTextsTest {
                         .add(RoboImageAndTextsCell.builder().image(image1).maxHeight(10).text1("Vikram Tambe").text2("Arjun Tambe").borderWidth(1).build())
                         .build());
         
+        tableBuilder.addRow(
+                Row.builder()
+                        .add(RoboImageCell.builder().image(image3).imageText("10").borderWidth(1).build())
+                        .add(RoboImageAndTextsCell.builder().image(image1).maxHeight(10).text1("Madhavan Varadachari").text2("Veranika Kantrouskaya").borderWidth(1).build())
+                        .build());
+        
+        tableBuilder.addRow(
+                Row.builder()
+                        .add(RoboImageCell.builder().image(image3).imageText("10").borderWidth(1).build())
+                        .add(RoboImageAndTextsCell.builder().image(image1).maxHeight(10).text1("Aruna Tambe").text2("Eric Frederiksen").borderWidth(1).build())
+                        .build());
+        
         TestUtils.createAndSaveDocumentWithTables("roboimagesandtexts.pdf", tableBuilder.build());
     }
 

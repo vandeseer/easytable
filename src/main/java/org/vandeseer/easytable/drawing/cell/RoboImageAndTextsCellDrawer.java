@@ -44,7 +44,7 @@ public class RoboImageAndTextsCellDrawer extends AbstractCellDrawer<RoboImageAnd
 
         }
         
-        float startY = drawingContext.getStartingPoint().y + getAdaptionForVerticalAlignment() - cell.getPaddingTop();
+        float startY = drawingContext.getStartingPoint().y + getAdaptionForVerticalAlignment() - (cell.getPaddingTop() + 2f);
         
         int fontSize1 = cell.getTextFontSize1() > 0 ? cell.getTextFontSize1() : 10;
         Color imageTextColor1 = cell.getTextColor1() != null ? cell.getTextColor1() : Color.BLACK;
