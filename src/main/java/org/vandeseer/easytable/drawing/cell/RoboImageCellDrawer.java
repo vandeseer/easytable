@@ -47,8 +47,8 @@ public class RoboImageCellDrawer extends AbstractCellDrawer<RoboImageCell> {
 
         contentStream.drawImage(cell.getImage(), drawAt.x, drawAt.y, size.x, size.y);
         
-        float textStartX = drawAt.x - cell.getPaddingLeft();
-        float startY = drawAt.y + (size.y - cell.getPaddingTop() - 1f);
+        float textStartX = drawAt.x - cell.getPaddingLeft() + 2f;
+        float startY = drawAt.y + (size.y - cell.getPaddingTop() - 4f);
         int fontSize = cell.getImageTextFontSize() > 0 ? cell.getImageTextFontSize() : 10;
         Color imageTextColor = cell.getImageTextColor() != null ? cell.getImageTextColor() : Color.WHITE;
         PDFont imageTextFont = cell.getImageTextFont() != null ? cell.getImageTextFont() : PDType1Font.HELVETICA;
