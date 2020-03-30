@@ -10,9 +10,9 @@
 		<version>9</version>
 	</parent>
 
-	<groupId>com.github.vandeseer</groupId>
-	<artifactId>easytable</artifactId>
-	<version>0.6.0</version>
+	<groupId>com.github.robohead</groupId>
+	<artifactId>robohead-easytable</artifactId>
+	<version>0.1.0</version>
 	<packaging>jar</packaging>
 
 	<properties>
