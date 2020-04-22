@@ -35,7 +35,6 @@ public class DrawingUtil {
 
         contentStream.addRect(rectangle.getX(), rectangle.getY(), rectangle.getWidth(), rectangle.getHeight());
         contentStream.fill();
-        contentStream.closePath();
 
         // Reset NonStrokingColor to default value
         contentStream.setNonStrokingColor(Color.BLACK);

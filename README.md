@@ -31,7 +31,7 @@ Add this to your `pom.xml`:
     <dependency>
         <groupId>com.github.vandeseer</groupId>
         <artifactId>easytable</artifactId>
-        <version>0.6.4</version>
+        <version>0.6.5</version>
     </dependency>
 
 Or checkout the repository and install it locally with maven (e.g. for the`develop` branch):
@@ -130,6 +130,8 @@ improvements
 *   to [TheRealSourceSeeker](https://github.com/TheRealSourceSeeker) for finding a bug caused by using `float`s
 *   to [Drummond Dawson](https://github.com/drumonii) for code changes that allowed removing a dependency
 *   to [styssi](https://github.com/styssi) for allowing several multipage tables being drawn on the same page
+*   to [Richard Mealing](https://github.com/mealingr) for adding the license section to the `pom.xml`
+*   to [msww](https://github.com/msww) for finding a [small issue](https://github.com/vandeseer/easytable/issues/85)
 *   to [Ralf Stuckert](https://github.com/ralfstuckert) for creating [pdfbox-layout](https://github.com/ralfstuckert/pdfbox-layout)
 
 ## Q&A

@@ -243,7 +243,7 @@ public class Table {
             for (int i = 0; i < table.getRows().size(); i++) {
 
                 final Optional<AbstractCell> highestSpanningCell = rows.get(i).getCells().stream()
-                        .filter(x -> x.getRowSpan() > 0)
+                        .filter(x -> x.getRowSpan() > 1)
                         .max(Comparator.comparing(AbstractCell::getMinHeight));
 
                 if (highestSpanningCell.isPresent()) {
