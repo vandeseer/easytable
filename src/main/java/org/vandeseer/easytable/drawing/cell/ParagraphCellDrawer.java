@@ -52,6 +52,7 @@ public class ParagraphCellDrawer extends AbstractCellDrawer<ParagraphCell> {
                 annotationDrawListener
         );
 
+        annotationDrawListener.afterPage(null);
         annotationDrawListener.afterRender();
         drawingContext.getPage().getAnnotations().forEach(PDAnnotation::constructAppearances);
     }

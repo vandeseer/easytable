@@ -62,7 +62,7 @@ public class ParagraphCellTest {
                             .paragraph(Paragraph.builder()
                                 .append(Markup.builder()
                                         .markup(
-                                                "This is using Markup where you can {color:#efefef}color your text, " +
+                                                "This is using __Markup__ where you can {color:#efefef}color your text, " +
                                                 "{color:#000000}or also just *emphasize* whatever you think " +
                                                 "should be *emphasized*). You can also *{color:#efefef}combine both*" +
                                                 "{color:#000000}. Furthermore you can add links like this one " +
