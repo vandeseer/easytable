@@ -26,13 +26,14 @@ public class MinimumWorkingExample {
                 // Build the table
                 Table myTable = Table.builder()
                         .addColumnsOfWidth(100, 100)
+                        .borderWidth(1)
                         .addRow(Row.builder()
-                                .add(TextCell.builder().text("One One").borderWidth(1).backgroundColor(Color.GRAY).build())
-                                .add(TextCell.builder().text("One Two").borderWidth(1).backgroundColor(Color.LIGHT_GRAY).build())
+                                .add(TextCell.builder().text("One One").backgroundColor(Color.GRAY).build())
+                                .add(TextCell.builder().text("One Two").backgroundColor(Color.LIGHT_GRAY).build())
                                 .build())
                         .addRow(Row.builder()
-                                .add(TextCell.builder().text("Two One").borderWidth(1).textColor(Color.RED).build())
-                                .add(TextCell.builder().text("Two Two").borderWidth(1).horizontalAlignment(HorizontalAlignment.RIGHT).build())
+                                .add(TextCell.builder().text("Two One").textColor(Color.RED).build())
+                                .add(TextCell.builder().text("Two Two").horizontalAlignment(HorizontalAlignment.RIGHT).build())
                                 .build())
                         .build();
 

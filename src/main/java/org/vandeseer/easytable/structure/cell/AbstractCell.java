@@ -20,7 +20,11 @@ import java.awt.*;
 @SuperBuilder(toBuilder = true)
 public abstract class AbstractCell {
 
+    public static final float DEFAULT_PADDING = 4f;
+
     public static final float DEFAULT_MIN_HEIGHT = 10f;
+
+    public static final float DEFAULT_BORDER_WIDTH = 0;
 
     @Builder.Default
     private final int colSpan = 1;
@@ -47,29 +51,18 @@ public abstract class AbstractCell {
     @Setter(AccessLevel.PROTECTED)
     protected Settings settings;
 
+    // TODO Also move those to settings?!
     @Builder.Default
-    private final float paddingLeft = 4;
+    private final float paddingLeft = DEFAULT_PADDING;
 
     @Builder.Default
-    private final float paddingRight = 4;
+    private final float paddingRight = DEFAULT_PADDING;
 
     @Builder.Default
-    private final float paddingTop = 4;
+    private final float paddingTop = DEFAULT_PADDING;
 
     @Builder.Default
-    private final float paddingBottom = 4;
-
-    @Builder.Default
-    private float borderWidthTop = 0;
-
-    @Builder.Default
-    private float borderWidthLeft = 0;
-
-    @Builder.Default
-    private float borderWidthRight = 0;
-
-    @Builder.Default
-    private float borderWidthBottom = 0;
+    private final float paddingBottom = DEFAULT_PADDING;
 
     public float getHorizontalPadding() {
         return getPaddingLeft() + getPaddingRight();
@@ -79,20 +72,44 @@ public abstract class AbstractCell {
         return getPaddingTop() + getPaddingBottom();
     }
 
+    public float getBorderWidthTop() {
+        return hasBorderTop()
+                ? settings.getBorderWidthTop()
+                : 0;
+    }
+
     public boolean hasBorderTop() {
-        return getBorderWidthTop() > 0;
+        return settings.getBorderWidthTop() != null;
+    }
+
+    public float getBorderWidthBottom() {
+        return hasBorderBottom()
+                ? settings.getBorderWidthBottom()
+                : 0;
     }
 
     public boolean hasBorderBottom() {
-        return getBorderWidthBottom() > 0;
+        return settings.getBorderWidthBottom() != null;
+    }
+
+    public float getBorderWidthLeft() {
+        return hasBorderLeft()
+                ? settings.getBorderWidthLeft()
+                : 0;
     }
 
     public boolean hasBorderLeft() {
-        return getBorderWidthLeft() > 0;
+        return settings.getBorderWidthLeft() != null;
+    }
+
+    public float getBorderWidthRight() {
+        return hasBorderRight()
+                ? settings.getBorderWidthRight()
+                : 0;
     }
 
     public boolean hasBorderRight() {
-        return getBorderWidthRight() > 0;
+        return settings.getBorderWidthRight() != null;
     }
 
     public boolean hasBackgroundColor() {
@@ -159,10 +176,31 @@ public abstract class AbstractCell {
         protected Settings settings = Settings.builder().build();
 
         public B borderWidth(final float borderWidth) {
-            return this.borderWidthTop(borderWidth)
-                    .borderWidthBottom(borderWidth)
-                    .borderWidthLeft(borderWidth)
-                    .borderWidthRight(borderWidth);
+            settings.setBorderWidthTop(borderWidth);
+            settings.setBorderWidthBottom(borderWidth);
+            settings.setBorderWidthLeft(borderWidth);
+            settings.setBorderWidthRight(borderWidth);
+            return this.self();
+        }
+
+        public B borderWidthTop(final float borderWidth) {
+            settings.setBorderWidthTop(borderWidth);
+            return this.self();
+        }
+
+        public B borderWidthBottom(final float borderWidth) {
+            settings.setBorderWidthBottom(borderWidth);
+            return this.self();
+        }
+
+        public B borderWidthLeft(final float borderWidth) {
+            settings.setBorderWidthLeft(borderWidth);
+            return this.self();
+        }
+
+        public B borderWidthRight(final float borderWidth) {
+            settings.setBorderWidthRight(borderWidth);
+            return this.self();
         }
 
         public B padding(final float padding) {

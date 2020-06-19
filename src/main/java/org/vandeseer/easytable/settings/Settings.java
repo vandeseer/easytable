@@ -15,6 +15,11 @@ public class Settings {
     private Color textColor;
     private Color backgroundColor;
 
+    private Float borderWidthTop;
+    private Float borderWidthBottom;
+    private Float borderWidthLeft;
+    private Float borderWidthRight;
+
     private Color borderColor;
 
     private HorizontalAlignment horizontalAlignment;
@@ -36,6 +41,7 @@ public class Settings {
 
     public void fillingMergeBy(Settings settings) {
         fillingMergeFontSettings(settings);
+        fillingMergeBorderWidthSettings(settings);
         fillingMergeColorSettings(settings);
         fillingMergeAlignmentSettings(settings);
         fillingMergeWordBreakSetting(settings);
@@ -45,6 +51,24 @@ public class Settings {
         // Note that we use the boxed Boolean only here internally!
         if (wordBreak == null && settings.wordBreak != null) {
             wordBreak = settings.getWordBreak();
+        }
+    }
+
+    private void fillingMergeBorderWidthSettings(Settings settings) {
+        if (getBorderWidthBottom() == null && settings.getBorderWidthBottom() != null) {
+            borderWidthBottom = settings.getBorderWidthBottom();
+        }
+
+        if (getBorderWidthTop() == null && settings.getBorderWidthTop() != null) {
+            borderWidthTop = settings.getBorderWidthTop();
+        }
+
+        if (getBorderWidthLeft() == null && settings.getBorderWidthLeft() != null) {
+            borderWidthLeft = settings.getBorderWidthLeft();
+        }
+
+        if (getBorderWidthRight() == null && settings.getBorderWidthRight() != null) {
+            borderWidthRight = settings.getBorderWidthRight();
         }
     }
 

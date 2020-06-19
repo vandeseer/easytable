@@ -94,6 +94,8 @@ public class Row {
             return this;
         }
 
+        // TODO borderWidth
+
         public Row.RowBuilder borderColor(final Color borderColor) {
             settings.setBorderColor(borderColor);
             return this;

@@ -38,9 +38,6 @@ public class Table {
     private int numberOfColumns;
     private float width;
 
-    @Builder.Default
-    private float borderWidth = 0.2f;
-
     public float getHeight() {
         return rows.stream()
                 .map(Row::getHeight)
@@ -153,6 +150,14 @@ public class Table {
 
         public TableBuilder backgroundColor(final Color backgroundColor) {
             settings.setBackgroundColor(backgroundColor);
+            return this;
+        }
+
+        public TableBuilder borderWidth(final float borderWidth) {
+            settings.setBorderWidthTop(borderWidth);
+            settings.setBorderWidthBottom(borderWidth);
+            settings.setBorderWidthLeft(borderWidth);
+            settings.setBorderWidthRight(borderWidth);
             return this;
         }
 

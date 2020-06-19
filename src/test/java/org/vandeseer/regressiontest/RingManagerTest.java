@@ -76,12 +76,13 @@ public class RingManagerTest {
         final float borderWidthOuter = 1.5f;
         final float borderWidthInner = 1.0f;
 
-        tableBuilder.addRow(Row.builder().add(
-                TextCell.builder().text("1.")
-                        .borderWidthTop(borderWidthOuter)
-                        .borderWidthLeft(borderWidthOuter)
-                        .borderWidthRight(borderWidthInner)
-                        .build())
+        tableBuilder.addRow(Row.builder()
+                .add(
+                        TextCell.builder().text("1.")
+                                .borderWidthTop(borderWidthOuter)
+                                .borderWidthLeft(borderWidthOuter)
+                                .borderWidthRight(borderWidthInner)
+                                .build())
                 .add(
                         TextCell.builder().text("WK DBV(s)")
                                 .borderWidthTop(borderWidthOuter)
@@ -95,8 +96,12 @@ public class RingManagerTest {
                                 .build()
                 ).build());
 
-        tableBuilder.addRow(Row.builder().add(
-                TextCell.builder().text("").borderWidthLeft(borderWidthOuter).build())
+        tableBuilder.addRow(Row.builder()
+                .add(
+                        TextCell.builder()
+                                .text("")
+                                .borderWidthLeft(borderWidthOuter)
+                                .build())
                 .add(
                         TextCell.builder().text("Jugend")
                                 .borderWidthRight(borderWidthInner)
