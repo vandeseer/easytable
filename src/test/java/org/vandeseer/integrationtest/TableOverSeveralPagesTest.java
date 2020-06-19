@@ -27,6 +27,9 @@ public class TableOverSeveralPagesTest {
     private static final String SEVERAL_PAGES_TABLE_1_FILE_NAME = "severalPagesTable1.pdf";
     private static final String SEVERAL_PAGES_TABLE_2_FILE_NAME = "severalPagesTable2.pdf";
 
+    private static final String SEVERAL_PAGES_REP_HEADER_TABLE_1_FILE_NAME = "severalPagesTableRepeatedHeader.pdf";
+    private static final String SEVERAL_PAGES_REP_HEADER_TABLE_2_FILE_NAME = "severalPagesTableRepeatedHeaderMultipleRows.pdf";
+
     private static final Color DARK_BLUE = new Color(46, 77, 97);
     private static final Color CUSTOM_GRAY = new Color(136, 136, 136);
 
@@ -77,9 +80,15 @@ public class TableOverSeveralPagesTest {
                     .build()
                     .draw(() -> document, () -> new PDPage(PDRectangle.A4), 50f);
 
-            document.save(TestUtils.TARGET_FOLDER + "/severalPagesTableRepeatedHeader.pdf");
+            document.save(TestUtils.TARGET_FOLDER + "/" + SEVERAL_PAGES_REP_HEADER_TABLE_1_FILE_NAME);
         }
 
+        final CompareResult compareResult = new PdfComparator<>(
+                getExpectedPdfFor(SEVERAL_PAGES_REP_HEADER_TABLE_1_FILE_NAME),
+                getActualPdfFor(SEVERAL_PAGES_REP_HEADER_TABLE_1_FILE_NAME)
+        ).compare();
+
+        assertTrue(compareResult.isEqual());
     }
 
     @Test
@@ -96,9 +105,15 @@ public class TableOverSeveralPagesTest {
                     .build()
                     .draw(() -> document, () -> new PDPage(PDRectangle.A4), 50f);
 
-            document.save(TestUtils.TARGET_FOLDER + "/severalPagesTableRepeatedHeaderMultipleRows.pdf");
+            document.save(TestUtils.TARGET_FOLDER + "/" + SEVERAL_PAGES_REP_HEADER_TABLE_2_FILE_NAME);
         }
 
+        final CompareResult compareResult = new PdfComparator<>(
+                getExpectedPdfFor(SEVERAL_PAGES_REP_HEADER_TABLE_2_FILE_NAME),
+                getActualPdfFor(SEVERAL_PAGES_REP_HEADER_TABLE_2_FILE_NAME)
+        ).compare();
+
+        assertTrue(compareResult.isEqual());
     }
 
     private Table createTableWithThreeHeaderRows() {

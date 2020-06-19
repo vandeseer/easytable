@@ -20,7 +20,9 @@ import static org.vandeseer.easytable.settings.HorizontalAlignment.*;
 
 public class Issue20WordWrappingTest {
 
-    private static final String FILE_NAME = TestUtils.TARGET_SUBFOLDER_REGRESSION + "/" + "wordWrapping_issue20.pdf";
+    private static final String FILE_NAME_TEST_1 = TestUtils.TARGET_SUBFOLDER_REGRESSION + "/" + "wordWrapping_issue20.pdf";
+    private static final String FILE_NAME_TEST_2 = TestUtils.TARGET_SUBFOLDER_REGRESSION + "/" + "wordWrapping_issue20_2.pdf";
+    private static final String FILE_NAME_TEST_3 = TestUtils.TARGET_SUBFOLDER_REGRESSION + "/" + "wordWrapping_issue20_3.pdf";
 
     @Before
     public void before() {
@@ -48,9 +50,9 @@ public class Issue20WordWrappingTest {
                 .add(TextCell.builder().text("g").borderWidth(1).padding(0f).build())
                 .build());
 
-        TestUtils.createAndSaveDocumentWithTable(FILE_NAME, tableBuilder.build());
+        TestUtils.createAndSaveDocumentWithTable(FILE_NAME_TEST_1, tableBuilder.build());
 
-        CompareResult compareResult = new PdfComparator<>(getExpectedPdfFor(FILE_NAME), getActualPdfFor(FILE_NAME)).compare();
+        CompareResult compareResult = new PdfComparator<>(getExpectedPdfFor(FILE_NAME_TEST_1), getActualPdfFor(FILE_NAME_TEST_1)).compare();
         assertTrue(compareResult.isEqual());
     }
 
@@ -118,7 +120,10 @@ public class Issue20WordWrappingTest {
                 .backgroundColor(Color.LIGHT_GRAY)
                 .build());
 
-        TestUtils.createAndSaveDocumentWithTable(TestUtils.TARGET_SUBFOLDER_REGRESSION + "/wordWrapping_issue20_2.pdf", tableBuilder.build());
+        TestUtils.createAndSaveDocumentWithTable(FILE_NAME_TEST_2, tableBuilder.build());
+
+        CompareResult compareResult = new PdfComparator<>(getExpectedPdfFor(FILE_NAME_TEST_2), getActualPdfFor(FILE_NAME_TEST_2)).compare();
+        assertTrue(compareResult.isEqual());
     }
 
     @Test
@@ -134,7 +139,10 @@ public class Issue20WordWrappingTest {
                         .build())
                 .wordBreak(true);
 
-        TestUtils.createAndSaveDocumentWithTable(TestUtils.TARGET_SUBFOLDER_REGRESSION + "/wordWrapping_issue20_3.pdf", tableBuilder.build());
+        TestUtils.createAndSaveDocumentWithTable(FILE_NAME_TEST_3, tableBuilder.build());
+
+        CompareResult compareResult = new PdfComparator<>(getExpectedPdfFor(FILE_NAME_TEST_3), getActualPdfFor(FILE_NAME_TEST_3)).compare();
+        assertTrue(compareResult.isEqual());
     }
 
 }
