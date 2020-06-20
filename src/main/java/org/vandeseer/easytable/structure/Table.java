@@ -22,6 +22,7 @@ public class Table {
     private static final int DEFAULT_FONT_SIZE = 12;
     private static final Color DEFAULT_TEXT_COLOR = Color.BLACK;
     private static final Color DEFAULT_BORDER_COLOR = Color.BLACK;
+    private static final float DEFAULT_PADDING = 4f;
 
     private static final HorizontalAlignment DEFAULT_HORIZONTAL_ALIGNMENT = HorizontalAlignment.LEFT;
     private static final VerticalAlignment DEFAULT_VERTICAL_ALIGNMENT = VerticalAlignment.MIDDLE;
@@ -58,6 +59,10 @@ public class Table {
                 .fontSize(DEFAULT_FONT_SIZE)
                 .textColor(DEFAULT_TEXT_COLOR)
                 .borderColor(DEFAULT_BORDER_COLOR)
+                .paddingTop(DEFAULT_PADDING)
+                .paddingBottom(DEFAULT_PADDING)
+                .paddingLeft(DEFAULT_PADDING)
+                .paddingRight(DEFAULT_PADDING)
                 .wordBreak(true)
                 .build();
 
@@ -158,6 +163,14 @@ public class Table {
             settings.setBorderWidthBottom(borderWidth);
             settings.setBorderWidthLeft(borderWidth);
             settings.setBorderWidthRight(borderWidth);
+            return this;
+        }
+
+        public TableBuilder padding(final float padding) {
+            settings.setPaddingTop(padding);
+            settings.setPaddingBottom(padding);
+            settings.setPaddingLeft(padding);
+            settings.setPaddingRight(padding);
             return this;
         }
 

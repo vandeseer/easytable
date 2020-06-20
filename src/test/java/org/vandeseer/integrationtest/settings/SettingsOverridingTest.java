@@ -16,6 +16,9 @@ import static org.vandeseer.TestUtils.getActualPdfFor;
 import static org.vandeseer.TestUtils.getExpectedPdfFor;
 import static org.vandeseer.easytable.settings.HorizontalAlignment.CENTER;
 
+// TODO Tests for
+// - padding (table, row, cell)
+// - border width (table, row, cell)
 public class SettingsOverridingTest {
 
     public static final String FILE_NAME = "settingsOverriding.pdf";
