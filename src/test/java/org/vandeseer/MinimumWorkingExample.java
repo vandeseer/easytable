@@ -5,6 +5,7 @@ import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.common.PDRectangle;
 import org.vandeseer.easytable.TableDrawer;
+import org.vandeseer.easytable.settings.BorderStyle;
 import org.vandeseer.easytable.settings.HorizontalAlignment;
 import org.vandeseer.easytable.structure.Row;
 import org.vandeseer.easytable.structure.Table;
@@ -32,7 +33,7 @@ public class MinimumWorkingExample {
                                 .build())
                         .addRow(Row.builder()
                                 .add(TextCell.builder().text("Two One").borderWidth(1).textColor(Color.RED).build())
-                                .add(TextCell.builder().text("Two Two").borderWidth(1).horizontalAlignment(HorizontalAlignment.RIGHT).build())
+                                .add(TextCell.builder().text("Two Two").borderWidth(1).borderStyleRight(BorderStyle.DOTTED).horizontalAlignment(HorizontalAlignment.RIGHT).build())
                                 .build())
                         .build();
 

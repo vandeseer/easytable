@@ -17,6 +17,14 @@ public class Settings {
 
     private Color borderColor;
 
+    private BorderStyle borderStyleLeft;
+
+    private BorderStyle borderStyleRight;
+
+    private BorderStyle borderStyleTop;
+
+    private BorderStyle borderStyleBottom;
+
     private HorizontalAlignment horizontalAlignment;
     private VerticalAlignment verticalAlignment;
 

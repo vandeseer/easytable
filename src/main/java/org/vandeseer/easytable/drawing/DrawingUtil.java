@@ -1,6 +1,7 @@
 package org.vandeseer.easytable.drawing;
 
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
+import org.vandeseer.easytable.settings.BorderStyle;
 
 import java.awt.*;
 import java.io.IOException;
@@ -21,6 +22,14 @@ public class DrawingUtil {
     }
 
     public static void drawLine(PDPageContentStream contentStream, PositionedLine line) throws IOException {
+
+        if(line.getBorderStyle() !=null && line.getBorderStyle() == BorderStyle.DOTTED){
+            contentStream.setLineDashPattern (new float[]{1}, 1);
+        }else{
+            contentStream.setLineDashPattern (new float[]{}, 0);
+        }
+
+
         contentStream.moveTo(line.getStartX(), line.getStartY());
         contentStream.setLineWidth(line.getWidth());
         contentStream.lineTo(line.getEndX(), line.getEndY());
