@@ -1,9 +1,10 @@
 package org.vandeseer.easytable.settings;
 
-public enum BorderStyle {
+public enum BorderStyle implements BorderStyleInterface {
 
     SOLID(new float[]{}, 0),
-    DOTTED(new float[]{1}, 1);
+    DOTTED(new float[]{1}, 1),
+    DASHED(new float[]{5,2}, 1);
 
     private final float[] pattern;
     private final int phase;

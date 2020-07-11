@@ -27,10 +27,10 @@ public class Settings {
     private Float paddingTop;
     private Float paddingBottom;
 
-    private BorderStyle borderStyleLeft;
-    private BorderStyle borderStyleRight;
-    private BorderStyle borderStyleTop;
-    private BorderStyle borderStyleBottom;
+    private BorderStyleInterface borderStyleLeft;
+    private BorderStyleInterface borderStyleRight;
+    private BorderStyleInterface borderStyleTop;
+    private BorderStyleInterface borderStyleBottom;
 
     private HorizontalAlignment horizontalAlignment;
     private VerticalAlignment verticalAlignment;

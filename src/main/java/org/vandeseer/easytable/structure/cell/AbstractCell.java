@@ -7,7 +7,7 @@ import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 import org.vandeseer.easytable.drawing.Drawer;
 import org.vandeseer.easytable.drawing.cell.AbstractCellDrawer;
-import org.vandeseer.easytable.settings.BorderStyle;
+import org.vandeseer.easytable.settings.BorderStyleInterface;
 import org.vandeseer.easytable.settings.HorizontalAlignment;
 import org.vandeseer.easytable.settings.Settings;
 import org.vandeseer.easytable.settings.VerticalAlignment;
@@ -112,19 +112,19 @@ public abstract class AbstractCell {
         return settings.getBorderWidthRight() != null && settings.getBorderWidthRight() > 0;
     }
 
-    public BorderStyle getBorderStyleTop() {
+    public BorderStyleInterface getBorderStyleTop() {
         return settings.getBorderStyleTop();
     }
 
-    public BorderStyle getBorderStyleBottom() {
+    public BorderStyleInterface getBorderStyleBottom() {
         return settings.getBorderStyleBottom();
     }
 
-    public BorderStyle getBorderStyleLeft() {
+    public BorderStyleInterface getBorderStyleLeft() {
         return settings.getBorderStyleLeft();
     }
 
-    public BorderStyle getBorderStyleRight() {
+    public BorderStyleInterface getBorderStyleRight() {
         return settings.getBorderStyleRight();
     }
 
@@ -219,27 +219,27 @@ public abstract class AbstractCell {
             return this.self();
         }
 
-        public B borderStyleTop(final BorderStyle style) {
+        public B borderStyleTop(final BorderStyleInterface style) {
             settings.setBorderStyleTop(style);
             return this.self();
         }
 
-        public B borderStyleBottom(final BorderStyle style) {
+        public B borderStyleBottom(final BorderStyleInterface style) {
             settings.setBorderStyleBottom(style);
             return this.self();
         }
 
-        public B borderStyleLeft(final BorderStyle style) {
+        public B borderStyleLeft(final BorderStyleInterface style) {
             settings.setBorderStyleLeft(style);
             return this.self();
         }
 
-        public B borderStyleRight(final BorderStyle style) {
+        public B borderStyleRight(final BorderStyleInterface style) {
             settings.setBorderStyleRight(style);
             return this.self();
         }
 
-        public B borderStyle(final BorderStyle style) {
+        public B borderStyle(final BorderStyleInterface style) {
             return this.borderStyleLeft(style)
                     .borderStyleRight(style)
                     .borderStyleBottom(style)

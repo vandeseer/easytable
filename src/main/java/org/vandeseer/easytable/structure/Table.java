@@ -3,10 +3,7 @@ package org.vandeseer.easytable.structure;
 import lombok.*;
 import org.apache.pdfbox.pdmodel.font.PDFont;
 import org.apache.pdfbox.pdmodel.font.PDType1Font;
-import org.vandeseer.easytable.settings.BorderStyle;
-import org.vandeseer.easytable.settings.HorizontalAlignment;
-import org.vandeseer.easytable.settings.Settings;
-import org.vandeseer.easytable.settings.VerticalAlignment;
+import org.vandeseer.easytable.settings.*;
 import org.vandeseer.easytable.structure.cell.AbstractCell;
 
 import java.awt.*;
@@ -23,7 +20,7 @@ public class Table {
     private static final int DEFAULT_FONT_SIZE = 12;
     private static final Color DEFAULT_TEXT_COLOR = Color.BLACK;
     private static final Color DEFAULT_BORDER_COLOR = Color.BLACK;
-    private static final BorderStyle DEFAULT_BORDER_STYLE = BorderStyle.SOLID;
+    private static final BorderStyleInterface DEFAULT_BORDER_STYLE = BorderStyle.SOLID;
     private static final float DEFAULT_PADDING = 4f;
 
     private static final HorizontalAlignment DEFAULT_HORIZONTAL_ALIGNMENT = HorizontalAlignment.LEFT;
@@ -172,7 +169,7 @@ public class Table {
             return this;
         }
 
-        public TableBuilder borderStyle(final BorderStyle borderStyle) {
+        public TableBuilder borderStyle(final BorderStyleInterface borderStyle) {
             settings.setBorderStyleTop(borderStyle);
             settings.setBorderStyleBottom(borderStyle);
             settings.setBorderStyleLeft(borderStyle);
