@@ -55,18 +55,6 @@ public abstract class AbstractCell {
     public float getPaddingTop() {
         return settings.getPaddingTop();
     }
-    @Builder.Default
-    private BorderStyle borderStyleLeft = BorderStyle.SOLID;
-
-    @Builder.Default
-    private BorderStyle borderStyleRight = BorderStyle.SOLID;
-
-    @Builder.Default
-    private BorderStyle borderStyleTop = BorderStyle.SOLID;
-
-    @Builder.Default
-    private BorderStyle borderStyleBottom = BorderStyle.SOLID;
-
 
     public float getPaddingLeft() {
         return settings.getPaddingLeft();
@@ -100,23 +88,6 @@ public abstract class AbstractCell {
                 : 0;
     }
 
-
-    public boolean hasBorderStyleTop() {
-        return getBorderStyleTop() !=null && getBorderStyleTop() == BorderStyle.DOTTED;
-    }
-
-    public boolean hasBorderStyleBottom() {
-        return getBorderStyleBottom()!=null  && getBorderStyleBottom() == BorderStyle.DOTTED;
-    }
-    public boolean hasBorderStyleLeft() {
-        return getBorderStyleLeft() !=null && getBorderStyleLeft() == BorderStyle.DOTTED;
-    }
-
-    public boolean hasBorderStyleRight() {
-        return getBorderStyleRight()!=null && getBorderStyleRight() == BorderStyle.DOTTED;
-    }
-
-
     public boolean hasBorderBottom() {
         return settings.getBorderWidthBottom() != null && settings.getBorderWidthBottom() > 0;
     }
@@ -139,6 +110,22 @@ public abstract class AbstractCell {
 
     public boolean hasBorderRight() {
         return settings.getBorderWidthRight() != null && settings.getBorderWidthRight() > 0;
+    }
+
+    public BorderStyle getBorderStyleTop() {
+        return settings.getBorderStyleTop();
+    }
+
+    public BorderStyle getBorderStyleBottom() {
+        return settings.getBorderStyleBottom();
+    }
+
+    public BorderStyle getBorderStyleLeft() {
+        return settings.getBorderStyleLeft();
+    }
+
+    public BorderStyle getBorderStyleRight() {
+        return settings.getBorderStyleRight();
     }
 
     public boolean hasBackgroundColor() {
@@ -232,19 +219,38 @@ public abstract class AbstractCell {
             return this.self();
         }
 
-        public B padding(final float padding) {
-            return this.paddingTop(padding)
-                    .paddingBottom(padding)
-                    .paddingLeft(padding)
-                    .paddingRight(padding);
+        public B borderStyleTop(final BorderStyle style) {
+            settings.setBorderStyleTop(style);
+            return this.self();
         }
 
+        public B borderStyleBottom(final BorderStyle style) {
+            settings.setBorderStyleBottom(style);
+            return this.self();
+        }
+
+        public B borderStyleLeft(final BorderStyle style) {
+            settings.setBorderStyleLeft(style);
+            return this.self();
+        }
+
+        public B borderStyleRight(final BorderStyle style) {
+            settings.setBorderStyleRight(style);
+            return this.self();
+        }
 
         public B borderStyle(final BorderStyle style) {
             return this.borderStyleLeft(style)
                     .borderStyleRight(style)
                     .borderStyleBottom(style)
                     .borderStyleTop(style);
+        }
+
+        public B padding(final float padding) {
+            return this.paddingTop(padding)
+                    .paddingBottom(padding)
+                    .paddingLeft(padding)
+                    .paddingRight(padding);
         }
 
         public B paddingTop(final float padding) {

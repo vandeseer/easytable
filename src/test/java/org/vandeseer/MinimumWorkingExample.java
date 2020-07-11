@@ -37,7 +37,9 @@ public class MinimumWorkingExample {
                                 .add(TextCell.builder().text("Two One").textColor(Color.RED).build())
                                 .add(TextCell.builder().text("Two Two")
                                         .borderWidthRight(1f)
-                                        .borderStyleRight(BorderStyle.DOTTED).horizontalAlignment(HorizontalAlignment.RIGHT).build())
+                                        .borderStyleRight(BorderStyle.DOTTED)
+                                        .horizontalAlignment(HorizontalAlignment.RIGHT)
+                                        .build())
                                 .build())
                         .build();
 

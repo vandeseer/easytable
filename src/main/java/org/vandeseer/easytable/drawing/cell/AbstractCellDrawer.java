@@ -40,7 +40,8 @@ public abstract class AbstractCellDrawer<T extends AbstractCell> implements Draw
                             .y(y)
                             .width(cell.getWidth())
                             .height(height)
-                            .color(cell.getBackgroundColor()).build()
+                            .color(cell.getBackgroundColor())
+                            .build()
             );
         }
     }
@@ -71,37 +72,31 @@ public abstract class AbstractCellDrawer<T extends AbstractCell> implements Draw
             final float correctionRight = cell.getBorderWidthRight() / 2;
 
             if (cell.hasBorderTop()) {
-
-                PositionedLine.PositionedLineBuilder positionedLineBuilder = PositionedLine.builder()
+                DrawingUtil.drawLine(contentStream, PositionedLine.builder()
                         .startX(start.x - correctionLeft)
                         .startY(start.y + rowHeight)
                         .endX(start.x + cellWidth + correctionRight)
                         .endY(start.y + rowHeight)
                         .width(cell.getBorderWidthTop())
                         .color(cellBorderColor)
-                        .resetColor(rowBorderColor);
-
-                if (cell.hasBorderStyleTop()) {
-                    positionedLineBuilder.borderStyle(cell.getBorderStyleTop());
-
-                }
-
-                DrawingUtil.drawLine(contentStream, positionedLineBuilder.build());
+                        .resetColor(rowBorderColor)
+                        .borderStyle(cell.getBorderStyleTop())
+                        .build()
+                );
             }
 
             if (cell.hasBorderBottom()) {
-                PositionedLine.PositionedLineBuilder positionedLineBuilder = PositionedLine.builder()
+                DrawingUtil.drawLine(contentStream, PositionedLine.builder()
                         .startX(start.x - correctionLeft)
                         .startY(sY)
                         .endX(start.x + cellWidth + correctionRight)
                         .endY(sY)
                         .width(cell.getBorderWidthBottom())
                         .color(cellBorderColor)
-                        .resetColor(rowBorderColor);
-                if (cell.hasBorderStyleBottom()) {
-                    positionedLineBuilder.borderStyle(cell.getBorderStyleBottom());
-                }
-                DrawingUtil.drawLine(contentStream, positionedLineBuilder.build());
+                        .resetColor(rowBorderColor)
+                        .borderStyle(cell.getBorderStyleBottom())
+                        .build()
+                );
             }
         }
 
@@ -110,34 +105,31 @@ public abstract class AbstractCellDrawer<T extends AbstractCell> implements Draw
             final float correctionBottom = cell.getBorderWidthBottom() / 2;
 
             if (cell.hasBorderLeft()) {
-                PositionedLine.PositionedLineBuilder positionedLineBuilder = PositionedLine.builder()
+                DrawingUtil.drawLine(contentStream, PositionedLine.builder()
                         .startX(start.x)
                         .startY(sY - correctionBottom)
                         .endX(start.x)
                         .endY(sY + height + correctionTop)
                         .width(cell.getBorderWidthLeft())
                         .color(cellBorderColor)
-                        .resetColor(rowBorderColor);
-                if (cell.hasBorderStyleLeft()) {
-                    positionedLineBuilder.borderStyle(cell.getBorderStyleLeft());
-                }
-
-                DrawingUtil.drawLine(contentStream, positionedLineBuilder.build());
+                        .resetColor(rowBorderColor)
+                        .borderStyle(cell.getBorderStyleLeft())
+                        .build()
+                );
             }
 
             if (cell.hasBorderRight()) {
-                PositionedLine.PositionedLineBuilder positionedLineBuilder = PositionedLine.builder()
+                DrawingUtil.drawLine(contentStream, PositionedLine.builder()
                         .startX(start.x + cellWidth)
                         .startY(sY - correctionBottom)
                         .endX(start.x + cellWidth)
                         .endY(sY + height + correctionTop)
                         .width(cell.getBorderWidthRight())
                         .color(cellBorderColor)
-                        .resetColor(rowBorderColor);
-                if (cell.hasBorderStyleRight()) {
-                    positionedLineBuilder.borderStyle(cell.getBorderStyleRight());
-                }
-                DrawingUtil.drawLine(contentStream, positionedLineBuilder.build());
+                        .resetColor(rowBorderColor)
+                        .borderStyle(cell.getBorderStyleRight())
+                        .build()
+                );
             }
         }
     }
