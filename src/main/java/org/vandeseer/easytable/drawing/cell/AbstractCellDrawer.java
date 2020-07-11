@@ -71,27 +71,37 @@ public abstract class AbstractCellDrawer<T extends AbstractCell> implements Draw
             final float correctionRight = cell.getBorderWidthRight() / 2;
 
             if (cell.hasBorderTop()) {
-                DrawingUtil.drawLine(contentStream, PositionedLine.builder()
+
+                PositionedLine.PositionedLineBuilder positionedLineBuilder = PositionedLine.builder()
                         .startX(start.x - correctionLeft)
                         .startY(start.y + rowHeight)
                         .endX(start.x + cellWidth + correctionRight)
                         .endY(start.y + rowHeight)
                         .width(cell.getBorderWidthTop())
                         .color(cellBorderColor)
-                        .resetColor(rowBorderColor)
-                        .build());
+                        .resetColor(rowBorderColor);
+
+                if (cell.hasBorderStyleTop()) {
+                    positionedLineBuilder.borderStyle(cell.getBorderStyleTop());
+
+                }
+
+                DrawingUtil.drawLine(contentStream, positionedLineBuilder.build());
             }
 
             if (cell.hasBorderBottom()) {
-                DrawingUtil.drawLine(contentStream, PositionedLine.builder()
+                PositionedLine.PositionedLineBuilder positionedLineBuilder = PositionedLine.builder()
                         .startX(start.x - correctionLeft)
                         .startY(sY)
                         .endX(start.x + cellWidth + correctionRight)
                         .endY(sY)
                         .width(cell.getBorderWidthBottom())
                         .color(cellBorderColor)
-                        .resetColor(rowBorderColor)
-                        .build());
+                        .resetColor(rowBorderColor);
+                if (cell.hasBorderStyleBottom()) {
+                    positionedLineBuilder.borderStyle(cell.getBorderStyleBottom());
+                }
+                DrawingUtil.drawLine(contentStream, positionedLineBuilder.build());
             }
         }
 
@@ -100,27 +110,34 @@ public abstract class AbstractCellDrawer<T extends AbstractCell> implements Draw
             final float correctionBottom = cell.getBorderWidthBottom() / 2;
 
             if (cell.hasBorderLeft()) {
-                DrawingUtil.drawLine(contentStream, PositionedLine.builder()
+                PositionedLine.PositionedLineBuilder positionedLineBuilder = PositionedLine.builder()
                         .startX(start.x)
                         .startY(sY - correctionBottom)
                         .endX(start.x)
                         .endY(sY + height + correctionTop)
                         .width(cell.getBorderWidthLeft())
                         .color(cellBorderColor)
-                        .resetColor(rowBorderColor)
-                        .build());
+                        .resetColor(rowBorderColor);
+                if (cell.hasBorderStyleLeft()) {
+                    positionedLineBuilder.borderStyle(cell.getBorderStyleLeft());
+                }
+
+                DrawingUtil.drawLine(contentStream, positionedLineBuilder.build());
             }
 
             if (cell.hasBorderRight()) {
-                DrawingUtil.drawLine(contentStream, PositionedLine.builder()
+                PositionedLine.PositionedLineBuilder positionedLineBuilder = PositionedLine.builder()
                         .startX(start.x + cellWidth)
                         .startY(sY - correctionBottom)
                         .endX(start.x + cellWidth)
                         .endY(sY + height + correctionTop)
                         .width(cell.getBorderWidthRight())
                         .color(cellBorderColor)
-                        .resetColor(rowBorderColor)
-                        .build());
+                        .resetColor(rowBorderColor);
+                if (cell.hasBorderStyleRight()) {
+                    positionedLineBuilder.borderStyle(cell.getBorderStyleRight());
+                }
+                DrawingUtil.drawLine(contentStream, positionedLineBuilder.build());
             }
         }
     }

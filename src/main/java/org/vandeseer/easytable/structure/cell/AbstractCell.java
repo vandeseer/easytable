@@ -7,6 +7,7 @@ import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 import org.vandeseer.easytable.drawing.Drawer;
 import org.vandeseer.easytable.drawing.cell.AbstractCellDrawer;
+import org.vandeseer.easytable.settings.BorderStyle;
 import org.vandeseer.easytable.settings.HorizontalAlignment;
 import org.vandeseer.easytable.settings.Settings;
 import org.vandeseer.easytable.settings.VerticalAlignment;
@@ -54,6 +55,18 @@ public abstract class AbstractCell {
     public float getPaddingTop() {
         return settings.getPaddingTop();
     }
+    @Builder.Default
+    private BorderStyle borderStyleLeft = BorderStyle.SOLID;
+
+    @Builder.Default
+    private BorderStyle borderStyleRight = BorderStyle.SOLID;
+
+    @Builder.Default
+    private BorderStyle borderStyleTop = BorderStyle.SOLID;
+
+    @Builder.Default
+    private BorderStyle borderStyleBottom = BorderStyle.SOLID;
+
 
     public float getPaddingLeft() {
         return settings.getPaddingLeft();
@@ -86,6 +99,23 @@ public abstract class AbstractCell {
                 ? settings.getBorderWidthBottom()
                 : 0;
     }
+
+
+    public boolean hasBorderStyleTop() {
+        return getBorderStyleTop() !=null && getBorderStyleTop() == BorderStyle.DOTTED;
+    }
+
+    public boolean hasBorderStyleBottom() {
+        return getBorderStyleBottom()!=null  && getBorderStyleBottom() == BorderStyle.DOTTED;
+    }
+    public boolean hasBorderStyleLeft() {
+        return getBorderStyleLeft() !=null && getBorderStyleLeft() == BorderStyle.DOTTED;
+    }
+
+    public boolean hasBorderStyleRight() {
+        return getBorderStyleRight()!=null && getBorderStyleRight() == BorderStyle.DOTTED;
+    }
+
 
     public boolean hasBorderBottom() {
         return settings.getBorderWidthBottom() != null && settings.getBorderWidthBottom() > 0;
@@ -207,6 +237,14 @@ public abstract class AbstractCell {
                     .paddingBottom(padding)
                     .paddingLeft(padding)
                     .paddingRight(padding);
+        }
+
+
+        public B borderStyle(final BorderStyle style) {
+            return this.borderStyleLeft(style)
+                    .borderStyleRight(style)
+                    .borderStyleBottom(style)
+                    .borderStyleTop(style);
         }
 
         public B paddingTop(final float padding) {
