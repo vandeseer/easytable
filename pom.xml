@@ -10,7 +10,7 @@
     </parent>
 
     <groupId>com.github.vandeseer</groupId>
-    <artifactId>easytable</artifactId>
+    <artifactId>easytable-vakhtang</artifactId>
     <version>0.6.6</version>
     <packaging>jar</packaging>
 
