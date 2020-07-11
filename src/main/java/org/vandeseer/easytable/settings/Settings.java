@@ -15,14 +15,21 @@ public class Settings {
     private Color textColor;
     private Color backgroundColor;
 
+    private Float borderWidthTop;
+    private Float borderWidthBottom;
+    private Float borderWidthLeft;
+    private Float borderWidthRight;
+
     private Color borderColor;
 
+    private Float paddingLeft;
+    private Float paddingRight;
+    private Float paddingTop;
+    private Float paddingBottom;
+
     private BorderStyle borderStyleLeft;
-
     private BorderStyle borderStyleRight;
-
     private BorderStyle borderStyleTop;
-
     private BorderStyle borderStyleBottom;
 
     private HorizontalAlignment horizontalAlignment;
@@ -44,6 +51,8 @@ public class Settings {
 
     public void fillingMergeBy(Settings settings) {
         fillingMergeFontSettings(settings);
+        fillingMergePaddingSettings(settings);
+        fillingMergeBorderWidthSettings(settings);
         fillingMergeColorSettings(settings);
         fillingMergeAlignmentSettings(settings);
         fillingMergeWordBreakSetting(settings);
@@ -53,6 +62,42 @@ public class Settings {
         // Note that we use the boxed Boolean only here internally!
         if (wordBreak == null && settings.wordBreak != null) {
             wordBreak = settings.getWordBreak();
+        }
+    }
+
+    private void fillingMergePaddingSettings(Settings settings) {
+        if (getPaddingBottom() == null && settings.getPaddingBottom() != null) {
+            paddingBottom = settings.getPaddingBottom();
+        }
+
+        if (getPaddingTop() == null && settings.getPaddingTop() != null) {
+            paddingTop = settings.getPaddingTop();
+        }
+
+        if (getPaddingLeft() == null && settings.getPaddingLeft() != null) {
+            paddingLeft = settings.getPaddingLeft();
+        }
+
+        if (getPaddingRight() == null && settings.getPaddingRight() != null) {
+            paddingRight = settings.getPaddingRight();
+        }
+    }
+
+    private void fillingMergeBorderWidthSettings(Settings settings) {
+        if (getBorderWidthBottom() == null && settings.getBorderWidthBottom() != null) {
+            borderWidthBottom = settings.getBorderWidthBottom();
+        }
+
+        if (getBorderWidthTop() == null && settings.getBorderWidthTop() != null) {
+            borderWidthTop = settings.getBorderWidthTop();
+        }
+
+        if (getBorderWidthLeft() == null && settings.getBorderWidthLeft() != null) {
+            borderWidthLeft = settings.getBorderWidthLeft();
+        }
+
+        if (getBorderWidthRight() == null && settings.getBorderWidthRight() != null) {
+            borderWidthRight = settings.getBorderWidthRight();
         }
     }
 

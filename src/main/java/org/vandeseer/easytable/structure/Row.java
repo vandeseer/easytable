@@ -94,6 +94,22 @@ public class Row {
             return this;
         }
 
+        public Row.RowBuilder padding(final float padding) {
+            settings.setPaddingTop(padding);
+            settings.setPaddingBottom(padding);
+            settings.setPaddingLeft(padding);
+            settings.setPaddingRight(padding);
+            return this;
+        }
+
+        public Row.RowBuilder borderWidth(final float borderWidth) {
+            settings.setBorderWidthTop(borderWidth);
+            settings.setBorderWidthBottom(borderWidth);
+            settings.setBorderWidthLeft(borderWidth);
+            settings.setBorderWidthRight(borderWidth);
+            return this;
+        }
+
         public Row.RowBuilder borderColor(final Color borderColor) {
             settings.setBorderColor(borderColor);
             return this;
