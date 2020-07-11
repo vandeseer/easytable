@@ -68,9 +68,6 @@ public abstract class AbstractCell {
     private BorderStyle borderStyleBottom = BorderStyle.SOLID;
 
 
-    @Builder.Default
-    private float borderWidthTop = 0;
-
     public float getPaddingLeft() {
         return settings.getPaddingLeft();
     }

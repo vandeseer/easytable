@@ -87,11 +87,9 @@ public abstract class AbstractCellDrawer<T extends AbstractCell> implements Draw
                 }
 
                 DrawingUtil.drawLine(contentStream, positionedLineBuilder.build());
-
             }
 
             if (cell.hasBorderBottom()) {
-
                 PositionedLine.PositionedLineBuilder positionedLineBuilder = PositionedLine.builder()
                         .startX(start.x - correctionLeft)
                         .startY(sY)
@@ -100,17 +98,11 @@ public abstract class AbstractCellDrawer<T extends AbstractCell> implements Draw
                         .width(cell.getBorderWidthBottom())
                         .color(cellBorderColor)
                         .resetColor(rowBorderColor);
-
                 if (cell.hasBorderStyleBottom()) {
                     positionedLineBuilder.borderStyle(cell.getBorderStyleBottom());
                 }
-
                 DrawingUtil.drawLine(contentStream, positionedLineBuilder.build());
-
-
             }
-
-
         }
 
         if (cell.hasBorderLeft() || cell.hasBorderRight()) {
@@ -118,27 +110,22 @@ public abstract class AbstractCellDrawer<T extends AbstractCell> implements Draw
             final float correctionBottom = cell.getBorderWidthBottom() / 2;
 
             if (cell.hasBorderLeft()) {
-
                 PositionedLine.PositionedLineBuilder positionedLineBuilder = PositionedLine.builder()
                         .startX(start.x)
                         .startY(sY - correctionBottom)
                         .endX(start.x)
                         .endY(sY + height + correctionTop)
                         .width(cell.getBorderWidthLeft())
-                        .resetColor(rowBorderColor)
-                        .color(cellBorderColor);
-
-
+                        .color(cellBorderColor)
+                        .resetColor(rowBorderColor);
                 if (cell.hasBorderStyleLeft()) {
                     positionedLineBuilder.borderStyle(cell.getBorderStyleLeft());
                 }
 
                 DrawingUtil.drawLine(contentStream, positionedLineBuilder.build());
-
             }
 
             if (cell.hasBorderRight()) {
-
                 PositionedLine.PositionedLineBuilder positionedLineBuilder = PositionedLine.builder()
                         .startX(start.x + cellWidth)
                         .startY(sY - correctionBottom)
@@ -147,14 +134,11 @@ public abstract class AbstractCellDrawer<T extends AbstractCell> implements Draw
                         .width(cell.getBorderWidthRight())
                         .color(cellBorderColor)
                         .resetColor(rowBorderColor);
-
                 if (cell.hasBorderStyleRight()) {
                     positionedLineBuilder.borderStyle(cell.getBorderStyleRight());
                 }
-
                 DrawingUtil.drawLine(contentStream, positionedLineBuilder.build());
             }
-
         }
     }
 
