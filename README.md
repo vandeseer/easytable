@@ -6,11 +6,11 @@ to create tables in a fairly simple way.
 It emerged from the need in another project. Therefore it also may miss some
 crucial features. Nevertheless there is:
 
-*   setting font and font size on table, row and cell level
+*   setting font, font size, padding, border width on table, row and cell level
 *   setting single cells with bottom-, top-, left- and right-border width separately
 *   background color on table, row and cell level
 *   padding (top, bottom, left, right) on cell level
-*   border colors (on table, row or cell level)
+*   border color and style (on table, row or cell level)
 *   support for text alignment (right, left, center, justified)
 *   vertical text alignment (top, middle, bottom)
 *   column spanning and row spanning 

@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 import org.apache.pdfbox.pdmodel.font.PDFont;
+import org.vandeseer.easytable.settings.BorderStyleInterface;
 import org.vandeseer.easytable.settings.HorizontalAlignment;
 import org.vandeseer.easytable.settings.Settings;
 import org.vandeseer.easytable.settings.VerticalAlignment;
@@ -107,6 +108,14 @@ public class Row {
             settings.setBorderWidthBottom(borderWidth);
             settings.setBorderWidthLeft(borderWidth);
             settings.setBorderWidthRight(borderWidth);
+            return this;
+        }
+
+        public Row.RowBuilder borderStyle(final BorderStyleInterface borderStyle) {
+            settings.setBorderStyleTop(borderStyle);
+            settings.setBorderStyleBottom(borderStyle);
+            settings.setBorderStyleLeft(borderStyle);
+            settings.setBorderStyleRight(borderStyle);
             return this;
         }
 
