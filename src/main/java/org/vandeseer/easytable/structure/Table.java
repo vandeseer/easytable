@@ -218,7 +218,7 @@ public class Table {
 
             // Set up the connections between table, row(s) and cell(s)
             for (int rowIndex = 0; rowIndex < rows.size(); rowIndex++) {
-               Row row = rows.get(rowIndex);
+                Row row = rows.get(rowIndex);
                 row.setTable(table);
 
                 // Fill up the settings of the row that are not set there directly
