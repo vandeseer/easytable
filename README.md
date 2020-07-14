@@ -1,6 +1,6 @@
 # easytable
 
-This is a (very) small project that builds upon
+This is a small project that builds upon
 [Apache's PDFBox](http://pdfbox.apache.org) and should allow you
 to create tables in a fairly simple way.
 It emerged from the need in another project. Therefore it also may miss some
@@ -9,14 +9,14 @@ crucial features. Nevertheless there is:
 *   setting font, font size, padding, border width on table, row and cell level
 *   setting single cells with bottom-, top-, left- and right-border width separately
 *   background color on table, row and cell level
-*   padding (top, bottom, left, right) on cell level
+*   padding (top, bottom, left, right) on table, row and cell level
 *   border color and style (on table, row or cell level)
 *   support for text alignment (right, left, center, justified)
 *   vertical text alignment (top, middle, bottom)
 *   column spanning and row spanning 
 *   line breaking and line spacing
 *   images in cells
-*   experimental: vertical text, [links and paragraphs within cells](#paragraph-cells)
+*   experimental: vertical text, [links, markup and paragraphs within cells](#paragraph-cells)
 
 One can also override classes that are responsible for table/cell drawing, i.e. 
 their drawing behaviour can be customized to a pretty high extent.
@@ -31,7 +31,7 @@ Add this to your `pom.xml`:
     <dependency>
         <groupId>com.github.vandeseer</groupId>
         <artifactId>easytable</artifactId>
-        <version>0.6.6</version>
+        <version>0.7.0</version>
     </dependency>
 
 Or checkout the repository and install it locally with maven (e.g. for the`develop` branch):
@@ -132,6 +132,7 @@ improvements
 *   to [styssi](https://github.com/styssi) for allowing several multipage tables being drawn on the same page
 *   to [Richard Mealing](https://github.com/mealingr) for adding the license section to the `pom.xml`
 *   to [msww](https://github.com/msww) for finding a [small issue](https://github.com/vandeseer/easytable/issues/85)
+*   to [VakhoQ](https://github.com/VakhoQ) for implementing border styles
 *   to [Ralf Stuckert](https://github.com/ralfstuckert) for creating [pdfbox-layout](https://github.com/ralfstuckert/pdfbox-layout)
 
 ## Q&A
