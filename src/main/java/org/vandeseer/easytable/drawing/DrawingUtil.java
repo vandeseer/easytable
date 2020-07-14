@@ -12,6 +12,7 @@ public class DrawingUtil {
 
     public static void drawText(PDPageContentStream contentStream, PositionedStyledText styledText) throws IOException {
         contentStream.beginText();
+        contentStream.setTextRise(styledText.getTextRise());
         contentStream.setNonStrokingColor(styledText.getColor());
         contentStream.setFont(styledText.getFont(), styledText.getFontSize());
         contentStream.newLineAtOffset(styledText.getX(), styledText.getY());

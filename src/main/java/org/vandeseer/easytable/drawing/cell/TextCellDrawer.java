@@ -7,6 +7,7 @@ import org.vandeseer.easytable.drawing.DrawingContext;
 import org.vandeseer.easytable.drawing.DrawingUtil;
 import org.vandeseer.easytable.drawing.PositionedStyledText;
 import org.vandeseer.easytable.structure.cell.AbstractTextCell;
+import org.vandeseer.easytable.structure.cell.TextCell;
 import org.vandeseer.easytable.util.PdfUtil;
 
 import java.awt.*;
@@ -28,20 +29,37 @@ public class TextCellDrawer<T extends AbstractTextCell> extends AbstractCellDraw
     public void drawContent(DrawingContext drawingContext) {
         final float startX = drawingContext.getStartingPoint().x;
 
-        final PDFont currentFont = cell.getFont();
-        final int currentFontSize = cell.getFontSize();
-        final Color currentTextColor = cell.getTextColor();
+        PDFont currentFont = cell.getFont();
+        int currentFontSize = cell.getFontSize();
+        Color currentTextColor = cell.getTextColor();
 
         float yOffset = drawingContext.getStartingPoint().y + getAdaptionForVerticalAlignment();
         float xOffset = startX + cell.getPaddingLeft();
 
-        final List<String> lines = calculateAndGetLines(currentFont, currentFontSize, cell.getMaxWidth());
+        float textWidth = 0f;
+        int superScriptFontSze;
+
+
+        TextCell superScriptCell = null;
+        if (cell instanceof TextCell) {
+            TextCell textCell = (TextCell) cell;
+            if (textCell.hasSuperScript()) {
+                superScriptCell = textCell.getSuperScript();
+            }
+        }
+        List<String> lines;
+        if (superScriptCell != null) {
+            lines = calculateAndGetLines(currentFont, currentFontSize, superScriptCell.getFont(), superScriptCell.getFontSize(), cell.getMaxWidth());
+        } else {
+            lines = calculateAndGetLines(currentFont, currentFontSize, cell.getMaxWidth());
+        }
+
         for (int i = 0; i < lines.size(); i++) {
             final String line = lines.get(i);
 
             yOffset -= calculateYOffset(currentFont, currentFontSize, i);
 
-            final float textWidth = PdfUtil.getStringWidth(line, currentFont, currentFontSize);
+            textWidth = PdfUtil.getStringWidth(line, currentFont, currentFontSize);
 
             // Handle horizontal alignment by adjusting the xOffset
             if (cell.isHorizontallyAligned(RIGHT)) {
@@ -66,6 +84,43 @@ public class TextCellDrawer<T extends AbstractTextCell> extends AbstractCellDraw
                             .build()
             );
         }
+
+
+        if (cell instanceof TextCell) {
+            TextCell textCell = (TextCell) cell;
+
+            if (textCell.hasSuperScript()) {
+                cell = textCell.getSuperScript();
+                currentFont = cell.getFont();
+                currentFontSize = cell.getFontSize();
+                currentTextColor = cell.getTextColor();
+                xOffset = startX + cell.getPaddingLeft() + textWidth;
+
+                final String line = cell.getText();
+                textWidth = PdfUtil.getStringWidth(line, currentFont, currentFontSize);
+
+                if (cell.isHorizontallyAligned(RIGHT)) {
+                    xOffset = startX + (cell.getWidth() - (textWidth + cell.getPaddingRight()));
+                } else if (cell.isHorizontallyAligned(CENTER)) {
+                    xOffset = startX + (cell.getWidth() - textWidth) / 2;
+                }
+
+                drawText(
+                        drawingContext,
+                        PositionedStyledText.builder()
+                                .x(xOffset)
+                                .y(yOffset)
+                                .text(line)
+                                .font(currentFont)
+                                .fontSize(currentFontSize)
+                                .color(currentTextColor)
+                                .textRise(cell.getTextRise())
+                                .build()
+                );
+            }
+        }
+
+
     }
 
     @Override
@@ -96,7 +151,25 @@ public class TextCellDrawer<T extends AbstractTextCell> extends AbstractCellDraw
         return charSpacing;
     }
 
+
+    protected List<String> calculateAndGetLines(PDFont currentFont, int currentFontSize,
+                                                PDFont superScriptFont, int superScriptSize,
+                                                float maxWidth) {
+
+        String superScriptText = null;
+        TextCell textCell = (TextCell) cell;
+        if (textCell.hasSuperScript()) {
+            superScriptText = textCell.getSuperScript().getText();
+        }
+        return cell.isWordBreak()
+                ? PdfUtil.getOptimalTextBreakLines(cell.getText(), superScriptText, currentFont, currentFontSize, superScriptFont, superScriptSize, maxWidth)
+                : Collections.singletonList(cell.getText());
+
+    }
+
     protected List<String> calculateAndGetLines(PDFont currentFont, int currentFontSize, float maxWidth) {
+
+
         return cell.isWordBreak()
                 ? PdfUtil.getOptimalTextBreakLines(cell.getText(), currentFont, currentFontSize, maxWidth)
                 : Collections.singletonList(cell.getText());

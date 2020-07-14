@@ -13,8 +13,28 @@ public class TextCell extends AbstractTextCell {
     @NonNull
     protected String text;
 
+    private TextCell superScript;
+
+    public void setText(String text) {
+        this.text = text;
+    }
+
+
+    public String getText() {
+        return text;
+    }
+
+
     protected Drawer createDefaultDrawer() {
         return new TextCellDrawer(this);
+    }
+
+    public TextCell getSuperScript() {
+        return superScript;
+    }
+
+    public boolean hasSuperScript() {
+            return superScript != null;
     }
 
 }

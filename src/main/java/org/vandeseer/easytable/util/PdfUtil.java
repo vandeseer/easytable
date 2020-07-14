@@ -90,6 +90,26 @@ public final class PdfUtil {
         return result;
     }
 
+    public static List<String> getOptimalTextBreakLines(final String text,
+                                                        final String superScriptText,
+                                                        final PDFont font,
+                                                        final int fontSize,
+                                                        final PDFont superScriptFont,
+                                                        final int superScriptFontSize,
+                                                        final float maxWidth) {
+        final List<String> result = new ArrayList<>();
+
+        for (final String line : text.split(NEW_LINE_REGEX)) {
+            if (PdfUtil.doesTextLineFit(line, superScriptText, font, fontSize, superScriptFont, superScriptFontSize, maxWidth)) {
+                result.add(line);
+            } else {
+                result.addAll(PdfUtil.wrapLine(line, superScriptText, font, fontSize, superScriptFont, superScriptFontSize, maxWidth));
+            }
+        }
+
+        return result;
+    }
+
     private static List<String> wrapLine(final String line, final PDFont font, final int fontSize, final float maxWidth) {
         if (PdfUtil.doesTextLineFit(line, font, fontSize, maxWidth)) {
             return Collections.singletonList(line);
@@ -102,6 +122,25 @@ public final class PdfUtil {
 
         while (!allWords.empty()) {
             goodLines.add(buildALine(allWords, font, fontSize, maxWidth));
+        }
+
+        return goodLines;
+    }
+
+    private static List<String> wrapLine(final String line, final String superScript, final PDFont font, final int fontSize,
+                                         final PDFont superScriptFont, final int superScriptFontSize,
+                                         final float maxWidth) {
+        if (PdfUtil.doesTextLineFit(line, superScript, font, fontSize, superScriptFont, superScriptFontSize, maxWidth)) {
+            return Collections.singletonList(line);
+        }
+
+        List<String> goodLines = new ArrayList<>();
+        Stack<String> allWords = new Stack<>();
+        Arrays.asList(line.split("(?<=[\\\\. ,-])")).forEach(allWords::push);
+        Collections.reverse(allWords);
+
+        while (!allWords.empty()) {
+            goodLines.add(buildALine(allWords, superScript, font, fontSize, superScriptFont, superScriptFontSize, maxWidth));
         }
 
         return goodLines;
@@ -162,9 +201,73 @@ public final class PdfUtil {
         return line.toString().trim();
     }
 
+
+    private static String buildALine(final Stack<String> words,
+                                     final String superScript,
+                                     final PDFont font,
+                                     final int fontSize,
+                                     final PDFont superScriptFont,
+                                     final int superScriptFontSize,
+                                     final float maxWidth) {
+
+        final StringBuilder line = new StringBuilder();
+        float width = 0;
+
+        int size = words.size();
+        int counter = 0;
+
+
+        while (!words.empty()) {
+            counter++;
+
+            String text = words.peek();
+            float nextWordWidth;
+            if(counter == size){
+                System.out.println("LAST : " + text);
+                nextWordWidth = getStringWidth(text, font, fontSize) + getStringWidth(superScript, superScriptFont, superScriptFontSize) ;
+            }else{
+                nextWordWidth = getStringWidth(text, font, fontSize);
+            }
+
+
+
+            // if a single char on an empty line bigger than the max-size, then there is no split possible.
+            if (line.length() == 0 && words.peek().length() == 1 && nextWordWidth > maxWidth) {
+                return words.pop();
+            }
+
+            if (doesTextLineFit(width + nextWordWidth, maxWidth)) {
+                line.append(words.pop());
+                width += nextWordWidth;
+            } else {
+                break;
+            }
+        }
+
+        // no word found -> split by size
+        if (width == 0 && !words.empty()) {
+            List<String> cutBySize = splitBySize(words.pop(), font, fontSize, maxWidth);
+            Collections.reverse(cutBySize);
+            cutBySize.forEach(words::push);
+
+            return buildALine(words, font, fontSize, maxWidth);
+        }
+
+        return line.toString().trim();
+    }
+
+
+
     private static boolean doesTextLineFit(final String textLine, final PDFont font, final int fontSize, final float maxWidth) {
         return doesTextLineFit(PdfUtil.getStringWidth(textLine, font, fontSize), maxWidth);
     }
+
+    private static boolean doesTextLineFit(final String textLine, String superScriptText, final PDFont font, final int fontSize,
+                                           final PDFont superScriptFont, final int superScriptFontSize, final float maxWidth) {
+        return doesTextLineFit(PdfUtil.getStringWidth(textLine, font, fontSize) +
+                PdfUtil.getStringWidth(superScriptText, superScriptFont, superScriptFontSize), maxWidth);
+    }
+
 
     private static boolean doesTextLineFit(final float stringWidth, final float maxWidth) {
         // Conceptually we want to calculate:

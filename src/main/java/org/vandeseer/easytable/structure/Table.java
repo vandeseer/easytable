@@ -7,6 +7,7 @@ import org.vandeseer.easytable.settings.HorizontalAlignment;
 import org.vandeseer.easytable.settings.Settings;
 import org.vandeseer.easytable.settings.VerticalAlignment;
 import org.vandeseer.easytable.structure.cell.AbstractCell;
+import org.vandeseer.easytable.structure.cell.TextCell;
 
 import java.awt.*;
 import java.util.List;
@@ -217,7 +218,7 @@ public class Table {
 
             // Set up the connections between table, row(s) and cell(s)
             for (int rowIndex = 0; rowIndex < rows.size(); rowIndex++) {
-                Row row = rows.get(rowIndex);
+               Row row = rows.get(rowIndex);
                 row.setTable(table);
 
                 // Fill up the settings of the row that are not set there directly
@@ -240,6 +241,15 @@ public class Table {
                     cell.setColumn(column);
 
                     cell.setWidth(getAvailableCellWidthRespectingSpan(columnIndex, cell.getColSpan()));
+
+
+                    if(cell instanceof TextCell){
+                        TextCell textCell = (TextCell) cell;
+                        if(textCell.hasSuperScript()){
+                            textCell= textCell.getSuperScript();
+                            textCell.getSettings().fillingMergeBy(row.getSettings());
+                        }
+                    }
 
                     columnIndex += cell.getColSpan();
                 }

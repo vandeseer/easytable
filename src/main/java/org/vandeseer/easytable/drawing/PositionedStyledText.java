@@ -16,5 +16,6 @@ public class PositionedStyledText {
     private final PDFont font;
     private final int fontSize;
     private final Color color;
+    private final float textRise;
 
 }

@@ -20,6 +20,9 @@ public abstract class AbstractTextCell extends AbstractCell {
     @Builder.Default
     protected float lineSpacing = 1f;
 
+    @Builder.Default
+    protected float textRise = 0f;
+
     public PDFont getFont() {
         return settings.getFont();
     }

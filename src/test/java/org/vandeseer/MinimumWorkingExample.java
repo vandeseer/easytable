@@ -36,6 +36,16 @@ public class MinimumWorkingExample {
                                 .add(TextCell.builder().text("Two One").textColor(Color.RED).build())
                                 .add(TextCell.builder().text("Two Two").horizontalAlignment(HorizontalAlignment.RIGHT).build())
                                 .build())
+                        .addRow(Row.builder()
+                                .padding(10)
+                                .add(TextCell.builder().text("The last word is to the same line").textColor(Color.RED)
+                                        .superScript(TextCell.builder().text("1").fontSize(6).textRise(5).build())
+                                        .build())
+                                .add(TextCell.builder()
+                                        .text("The last word ======> to next line").borderWidth(4).backgroundColor(Color.WHITE)
+                                        .superScript(TextCell.builder().text("2").fontSize(6).textRise(5).build())
+                                        .build())
+                                .build())
                         .build();
 
                 // Set up the drawer
