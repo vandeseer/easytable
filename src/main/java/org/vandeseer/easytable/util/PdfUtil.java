@@ -223,7 +223,6 @@ public final class PdfUtil {
             String text = words.peek();
             float nextWordWidth;
             if(counter == size){
-                System.out.println("LAST : " + text);
                 nextWordWidth = getStringWidth(text, font, fontSize) + getStringWidth(superScript, superScriptFont, superScriptFontSize) ;
             }else{
                 nextWordWidth = getStringWidth(text, font, fontSize);

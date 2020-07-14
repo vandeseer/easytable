@@ -37,8 +37,6 @@ public class TextCellDrawer<T extends AbstractTextCell> extends AbstractCellDraw
         float xOffset = startX + cell.getPaddingLeft();
 
         float textWidth = 0f;
-        int superScriptFontSze;
-
 
         TextCell superScriptCell = null;
         if (cell instanceof TextCell) {
