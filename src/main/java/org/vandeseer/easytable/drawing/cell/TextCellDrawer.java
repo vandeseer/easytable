@@ -61,8 +61,12 @@ public class TextCellDrawer<T extends AbstractTextCell> extends AbstractCellDraw
 
             // Handle horizontal alignment by adjusting the xOffset
             if (cell.isHorizontallyAligned(RIGHT)) {
-                xOffset = startX + (cell.getWidth() - (textWidth + cell.getPaddingRight()));
-
+                if (superScriptCell != null){
+                   float superTextWidth = PdfUtil.getStringWidth(superScriptCell.getText(), superScriptCell.getFont(), superScriptCell.getFontSize());
+                    xOffset =  startX + (cell.getWidth()- (textWidth + cell.getPaddingRight())-  (superTextWidth+superScriptCell.getPaddingRight()));
+                }else{
+                    xOffset = startX + (cell.getWidth() - (textWidth + cell.getPaddingRight()));
+                }
             } else if (cell.isHorizontallyAligned(CENTER)) {
                 xOffset = startX + (cell.getWidth() - textWidth) / 2;
 
@@ -92,17 +96,8 @@ public class TextCellDrawer<T extends AbstractTextCell> extends AbstractCellDraw
                 currentFont = cell.getFont();
                 currentFontSize = cell.getFontSize();
                 currentTextColor = cell.getTextColor();
-                xOffset = startX + cell.getPaddingLeft() + textWidth;
-
+                xOffset = xOffset + textWidth;
                 final String line = cell.getText();
-                textWidth = PdfUtil.getStringWidth(line, currentFont, currentFontSize);
-
-                if (cell.isHorizontallyAligned(RIGHT)) {
-                    xOffset = startX + (cell.getWidth() - (textWidth + cell.getPaddingRight()));
-                } else if (cell.isHorizontallyAligned(CENTER)) {
-                    xOffset = startX + (cell.getWidth() - textWidth) / 2;
-                }
-
                 drawText(
                         drawingContext,
                         PositionedStyledText.builder()
