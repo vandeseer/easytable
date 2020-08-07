@@ -29,7 +29,7 @@ public class MinimumWorkingExample {
                         .addColumnsOfWidth(200, 200)
                         .padding(2)
                         .addRow(Row.builder()
-                                .add(TextCell.builder().text("One One").borderWidth(4).backgroundColor(Color.WHITE).build())
+                                .add(TextCell.builder().text("One One").borderWidth(4).borderColorLeft(Color.MAGENTA).backgroundColor(Color.WHITE).build())
                                 .add(TextCell.builder().text("One Two").borderWidth(0).backgroundColor(Color.YELLOW).build())
                                 .build())
                         .addRow(Row.builder()

@@ -57,7 +57,10 @@ public class Table {
                 .font(DEFAULT_FONT)
                 .fontSize(DEFAULT_FONT_SIZE)
                 .textColor(DEFAULT_TEXT_COLOR)
-                .borderColor(DEFAULT_BORDER_COLOR)
+                .borderColorTop(DEFAULT_BORDER_COLOR)
+                .borderColorBottom(DEFAULT_BORDER_COLOR)
+                .borderColorLeft(DEFAULT_BORDER_COLOR)
+                .borderColorRight(DEFAULT_BORDER_COLOR)
                 .borderStyleTop(DEFAULT_BORDER_STYLE)
                 .borderStyleBottom(DEFAULT_BORDER_STYLE)
                 .borderStyleLeft(DEFAULT_BORDER_STYLE)
@@ -186,7 +189,10 @@ public class Table {
         }
 
         public TableBuilder borderColor(final Color borderColor) {
-            settings.setBorderColor(borderColor);
+            settings.setBorderColorTop(borderColor);
+            settings.setBorderColorBottom(borderColor);
+            settings.setBorderColorLeft(borderColor);
+            settings.setBorderColorRight(borderColor);
             return this;
         }
 

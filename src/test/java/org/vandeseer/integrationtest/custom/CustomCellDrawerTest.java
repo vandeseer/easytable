@@ -27,7 +27,7 @@ public class CustomCellDrawerTest {
 
     public static final String FILE_NAME = "customCellDrawerNoLombok.pdf";
 
-    private static final TextCellDrawer CUSTOM_DRAWER = new TextCellDrawer() {
+    private static final TextCellDrawer<TextCell> CUSTOM_DRAWER = new TextCellDrawer<TextCell>() {
         @Override
         protected void drawText(DrawingContext drawingContext, PositionedStyledText text) throws IOException {
             System.out.println("My custom drawer is called :-)");

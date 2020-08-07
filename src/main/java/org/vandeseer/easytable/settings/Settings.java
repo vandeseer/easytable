@@ -20,17 +20,20 @@ public class Settings {
     private Float borderWidthLeft;
     private Float borderWidthRight;
 
-    private Color borderColor;
+    private Color borderColorTop;
+    private Color borderColorBottom;
+    private Color borderColorLeft;
+    private Color borderColorRight;
 
-    private Float paddingLeft;
-    private Float paddingRight;
     private Float paddingTop;
     private Float paddingBottom;
+    private Float paddingLeft;
+    private Float paddingRight;
 
-    private BorderStyleInterface borderStyleLeft;
-    private BorderStyleInterface borderStyleRight;
     private BorderStyleInterface borderStyleTop;
     private BorderStyleInterface borderStyleBottom;
+    private BorderStyleInterface borderStyleLeft;
+    private BorderStyleInterface borderStyleRight;
 
     private HorizontalAlignment horizontalAlignment;
     private VerticalAlignment verticalAlignment;
@@ -129,8 +132,20 @@ public class Settings {
             backgroundColor = settings.getBackgroundColor();
         }
 
-        if (getBorderColor() == null && settings.getBorderColor() != null) {
-            borderColor = settings.getBorderColor();
+        if (getBorderColorTop() == null && settings.getBorderColorTop() != null) {
+            borderColorTop = settings.getBorderColorTop();
+        }
+
+        if (getBorderColorBottom() == null && settings.getBorderColorBottom() != null) {
+            borderColorBottom = settings.getBorderColorBottom();
+        }
+
+        if (getBorderColorLeft() == null && settings.getBorderColorLeft() != null) {
+            borderColorLeft = settings.getBorderColorLeft();
+        }
+
+        if (getBorderColorRight() == null && settings.getBorderColorRight() != null) {
+            borderColorRight = settings.getBorderColorRight();
         }
     }
 
