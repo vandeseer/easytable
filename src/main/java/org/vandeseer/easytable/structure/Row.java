@@ -63,6 +63,11 @@ public class Row {
         this.height += (this.height / (heightOfHighestCell - rowSpanSizeDifference)) * rowSpanSizeDifference;
     }
 
+    public Color getBorderColor() {
+        // We could simply return any of the four border color values ...
+        return settings.getBorderColorBottom();
+    }
+
     public static class RowBuilder {
 
         private List<AbstractCell> cells = new ArrayList<>();
@@ -122,7 +127,10 @@ public class Row {
         }
 
         public Row.RowBuilder borderColor(final Color borderColor) {
-            settings.setBorderColor(borderColor);
+            settings.setBorderColorBottom(borderColor);
+            settings.setBorderColorTop(borderColor);
+            settings.setBorderColorLeft(borderColor);
+            settings.setBorderColorRight(borderColor);
             return this;
         }
 
