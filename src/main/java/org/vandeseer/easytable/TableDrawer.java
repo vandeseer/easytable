@@ -50,6 +50,10 @@ public class TableDrawer {
     @Getter
     private float finalY;
 
+    @Setter
+    @Accessors(chain = true, fluent = true)
+    protected boolean compress;
+
     protected final List<BiConsumer<Drawer, DrawingContext>> drawerList = new LinkedList<>();
     {
         this.drawerList.add((drawer, drawingContext) -> {
@@ -130,7 +134,7 @@ public class TableDrawer {
                 pageToDrawOn = document.getPage(document.getNumberOfPages() - 1);
             }
 
-            try (final PDPageContentStream newPageContentStream = new PDPageContentStream(document, pageToDrawOn, APPEND, false)) {
+            try (final PDPageContentStream newPageContentStream = new PDPageContentStream(document, pageToDrawOn, APPEND, compress)) {
                 this.contentStream(newPageContentStream)
                         .page(pageToDrawOn)
                         .drawPage(pageDataQueue.poll());
