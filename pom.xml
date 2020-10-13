@@ -62,7 +62,7 @@
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <!-- TODO Upgrade to JUnit 5? -->
-            <version>4.13</version>
+            <version>4.13.1</version>
             <scope>test</scope>
         </dependency>
         <dependency>
