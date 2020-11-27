@@ -191,6 +191,9 @@ public abstract class AbstractCell {
 
         protected Settings settings = Settings.builder().build();
 
+        // We don't want to expose settings directly!
+        private void settings(Settings settings) {}
+
         public B borderWidth(final float borderWidth) {
             settings.setBorderWidthTop(borderWidth);
             settings.setBorderWidthBottom(borderWidth);
