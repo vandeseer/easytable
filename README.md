@@ -31,7 +31,7 @@ Add this to your `pom.xml`:
     <dependency>
         <groupId>com.github.vandeseer</groupId>
         <artifactId>easytable</artifactId>
-        <version>0.7.2</version>
+        <version>0.8.0</version>
     </dependency>
 
 Or checkout the repository and install it locally with maven (e.g. for the`develop` branch):
@@ -171,20 +171,6 @@ should use `RepeatedHeaderTableDrawer` or `TableDrawer` respectively.
 ### Can I get the `y` coordinate of the end of a drawn table?
 
 Yes. Just use the `.getFinalY()` method. Also see [FinalYTest.java](src/test/java/org/vandeseer/integrationtest/FinalYTest.java).
-
-### Does it work with Java < 8?
-
-Nope. You will need at least Java 8.
-
-### Does it work with PDFBox 1.8.9?
-
-Well, Using it with PDFBox 1.8.9 requires you to check out version
-0.0.7 (tagged as such in git) and install it locally, i.e.:
-
-    git checkout v0.0.7
-    mvn clean install
-
-Note though that the API has changed quite a bit in the meantime ...
 
 ### Cool, I like it, can I buy you a beer?
 
