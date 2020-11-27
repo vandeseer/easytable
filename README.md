@@ -188,4 +188,8 @@ Note though that the API has changed quite a bit in the meantime ...
 
 ### Cool, I like it, can I buy you a beer?
 
-Yes. Or you can upvote this answer on [stackoverflow](https://stackoverflow.com/questions/28059563/how-to-create-table-using-apache-pdfbox/42612456#42612456).
+Yes. Or you can upvote this answer on [stackoverflow](https://stackoverflow.com/questions/28059563/how-to-create-table-using-apache-pdfbox/42612456#42612456). Or:
+
+<a href="https://paypal.me/SDeser/5">
+  <img src="https://raw.githubusercontent.com/stefan-niedermann/paypal-donate-button/master/paypal-donate-button.png" alt="Donate with PayPal" width="300px"/>
+</a>
