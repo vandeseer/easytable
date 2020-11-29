@@ -27,6 +27,9 @@ public class ParagraphCell extends AbstractCell {
     public void setWidth(float width) {
         super.setWidth(width);
 
+        // Clear the paragraph just in case ...
+        while(getParagraph().getWrappedParagraph().removeLast() != null) {}
+
         getParagraph().getProcessables().forEach(
                 processable -> processable.process(getParagraph().getWrappedParagraph(), getSettings())
         );
