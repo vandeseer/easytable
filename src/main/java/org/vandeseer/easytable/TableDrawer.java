@@ -53,7 +53,7 @@ public class TableDrawer {
     @Setter
     @Accessors(chain = true, fluent = true)
     protected boolean compress;
-
+    
     protected final List<BiConsumer<Drawer, DrawingContext>> drawerList = new LinkedList<>();
     {
         this.drawerList.add((drawer, drawingContext) -> {
@@ -84,7 +84,7 @@ public class TableDrawer {
         );
     }
 
-    private Queue<PageData> computeRowsOnPagesWithNewPageStartOf(float yOffsetOnNewPage) {
+    protected Queue<PageData> computeRowsOnPagesWithNewPageStartOf(float yOffsetOnNewPage) {
         final Queue<PageData> dataForPages = new LinkedList<>();
 
         float y = startY;
@@ -125,14 +125,7 @@ public class TableDrawer {
         final Queue<PageData> pageDataQueue = computeRowsOnPagesWithNewPageStartOf(startOnNewPage);
 
         for (int i = 0; !pageDataQueue.isEmpty(); i++) {
-            final PDPage pageToDrawOn;
-
-            if (i > 0 || document.getNumberOfPages() == 0) {
-                pageToDrawOn = pageSupplier.get();
-                document.addPage(pageToDrawOn);
-            } else {
-                pageToDrawOn = document.getPage(document.getNumberOfPages() - 1);
-            }
+            final PDPage pageToDrawOn = determinePageToDraw(i, document, pageSupplier);
 
             try (final PDPageContentStream newPageContentStream = new PDPageContentStream(document, pageToDrawOn, APPEND, compress)) {
                 this.contentStream(newPageContentStream)
@@ -143,6 +136,16 @@ public class TableDrawer {
             startY(pageToDrawOn.getMediaBox().getHeight() - yOffset);
         }
     }
+    
+    protected PDPage determinePageToDraw(int index, PDDocument document, Supplier<PDPage> pageSupplier) {
+		final PDPage pageToDrawOn;
+		if (index > 0 || document.getNumberOfPages() == 0) {
+			pageToDrawOn = pageSupplier.get();
+			document.addPage(pageToDrawOn);
+		} else 
+			pageToDrawOn = document.getPage(document.getNumberOfPages() - 1);	
+		return pageToDrawOn;
+	}
 
     protected void drawWithFunction(PageData pageData, Point2D.Float startingPoint, BiConsumer<Drawer, DrawingContext> consumer) {
         float y = startingPoint.y;
