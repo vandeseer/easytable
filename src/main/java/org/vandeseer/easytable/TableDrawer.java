@@ -1,5 +1,6 @@
 package org.vandeseer.easytable;
 
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
@@ -54,6 +55,13 @@ public class TableDrawer {
     @Accessors(chain = true, fluent = true)
     protected boolean compress;
     
+    @Getter
+	protected PDPage tableStartPage;
+    
+	@Getter (AccessLevel.NONE)
+	protected boolean startTableInNewPage;
+	
+    
     protected final List<BiConsumer<Drawer, DrawingContext>> drawerList = new LinkedList<>();
     {
         this.drawerList.add((drawer, drawingContext) -> {
@@ -96,7 +104,7 @@ public class TableDrawer {
             if (isRowTooHighToBeDrawnOnPage(row, yOffsetOnNewPage)) {
                 throw new RowIsTooHighException("There is a row that is too high to be drawn on a single page");
             }
-
+            
             if (isNotDrawableOnPage(y, row)) {
                 dataForPages.add(new PageData(firstRowOnPage, lastRowOnPage));
                 y = yOffsetOnNewPage;
@@ -116,12 +124,20 @@ public class TableDrawer {
     private boolean isRowTooHighToBeDrawnOnPage(Row row, float yOffsetOnNewPage) {
         return row.getHeight() > (yOffsetOnNewPage - endY);
     }
+    
+	protected void determinePageToStartTable(float yOffsetOnNewPage) {		
+		if (startY - table.getRows().get(0).getHeight() < endY) {
+			startY = yOffsetOnNewPage;
+			startTableInNewPage = true;
+		}
+    }
 
     public void draw(Supplier<PDDocument> documentSupplier, Supplier<PDPage> pageSupplier, float yOffset) throws IOException {
         final PDDocument document = documentSupplier.get();
 
         // We create one throwaway page to be able to calculate the page data upfront
         float startOnNewPage = pageSupplier.get().getMediaBox().getHeight() - yOffset;
+        determinePageToStartTable(startOnNewPage);
         final Queue<PageData> pageDataQueue = computeRowsOnPagesWithNewPageStartOf(startOnNewPage);
 
         for (int i = 0; !pageDataQueue.isEmpty(); i++) {
@@ -139,11 +155,15 @@ public class TableDrawer {
     
     protected PDPage determinePageToDraw(int index, PDDocument document, Supplier<PDPage> pageSupplier) {
 		final PDPage pageToDrawOn;
-		if (index > 0 || document.getNumberOfPages() == 0) {
+		if ((index == 0 && startTableInNewPage) || index > 0 || document.getNumberOfPages() == 0) {
+			startTableInNewPage = false;
 			pageToDrawOn = pageSupplier.get();
 			document.addPage(pageToDrawOn);
 		} else 
-			pageToDrawOn = document.getPage(document.getNumberOfPages() - 1);	
+			pageToDrawOn = document.getPage(document.getNumberOfPages() - 1);
+		
+		if (index == 0)
+			tableStartPage = pageToDrawOn;
 		return pageToDrawOn;
 	}
 
