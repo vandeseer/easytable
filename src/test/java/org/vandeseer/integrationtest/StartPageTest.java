@@ -47,7 +47,6 @@ public class StartPageTest {
 		document = new PDDocument();
 		currentPage = new PDPage(PDRectangle.A4);
 		document.addPage(currentPage);
-		System.out.println(currentPage);
 
 		try (final PDPageContentStream content = new PDPageContentStream(document, currentPage, APPEND, false)) {
 			content.beginText();
@@ -80,9 +79,6 @@ public class StartPageTest {
 
 		document.save(TestUtils.TARGET_FOLDER + "/" + outputFileName);
 		document.close();
-
-		System.out.println(drawer.getTableStartPage());
-		System.out.println(document.getPage(document.getNumberOfPages() - 1));
 
 		final CompareResult compareResult = new PdfComparator<>(getExpectedPdfFor(outputFileName),
 				getActualPdfFor(outputFileName)).compare();
