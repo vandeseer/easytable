@@ -142,6 +142,14 @@ public class TableDrawer {
 
         for (int i = 0; !pageDataQueue.isEmpty(); i++) {
             final PDPage pageToDrawOn = determinePageToDraw(i, document, pageSupplier);
+            
+            if ((i == 0 && startTableInNewPage) || i > 0 || document.getNumberOfPages() == 0) {
+            	startTableInNewPage = false;
+            }
+            
+    		if (i == 0) {
+    			tableStartPage = pageToDrawOn;
+    		}
 
             try (final PDPageContentStream newPageContentStream = new PDPageContentStream(document, pageToDrawOn, APPEND, compress)) {
                 this.contentStream(newPageContentStream)
@@ -155,15 +163,13 @@ public class TableDrawer {
     
     protected PDPage determinePageToDraw(int index, PDDocument document, Supplier<PDPage> pageSupplier) {
 		final PDPage pageToDrawOn;
-		if ((index == 0 && startTableInNewPage) || index > 0 || document.getNumberOfPages() == 0) {
-			startTableInNewPage = false;
+		
+		if ((index == 0 && startTableInNewPage) || index > 0 || document.getNumberOfPages() == 0) {			
 			pageToDrawOn = pageSupplier.get();
 			document.addPage(pageToDrawOn);
-		} else 
+		} else {
 			pageToDrawOn = document.getPage(document.getNumberOfPages() - 1);
-		
-		if (index == 0)
-			tableStartPage = pageToDrawOn;
+		}		
 		return pageToDrawOn;
 	}
 
