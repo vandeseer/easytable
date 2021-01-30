@@ -22,6 +22,8 @@ import static java.util.Comparator.naturalOrder;
 @Setter(AccessLevel.PACKAGE)
 public class Row {
 
+    private static final Float DEFAULT_HEIGHT = 10f;
+
     private Table table;
 
     private List<AbstractCell> cells;
@@ -50,7 +52,7 @@ public class Row {
                     .filter(cell -> cell.getRowSpan() == 1)
                     .map(AbstractCell::getHeight)
                     .max(naturalOrder())
-                    .orElseThrow(RuntimeException::new);
+                    .orElse(DEFAULT_HEIGHT);
         }
 
         return height;
