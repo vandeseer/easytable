@@ -1,15 +1,14 @@
 package org.vandeseer.easytable;
 
-import java.awt.geom.Point2D;
-import java.io.IOException;
-import java.util.function.Supplier;
-
+import lombok.Builder;
+import lombok.experimental.SuperBuilder;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.vandeseer.easytable.structure.Row;
 
-import lombok.Builder;
-import lombok.experimental.SuperBuilder;
+import java.awt.geom.Point2D;
+import java.io.IOException;
+import java.util.function.Supplier;
 
 @SuperBuilder
 public class RepeatedHeaderTableDrawer extends TableDrawer {
@@ -41,7 +40,8 @@ public class RepeatedHeaderTableDrawer extends TableDrawer {
 	@Override
 	protected void determinePageToStartTable(float yOffsetOnNewPage) {
 		float minimumRowsToFitHeight = 0;
-		int minimumRowsToFit = table.getRows().size() > numberOfRowsToRepeat ? numberOfRowsToRepeat + 1
+		int minimumRowsToFit = table.getRows().size() > numberOfRowsToRepeat
+				? numberOfRowsToRepeat + 1
 				: numberOfRowsToRepeat;
 
 		for (final Row row : table.getRows().subList(0, minimumRowsToFit))
