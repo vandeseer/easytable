@@ -54,7 +54,7 @@
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
-            <version>1.18.16</version>
+            <version>1.18.18</version>
             <scope>provided</scope>
         </dependency>
 
@@ -62,7 +62,7 @@
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <!-- TODO Upgrade to JUnit 5? -->
-            <version>4.13.1</version>
+            <version>4.13.2</version>
             <scope>test</scope>
         </dependency>
 
@@ -88,7 +88,7 @@
         <dependency>
             <groupId>de.redsix</groupId>
             <artifactId>pdfcompare</artifactId>
-            <version>1.1.57</version>
+            <version>1.1.58</version>
             <scope>test</scope>
         </dependency>
 
