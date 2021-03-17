@@ -26,7 +26,8 @@ import static junit.framework.TestCase.assertTrue;
 import static org.apache.pdfbox.pdmodel.font.PDType1Font.HELVETICA;
 import static org.vandeseer.TestUtils.getActualPdfFor;
 import static org.vandeseer.TestUtils.getExpectedPdfFor;
-import static org.vandeseer.easytable.settings.VerticalAlignment.MIDDLE;
+import static org.vandeseer.easytable.settings.HorizontalAlignment.*;
+import static org.vandeseer.easytable.settings.VerticalAlignment.*;
 
 public class VerticalTextCellTest {
 
@@ -57,7 +58,8 @@ public class VerticalTextCellTest {
     public void testVerticalTextCell() throws IOException {
         TestUtils.createAndSaveDocumentWithTables(FILE_NAME,
                 createSimpleTable(),
-                createKnowledgeBaseExampleTable()
+                createKnowledgeBaseExampleTable(),
+                createAlignmentTable()
         );
 
 
@@ -147,6 +149,35 @@ public class VerticalTextCellTest {
                         .build());
 
         return tableBuilder.build();
+    }
+
+    private Table createAlignmentTable() {
+        return Table.builder()
+                .addColumnsOfWidth(80, 80, 80)
+                .fontSize(8)
+                .font(ownFont)
+                .addRow(Row.builder()
+                        .height(100f)
+                        .add(VerticalTextCell.builder().borderWidth(1).text("Bottom").verticalAlignment(BOTTOM).build())
+                        .add(VerticalTextCell.builder().borderWidth(1).text("Middle").verticalAlignment(MIDDLE).build())
+                        .add(VerticalTextCell.builder().borderWidth(1).text("Top").verticalAlignment(TOP).build())
+                        .build())
+                .addRow(Row.builder()
+                        .height(100f)
+                        .add(VerticalTextCell.builder().borderWidth(1).text("Left").horizontalAlignment(LEFT).build())
+                        .add(VerticalTextCell.builder().borderWidth(1).text("Center").horizontalAlignment(CENTER).build())
+                        .add(VerticalTextCell.builder().borderWidth(1).text("Right").horizontalAlignment(RIGHT).build())
+                        .build())
+                .addRow(Row.builder()
+                        .height(100f)
+                        .add(VerticalTextCell.builder().borderWidth(1).text("Bottom Left")
+                                .verticalAlignment(BOTTOM).horizontalAlignment(LEFT).build())
+                        .add(VerticalTextCell.builder().borderWidth(1).text("Middle Center")
+                                .verticalAlignment(MIDDLE).horizontalAlignment(CENTER).build())
+                        .add(VerticalTextCell.builder().borderWidth(1).text("Top Right")
+                                .verticalAlignment(TOP).horizontalAlignment(RIGHT).build())
+                        .build())
+                .build();
     }
 
     private AbstractCell createEmptySpacingCell() {
