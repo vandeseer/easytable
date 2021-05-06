@@ -3,8 +3,8 @@
 This is a small project that builds upon
 [Apache's PDFBox](http://pdfbox.apache.org) and should allow you
 to create tables in a fairly simple way.
-It emerged from the need in another project. Therefore it also may miss some
-crucial features. Nevertheless there is:
+It emerged from the need in another project. Therefore, it also may miss some
+crucial features. Nevertheless, there is:
 
 *   setting font, font size, padding, border width on table, row and cell level
 *   setting single cells with bottom-, top-, left- and right-border width separately
@@ -31,7 +31,7 @@ Add this to your `pom.xml`:
     <dependency>
         <groupId>com.github.vandeseer</groupId>
         <artifactId>easytable</artifactId>
-        <version>0.8.2</version>
+        <version>0.8.3</version>
     </dependency>
 
 Or checkout the repository and install it locally with maven (e.g. for the`develop` branch):
@@ -105,6 +105,9 @@ In case you are using maven for instance in your `pom.xml`:
             </exclusion>
         </exclusions>
     </dependency>
+
+Note though that the jitpack.io repository may not provide the package anymore, 
+also see [issue #123](https://github.com/vandeseer/easytable/issues/123)!
 
 ### Setting the Page on `TableDrawer`
 
