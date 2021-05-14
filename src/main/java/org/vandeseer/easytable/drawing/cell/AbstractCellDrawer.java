@@ -64,8 +64,12 @@ public abstract class AbstractCellDrawer<T extends AbstractCell> implements Draw
                 : start.y;
 
         // Handle the cell's borders
-        final Color cellBorderColor = cell.getBorderColor();
-        final Color rowBorderColor = cell.getRow().getSettings().getBorderColor();
+        final Color cellBorderColorTop = cell.getBorderColorTop();
+        final Color cellBorderColorBottom = cell.getBorderColorBottom();
+        final Color cellBorderColorLeft = cell.getBorderColorLeft();
+        final Color cellBorderColorRight = cell.getBorderColorRight();
+
+        final Color rowBorderColor = cell.getRow().getBorderColor();
 
         if (cell.hasBorderTop() || cell.hasBorderBottom()) {
             final float correctionLeft = cell.getBorderWidthLeft() / 2;
@@ -78,7 +82,7 @@ public abstract class AbstractCellDrawer<T extends AbstractCell> implements Draw
                         .endX(start.x + cellWidth + correctionRight)
                         .endY(start.y + rowHeight)
                         .width(cell.getBorderWidthTop())
-                        .color(cellBorderColor)
+                        .color(cellBorderColorTop)
                         .resetColor(rowBorderColor)
                         .borderStyle(cell.getBorderStyleTop())
                         .build()
@@ -92,7 +96,7 @@ public abstract class AbstractCellDrawer<T extends AbstractCell> implements Draw
                         .endX(start.x + cellWidth + correctionRight)
                         .endY(sY)
                         .width(cell.getBorderWidthBottom())
-                        .color(cellBorderColor)
+                        .color(cellBorderColorBottom)
                         .resetColor(rowBorderColor)
                         .borderStyle(cell.getBorderStyleBottom())
                         .build()
@@ -111,7 +115,7 @@ public abstract class AbstractCellDrawer<T extends AbstractCell> implements Draw
                         .endX(start.x)
                         .endY(sY + height + correctionTop)
                         .width(cell.getBorderWidthLeft())
-                        .color(cellBorderColor)
+                        .color(cellBorderColorLeft)
                         .resetColor(rowBorderColor)
                         .borderStyle(cell.getBorderStyleLeft())
                         .build()
@@ -125,7 +129,7 @@ public abstract class AbstractCellDrawer<T extends AbstractCell> implements Draw
                         .endX(start.x + cellWidth)
                         .endY(sY + height + correctionTop)
                         .width(cell.getBorderWidthRight())
-                        .color(cellBorderColor)
+                        .color(cellBorderColorRight)
                         .resetColor(rowBorderColor)
                         .borderStyle(cell.getBorderStyleRight())
                         .build()

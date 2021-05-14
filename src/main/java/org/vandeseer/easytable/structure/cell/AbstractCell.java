@@ -112,6 +112,22 @@ public abstract class AbstractCell {
         return settings.getBorderWidthRight() != null && settings.getBorderWidthRight() > 0;
     }
 
+    public Color getBorderColorTop() {
+        return settings.getBorderColorTop();
+    }
+
+    public Color getBorderColorBottom() {
+        return settings.getBorderColorBottom();
+    }
+
+    public Color getBorderColorLeft() {
+        return settings.getBorderColorLeft();
+    }
+
+    public Color getBorderColorRight() {
+        return settings.getBorderColorRight();
+    }
+
     public BorderStyleInterface getBorderStyleTop() {
         return settings.getBorderStyleTop();
     }
@@ -134,10 +150,6 @@ public abstract class AbstractCell {
 
     public Color getBackgroundColor() {
         return settings.getBackgroundColor();
-    }
-
-    public Color getBorderColor() {
-        return settings.getBorderColor();
     }
 
     public boolean isWordBreak() {
@@ -291,8 +303,31 @@ public abstract class AbstractCell {
             return this.self();
         }
 
+        public B borderColorTop(final Color borderColor) {
+            settings.setBorderColorTop(borderColor);
+            return this.self();
+        }
+
+        public B borderColorBottom(final Color borderColor) {
+            settings.setBorderColorBottom(borderColor);
+            return this.self();
+        }
+
+        public B borderColorLeft(final Color borderColor) {
+            settings.setBorderColorLeft(borderColor);
+            return this.self();
+        }
+
+        public B borderColorRight(final Color borderColor) {
+            settings.setBorderColorRight(borderColor);
+            return this.self();
+        }
+
         public B borderColor(final Color borderColor) {
-            settings.setBorderColor(borderColor);
+            this.borderColorBottom(borderColor)
+                    .borderColorTop(borderColor)
+                    .borderColorLeft(borderColor)
+                    .borderColorRight(borderColor);
             return this.self();
         }
 
