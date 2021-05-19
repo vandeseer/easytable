@@ -74,7 +74,7 @@ public class TextCellDrawer<T extends AbstractTextCell> extends AbstractCellDraw
     }
 
 
-    private float calculateYOffset(PDFont currentFont, int currentFontSize, int lineIndex) {
+    protected float calculateYOffset(PDFont currentFont, int currentFontSize, int lineIndex) {
         return PdfUtil.getFontHeight(currentFont, currentFontSize) // font height
                 + (lineIndex > 0 ? PdfUtil.getFontHeight(currentFont, currentFontSize) * cell.getLineSpacing() : 0f); // line spacing
     }

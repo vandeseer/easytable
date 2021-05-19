@@ -8,7 +8,7 @@ import org.vandeseer.easytable.drawing.cell.ExtendedTextCellDrawer;
 import org.vandeseer.easytable.drawing.cell.TextCellDrawer;
 
 @Getter
-@SuperBuilder
+@SuperBuilder(toBuilder = true)
 public class ExtendedTextCell extends AbstractTextCell
 {
     @NonNull

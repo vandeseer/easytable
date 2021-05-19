@@ -18,6 +18,7 @@ import static org.vandeseer.easytable.util.FloatUtil.isEqualInEpsilon;
 public final class PdfUtil {
 
     public static final String NEW_LINE_REGEX = "\\r?\\n";
+    public static final float subSuperScriptFontRatio = 0.55f;
 
 
     /**
@@ -55,6 +56,76 @@ public final class PdfUtil {
         return widths.stream().reduce(0.0f, Float::sum);
     }
 
+    /**
+     * Computes the width of an extended string (in points). Extended strings currently only support superscripts
+     *
+     * @param text      Text
+     * @param font      Font of Text
+     * @param fontSize  FontSize of String
+     * @return Width (in points)
+     */
+    public static float getExtendedStringWidth(final String text, final PDFont font, final int fontSize)
+    {
+        return Arrays.stream(text.split(NEW_LINE_REGEX))
+                .max(Comparator.comparing(String::length))
+                .map(x -> getWidthOfExtendedStringWithoutNewlines(x, font, fontSize))
+                .orElseThrow(CouldNotDetermineStringWidthException::new);
+    }
+
+    @SneakyThrows
+    private static float getWidthOfExtendedStringWithoutNewlines(String text, PDFont font, int fontSize)
+    {
+        boolean flag = false;
+        float trueFontSize = fontSize;
+
+        final List<String> codePointsAsString = text.codePoints()
+                .mapToObj(codePoint -> new String(new int[]{codePoint}, 0, 1))
+                .collect(Collectors.toList());
+
+        List<Float> widths = new ArrayList<>();
+
+        for (final String codepoint : codePointsAsString)
+        {
+            if (isSuperScript(codepoint.charAt(0)) || isSubScript(codepoint.charAt(0)))
+            {
+                flag = true;
+                continue;
+            }
+            else if (flag)
+            {
+                trueFontSize = fontSize * subSuperScriptFontRatio;
+                flag = false;
+            }
+
+            try
+            {
+                widths.add(font.getStringWidth(codepoint) * trueFontSize / 1000F);
+            }
+            catch (final IllegalArgumentException e)
+            {
+                widths.add(font.getStringWidth("–") * trueFontSize / 1000F);
+            }
+
+            trueFontSize = fontSize;
+        }
+
+        return widths.stream().reduce(0.0f, Float::sum);
+    }
+
+    public static boolean isSuperScript(char character)
+    {
+        if (character == '^')
+            return (true);
+        return (false);
+    }
+
+    public static boolean isSubScript(char character)
+    {
+        if (character == '|')
+            return (true);
+        return (false);
+    }
+
 
     /**
      * Computes the height of a font.
@@ -81,6 +152,21 @@ public final class PdfUtil {
 
         for (final String line : text.split(NEW_LINE_REGEX)) {
             if (PdfUtil.doesTextLineFit(line, font, fontSize, maxWidth)) {
+                result.add(line);
+            } else {
+                result.addAll(PdfUtil.wrapLine(line, font, fontSize, maxWidth));
+            }
+        }
+
+        return result;
+    }
+
+    public static List<String> getOptimalExtendedTextBreakLines(final String text, final PDFont font, final int fontSize, final float maxWidth)
+    {
+        final List<String> result = new ArrayList<>();
+
+        for (final String line : text.split(NEW_LINE_REGEX)) {
+            if (PdfUtil.doesExtendedTextLineFit(line, font, fontSize, maxWidth)) {
                 result.add(line);
             } else {
                 result.addAll(PdfUtil.wrapLine(line, font, fontSize, maxWidth));
@@ -175,6 +261,18 @@ public final class PdfUtil {
         // Hence we use a delta here that is sufficient for our purposes.
 
         //noinspection SuspiciousNameCombination
+        if (isEqualInEpsilon(stringWidth, maxWidth)) return true; // we consider the two numbers being equal
+
+        return maxWidth > stringWidth;
+    }
+
+    private static boolean doesExtendedTextLineFit(final String textLine, final PDFont font, final int fontSize, final float maxWidth)
+    {
+        return doesExtendedTextLineFit(PdfUtil.getExtendedStringWidth(textLine, font, fontSize), maxWidth);
+    }
+
+    private static boolean doesExtendedTextLineFit(final float stringWidth, final float maxWidth)
+    {
         if (isEqualInEpsilon(stringWidth, maxWidth)) return true; // we consider the two numbers being equal
 
         return maxWidth > stringWidth;
