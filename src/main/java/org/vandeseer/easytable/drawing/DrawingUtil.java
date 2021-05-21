@@ -74,6 +74,7 @@ public class DrawingUtil {
         }
 
         contentStream.endText();
+        contentStream.setTextRise(0);
         contentStream.setCharacterSpacing(0);
     }
 
