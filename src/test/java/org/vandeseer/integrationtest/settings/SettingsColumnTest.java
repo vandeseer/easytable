@@ -28,7 +28,7 @@ public class SettingsColumnTest {
     public void differentSettings() throws IOException {
         final Table.TableBuilder tableBuilder = Table.builder()
                 .addColumn(Column.builder().width(100).backgroundColor(PURPLE_LIGHT_1).build())
-                .addColumn(Column.builder().width(100).build())
+                .addColumn(Column.builder().width(100).fontSize(13).build())
                 .addColumn(Column.builder().width(100).backgroundColor(PURPLE_LIGHT_2).build())
                 .fontSize(8)
                 .font(HELVETICA)
@@ -43,6 +43,15 @@ public class SettingsColumnTest {
                             .build()
             );
         }
+
+        tableBuilder.addRow(
+                Row.builder()
+                        .add(TextCell.builder().text("abcd").build())
+                        .add(TextCell.builder().text("abcd").build())
+                        .add(TextCell.builder().text("abcd").build())
+                        .backgroundColor(Color.GREEN)
+                        .build()
+        );
 
         TestUtils.createAndSaveDocumentWithTable(FILE_NAME, tableBuilder.build());
 
