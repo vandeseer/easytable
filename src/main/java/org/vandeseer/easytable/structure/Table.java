@@ -144,6 +144,13 @@ public class Table {
             return this;
         }
 
+        public TableBuilder addColumn(Column column) {
+            numberOfColumns++;
+            columns.add(column);
+            this.width += column.getWidth();
+            return this;
+        }
+
         public TableBuilder font(final PDFont font) {
             settings.setFont(font);
             return this;
@@ -243,18 +250,19 @@ public class Table {
                 int columnIndex = 0;
                 for (AbstractCell cell : row.getCells()) {
 
-                    // Fill up the settings of the cell that are not set there directly
-                    cell.getSettings().fillingMergeBy(row.getSettings());
-
-                    cell.setRow(row);
-
                     // We need to take into account row spanning ...
                     while (table.isRowSpanAt(rowIndex, columnIndex)) {
                         columnIndex++;
                     }
 
+                    // Settings precedence: first row, then column
                     Column column = table.getColumns().get(columnIndex);
                     cell.setColumn(column);
+                    cell.getSettings().fillingMergeBy(column.getSettings());
+
+                    // Fill up the settings of the cell that are not set there directly
+                    cell.getSettings().fillingMergeBy(row.getSettings());
+                    cell.setRow(row);
 
                     cell.setWidth(getAvailableCellWidthRespectingSpan(columnIndex, cell.getColSpan()));
 
