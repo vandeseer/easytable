@@ -4,6 +4,7 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 import org.apache.pdfbox.pdmodel.font.PDFont;
+import org.vandeseer.easytable.settings.BorderStyleInterface;
 import org.vandeseer.easytable.settings.HorizontalAlignment;
 import org.vandeseer.easytable.settings.Settings;
 import org.vandeseer.easytable.settings.VerticalAlignment;
@@ -28,6 +29,7 @@ public class Column {
             throw new IllegalArgumentException("Column width must be non-negative");
         }
         this.width = width;
+        this.settings = Settings.builder().build();
     }
 
     private Column(final float width, final Settings settings) {
@@ -89,29 +91,43 @@ public class Column {
             return this;
         }
 
-//        public ColumnBuilder borderWidth(final float borderWidth) {
-////            settings.setBorderWidthTop(borderWidth);
-////            settings.setBorderWidthBottom(borderWidth);
-//            settings.setBorderWidthLeft(borderWidth);
-//            settings.setBorderWidthRight(borderWidth);
-//            return this;
-//        }
+        public ColumnBuilder borderWidth(final float borderWidth) {
+            settings.setBorderWidthLeft(borderWidth);
+            settings.setBorderWidthRight(borderWidth);
+            settings.setBorderWidthTop(borderWidth);
+            settings.setBorderWidthBottom(borderWidth);
+            return this;
+        }
 
-//        public ColumnBuilder borderStyle(final BorderStyleInterface borderStyle) {
-////            settings.setBorderStyleTop(borderStyle);
-////            settings.setBorderStyleBottom(borderStyle);
-//            settings.setBorderStyleLeft(borderStyle);
-//            settings.setBorderStyleRight(borderStyle);
-//            return this;
-//        }
+        public ColumnBuilder borderWidthLeft(final float borderWidth) {
+            settings.setBorderWidthLeft(borderWidth);
+            return this;
+        }
 
-//        public ColumnBuilder borderColor(final Color borderColor) {
-////            settings.setBorderColorBottom(borderColor);
-////            settings.setBorderColorTop(borderColor);
-//            settings.setBorderColorLeft(borderColor);
-//            settings.setBorderColorRight(borderColor);
-//            return this;
-//        }
+        public ColumnBuilder borderWidthRight(final float borderWidth) {
+            settings.setBorderWidthRight(borderWidth);
+            return this;
+        }
+
+        public ColumnBuilder borderStyleLeft(final BorderStyleInterface borderStyle) {
+            settings.setBorderStyleLeft(borderStyle);
+            return this;
+        }
+
+        public ColumnBuilder borderStyleRight(final BorderStyleInterface borderStyle) {
+            settings.setBorderStyleRight(borderStyle);
+            return this;
+        }
+
+        public ColumnBuilder borderColorLeft(final Color borderColor) {
+            settings.setBorderColorLeft(borderColor);
+            return this;
+        }
+
+        public ColumnBuilder borderColorRight(final Color borderColor) {
+            settings.setBorderColorRight(borderColor);
+            return this;
+        }
 
         public ColumnBuilder horizontalAlignment(HorizontalAlignment alignment) {
             settings.setHorizontalAlignment(alignment);

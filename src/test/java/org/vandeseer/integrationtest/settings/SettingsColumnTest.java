@@ -27,7 +27,14 @@ public class SettingsColumnTest {
     @Test
     public void differentSettings() throws IOException {
         final Table.TableBuilder tableBuilder = Table.builder()
-                .addColumn(Column.builder().width(100).backgroundColor(PURPLE_LIGHT_1).build())
+                .addColumn(
+                        Column.builder()
+                                .width(100)
+                                .borderWidthLeft(2)
+                                .borderColorLeft(Color.BLUE)
+                                .backgroundColor(PURPLE_LIGHT_1)
+                                .build()
+                )
                 .addColumn(Column.builder().width(100).fontSize(13).build())
                 .addColumn(Column.builder().width(100).backgroundColor(PURPLE_LIGHT_2).build())
                 .fontSize(8)
