@@ -97,7 +97,7 @@ In case you are using maven for instance in your `pom.xml`:
     <dependency>
         <groupId>com.github.ralfstuckert.pdfbox-layout</groupId>
         <artifactId>pdfbox2-layout</artifactId>
-        <version>1.0.0</version>
+        <version>1.0.1</version>
         <exclusions>
             <exclusion>
                 <groupId>org.apache.pdfbox</groupId>
@@ -105,9 +105,6 @@ In case you are using maven for instance in your `pom.xml`:
             </exclusion>
         </exclusions>
     </dependency>
-
-Note though that the jitpack.io repository may not provide the package anymore, 
-also see [issue #123](https://github.com/vandeseer/easytable/issues/123)!
 
 ### Setting the Page on `TableDrawer`
 
