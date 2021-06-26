@@ -6,6 +6,7 @@ import java.awt.*;
 import java.io.IOException;
 
 import static org.vandeseer.easytable.settings.BorderStyle.SOLID;
+import static org.vandeseer.easytable.util.PdfUtil.*;
 
 public class DrawingUtil {
 
@@ -19,6 +20,61 @@ public class DrawingUtil {
         contentStream.newLineAtOffset(styledText.getX(), styledText.getY());
         contentStream.showText(styledText.getText());
         contentStream.endText();
+        contentStream.setCharacterSpacing(0);
+    }
+
+    public static void drawExtendedText(PDPageContentStream contentStream, PositionedStyledText styledText) throws IOException
+    {
+        char[] text = styledText.getText().toCharArray();
+        boolean isSuper = false;
+        boolean isSub = false;
+
+        float fontRaisePercentage = 1/3f;
+        float fontLowerPercentage = 0.05f;
+
+        contentStream.beginText();
+        contentStream.setNonStrokingColor(styledText.getColor());
+        contentStream.setFont(styledText.getFont(), styledText.getFontSize());
+        contentStream.newLineAtOffset(styledText.getX(), styledText.getY());
+
+        for (char curr : text)
+        {
+            if(isSuperScript(curr))
+            {
+                isSuper = true;
+                continue;
+            }
+            else if (isSubScript(curr))
+            {
+                isSub = true;
+                continue;
+            }
+
+            if(isSuper)
+            {
+                contentStream.setFont(styledText.getFont(), styledText.getFontSize() * subSuperScriptFontRatio);
+                contentStream.setTextRise(styledText.getFontSize() * fontRaisePercentage);
+
+                isSuper = false;
+            }
+            else if (isSub)
+            {
+                contentStream.setFont(styledText.getFont(), styledText.getFontSize() * subSuperScriptFontRatio);
+                contentStream.setTextRise(-styledText.getFontSize() * fontLowerPercentage);
+
+                isSub = false;
+            }
+            else
+            {
+                contentStream.setFont(styledText.getFont(), styledText.getFontSize());
+                contentStream.setTextRise(0);
+            }
+
+            contentStream.showText(curr + "");
+        }
+
+        contentStream.endText();
+        contentStream.setTextRise(0);
         contentStream.setCharacterSpacing(0);
     }
 
