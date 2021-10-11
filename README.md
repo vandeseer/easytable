@@ -6,23 +6,25 @@ to create tables in a fairly simple way.
 It emerged from the need in another project. Therefore, it also may miss some
 crucial features. Nevertheless, there is:
 
-*   setting font, font size, padding, border width on table, row and cell level
-*   setting single cells with bottom-, top-, left- and right-border width separately
-*   background color on table, row and cell level
-*   padding (top, bottom, left, right) on table, row and cell level
-*   border color and style (on table, row or cell level)
-*   support for text alignment (right, left, center, justified)
-*   vertical text alignment (top, middle, bottom)
-*   column spanning and row spanning 
-*   line breaking and line spacing
-*   images in cells
-*   experimental: vertical text, [links, markup and paragraphs within cells](#paragraph-cells)
+* setting font and font size, table, row, column and cell level
+* line breaking and line spacing
+* background color and style on table, row, column and cell level
+* padding (top, bottom, left, right) on table, row and cell level
+* border color, width and style (on table, row or cell level)
+* support for text alignment (right, left, center, justified)
+* vertical text alignment (top, middle, bottom)
+* column spanning and row spanning 
+* images in cells
+* allowing for a lot of customizations
+* experimental: vertical text, [links, markup and paragraphs within cells](#paragraph-cells), drawing a large table's 
+overflow on the same page
 
 One can also override classes that are responsible for table/cell drawing, i.e. 
 their drawing behaviour can be customized to a pretty high extent.
 
 It is also possible to draw a table over multiple pages (even with the 
-header row being repeated on every new page).
+header row being repeated on every new page) or to draw a large table's overflow 
+next to the already existing table on the same page (see below for examples).
 
 ## Installation
 
@@ -58,6 +60,10 @@ The last one illustrates the use of vertical text in text cells. The code for
 it can be found [here](src/test/java/org/vandeseer/integrationtest/VerticalTextCellTest.java):
 
 ![easytable table](doc/example4.png)
+
+Drawing the overflow of a large table on the same page is also [possible](src/test/java/org/vandeseer/integrationtest/OverflowOnSamePageTableDrawerTest.java): 
+
+![easytable table](doc/example_overflow_on_same_page.png)
 
 If you run the tests with `mvn clean test` there also some PDF documents created which you can find in the `target` folder.
 The corresponding sources (in order to understand how to use the code) can be found in the test package.
