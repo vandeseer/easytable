@@ -33,7 +33,7 @@ Add this to your `pom.xml`:
     <dependency>
         <groupId>com.github.vandeseer</groupId>
         <artifactId>easytable</artifactId>
-        <version>0.8.5</version>
+        <version>0.8.6-SNAPSHOT</version>
     </dependency>
 
 Or checkout the repository and install it locally with maven (e.g. for the`develop` branch):
