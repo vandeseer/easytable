@@ -74,6 +74,7 @@ public class CustomCellWithCustomDrawerUsingLombokTest {
 
     private static Table createSimpleTable() {
         return Table.builder()
+                .backwardsCompatibleFontHeight(true)
                 .addColumnsOfWidth(100, 100, 100, 100)
                 .fontSize(8)
                 .font(HELVETICA)

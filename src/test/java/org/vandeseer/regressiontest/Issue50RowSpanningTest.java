@@ -40,6 +40,7 @@ public class Issue50RowSpanningTest {
 
     private Table createTable() {
         final Table.TableBuilder tableBuilder = Table.builder()
+                .backwardsCompatibleFontHeight(true)
                 .addColumnsOfWidth(35, 92, 50, 50, 72, 240)
                 .fontSize(8)
                 .font(HELVETICA)

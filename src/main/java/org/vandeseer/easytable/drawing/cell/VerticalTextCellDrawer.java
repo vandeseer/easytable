@@ -69,10 +69,11 @@ public class VerticalTextCellDrawer extends AbstractCellDrawer<VerticalTextCell>
             yOffset += (height - textHeight - cell.getPaddingTop() - cell.getPaddingBottom());
         }
 
-        float xOffset = startX + cell.getPaddingLeft() - PdfUtil.getFontHeight(currentFont, currentFontSize);
+        float fontHeight = PdfUtil.getFontHeight(currentFont, currentFontSize, cell.getSettings().isBackwardsCompatibleFontHeight());
+        float xOffset = startX + cell.getPaddingLeft() - fontHeight;
 
-        float textWidth = (PdfUtil.getFontHeight(currentFont, currentFontSize) // font height
-                + PdfUtil.getFontHeight(currentFont, currentFontSize) * cell.getLineSpacing()) * lines.size(); // line spacing;
+        float textWidth = (fontHeight // font height
+                + fontHeight * cell.getLineSpacing()) * lines.size(); // line spacing;
 
         if (cell.isHorizontallyAligned(CENTER)) {
             xOffset = xOffset + ((cell.getWidth() - cell.getPaddingRight() - cell.getPaddingLeft()) / 2 - textWidth / 2);
@@ -84,8 +85,7 @@ public class VerticalTextCellDrawer extends AbstractCellDrawer<VerticalTextCell>
             String line = lines.get(i);
 
             xOffset += (
-                    PdfUtil.getFontHeight(currentFont, currentFontSize) // font height
-                            + (i > 0 ? PdfUtil.getFontHeight(currentFont, currentFontSize) * cell.getLineSpacing() : 0f) // line spacing
+                    fontHeight + (i > 0 ? fontHeight * cell.getLineSpacing() : 0f) // line spacing
             );
 
             drawText(line, currentFont, currentFontSize, currentTextColor, xOffset, yOffset, drawingContext.getContentStream());

@@ -19,6 +19,7 @@ public class Issue28InfiniteLoopTest {
     @Test(expected = RowIsTooHighException.class)
     public void createTwoPageTable() throws IOException {
         final Table.TableBuilder tableBuilder = Table.builder()
+                .backwardsCompatibleFontHeight(true)
                 .addColumnOfWidth(200)
                 .addColumnOfWidth(200);
 

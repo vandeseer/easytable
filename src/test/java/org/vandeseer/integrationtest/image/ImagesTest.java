@@ -25,6 +25,7 @@ public class ImagesTest {
     public void testImage() throws Exception {
 
         final Table.TableBuilder tableBuilder = Table.builder()
+                .backwardsCompatibleFontHeight(true)
                 .addColumnsOfWidth(200, 200);
 
         final byte[] bytes1 = IOUtils.toByteArray(getClass().getClassLoader().getResourceAsStream("pic1.jpg"));

@@ -33,6 +33,7 @@ public class SettingsTest {
     @Test
     public void differentSettings() throws IOException {
         final Table.TableBuilder tableBuilder = Table.builder()
+                .backwardsCompatibleFontHeight(true)
                 .addColumnsOfWidth(170, 170, 150)
                 .fontSize(8)
                 .font(HELVETICA)

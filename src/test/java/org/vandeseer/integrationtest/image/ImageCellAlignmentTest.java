@@ -45,6 +45,7 @@ public class ImageCellAlignmentTest {
         float columnWidth = userPageWidth / 8.0F;
 
         Table.TableBuilder tableBuilder = Table.builder()
+                .backwardsCompatibleFontHeight(true)
                 .addColumnsOfWidth(columnWidth, columnWidth, columnWidth, columnWidth,
                         columnWidth, columnWidth, columnWidth, columnWidth)
                 .fontSize(8)

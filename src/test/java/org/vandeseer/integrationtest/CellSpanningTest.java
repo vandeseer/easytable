@@ -68,6 +68,7 @@ public class CellSpanningTest {
 
     private Table createTableWithCellColSpanning() {
         final Table.TableBuilder tableBuilder = Table.builder()
+                .backwardsCompatibleFontHeight(true)
                 .addColumnsOfWidth(300, 120, 70)
                 .fontSize(8)
                 .font(HELVETICA);
@@ -97,6 +98,7 @@ public class CellSpanningTest {
 
     private Table createTableWithCellRowSpanning() {
         final Table.TableBuilder tableBuilder = Table.builder()
+                .backwardsCompatibleFontHeight(true)
                 .addColumnsOfWidth(300, 120, 70)
                 .fontSize(8)
                 .font(HELVETICA);
@@ -125,8 +127,9 @@ public class CellSpanningTest {
         return tableBuilder.build();
     }
 
-    private Table createTableWithTwoCellRowSpannings() throws Exception {
+    private Table createTableWithTwoCellRowSpannings() {
         final Table.TableBuilder tableBuilder = Table.builder()
+                .backwardsCompatibleFontHeight(true)
                 .addColumnsOfWidth(300, 120, 70)
                 .fontSize(8)
                 .font(HELVETICA);
@@ -162,6 +165,7 @@ public class CellSpanningTest {
 
     private Table createTableWithSeveralRowSpannings() {
         final Table.TableBuilder tableBuilder = Table.builder()
+                .backwardsCompatibleFontHeight(true)
                 .addColumnsOfWidth(300, 120, 70)
                 .fontSize(8)
                 .font(HELVETICA);
@@ -201,6 +205,7 @@ public class CellSpanningTest {
 
     private Table createTableWithDifferentAlignmentsInSpannedCells() {
         final Table.TableBuilder tableBuilder = Table.builder()
+                .backwardsCompatibleFontHeight(true)
                 .addColumnsOfWidth(300, 120, 70)
                 .fontSize(8)
                 .font(HELVETICA);
@@ -241,6 +246,7 @@ public class CellSpanningTest {
 
     private Table createTableWithSeveralRowAndCellSpannings() {
         final Table.TableBuilder tableBuilder = Table.builder()
+                .backwardsCompatibleFontHeight(true)
                 .addColumnsOfWidth(200, 120, 70, 100)
                 .fontSize(8)
                 .font(HELVETICA);
@@ -275,6 +281,7 @@ public class CellSpanningTest {
 
     private Table createTableWithImages() throws IOException {
         final Table.TableBuilder tableBuilder = Table.builder()
+                .backwardsCompatibleFontHeight(true)
                 .addColumnsOfWidth(200, 120, 70, 100)
                 .horizontalAlignment(CENTER)
                 .verticalAlignment(MIDDLE)
@@ -311,6 +318,7 @@ public class CellSpanningTest {
 
     private Table createVeryLargeTable() {
         final Table.TableBuilder tableBuilder = Table.builder()
+                .backwardsCompatibleFontHeight(true)
                 .addColumnsOfWidth(300, 120, 70)
                 .fontSize(12)
                 .font(HELVETICA);

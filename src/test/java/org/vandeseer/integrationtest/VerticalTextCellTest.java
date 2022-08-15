@@ -69,6 +69,7 @@ public class VerticalTextCellTest {
 
     private static Table createSimpleTable() {
         final Table.TableBuilder tableBuilder = Table.builder()
+                .backwardsCompatibleFontHeight(true)
                 .addColumnsOfWidth(100, 100, 100, 100)
                 .fontSize(8)
                 .font(HELVETICA);
@@ -93,6 +94,7 @@ public class VerticalTextCellTest {
     private Table createKnowledgeBaseExampleTable() {
 
         final Table.TableBuilder tableBuilder = Table.builder()
+                .backwardsCompatibleFontHeight(true)
                 .addColumnsOfWidth(200, 20, 20, 20, 20, 20)
                 .fontSize(8)
                 .font(ownFont)
@@ -153,6 +155,7 @@ public class VerticalTextCellTest {
 
     private Table createAlignmentTable() {
         return Table.builder()
+                .backwardsCompatibleFontHeight(true)
                 .addColumnsOfWidth(80, 80, 80)
                 .fontSize(8)
                 .font(ownFont)

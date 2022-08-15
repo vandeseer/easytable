@@ -1,14 +1,7 @@
 package org.vandeseer.integrationtest;
 
-import static junit.framework.TestCase.assertTrue;
-import static junit.framework.TestCase.assertEquals;
-import static org.apache.pdfbox.pdmodel.PDPageContentStream.AppendMode.APPEND;
-import static org.vandeseer.TestUtils.getActualPdfFor;
-import static org.vandeseer.TestUtils.getExpectedPdfFor;
-import static org.apache.pdfbox.pdmodel.font.PDType1Font.HELVETICA;
-
-import java.io.IOException;
-
+import de.redsix.pdfcompare.CompareResult;
+import de.redsix.pdfcompare.PdfComparator;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
@@ -23,8 +16,14 @@ import org.vandeseer.easytable.structure.Table;
 import org.vandeseer.easytable.structure.Table.TableBuilder;
 import org.vandeseer.easytable.structure.cell.TextCell;
 
-import de.redsix.pdfcompare.CompareResult;
-import de.redsix.pdfcompare.PdfComparator;
+import java.io.IOException;
+
+import static junit.framework.TestCase.assertEquals;
+import static junit.framework.TestCase.assertTrue;
+import static org.apache.pdfbox.pdmodel.PDPageContentStream.AppendMode.APPEND;
+import static org.apache.pdfbox.pdmodel.font.PDType1Font.HELVETICA;
+import static org.vandeseer.TestUtils.getActualPdfFor;
+import static org.vandeseer.TestUtils.getExpectedPdfFor;
 
 public class StartPageTest {
 
@@ -57,6 +56,7 @@ public class StartPageTest {
 			content.close();
 
 			TableBuilder builder = Table.builder().addColumnsOfWidth(150, 150, 150).fontSize(25).font(HELVETICA)
+					.backwardsCompatibleFontHeight(true)
 					.padding(5).borderWidth(1)
 					.addRow(Row.builder().add(TextCell.builder().text("Header").build())
 							.add(TextCell.builder().text("of").build()).add(TextCell.builder().text("Table").build())

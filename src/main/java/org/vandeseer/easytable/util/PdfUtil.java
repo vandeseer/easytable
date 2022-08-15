@@ -5,6 +5,7 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import lombok.SneakyThrows;
 import org.apache.pdfbox.pdmodel.font.PDFont;
+import org.apache.pdfbox.pdmodel.font.PDFontDescriptor;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -63,8 +64,17 @@ public final class PdfUtil {
      * @param fontSize FontSize
      * @return Height of font
      */
-    public static float getFontHeight(final PDFont font, final int fontSize) {
-        return font.getFontDescriptor().getCapHeight() * fontSize / 1000F;
+    static public float getFontHeight(final PDFont font, final int fontSize) {
+        return getFontHeight(font, fontSize, false);
+    }
+
+    static public float getFontHeight(final PDFont font, final int fontSize, boolean backwardsCompatible) {
+        if (backwardsCompatible) {
+            return font.getFontDescriptor().getCapHeight() * fontSize / 1000F;
+        } else {
+            final PDFontDescriptor fontDescriptor = font.getFontDescriptor();
+            return (fontDescriptor.getFontBoundingBox().getHeight() - fontDescriptor.getLeading()) / 1000.0f * fontSize;
+        }
     }
 
     /**

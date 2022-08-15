@@ -118,6 +118,7 @@ public class TableOverSeveralPagesTest {
 
     private Table createTableWithThreeHeaderRows() {
         final Table.TableBuilder tableBuilder = Table.builder()
+                .backwardsCompatibleFontHeight(true)
                 .addColumnsOfWidth(200, 200);
 
         tableBuilder
@@ -184,6 +185,7 @@ public class TableOverSeveralPagesTest {
 
     private Table createTable() {
         final Table.TableBuilder tableBuilder = Table.builder()
+                .backwardsCompatibleFontHeight(true)
                 .addColumnOfWidth(200)
                 .addColumnOfWidth(200);
 

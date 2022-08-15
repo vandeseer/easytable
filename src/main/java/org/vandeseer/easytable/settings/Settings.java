@@ -44,6 +44,17 @@ public class Settings {
     @Setter(AccessLevel.NONE)
     private Boolean wordBreak;
 
+    @Setter(AccessLevel.NONE)
+    private Boolean backwardsCompatibleFontHeight;
+
+    public boolean isBackwardsCompatibleFontHeight() {
+        return backwardsCompatibleFontHeight;
+    }
+
+    public void setBackwardsCompatibleFontHeight(boolean value) {
+        this.backwardsCompatibleFontHeight = value;
+    }
+
     public boolean isWordBreak() {
         return wordBreak != null && wordBreak;
     }
@@ -60,12 +71,20 @@ public class Settings {
         fillingMergeColorSettings(settings);
         fillingMergeAlignmentSettings(settings);
         fillingMergeWordBreakSetting(settings);
+        fillingMergeBackwardsCompatibleFontHeightSetting(settings);
     }
 
     private void fillingMergeWordBreakSetting(Settings settings) {
         // Note that we use the boxed Boolean only here internally!
         if (wordBreak == null && settings.wordBreak != null) {
             wordBreak = settings.getWordBreak();
+        }
+    }
+
+    private void fillingMergeBackwardsCompatibleFontHeightSetting(Settings settings) {
+        // Note that we use the boxed Boolean only here internally!
+        if (backwardsCompatibleFontHeight == null && settings.backwardsCompatibleFontHeight != null) {
+            backwardsCompatibleFontHeight = settings.isBackwardsCompatibleFontHeight();
         }
     }
 

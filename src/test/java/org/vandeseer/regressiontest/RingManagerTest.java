@@ -68,6 +68,7 @@ public class RingManagerTest {
 
     private Table getRingManagerTable() {
         final TableBuilder tableBuilder = Table.builder()
+                .backwardsCompatibleFontHeight(true)
                 .addColumnsOfWidth(26, 70, 390)
                 .fontSize(9)
                 .borderColor(Color.GRAY)

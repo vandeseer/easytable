@@ -1,13 +1,7 @@
 package org.vandeseer.regressiontest;
 
-import static junit.framework.TestCase.assertTrue;
-import static org.apache.pdfbox.pdmodel.PDPageContentStream.AppendMode.APPEND;
-import static org.vandeseer.TestUtils.getActualPdfFor;
-import static org.vandeseer.TestUtils.getExpectedPdfFor;
-
-import java.awt.Color;
-import java.io.IOException;
-
+import de.redsix.pdfcompare.CompareResult;
+import de.redsix.pdfcompare.PdfComparator;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
@@ -24,8 +18,13 @@ import org.vandeseer.easytable.structure.Table;
 import org.vandeseer.easytable.structure.Table.TableBuilder;
 import org.vandeseer.easytable.structure.cell.TextCell;
 
-import de.redsix.pdfcompare.CompareResult;
-import de.redsix.pdfcompare.PdfComparator;
+import java.awt.*;
+import java.io.IOException;
+
+import static junit.framework.TestCase.assertTrue;
+import static org.apache.pdfbox.pdmodel.PDPageContentStream.AppendMode.APPEND;
+import static org.vandeseer.TestUtils.getActualPdfFor;
+import static org.vandeseer.TestUtils.getExpectedPdfFor;
 
 public class Issue111RepeatHeaderTableTest {
 
@@ -59,6 +58,7 @@ public class Issue111RepeatHeaderTableTest {
 		content.close();
 
 		TableBuilder builder = Table.builder().addColumnsOfWidth(100, 400).borderColor(Color.LIGHT_GRAY).borderWidth(1)
+				.backwardsCompatibleFontHeight(true)
 				.font(PDType1Font.TIMES_ROMAN).fontSize(13).verticalAlignment(VerticalAlignment.TOP)
 				.horizontalAlignment(HorizontalAlignment.LEFT).padding(5)
 

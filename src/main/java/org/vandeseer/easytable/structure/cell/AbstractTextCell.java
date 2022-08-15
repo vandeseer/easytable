@@ -54,7 +54,7 @@ public abstract class AbstractTextCell extends AbstractCell {
             return this.textHeight;
         }
 
-        this.textHeight = PdfUtil.getFontHeight(getFont(), getFontSize());
+        this.textHeight = PdfUtil.getFontHeight(getFont(), getFontSize(), settings.isBackwardsCompatibleFontHeight());
 
         if (settings.isWordBreak()) {
 

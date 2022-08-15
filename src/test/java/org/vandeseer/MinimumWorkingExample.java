@@ -26,6 +26,7 @@ public class MinimumWorkingExample {
 
                 // Build the table
                 Table myTable = Table.builder()
+                        .backwardsCompatibleFontHeight(true)
                         .addColumnsOfWidth(200, 200)
                         .padding(2)
                         .addRow(Row.builder()

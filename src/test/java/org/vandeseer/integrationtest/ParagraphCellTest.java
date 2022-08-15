@@ -42,6 +42,7 @@ public class ParagraphCellTest {
 
     private Table createParagraphTable() {
         return Table.builder()
+                .backwardsCompatibleFontHeight(true)
                 .addColumnsOfWidth(200, 200)
                 .borderColor(WHITE)
                 .fontSize(8)
@@ -92,6 +93,7 @@ public class ParagraphCellTest {
 
     private static Table createSimpleTable() {
         return Table.builder()
+                .backwardsCompatibleFontHeight(true)
                 .addColumnsOfWidth(120, 120, 120, 120)
                 .fontSize(8)
                 .font(HELVETICA)
