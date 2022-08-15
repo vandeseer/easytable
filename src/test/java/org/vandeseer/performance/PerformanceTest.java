@@ -48,6 +48,7 @@ public class PerformanceTest {
 
 		try (PDDocument document = new PDDocument()) {
 			Table.TableBuilder tableBuilder = Table.builder()
+					.backwardsCompatibleFontHeight(true)
 					.addColumnsOfWidth(WIDTH)
 					.font(PDType1Font.HELVETICA)
 					.fontSize(10);

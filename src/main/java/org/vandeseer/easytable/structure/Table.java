@@ -70,6 +70,7 @@ public class Table {
                 .paddingLeft(DEFAULT_PADDING)
                 .paddingRight(DEFAULT_PADDING)
                 .wordBreak(true)
+                .backwardsCompatibleFontHeight(false)
                 .build();
 
         private Set<Point> rowSpanCells = new HashSet<>();
@@ -215,6 +216,11 @@ public class Table {
 
         public TableBuilder wordBreak(Boolean wordBreak) {
             settings.setWordBreak(wordBreak);
+            return this;
+        }
+
+        public TableBuilder backwardsCompatibleFontHeight(boolean value) {
+            settings.setBackwardsCompatibleFontHeight(value);
             return this;
         }
 

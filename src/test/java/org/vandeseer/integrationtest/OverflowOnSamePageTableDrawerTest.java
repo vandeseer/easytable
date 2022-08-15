@@ -50,6 +50,7 @@ public class OverflowOnSamePageTableDrawerTest {
 
     private Table createTable() {
         final Table.TableBuilder tableBuilder = Table.builder()
+                .backwardsCompatibleFontHeight(true)
                 .addColumnOfWidth(60)
                 .addColumnOfWidth(60);
 

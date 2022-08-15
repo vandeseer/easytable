@@ -36,6 +36,7 @@ public class SettingsOverridingBordersTest {
 
     private Table createTableWithFontSettingAndBorderColorOverriding() {
         final Table.TableBuilder tableBuilder = Table.builder()
+                .backwardsCompatibleFontHeight(true)
                 .addColumnsOfWidth(100, 100, 100)
                 .padding(1f)
                 .borderWidth(2)

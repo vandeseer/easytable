@@ -38,6 +38,7 @@ public class SettingsOverridingTest {
 
     private Table createTableWithFontSettingAndBorderColorOverriding() {
         final Table.TableBuilder tableBuilder = Table.builder()
+                .backwardsCompatibleFontHeight(true)
                 .addColumnsOfWidth(100, 100, 100)
                 .horizontalAlignment(CENTER)
                 .fontSize(10).font(HELVETICA)
@@ -77,6 +78,7 @@ public class SettingsOverridingTest {
 
     private Table createTableWithTextColorAndBackgroundColorOverriding() {
         final Table.TableBuilder tableBuilder = Table.builder()
+                .backwardsCompatibleFontHeight(true)
                 .addColumnsOfWidth(100, 100, 100)
                 .horizontalAlignment(CENTER)
                 .fontSize(10).font(HELVETICA)
@@ -110,6 +112,7 @@ public class SettingsOverridingTest {
 
     private Table createSampleDocumentWithWordBreakOverriding() {
         final Table.TableBuilder tableBuilder = Table.builder()
+                .backwardsCompatibleFontHeight(true)
                 .addColumnsOfWidth(150, 150, 150)
                 .horizontalAlignment(CENTER);
 

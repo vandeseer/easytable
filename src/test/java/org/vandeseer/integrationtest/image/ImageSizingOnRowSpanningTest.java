@@ -36,6 +36,7 @@ public class ImageSizingOnRowSpanningTest {
 
     private Table createRowSpanningTable(PDImageXObject glider) {
         final Table.TableBuilder tableBuilder = Table.builder()
+                .backwardsCompatibleFontHeight(true)
                 .addColumnsOfWidth(50, 30, 80, 20);
         // First row
         tableBuilder.addRow(
@@ -64,6 +65,7 @@ public class ImageSizingOnRowSpanningTest {
 
     private Table createColSpanningTable(PDImageXObject glider) {
         final Table.TableBuilder tableBuilder = Table.builder()
+                .backwardsCompatibleFontHeight(true)
                 .addColumnsOfWidth(100, 100);
         // First row
         tableBuilder.addRow(

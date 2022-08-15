@@ -32,6 +32,7 @@ public class Issue20WordWrappingTest {
     @Test
     public void createSampleDocumentWithWordWrapping_Issue20() throws Exception {
         final Table.TableBuilder tableBuilder = Table.builder()
+                .backwardsCompatibleFontHeight(true)
                 .addColumnsOfWidth(8, 8, 8)
                 .fontSize(12)
                 .font(HELVETICA)
@@ -59,6 +60,7 @@ public class Issue20WordWrappingTest {
     @Test
     public void createSampleDocumentWithWordWrapping_Issue20_2() throws Exception {
         final Table.TableBuilder tableBuilder = Table.builder()
+                .backwardsCompatibleFontHeight(true)
                 .addColumnsOfWidth(70, 260, 70, 70)
                 .fontSize(12)
                 .font(HELVETICA)
@@ -129,6 +131,7 @@ public class Issue20WordWrappingTest {
     @Test
     public void issue20() throws IOException {
         final Table.TableBuilder tableBuilder = Table.builder()
+                .backwardsCompatibleFontHeight(true)
                 .addColumnsOfWidth(100, 100)
                 .fontSize(8)
                 .font(HELVETICA)

@@ -69,6 +69,7 @@ public class FinalYTest {
 
     private static Table createHeaderTableForPage(int pageNumber) {
         return Table.builder()
+                .backwardsCompatibleFontHeight(true)
                 .addColumnsOfWidth(100, 100, 100, 100)
                 .fontSize(8)
                 .font(HELVETICA)

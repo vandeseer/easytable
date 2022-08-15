@@ -15,6 +15,7 @@ public class TableTest {
     @Test
     public void getNumberOfColumns_tableBuilderWithThreeColumns() {
         final TableBuilder tableBuilder = Table.builder()
+                .backwardsCompatibleFontHeight(true)
                 .addColumnOfWidth(12)
                 .addColumnOfWidth(34)
                 .addColumnOfWidth(56);
@@ -26,6 +27,7 @@ public class TableTest {
     @Test
     public void getWidth_tableBuilderWithTwoColumns() {
         final TableBuilder tableBuilder = Table.builder()
+                .backwardsCompatibleFontHeight(true)
                 .addColumnOfWidth(20)
                 .addColumnOfWidth(40);
         final Table table = tableBuilder.build();
@@ -36,6 +38,7 @@ public class TableTest {
     @Test
     public void getRows_tableBuilderWithOneRow() {
         final TableBuilder tableBuilder = Table.builder();
+        tableBuilder.backwardsCompatibleFontHeight(true);
         tableBuilder.addColumnOfWidth(12)
                 .addColumnOfWidth(34);
         final Row row = Row.builder()
@@ -51,6 +54,7 @@ public class TableTest {
     @Test
     public void getHeight_twoRowsWithDifferentPaddings() {
         final Table table = Table.builder()
+                .backwardsCompatibleFontHeight(true)
                 .addColumnOfWidth(12)
                 .addColumnOfWidth(34)
                 .fontSize(12)
@@ -61,7 +65,7 @@ public class TableTest {
                 .build();
 
         // highest cell (50) + actual font height
-        final float actualFontHeight = PdfUtil.getFontHeight(table.getSettings().getFont(), 12);
+        final float actualFontHeight = PdfUtil.getFontHeight(table.getSettings().getFont(), 12, true);
         assertThat(table.getHeight(), equalTo(50 + actualFontHeight));
     }
 

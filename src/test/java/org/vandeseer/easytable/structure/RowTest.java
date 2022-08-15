@@ -32,6 +32,7 @@ public class RowTest {
     @Test
     public void getHeightShouldReturnValueIfTableIsBuilt() {
         final Table.TableBuilder tableBuilder = Table.builder()
+                .backwardsCompatibleFontHeight(true)
                 .addColumnsOfWidth(10, 10, 10)
                 .horizontalAlignment(CENTER)
                 .fontSize(10).font(HELVETICA)

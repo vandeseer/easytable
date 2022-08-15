@@ -56,6 +56,7 @@ public class ExcelLikeExampleTest {
     private Table createSimpleExampleTable() {
         
         final TableBuilder tableBuilder = Table.builder()
+                .backwardsCompatibleFontHeight(true)
                 .addColumnsOfWidth(100, 50, 50, 50)
                 .fontSize(8)
                 .font(HELVETICA)
@@ -119,6 +120,7 @@ public class ExcelLikeExampleTest {
     private Table createComplexExampleTable() throws IOException {
 
         return Table.builder()
+                .backwardsCompatibleFontHeight(true)
                 .addColumnsOfWidth(50, 100, 40, 70, 120)
                 .borderColor(WHITE)
                 .textColor(DARK_GRAY)

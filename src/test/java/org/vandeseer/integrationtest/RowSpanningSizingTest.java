@@ -31,6 +31,7 @@ public class RowSpanningSizingTest {
 
     private Table createRegularTable() {
         return Table.builder()
+                .backwardsCompatibleFontHeight(true)
                 .addColumnsOfWidth(50, 50)
                 .addRow(Row.builder()
                         .add(TextCell.builder().borderWidth(1).text("1").build())
@@ -48,6 +49,7 @@ public class RowSpanningSizingTest {
 
     private Table createComplexTable1() {
         return Table.builder()
+                .backwardsCompatibleFontHeight(true)
                 .addColumnsOfWidth(50, 50, 50, 50)
                 .addRow(Row.builder()
                         .add(TextCell.builder().borderWidth(1).text("1").build())
@@ -75,6 +77,7 @@ public class RowSpanningSizingTest {
 
     private Table createComplexTable2() {
         return Table.builder()
+                .backwardsCompatibleFontHeight(true)
                 .addColumnsOfWidth(50, 50, 50, 50)
                 .addRow(Row.builder()
                         .add(TextCell.builder().borderWidth(1).text("1").build())
@@ -101,6 +104,7 @@ public class RowSpanningSizingTest {
 
     private Table createComplexTable3() {
         return Table.builder()
+                .backwardsCompatibleFontHeight(true)
                 .addColumnsOfWidth(50, 50, 50, 50)
                 .addRow(Row.builder()
                         .add(TextCell.builder().borderWidth(1).text("1").build())

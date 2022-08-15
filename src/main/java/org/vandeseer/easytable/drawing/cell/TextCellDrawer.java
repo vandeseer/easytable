@@ -75,8 +75,9 @@ public class TextCellDrawer<T extends AbstractTextCell> extends AbstractCellDraw
 
 
     private float calculateYOffset(PDFont currentFont, int currentFontSize, int lineIndex) {
-        return PdfUtil.getFontHeight(currentFont, currentFontSize) // font height
-                + (lineIndex > 0 ? PdfUtil.getFontHeight(currentFont, currentFontSize) * cell.getLineSpacing() : 0f); // line spacing
+        boolean backwardsCompatibleFontHeight = cell.getSettings().isBackwardsCompatibleFontHeight();
+        final float fontHeight = PdfUtil.getFontHeight(currentFont, currentFontSize, backwardsCompatibleFontHeight);
+        return fontHeight + (lineIndex > 0 ? fontHeight * cell.getLineSpacing() : 0f); // line spacing
     }
 
     static boolean isNotLastLine(List<String> lines, int i) {

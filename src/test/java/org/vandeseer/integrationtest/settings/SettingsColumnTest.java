@@ -27,6 +27,7 @@ public class SettingsColumnTest {
     @Test
     public void differentSettings() throws IOException {
         final Table.TableBuilder tableBuilder = Table.builder()
+                .backwardsCompatibleFontHeight(true)
                 .addColumn(
                         Column.builder()
                                 .width(100)
