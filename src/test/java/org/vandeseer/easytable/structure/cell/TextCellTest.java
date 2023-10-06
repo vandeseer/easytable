@@ -96,7 +96,7 @@ public class TextCellTest {
 
     @Test
     public void getWidth_cellWithSpanningNoWrapping() {
-        prepareTwoSpanningColumnsOfSize(20f, 20f);
+        prepareTwoSpanningColumnsOfSize2(20f, 20f);
 
         final String text = "abc";
 
@@ -166,7 +166,6 @@ public class TextCellTest {
     }
 
     private TextCell prepareForTest(TextCell cell) {
-        when(row.getTable()).thenReturn(table);
         cell.setRow(row);
         cell.setColumn(column);
         return cell;
@@ -175,5 +174,8 @@ public class TextCellTest {
     private void setColumnWidthTo(float width) {
         when(column.getWidth()).thenReturn(width);
     }
-
+    
+    private void prepareTwoSpanningColumnsOfSize2(float sizeColumn1, float sizeColumn2) {
+        Column nextColumn = mock(Column.class);
+    }
 }
