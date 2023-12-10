@@ -16,7 +16,7 @@ crucial features. Nevertheless, there is:
 * column spanning and row spanning 
 * images in cells
 * allowing for a lot of customizations
-* experimental: vertical text, [links, markup and paragraphs within cells](#paragraph-cells), drawing a large table's 
+* experimental: vertical text, drawing a large table's 
 overflow on the same page
 
 One can also override classes that are responsible for table/cell drawing, i.e. 
@@ -33,7 +33,7 @@ Add this to your `pom.xml`:
     <dependency>
         <groupId>com.github.vandeseer</groupId>
         <artifactId>easytable</artifactId>
-        <version>0.8.6-SNAPSHOT</version>
+        <version>1.0.0-SNAPSHOT</version>
     </dependency>
 
 Or checkout the repository and install it locally with maven (e.g. for the`develop` branch):
@@ -68,63 +68,6 @@ Drawing the overflow of a large table on the same page is also [possible](src/te
 If you run the tests with `mvn clean test` there also some PDF documents created which you can find in the `target` folder.
 The corresponding sources (in order to understand how to use the code) can be found in the test package.
 
-## Paragraph Cells
-
-Since several people asked me to include a way to add hyperlinks within cells I did a bit of research
-and stumbled across a really nice library named [pdfbox-layout](https://github.com/ralfstuckert/pdfbox-layout). 
-Unfortunately that library will not be developed 
-any further, but it still provides a very powerful API for creating paragraphs with "styled text" (including links
-as well as markup). 
-
-Therefore I created a wrapper cell type (named `ParagraphCell`) which allows to append
-- hyperlinks
-- styled text (i.e. colorable text with a font and font size) as well as
-- markup (please see this [documentation](https://github.com/ralfstuckert/pdfbox-layout/wiki/Markup)).
-
-Note that the easytable API may be a bit different to what you find in the linked documentation.
-Anyway, in order to get your hands dirty look at [this code](src/test/java/org/vandeseer/integrationtest/ParagraphCellTest.java) 
-on how to create such a table: 
-
-![table with markup](doc/example_paragraph_cell.png)
-
-### Adding Needed Dependency
-
-This is still a bit experimental and there may be changes in the future. 
-If you want to use this feature nevertheless you need to add pdfbox-layout as a dependency. 
-In case you are using maven for instance in your `pom.xml`:
-
-    <repositories>
-        <repository>
-            <id>jitpack.io</id>
-            <url>https://jitpack.io</url>
-        </repository>
-    </repositories>
-    ...
-    <dependency>
-        <groupId>com.github.ralfstuckert.pdfbox-layout</groupId>
-        <artifactId>pdfbox2-layout</artifactId>
-        <version>1.0.1</version>
-        <exclusions>
-            <exclusion>
-                <groupId>org.apache.pdfbox</groupId>
-                <artifactId>pdfbox</artifactId>
-            </exclusion>
-        </exclusions>
-    </dependency>
-
-### Setting the Page on `TableDrawer`
-
-Please note that you also need to set the `page(...)` on the `TableDrawer` in case you 
-are using a `ParagraphCell`.
-
-    TableDrawer.builder()
-        .page(page) // <-- This is needed!
-        .contentStream(contentStream)
-        .table(table)
-        ...
-        .build()
-        .draw()
-
 ## Kudos
 
 *   to [Binghammer](https://github.com/Binghammer) for implementing cell coloring and text center alignment
@@ -139,7 +82,6 @@ improvements
 *   to [Richard Mealing](https://github.com/mealingr) for adding the license section to the `pom.xml`
 *   to [msww](https://github.com/msww) for finding a [small issue](https://github.com/vandeseer/easytable/issues/85)
 *   to [VakhoQ](https://github.com/VakhoQ) for implementing border styles
-*   to [Ralf Stuckert](https://github.com/ralfstuckert) for creating [pdfbox-layout](https://github.com/ralfstuckert/pdfbox-layout)
 *   to [Miloš Čadek](https://github.com/c4da) for implementing alignment of vertical text cells
 
 ## Q&A
