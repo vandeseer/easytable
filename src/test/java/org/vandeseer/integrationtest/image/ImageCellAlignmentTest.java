@@ -16,6 +16,7 @@ import org.vandeseer.easytable.structure.cell.TextCell;
 import java.io.IOException;
 
 import static junit.framework.TestCase.assertTrue;
+import static org.apache.pdfbox.pdmodel.font.Standard14Fonts.FontName.HELVETICA;
 import static org.vandeseer.TestUtils.getActualPdfFor;
 import static org.vandeseer.TestUtils.getExpectedPdfFor;
 import static org.vandeseer.easytable.settings.HorizontalAlignment.*;
@@ -48,7 +49,7 @@ public class ImageCellAlignmentTest {
                 .addColumnsOfWidth(columnWidth, columnWidth, columnWidth, columnWidth,
                         columnWidth, columnWidth, columnWidth, columnWidth)
                 .fontSize(8)
-                .font(PDType1Font.HELVETICA)
+                .font(new PDType1Font(HELVETICA))
                 .wordBreak(true);
 
         Row.RowBuilder rowBuilder = Row.builder()
@@ -90,7 +91,7 @@ public class ImageCellAlignmentTest {
                         .colSpan(2)
                         .build());
 
-        tableBuilder.addRow(rowBuilder.font(PDType1Font.HELVETICA)
+        tableBuilder.addRow(rowBuilder.font(new PDType1Font(HELVETICA))
                 .fontSize(8)
                 .horizontalAlignment(CENTER)
                 .build());

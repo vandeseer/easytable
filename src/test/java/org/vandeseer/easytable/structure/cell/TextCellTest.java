@@ -14,6 +14,7 @@ import org.vandeseer.easytable.structure.Table;
 import org.vandeseer.easytable.structure.TableNotYetBuiltException;
 import org.vandeseer.easytable.util.PdfUtil;
 
+import static org.apache.pdfbox.pdmodel.font.Standard14Fonts.FontName.HELVETICA;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.IsEqual.equalTo;
 import static org.junit.Assert.assertEquals;
@@ -31,7 +32,7 @@ public class TextCellTest {
     @Mock
     private Table table;
 
-    private final PDFont font = PDType1Font.HELVETICA;
+    private final PDFont font = new PDType1Font(HELVETICA);
 
     private final int fontSize = 10;
 

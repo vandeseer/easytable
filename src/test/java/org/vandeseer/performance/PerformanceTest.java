@@ -13,6 +13,8 @@ import org.vandeseer.easytable.structure.cell.TextCell;
 import java.io.File;
 import java.io.IOException;
 
+import static org.apache.pdfbox.pdmodel.font.Standard14Fonts.FontName.HELVETICA;
+
 public class PerformanceTest {
 
 	private static final int LINES_MAX = 1000;
@@ -49,7 +51,7 @@ public class PerformanceTest {
 		try (PDDocument document = new PDDocument()) {
 			Table.TableBuilder tableBuilder = Table.builder()
 					.addColumnsOfWidth(WIDTH)
-					.font(PDType1Font.HELVETICA)
+					.font(new PDType1Font(HELVETICA))
 					.fontSize(10);
 
 			for (int i = 0; i < numLines; i++) {

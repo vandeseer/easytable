@@ -2,6 +2,7 @@ package org.vandeseer.integrationtest;
 
 import de.redsix.pdfcompare.CompareResult;
 import de.redsix.pdfcompare.PdfComparator;
+import org.apache.pdfbox.pdmodel.font.PDType1Font;
 import org.junit.Test;
 import org.vandeseer.TestUtils;
 import org.vandeseer.easytable.structure.Row;
@@ -17,7 +18,7 @@ import java.io.IOException;
 
 import static java.awt.Color.*;
 import static junit.framework.TestCase.assertTrue;
-import static org.apache.pdfbox.pdmodel.font.PDType1Font.*;
+import static org.apache.pdfbox.pdmodel.font.Standard14Fonts.FontName.*;
 import static org.vandeseer.TestUtils.*;
 import static org.vandeseer.easytable.settings.HorizontalAlignment.*;
 import static org.vandeseer.easytable.settings.VerticalAlignment.MIDDLE;
@@ -58,7 +59,7 @@ public class ExcelLikeExampleTest {
         final TableBuilder tableBuilder = Table.builder()
                 .addColumnsOfWidth(100, 50, 50, 50)
                 .fontSize(8)
-                .font(HELVETICA)
+                .font(new PDType1Font(HELVETICA))
                 .borderColor(Color.WHITE);
 
         // Add the header row ...
@@ -69,7 +70,7 @@ public class ExcelLikeExampleTest {
                 .add(TextCell.builder().text("Total").borderWidth(1).build())
                 .backgroundColor(BLUE_DARK)
                 .textColor(Color.WHITE)
-                .font(HELVETICA_BOLD)
+                .font(new PDType1Font(HELVETICA_BOLD))
                 .fontSize(9)
                 .horizontalAlignment(CENTER)
                 .build());
@@ -101,11 +102,11 @@ public class ExcelLikeExampleTest {
                         .textColor(WHITE)
                         .backgroundColor(BLUE_DARK)
                         .fontSize(6)
-                        .font(HELVETICA_OBLIQUE)
+                        .font(new PDType1Font(HELVETICA_OBLIQUE))
                         .borderWidth(1)
                         .build())
                 .add(TextCell.builder().text(grandTotal + " €").backgroundColor(LIGHT_GRAY)
-                        .font(HELVETICA_BOLD_OBLIQUE)
+                        .font(new PDType1Font(HELVETICA_BOLD_OBLIQUE))
                         .verticalAlignment(TOP)
                         .borderWidth(1)
                         .build())
@@ -123,7 +124,7 @@ public class ExcelLikeExampleTest {
                 .borderColor(WHITE)
                 .textColor(DARK_GRAY)
                 .fontSize(7)
-                .font(HELVETICA)
+                .font(new PDType1Font(HELVETICA))
                 .addRow(createHeaderRow())
                 .addRow(create1stDataRow())
                 .addRow(create2ndDataRow())
@@ -149,7 +150,7 @@ public class ExcelLikeExampleTest {
             .add(TextCell.builder().borderWidth(1).padding(6).text("Right").build())
             .backgroundColor(GRAY)
             .textColor(WHITE)
-            .font(HELVETICA_BOLD)
+            .font(new PDType1Font(HELVETICA_BOLD))
             .fontSize(8)
             .horizontalAlignment(CENTER)
             .build();
@@ -313,7 +314,7 @@ public class ExcelLikeExampleTest {
                 .verticalAlignment(MIDDLE)
                 .horizontalAlignment(JUSTIFY)
                 .padding(14)
-                .font(HELVETICA_OBLIQUE)
+                .font(new PDType1Font(HELVETICA_OBLIQUE))
                 .backgroundColor(GRAY_LIGHT_1);
     }
 

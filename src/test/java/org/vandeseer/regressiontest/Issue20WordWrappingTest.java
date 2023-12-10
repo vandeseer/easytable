@@ -2,6 +2,7 @@ package org.vandeseer.regressiontest;
 
 import de.redsix.pdfcompare.CompareResult;
 import de.redsix.pdfcompare.PdfComparator;
+import org.apache.pdfbox.pdmodel.font.PDType1Font;
 import org.junit.Before;
 import org.junit.Test;
 import org.vandeseer.TestUtils;
@@ -13,7 +14,7 @@ import java.awt.*;
 import java.io.IOException;
 
 import static junit.framework.TestCase.assertTrue;
-import static org.apache.pdfbox.pdmodel.font.PDType1Font.HELVETICA;
+import static org.apache.pdfbox.pdmodel.font.Standard14Fonts.FontName.HELVETICA;
 import static org.vandeseer.TestUtils.getActualPdfFor;
 import static org.vandeseer.TestUtils.getExpectedPdfFor;
 import static org.vandeseer.easytable.settings.HorizontalAlignment.*;
@@ -34,7 +35,7 @@ public class Issue20WordWrappingTest {
         final Table.TableBuilder tableBuilder = Table.builder()
                 .addColumnsOfWidth(8, 8, 8)
                 .fontSize(12)
-                .font(HELVETICA)
+                .font(new PDType1Font(HELVETICA))
                 .borderColor(Color.RED)
                 .wordBreak(true);
 
@@ -61,7 +62,7 @@ public class Issue20WordWrappingTest {
         final Table.TableBuilder tableBuilder = Table.builder()
                 .addColumnsOfWidth(70, 260, 70, 70)
                 .fontSize(12)
-                .font(HELVETICA)
+                .font(new PDType1Font(HELVETICA))
                 .borderColor(Color.WHITE)
                 .wordBreak(true);
 
@@ -131,7 +132,7 @@ public class Issue20WordWrappingTest {
         final Table.TableBuilder tableBuilder = Table.builder()
                 .addColumnsOfWidth(100, 100)
                 .fontSize(8)
-                .font(HELVETICA)
+                .font(new PDType1Font(HELVETICA))
                 .addRow(Row.builder()
                         .add(TextCell.builder().text("K.").horizontalAlignment(LEFT).borderWidth(1).build())
                         .add(TextCell.builder().text("fubar").horizontalAlignment(LEFT).borderWidth(1).build())

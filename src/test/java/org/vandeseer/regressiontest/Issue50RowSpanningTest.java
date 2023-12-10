@@ -2,6 +2,7 @@ package org.vandeseer.regressiontest;
 
 import de.redsix.pdfcompare.CompareResult;
 import de.redsix.pdfcompare.PdfComparator;
+import org.apache.pdfbox.pdmodel.font.PDType1Font;
 import org.junit.Before;
 import org.junit.Test;
 import org.vandeseer.TestUtils;
@@ -15,8 +16,8 @@ import java.awt.*;
 import java.io.IOException;
 
 import static junit.framework.TestCase.assertTrue;
-import static org.apache.pdfbox.pdmodel.font.PDType1Font.HELVETICA;
-import static org.apache.pdfbox.pdmodel.font.PDType1Font.HELVETICA_BOLD;
+import static org.apache.pdfbox.pdmodel.font.Standard14Fonts.FontName.HELVETICA;
+import static org.apache.pdfbox.pdmodel.font.Standard14Fonts.FontName.HELVETICA_BOLD;
 import static org.vandeseer.TestUtils.getActualPdfFor;
 import static org.vandeseer.TestUtils.getExpectedPdfFor;
 import static org.vandeseer.easytable.settings.HorizontalAlignment.CENTER;
@@ -42,7 +43,7 @@ public class Issue50RowSpanningTest {
         final Table.TableBuilder tableBuilder = Table.builder()
                 .addColumnsOfWidth(35, 92, 50, 50, 72, 240)
                 .fontSize(8)
-                .font(HELVETICA)
+                .font(new PDType1Font(HELVETICA))
                 .borderColor(Color.BLACK);
 
         tableBuilder.addRow(Row.builder()
@@ -53,7 +54,7 @@ public class Issue50RowSpanningTest {
                         .textColor(Color.BLACK)
                         .backgroundColor(Color.RED)
                         .fontSize(14)
-                        .font(HELVETICA_BOLD)
+                        .font(new PDType1Font(HELVETICA_BOLD))
                         .verticalAlignment(VerticalAlignment.MIDDLE)
                         .horizontalAlignment(CENTER)
                         .borderWidth(1)
@@ -63,7 +64,7 @@ public class Issue50RowSpanningTest {
                         .textColor(Color.BLACK)
                         .backgroundColor(Color.RED)
                         .fontSize(11)
-                        .font(HELVETICA_BOLD)
+                        .font(new PDType1Font(HELVETICA_BOLD))
                         .verticalAlignment(VerticalAlignment.MIDDLE)
                         .horizontalAlignment(CENTER)
                         .borderWidth(1)
@@ -79,7 +80,7 @@ public class Issue50RowSpanningTest {
                         .textColor(Color.BLACK)
                         .backgroundColor(Color.GRAY)
                         .fontSize(8)
-                        .font(HELVETICA_BOLD)
+                        .font(new PDType1Font(HELVETICA_BOLD))
                         .verticalAlignment(VerticalAlignment.MIDDLE)
                         .horizontalAlignment(CENTER)
                         .borderWidth(1)
@@ -89,7 +90,7 @@ public class Issue50RowSpanningTest {
                         .textColor(Color.BLACK)
                         .backgroundColor(Color.GRAY)
                         .fontSize(8)
-                        .font(HELVETICA_BOLD)
+                        .font(new PDType1Font(HELVETICA_BOLD))
                         .verticalAlignment(VerticalAlignment.MIDDLE)
                         .horizontalAlignment(CENTER)
                         .borderWidth(1)
@@ -99,7 +100,7 @@ public class Issue50RowSpanningTest {
                         .textColor(Color.BLACK)
                         .backgroundColor(Color.YELLOW)
                         .fontSize(10)
-                        .font(HELVETICA_BOLD)
+                        .font(new PDType1Font(HELVETICA_BOLD))
                         .verticalAlignment(VerticalAlignment.MIDDLE)
                         .horizontalAlignment(CENTER)
                         .borderWidth(1)
@@ -121,7 +122,7 @@ public class Issue50RowSpanningTest {
                         .borderWidthTop(1)
                         .backgroundColor(Color.GRAY)
                         .fontSize(8)
-                        .font(HELVETICA_BOLD)
+                        .font(new PDType1Font(HELVETICA_BOLD))
                         .verticalAlignment(VerticalAlignment.MIDDLE)
                         .horizontalAlignment(CENTER)
                         .borderWidth(1)
@@ -131,7 +132,7 @@ public class Issue50RowSpanningTest {
                         .borderWidthTop(1)
                         .backgroundColor(Color.GRAY)
                         .fontSize(8)
-                        .font(HELVETICA_BOLD)
+                        .font(new PDType1Font(HELVETICA_BOLD))
                         .verticalAlignment(VerticalAlignment.MIDDLE)
                         .horizontalAlignment(CENTER)
                         .borderWidth(1)
@@ -146,7 +147,7 @@ public class Issue50RowSpanningTest {
                         .textColor(Color.BLACK)
                         .backgroundColor(Color.GRAY)
                         .fontSize(8)
-                        .font(HELVETICA)
+                        .font(new PDType1Font(HELVETICA))
                         .verticalAlignment(VerticalAlignment.MIDDLE)
                         .horizontalAlignment(CENTER)
                         .borderWidth(1)
@@ -157,7 +158,7 @@ public class Issue50RowSpanningTest {
                         .textColor(Color.BLACK)
                         .backgroundColor(Color.GRAY)
                         .fontSize(8)
-                        .font(HELVETICA)
+                        .font(new PDType1Font(HELVETICA))
                         .verticalAlignment(VerticalAlignment.MIDDLE)
                         .horizontalAlignment(CENTER)
                         .borderWidth(1)
@@ -166,7 +167,7 @@ public class Issue50RowSpanningTest {
                         .borderWidthTop(1)
                         .backgroundColor(Color.GRAY)
                         .fontSize(8)
-                        .font(HELVETICA)
+                        .font(new PDType1Font(HELVETICA))
                         .verticalAlignment(VerticalAlignment.MIDDLE)
                         .horizontalAlignment(CENTER)
                         .borderWidth(1)

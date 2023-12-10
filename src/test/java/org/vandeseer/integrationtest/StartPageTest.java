@@ -1,14 +1,7 @@
 package org.vandeseer.integrationtest;
 
-import static junit.framework.TestCase.assertTrue;
-import static junit.framework.TestCase.assertEquals;
-import static org.apache.pdfbox.pdmodel.PDPageContentStream.AppendMode.APPEND;
-import static org.vandeseer.TestUtils.getActualPdfFor;
-import static org.vandeseer.TestUtils.getExpectedPdfFor;
-import static org.apache.pdfbox.pdmodel.font.PDType1Font.HELVETICA;
-
-import java.io.IOException;
-
+import de.redsix.pdfcompare.CompareResult;
+import de.redsix.pdfcompare.PdfComparator;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
@@ -23,8 +16,15 @@ import org.vandeseer.easytable.structure.Table;
 import org.vandeseer.easytable.structure.Table.TableBuilder;
 import org.vandeseer.easytable.structure.cell.TextCell;
 
-import de.redsix.pdfcompare.CompareResult;
-import de.redsix.pdfcompare.PdfComparator;
+import java.io.IOException;
+
+import static junit.framework.TestCase.assertEquals;
+import static junit.framework.TestCase.assertTrue;
+import static org.apache.pdfbox.pdmodel.PDPageContentStream.AppendMode.APPEND;
+import static org.apache.pdfbox.pdmodel.font.Standard14Fonts.FontName.HELVETICA;
+import static org.apache.pdfbox.pdmodel.font.Standard14Fonts.FontName.TIMES_ROMAN;
+import static org.vandeseer.TestUtils.getActualPdfFor;
+import static org.vandeseer.TestUtils.getExpectedPdfFor;
 
 public class StartPageTest {
 
@@ -50,13 +50,14 @@ public class StartPageTest {
 
 		try (final PDPageContentStream content = new PDPageContentStream(document, currentPage, APPEND, false)) {
 			content.beginText();
-			content.setFont(PDType1Font.TIMES_ROMAN, 15);
+			content.setFont(new PDType1Font(TIMES_ROMAN), 15);
 			content.newLineAtOffset(50, 500);
 			content.showText("This line is added to ensure table is drawn on new page when space not available.");
 			content.endText();
 			content.close();
 
-			TableBuilder builder = Table.builder().addColumnsOfWidth(150, 150, 150).fontSize(25).font(HELVETICA)
+			TableBuilder builder = Table.builder().addColumnsOfWidth(150, 150, 150)
+					.fontSize(25).font(new PDType1Font(HELVETICA))
 					.padding(5).borderWidth(1)
 					.addRow(Row.builder().add(TextCell.builder().text("Header").build())
 							.add(TextCell.builder().text("of").build()).add(TextCell.builder().text("Table").build())

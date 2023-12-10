@@ -6,6 +6,7 @@ import org.apache.pdfbox.io.IOUtils;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.font.PDFont;
 import org.apache.pdfbox.pdmodel.font.PDType0Font;
+import org.apache.pdfbox.pdmodel.font.PDType1Font;
 import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
 import org.junit.Before;
 import org.junit.Test;
@@ -23,7 +24,7 @@ import java.io.InputStream;
 import java.util.Objects;
 
 import static junit.framework.TestCase.assertTrue;
-import static org.apache.pdfbox.pdmodel.font.PDType1Font.HELVETICA;
+import static org.apache.pdfbox.pdmodel.font.Standard14Fonts.FontName.HELVETICA;
 import static org.vandeseer.TestUtils.getActualPdfFor;
 import static org.vandeseer.TestUtils.getExpectedPdfFor;
 import static org.vandeseer.easytable.settings.HorizontalAlignment.*;
@@ -71,7 +72,7 @@ public class VerticalTextCellTest {
         final Table.TableBuilder tableBuilder = Table.builder()
                 .addColumnsOfWidth(100, 100, 100, 100)
                 .fontSize(8)
-                .font(HELVETICA);
+                .font(new PDType1Font(HELVETICA));
 
         tableBuilder
                 .addRow(Row.builder()

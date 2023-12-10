@@ -11,7 +11,7 @@
 
     <groupId>com.github.vandeseer</groupId>
     <artifactId>easytable</artifactId>
-    <version>0.8.6-SNAPSHOT</version>
+    <version>1.0.0-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <properties>
@@ -48,13 +48,13 @@
         <dependency>
             <groupId>org.apache.pdfbox</groupId>
             <artifactId>pdfbox</artifactId>
-            <version>2.0.26</version>
+            <version>3.0.1</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
-            <version>1.18.24</version>
+            <version>1.18.30</version>
             <scope>provided</scope>
         </dependency>
 
@@ -88,7 +88,7 @@
         <dependency>
             <groupId>de.redsix</groupId>
             <artifactId>pdfcompare</artifactId>
-            <version>1.1.61</version>
+            <version>1.1.64</version>
             <scope>test</scope>
         </dependency>
 
@@ -142,7 +142,7 @@
                         <path>
                             <groupId>org.projectlombok</groupId>
                             <artifactId>lombok</artifactId>
-                            <version>1.18.20</version>
+                            <version>1.18.30</version>
                         </path>
                     </annotationProcessorPaths>
                 </configuration>

@@ -2,6 +2,8 @@ package org.vandeseer.integrationtest.settings;
 
 import de.redsix.pdfcompare.CompareResult;
 import de.redsix.pdfcompare.PdfComparator;
+import org.apache.pdfbox.pdmodel.font.PDType1Font;
+import org.apache.pdfbox.pdmodel.font.Standard14Fonts;
 import org.junit.Test;
 import org.vandeseer.TestUtils;
 import org.vandeseer.easytable.structure.Column;
@@ -13,7 +15,6 @@ import java.awt.*;
 import java.io.IOException;
 
 import static junit.framework.TestCase.assertTrue;
-import static org.apache.pdfbox.pdmodel.font.PDType1Font.HELVETICA;
 import static org.vandeseer.TestUtils.getActualPdfFor;
 import static org.vandeseer.TestUtils.getExpectedPdfFor;
 
@@ -38,7 +39,7 @@ public class SettingsColumnTest {
                 .addColumn(Column.builder().width(100).fontSize(13).build())
                 .addColumn(Column.builder().width(100).backgroundColor(PURPLE_LIGHT_2).build())
                 .fontSize(8)
-                .font(HELVETICA)
+                .font(new PDType1Font(Standard14Fonts.FontName.HELVETICA))
                 .wordBreak(true);
 
         for (int i = 0; i < 10; i++) {

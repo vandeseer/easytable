@@ -7,6 +7,8 @@ import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.common.PDRectangle;
+import org.apache.pdfbox.pdmodel.font.PDType1Font;
+import org.apache.pdfbox.pdmodel.font.Standard14Fonts;
 import org.junit.Test;
 import org.vandeseer.TestUtils;
 import org.vandeseer.easytable.TableDrawer;
@@ -21,7 +23,6 @@ import org.vandeseer.easytable.structure.cell.TextCell;
 import java.io.IOException;
 
 import static junit.framework.TestCase.assertTrue;
-import static org.apache.pdfbox.pdmodel.font.PDType1Font.HELVETICA;
 import static org.vandeseer.TestUtils.getActualPdfFor;
 import static org.vandeseer.TestUtils.getExpectedPdfFor;
 
@@ -76,7 +77,7 @@ public class CustomCellWithCustomDrawerUsingLombokTest {
         return Table.builder()
                 .addColumnsOfWidth(100, 100, 100, 100)
                 .fontSize(8)
-                .font(HELVETICA)
+                .font(new PDType1Font(Standard14Fonts.FontName.HELVETICA))
                 .addRow(Row.builder()
                         .add(MyCustomCell.builder().borderWidth(1).text("One").build())
                         .add(MyCustomCell.builder().borderWidth(1).text("Two").build())

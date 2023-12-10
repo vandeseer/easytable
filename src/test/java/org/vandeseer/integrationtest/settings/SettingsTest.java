@@ -3,6 +3,7 @@ package org.vandeseer.integrationtest.settings;
 import de.redsix.pdfcompare.CompareResult;
 import de.redsix.pdfcompare.PdfComparator;
 import org.apache.pdfbox.pdmodel.font.PDType1Font;
+import org.apache.pdfbox.pdmodel.font.Standard14Fonts;
 import org.junit.Test;
 import org.vandeseer.TestUtils;
 import org.vandeseer.easytable.settings.VerticalAlignment;
@@ -14,7 +15,7 @@ import java.awt.*;
 import java.io.IOException;
 
 import static junit.framework.TestCase.assertTrue;
-import static org.apache.pdfbox.pdmodel.font.PDType1Font.*;
+import static org.apache.pdfbox.pdmodel.font.Standard14Fonts.FontName.*;
 import static org.vandeseer.TestUtils.getActualPdfFor;
 import static org.vandeseer.TestUtils.getExpectedPdfFor;
 import static org.vandeseer.easytable.settings.HorizontalAlignment.*;
@@ -35,7 +36,7 @@ public class SettingsTest {
         final Table.TableBuilder tableBuilder = Table.builder()
                 .addColumnsOfWidth(170, 170, 150)
                 .fontSize(8)
-                .font(HELVETICA)
+                .font(new PDType1Font(HELVETICA))
                 .wordBreak(true);
 
         tableBuilder.addRow(Row.builder()
@@ -57,7 +58,7 @@ public class SettingsTest {
                         .verticalAlignment(VerticalAlignment.MIDDLE)
                         .horizontalAlignment(CENTER)
                         .lineSpacing(1.1f)
-                        .font(TIMES_ROMAN)
+                        .font(new PDType1Font(Standard14Fonts.FontName.TIMES_ROMAN))
                         .build())
                 .backgroundColor(PURPLE_LIGHT_2)
                 .height(200f)
@@ -68,7 +69,7 @@ public class SettingsTest {
                         .horizontalAlignment(LEFT)
                         .verticalAlignment(BOTTOM)
                         .textColor(Color.BLACK)
-                        .font(HELVETICA_OBLIQUE)
+                        .font(new PDType1Font(Standard14Fonts.FontName.HELVETICA_OBLIQUE))
                         .fontSize(16)
                         .padding(30)
                         .build())
@@ -82,7 +83,7 @@ public class SettingsTest {
                         .horizontalAlignment(JUSTIFY)
                         .textColor(Color.WHITE)
                         .lineSpacing(0.9f)
-                        .font(COURIER_BOLD)
+                        .font(new PDType1Font(COURIER_BOLD))
                         .build())
                 .add(TextCell.builder().text("This is bottom right aligned and does have a padding of 10, " +
                         "but a line spacing of 0.6")
@@ -99,7 +100,7 @@ public class SettingsTest {
                         .horizontalAlignment(RIGHT)
                         .verticalAlignment(TOP)
                         .textColor(Color.BLACK)
-                        .font(PDType1Font.TIMES_ITALIC)
+                        .font(new PDType1Font(TIMES_ITALIC))
                         .fontSize(14)
                         .padding(8)
                         .build())
@@ -107,7 +108,7 @@ public class SettingsTest {
                         .padding(20)
                         .backgroundColor(PURPLE_LIGHT_1)
                         .lineSpacing(0.9f)
-                        .font(COURIER_BOLD)
+                        .font(new PDType1Font(COURIER_BOLD))
                         .build())
                 .add(TextCell.builder().text("Bottom. Center.")
                         .verticalAlignment(BOTTOM)

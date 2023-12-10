@@ -2,6 +2,7 @@ package org.vandeseer.integrationtest.settings;
 
 import de.redsix.pdfcompare.CompareResult;
 import de.redsix.pdfcompare.PdfComparator;
+import org.apache.pdfbox.pdmodel.font.PDType1Font;
 import org.junit.Test;
 import org.vandeseer.TestUtils;
 import org.vandeseer.easytable.structure.Row;
@@ -11,7 +12,7 @@ import org.vandeseer.easytable.structure.cell.TextCell;
 import java.awt.*;
 
 import static junit.framework.TestCase.assertTrue;
-import static org.apache.pdfbox.pdmodel.font.PDType1Font.*;
+import static org.apache.pdfbox.pdmodel.font.Standard14Fonts.FontName.*;
 import static org.vandeseer.TestUtils.getActualPdfFor;
 import static org.vandeseer.TestUtils.getExpectedPdfFor;
 import static org.vandeseer.easytable.settings.HorizontalAlignment.CENTER;
@@ -40,14 +41,14 @@ public class SettingsOverridingTest {
         final Table.TableBuilder tableBuilder = Table.builder()
                 .addColumnsOfWidth(100, 100, 100)
                 .horizontalAlignment(CENTER)
-                .fontSize(10).font(HELVETICA)
+                .fontSize(10).font(new PDType1Font(HELVETICA))
                 .borderColor(Color.RED);
 
         tableBuilder.addRow(
                 Row.builder()
                         .add(TextCell.builder().text("FCmjGVylqCjoxxfFWhehSrm").colSpan(2).borderWidth(1).build())
                         .add(TextCell.builder().text("Booz").build())
-                        .font(COURIER_BOLD).fontSize(8)
+                        .font(new PDType1Font(COURIER_BOLD)).fontSize(8)
                         .build());
 
         tableBuilder.addRow(
@@ -55,7 +56,7 @@ public class SettingsOverridingTest {
                         .add(TextCell.builder().text("Pur").backgroundColor(Color.YELLOW).build())
                         .add(TextCell.builder().text("Booz").build())
                         .add(TextCell.builder().text("baz").build())
-                        .font(COURIER_BOLD).fontSize(8).build());
+                        .font(new PDType1Font(COURIER_BOLD)).fontSize(8).build());
 
         tableBuilder.addRow(
                 Row.builder()
@@ -63,13 +64,14 @@ public class SettingsOverridingTest {
                         .add(TextCell.builder().text("Booz").borderWidthTop(1).borderWidthLeft(1).build())
                         .add(TextCell.builder().text("baz").borderWidthBottom(1).build())
                         .borderColor(Color.GREEN)
-                        .font(COURIER_BOLD).fontSize(8).build());
+                        .font(new PDType1Font(COURIER_BOLD)).fontSize(8).build());
 
         tableBuilder.addRow(
                 Row.builder()
                         .add(TextCell.builder().text("Pur").backgroundColor(Color.YELLOW).borderWidth(1).build())
                         .add(TextCell.builder().text("Booz").build())
-                        .add(TextCell.builder().text("baz").borderColor(Color.CYAN).borderWidthBottom(1).font(HELVETICA_OBLIQUE).fontSize(5).build())
+                        .add(TextCell.builder().text("baz").borderColor(Color.CYAN).borderWidthBottom(1)
+                                .font(new PDType1Font(HELVETICA_OBLIQUE)).fontSize(5).build())
                         .build());
 
         return tableBuilder.build();
@@ -79,7 +81,7 @@ public class SettingsOverridingTest {
         final Table.TableBuilder tableBuilder = Table.builder()
                 .addColumnsOfWidth(100, 100, 100)
                 .horizontalAlignment(CENTER)
-                .fontSize(10).font(HELVETICA)
+                .fontSize(10).font(new PDType1Font(HELVETICA))
                 .textColor(Color.GREEN)
                 .backgroundColor(Color.LIGHT_GRAY);
 

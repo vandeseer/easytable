@@ -5,6 +5,7 @@ import de.redsix.pdfcompare.PdfComparator;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.common.PDRectangle;
+import org.apache.pdfbox.pdmodel.font.PDType1Font;
 import org.junit.Test;
 import org.vandeseer.TestUtils;
 import org.vandeseer.easytable.TableDrawer;
@@ -17,7 +18,7 @@ import java.awt.*;
 import java.io.IOException;
 
 import static junit.framework.TestCase.assertTrue;
-import static org.apache.pdfbox.pdmodel.font.PDType1Font.HELVETICA;
+import static org.apache.pdfbox.pdmodel.font.Standard14Fonts.FontName.HELVETICA;
 import static org.vandeseer.TestUtils.*;
 import static org.vandeseer.easytable.settings.HorizontalAlignment.CENTER;
 import static org.vandeseer.easytable.settings.HorizontalAlignment.RIGHT;
@@ -70,7 +71,7 @@ public class CellSpanningTest {
         final Table.TableBuilder tableBuilder = Table.builder()
                 .addColumnsOfWidth(300, 120, 70)
                 .fontSize(8)
-                .font(HELVETICA);
+                .font(new PDType1Font(HELVETICA));
 
 
         tableBuilder.addRow(Row.builder()
@@ -99,7 +100,7 @@ public class CellSpanningTest {
         final Table.TableBuilder tableBuilder = Table.builder()
                 .addColumnsOfWidth(300, 120, 70)
                 .fontSize(8)
-                .font(HELVETICA);
+                .font(new PDType1Font(HELVETICA));
 
 
         tableBuilder.addRow(Row.builder()
@@ -129,7 +130,7 @@ public class CellSpanningTest {
         final Table.TableBuilder tableBuilder = Table.builder()
                 .addColumnsOfWidth(300, 120, 70)
                 .fontSize(8)
-                .font(HELVETICA);
+                .font(new PDType1Font(HELVETICA));
 
 
         tableBuilder.addRow(Row.builder()
@@ -164,7 +165,7 @@ public class CellSpanningTest {
         final Table.TableBuilder tableBuilder = Table.builder()
                 .addColumnsOfWidth(300, 120, 70)
                 .fontSize(8)
-                .font(HELVETICA);
+                .font(new PDType1Font(HELVETICA));
 
         tableBuilder.addRow(Row.builder()
                 .add(TextCell.builder().text("This is\nrow span 4").rowSpan(4).borderWidth(1).verticalAlignment(MIDDLE).horizontalAlignment(CENTER).build())
@@ -203,7 +204,7 @@ public class CellSpanningTest {
         final Table.TableBuilder tableBuilder = Table.builder()
                 .addColumnsOfWidth(300, 120, 70)
                 .fontSize(8)
-                .font(HELVETICA);
+                .font(new PDType1Font(HELVETICA));
 
         tableBuilder.addRow(Row.builder()
                 .add(TextCell.builder().text("This is\nrow span 4").rowSpan(4).borderWidth(1).verticalAlignment(MIDDLE).horizontalAlignment(CENTER).build())
@@ -243,7 +244,7 @@ public class CellSpanningTest {
         final Table.TableBuilder tableBuilder = Table.builder()
                 .addColumnsOfWidth(200, 120, 70, 100)
                 .fontSize(8)
-                .font(HELVETICA);
+                .font(new PDType1Font(HELVETICA));
 
         tableBuilder.addRow(Row.builder()
                 .add(TextCell.builder().borderWidth(1).text("One").build())
@@ -279,7 +280,7 @@ public class CellSpanningTest {
                 .horizontalAlignment(CENTER)
                 .verticalAlignment(MIDDLE)
                 .fontSize(8)
-                .font(HELVETICA);
+                .font(new PDType1Font(HELVETICA));
 
         tableBuilder.addRow(Row.builder()
                 .add(ImageCell.builder().borderWidth(1).image(createTuxImage()).scale(0.1f).build())
@@ -313,7 +314,7 @@ public class CellSpanningTest {
         final Table.TableBuilder tableBuilder = Table.builder()
                 .addColumnsOfWidth(300, 120, 70)
                 .fontSize(12)
-                .font(HELVETICA);
+                .font(new PDType1Font(HELVETICA));
 
         int count = 0;
         for (int i = 0; i < 50; i++) {

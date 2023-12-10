@@ -19,6 +19,7 @@ import java.awt.*;
 import java.io.IOException;
 
 import static junit.framework.TestCase.assertTrue;
+import static org.apache.pdfbox.pdmodel.font.Standard14Fonts.FontName.HELVETICA_BOLD;
 import static org.vandeseer.TestUtils.getActualPdfFor;
 import static org.vandeseer.TestUtils.getExpectedPdfFor;
 
@@ -162,7 +163,7 @@ public class TableOverSeveralPagesTest {
 
     private TextCell createHeaderCell(String text) {
         return TextCell.builder()
-                .font(PDType1Font.HELVETICA_BOLD)
+                .font(new PDType1Font(HELVETICA_BOLD))
                 .text(text.toUpperCase())
                 .backgroundColor(DARK_BLUE)
                 .padding(16f)

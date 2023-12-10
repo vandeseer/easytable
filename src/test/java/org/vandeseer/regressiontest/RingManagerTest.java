@@ -6,6 +6,7 @@ import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.common.PDRectangle;
+import org.apache.pdfbox.pdmodel.font.PDType1Font;
 import org.junit.Before;
 import org.junit.Test;
 import org.vandeseer.TestUtils;
@@ -18,7 +19,7 @@ import org.vandeseer.easytable.structure.cell.TextCell;
 import java.awt.*;
 
 import static junit.framework.TestCase.assertTrue;
-import static org.apache.pdfbox.pdmodel.font.PDType1Font.HELVETICA;
+import static org.apache.pdfbox.pdmodel.font.Standard14Fonts.FontName.HELVETICA;
 import static org.vandeseer.TestUtils.getActualPdfFor;
 import static org.vandeseer.TestUtils.getExpectedPdfFor;
 
@@ -51,7 +52,7 @@ public class RingManagerTest {
                         .build()
                         .draw();
 
-                contentStream.setFont(HELVETICA, 8.0f);
+                contentStream.setFont(new PDType1Font(HELVETICA), 8.0f);
                 contentStream.beginText();
 
                 contentStream.newLineAtOffset(startX, startY - (table.getHeight() + 22));
@@ -71,7 +72,7 @@ public class RingManagerTest {
                 .addColumnsOfWidth(26, 70, 390)
                 .fontSize(9)
                 .borderColor(Color.GRAY)
-                .font(HELVETICA);
+                .font(new PDType1Font(HELVETICA));
 
         final float borderWidthOuter = 1.5f;
         final float borderWidthInner = 1.0f;

@@ -4,6 +4,7 @@ import lombok.NoArgsConstructor;
 import lombok.SneakyThrows;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.font.PDFont;
+import org.apache.pdfbox.util.Matrix;
 import org.vandeseer.easytable.drawing.DrawingContext;
 import org.vandeseer.easytable.settings.VerticalAlignment;
 import org.vandeseer.easytable.structure.cell.VerticalTextCell;
@@ -109,7 +110,7 @@ public class VerticalTextCellDrawer extends AbstractCellDrawer<VerticalTextCell>
         contentStream.beginText();
 
         // Do the transformation :)
-        contentStream.setTextMatrix(transform);
+        contentStream.setTextMatrix(new Matrix(transform));
 
         contentStream.setNonStrokingColor(color);
         contentStream.setFont(font, fontSize);

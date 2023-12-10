@@ -1,13 +1,7 @@
 package org.vandeseer.regressiontest;
 
-import static junit.framework.TestCase.assertTrue;
-import static org.apache.pdfbox.pdmodel.PDPageContentStream.AppendMode.APPEND;
-import static org.vandeseer.TestUtils.getActualPdfFor;
-import static org.vandeseer.TestUtils.getExpectedPdfFor;
-
-import java.awt.Color;
-import java.io.IOException;
-
+import de.redsix.pdfcompare.CompareResult;
+import de.redsix.pdfcompare.PdfComparator;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
@@ -24,8 +18,14 @@ import org.vandeseer.easytable.structure.Table;
 import org.vandeseer.easytable.structure.Table.TableBuilder;
 import org.vandeseer.easytable.structure.cell.TextCell;
 
-import de.redsix.pdfcompare.CompareResult;
-import de.redsix.pdfcompare.PdfComparator;
+import java.awt.*;
+import java.io.IOException;
+
+import static junit.framework.TestCase.assertTrue;
+import static org.apache.pdfbox.pdmodel.PDPageContentStream.AppendMode.APPEND;
+import static org.apache.pdfbox.pdmodel.font.Standard14Fonts.FontName.TIMES_ROMAN;
+import static org.vandeseer.TestUtils.getActualPdfFor;
+import static org.vandeseer.TestUtils.getExpectedPdfFor;
 
 public class Issue111RepeatHeaderTableTest {
 
@@ -52,14 +52,14 @@ public class Issue111RepeatHeaderTableTest {
 
 		PDPageContentStream content = new PDPageContentStream(document, my_page, APPEND, true);
 		content.beginText();
-		content.setFont(PDType1Font.TIMES_ROMAN, 15);
+		content.setFont(new PDType1Font(TIMES_ROMAN), 15);
 		content.newLineAtOffset(50, 500);
 		content.showText("This line is added to ensure table is drawn on new page when space not available.");
 		content.endText();
 		content.close();
 
 		TableBuilder builder = Table.builder().addColumnsOfWidth(100, 400).borderColor(Color.LIGHT_GRAY).borderWidth(1)
-				.font(PDType1Font.TIMES_ROMAN).fontSize(13).verticalAlignment(VerticalAlignment.TOP)
+				.font(new PDType1Font(TIMES_ROMAN)).fontSize(13).verticalAlignment(VerticalAlignment.TOP)
 				.horizontalAlignment(HorizontalAlignment.LEFT).padding(5)
 
 				.addRow(Row.builder().add(TextCell.builder().text("Repeat Row 1").borderWidth(0).colSpan(2).build())

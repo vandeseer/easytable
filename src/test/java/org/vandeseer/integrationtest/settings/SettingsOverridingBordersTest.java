@@ -2,6 +2,7 @@ package org.vandeseer.integrationtest.settings;
 
 import de.redsix.pdfcompare.CompareResult;
 import de.redsix.pdfcompare.PdfComparator;
+import org.apache.pdfbox.pdmodel.font.PDType1Font;
 import org.junit.Test;
 import org.vandeseer.TestUtils;
 import org.vandeseer.easytable.settings.BorderStyle;
@@ -13,7 +14,7 @@ import java.awt.*;
 
 import static java.awt.Color.BLACK;
 import static java.awt.Color.GRAY;
-import static org.apache.pdfbox.pdmodel.font.PDType1Font.*;
+import static org.apache.pdfbox.pdmodel.font.Standard14Fonts.FontName.*;
 import static org.junit.Assert.assertTrue;
 import static org.vandeseer.TestUtils.getActualPdfFor;
 import static org.vandeseer.TestUtils.getExpectedPdfFor;
@@ -41,7 +42,7 @@ public class SettingsOverridingBordersTest {
                 .borderWidth(2)
                 .borderStyle(BorderStyle.DOTTED)
                 .horizontalAlignment(CENTER)
-                .fontSize(16).font(HELVETICA)
+                .fontSize(16).font(new PDType1Font(HELVETICA))
                 .borderColor(Color.RED);
 
         tableBuilder.addRow(
@@ -60,7 +61,7 @@ public class SettingsOverridingBordersTest {
                         )
                         .borderWidth(3)
                         .borderStyle(BorderStyle.SOLID)
-                        .font(COURIER_BOLD).fontSize(12)
+                        .font(new PDType1Font(COURIER_BOLD)).fontSize(12)
                         .build()
         );
 
@@ -72,7 +73,7 @@ public class SettingsOverridingBordersTest {
                         .borderWidth(2.4f)
                         .borderStyle(BorderStyle.SOLID)
                         .borderColor(BLACK)
-                        .font(COURIER_BOLD)
+                        .font(new PDType1Font(COURIER_BOLD))
                         .fontSize(12)
                         .build()
         );
@@ -106,7 +107,7 @@ public class SettingsOverridingBordersTest {
                         .borderWidth(0.2f)
                         .borderStyle(BorderStyle.DASHED)
                         .borderColor(Color.BLUE)
-                        .font(COURIER_BOLD).fontSize(12).build());
+                        .font(new PDType1Font(COURIER_BOLD)).fontSize(12).build());
 
         tableBuilder.addRow(
                 Row.builder()
@@ -127,7 +128,7 @@ public class SettingsOverridingBordersTest {
                                         .borderWidth(0)
                                         .borderWidthBottom(1)
                                         .borderStyle(BorderStyle.DASHED)
-                                        .font(HELVETICA_OBLIQUE)
+                                        .font(new PDType1Font(HELVETICA_OBLIQUE))
                                         .fontSize(5)
                                         .verticalAlignment(MIDDLE)
                                         .build()

@@ -6,6 +6,7 @@ import org.junit.Test;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.apache.pdfbox.pdmodel.font.Standard14Fonts.FontName.HELVETICA;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
@@ -17,7 +18,7 @@ public class PdfUtilTest {
     public void getStringWidth_noNewLines() {
         final String text = "this is a small text";
 
-        final float actualSize = PdfUtil.getStringWidth(text, PDType1Font.HELVETICA, 12);
+        final float actualSize = PdfUtil.getStringWidth(text, new PDType1Font(HELVETICA), 12);
         final float expectedSize = 94.692F;
 
         assertThat(isEqualInEpsilon(expectedSize, actualSize), is(true));
@@ -28,9 +29,9 @@ public class PdfUtilTest {
     @Test
     public void getStringWidth_withNewLines_shouldReturnWidthOfLongestLine() {
         final String text = "this is a longer text\nthat has two\nnew lines in it";
-        final float firstLineWidth = PdfUtil.getStringWidth("this is a longer text", PDType1Font.HELVETICA, 12);
+        final float firstLineWidth = PdfUtil.getStringWidth("this is a longer text", new PDType1Font(HELVETICA), 12);
 
-        assertThat(PdfUtil.getStringWidth(text, PDType1Font.HELVETICA, 12), equalTo(firstLineWidth));
+        assertThat(PdfUtil.getStringWidth(text, new PDType1Font(HELVETICA), 12), equalTo(firstLineWidth));
     }
 
     @Test
@@ -38,9 +39,9 @@ public class PdfUtilTest {
         final String text = "this is a small text";
 
         // We don't have to break in case we have two times the size ;)
-        final float maxWidth = 2f * PdfUtil.getStringWidth(text, PDType1Font.HELVETICA, 12);
+        final float maxWidth = 2f * PdfUtil.getStringWidth(text, new PDType1Font(HELVETICA), 12);
 
-        assertThat(PdfUtil.getOptimalTextBreakLines(text, PDType1Font.HELVETICA, 12, maxWidth).size(), is(1));
+        assertThat(PdfUtil.getOptimalTextBreakLines(text, new PDType1Font(HELVETICA), 12, maxWidth).size(), is(1));
     }
 
     @Test
@@ -48,18 +49,18 @@ public class PdfUtilTest {
         final String text = "this is a small text\nthat has two\nnew lines in it";
 
         // Since we have new lines
-        final float maxWidth = 2f * PdfUtil.getStringWidth(text, PDType1Font.HELVETICA, 12);
+        final float maxWidth = 2f * PdfUtil.getStringWidth(text, new PDType1Font(HELVETICA), 12);
 
-        assertThat(PdfUtil.getOptimalTextBreakLines(text, PDType1Font.HELVETICA, 12, maxWidth).size(), is(3));
+        assertThat(PdfUtil.getOptimalTextBreakLines(text, new PDType1Font(HELVETICA), 12, maxWidth).size(), is(3));
     }
 
     @Test
     public void getOptimalTextBreakLines_noSpacesInText_shouldSplitOnDot() {
         final String text = "This.should.be.splitted.on.a.dot.No.spaces.in.here.";
 
-        final float maxWidth = PdfUtil.getStringWidth("This.should.be.splitted.on.a.dot.", PDType1Font.HELVETICA, 12);
+        final float maxWidth = PdfUtil.getStringWidth("This.should.be.splitted.on.a.dot.", new PDType1Font(HELVETICA), 12);
 
-        final List<String> lines = PdfUtil.getOptimalTextBreakLines(text, PDType1Font.HELVETICA, 12, maxWidth);
+        final List<String> lines = PdfUtil.getOptimalTextBreakLines(text, new PDType1Font(HELVETICA), 12, maxWidth);
 
         assertThat(lines.size(), is(2));
         assertThat(lines.get(0), is(equalTo("This.should.be.splitted.on.a.dot.")));
@@ -70,9 +71,9 @@ public class PdfUtilTest {
     public void getOptimalTextBreakLines_noSpacesNorDotsInText_shouldSplitOnComma() {
         final String text = "This,should,be,splitted,on,a,comma,no,space,nor,dots,in,here,";
 
-        final float maxWidth = PdfUtil.getStringWidth("This,should,be,splitted,on,a,comma,", PDType1Font.HELVETICA, 12);
+        final float maxWidth = PdfUtil.getStringWidth("This,should,be,splitted,on,a,comma,", new PDType1Font(HELVETICA), 12);
 
-        final List<String> lines = PdfUtil.getOptimalTextBreakLines(text, PDType1Font.HELVETICA, 12, maxWidth);
+        final List<String> lines = PdfUtil.getOptimalTextBreakLines(text, new PDType1Font(HELVETICA), 12, maxWidth);
 
         assertThat(lines.size(), is(2));
         assertThat(lines.get(0), is(equalTo("This,should,be,splitted,on,a,comma,")));
@@ -83,8 +84,8 @@ public class PdfUtilTest {
     public void getOptimalTextBreakLines_noSpacesNorDotsNorCommasInText_shouldSplitBySize() {
         final String text = "ThisDoesNotHaveAnyCharactersWhereWeCouldBreakMoreEasilySoWeBreakBySize";
 
-        final float maxWidth = PdfUtil.getStringWidth("ThisDoesNotHaveAnyCharacters", PDType1Font.HELVETICA, 12);
-        final List<String> lines = PdfUtil.getOptimalTextBreakLines(text, PDType1Font.HELVETICA, 12, maxWidth);
+        final float maxWidth = PdfUtil.getStringWidth("ThisDoesNotHaveAnyCharacters", new PDType1Font(HELVETICA), 12);
+        final List<String> lines = PdfUtil.getOptimalTextBreakLines(text, new PDType1Font(HELVETICA), 12, maxWidth);
 
         assertThat(lines.size(), is(3));
         assertThat(lines.get(0), is(equalTo("ThisDoesNotHaveAnyCharacter-")));
@@ -107,7 +108,7 @@ public class PdfUtilTest {
             expectedOutput.add("easytable.com");
         }
 
-        final List<String> actualOutput = PdfUtil.getOptimalTextBreakLines(builder.toString(), PDType1Font.HELVETICA, 8, 102);
+        final List<String> actualOutput = PdfUtil.getOptimalTextBreakLines(builder.toString(), new PDType1Font(HELVETICA), 8, 102);
 
         assertThat(actualOutput, equalTo(expectedOutput));
     }

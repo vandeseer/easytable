@@ -18,7 +18,7 @@ import java.io.IOException;
 
 import static junit.framework.TestCase.assertTrue;
 import static org.apache.pdfbox.pdmodel.PDPageContentStream.AppendMode.APPEND;
-import static org.apache.pdfbox.pdmodel.font.PDType1Font.HELVETICA;
+import static org.apache.pdfbox.pdmodel.font.Standard14Fonts.FontName.HELVETICA;
 import static org.vandeseer.TestUtils.getActualPdfFor;
 import static org.vandeseer.TestUtils.getExpectedPdfFor;
 
@@ -34,7 +34,7 @@ public class FinalYTest {
                 final PDPage page = new PDPage(PDRectangle.A4);
                 try (final PDPageContentStream contentStream = new PDPageContentStream(document, page, APPEND, false)) {
                     contentStream.beginText();
-                    contentStream.setFont(PDType1Font.HELVETICA, 12);
+                    contentStream.setFont(new PDType1Font(HELVETICA), 12);
                     contentStream.newLineAtOffset(100, 100);
                     contentStream.showText("text number " + i);
                     contentStream.endText();
@@ -53,7 +53,7 @@ public class FinalYTest {
                     tableDrawer.draw();
 
                     contentStream.beginText();
-                    contentStream.setFont(PDType1Font.HELVETICA, 12);
+                    contentStream.setFont(new PDType1Font(HELVETICA), 12);
                     contentStream.newLineAtOffset(100, tableDrawer.getFinalY() - 12);
                     contentStream.showText("text after final y " + tableDrawer.getFinalY());
                     contentStream.endText();
@@ -71,7 +71,7 @@ public class FinalYTest {
         return Table.builder()
                 .addColumnsOfWidth(100, 100, 100, 100)
                 .fontSize(8)
-                .font(HELVETICA)
+                .font(new PDType1Font(HELVETICA))
                 .addRow(Row.builder()
                         .add(TextCell.builder().borderWidth(1).text("Header").build())
                         .add(TextCell.builder().borderWidth(1).text("of").build())
