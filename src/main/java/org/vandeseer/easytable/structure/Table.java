@@ -3,12 +3,11 @@ package org.vandeseer.easytable.structure;
 import lombok.*;
 import org.apache.pdfbox.pdmodel.font.PDFont;
 import org.apache.pdfbox.pdmodel.font.PDType1Font;
+import org.apache.pdfbox.pdmodel.font.Standard14Fonts;
 import org.vandeseer.easytable.settings.*;
 import org.vandeseer.easytable.structure.cell.AbstractCell;
 
 import java.awt.*;
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
 import java.util.List;
 import java.util.*;
 
@@ -18,37 +17,7 @@ import java.util.*;
 @Setter(AccessLevel.PRIVATE)
 public class Table {
 
-    private static PDFont DEFAULT_FONT;
-    static {
-        // first check 3.0.0
-        try {
-            Class<?> clazz = Class.forName("org.apache.pdfbox.pdmodel.font.Standard14Fonts$FontName");
-            Method getNameMth = clazz.getDeclaredMethod("getName");
-            Object[] fontNameEnums = clazz.getEnumConstants();
-            // find HELVETICA
-            Object helvetica = null;
-            for (Object fontNameEnum : fontNameEnums) {
-                String fontName = (String) getNameMth.invoke(fontNameEnum);
-                if ("Helvetica".equals(fontName)) {
-                    helvetica = fontNameEnum;
-                    break;
-                }
-            }
-            // we have FontName class which is only available in version 3.0.0
-            DEFAULT_FONT = PDType1Font.class.getConstructor(clazz).newInstance(helvetica);
-        } catch (ReflectiveOperationException e) {
-            // fallback to v2
-            try {
-                Field helveticaField = PDType1Font.class.getDeclaredField("HELVETICA");
-                helveticaField.setAccessible(true);
-                Object value = helveticaField.get(PDType1Font.class);
-                DEFAULT_FONT = (PDType1Font) value;
-            } catch (ReflectiveOperationException e2) {
-                // unsupported combination
-                throw new IllegalStateException(e2);
-            }
-        }
-    }
+    private static final PDFont DEFAULT_FONT = new PDType1Font(Standard14Fonts.FontName.HELVETICA);
     private static final int DEFAULT_FONT_SIZE = 12;
     private static final Color DEFAULT_TEXT_COLOR = Color.BLACK;
     private static final Color DEFAULT_BORDER_COLOR = Color.BLACK;

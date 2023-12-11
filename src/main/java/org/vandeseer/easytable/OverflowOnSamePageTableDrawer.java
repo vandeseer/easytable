@@ -29,10 +29,11 @@ public class OverflowOnSamePageTableDrawer extends TableDrawer {
     @Builder.Default
     private final float spaceInBetween = 10f;
 
-    // This is really a private field.
-    // Shouldn't bet set via the Builder, too – see below ...
+    // This is really meant as a private field.
+    // Unfortunately it might be settable by the builder and we can't make it final :/
     @Getter(AccessLevel.NONE)
     @Setter(AccessLevel.NONE)
+    @Builder.Default
     private int actualTableLane = 1;
 
     protected void drawPage(PageData pageData) {
@@ -84,17 +85,6 @@ public class OverflowOnSamePageTableDrawer extends TableDrawer {
 
             startY(pageToDrawOn.getMediaBox().getHeight() - yOffset);
         }
-    }
-
-    // The following solely exists for excluding the "actualTableLane" from Lombok's builder ...
-    // Also see: https://stackoverflow.com/questions/30717640/how-to-exclude-property-from-lombok-builder/44395110#44395110
-    public static abstract class OverflowOnSamePageTableDrawerBuilder<C extends OverflowOnSamePageTableDrawer, B extends OverflowOnSamePageTableDrawerBuilder<C, B>> extends TableDrawerBuilder<C, B> {
-
-        private B actualTableLane(int actualTableLane) {
-            this.actualTableLane = actualTableLane;
-            return self();
-        }
-
     }
 
 }
