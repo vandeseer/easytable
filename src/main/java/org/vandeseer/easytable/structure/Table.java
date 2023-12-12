@@ -157,6 +157,12 @@ public class Table {
             return this;
         }
 
+        // Convenience setter for being halfway backwards compatible
+        public TableBuilder font(Standard14Fonts.FontName fontName) {
+            settings.setFont(new PDType1Font(fontName));
+            return this;
+        }
+
         public TableBuilder fontSize(final Integer fontSize) {
             settings.setFontSize(fontSize);
             return this;

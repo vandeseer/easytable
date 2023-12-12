@@ -4,6 +4,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.experimental.SuperBuilder;
 import org.apache.pdfbox.pdmodel.font.PDFont;
+import org.apache.pdfbox.pdmodel.font.PDType1Font;
+import org.apache.pdfbox.pdmodel.font.Standard14Fonts;
 import org.vandeseer.easytable.structure.Column;
 import org.vandeseer.easytable.util.PdfUtil;
 
@@ -112,6 +114,12 @@ public abstract class AbstractTextCell extends AbstractCell {
 
         public B font(final PDFont font) {
             settings.setFont(font);
+            return this.self();
+        }
+
+        // Convenience setter for being halfway backwards compatible
+        public B font(Standard14Fonts.FontName fontName) {
+            settings.setFont(new PDType1Font(fontName));
             return this.self();
         }
 

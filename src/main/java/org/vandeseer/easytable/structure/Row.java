@@ -5,6 +5,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 import org.apache.pdfbox.pdmodel.font.PDFont;
+import org.apache.pdfbox.pdmodel.font.PDType1Font;
+import org.apache.pdfbox.pdmodel.font.Standard14Fonts;
 import org.vandeseer.easytable.settings.BorderStyleInterface;
 import org.vandeseer.easytable.settings.HorizontalAlignment;
 import org.vandeseer.easytable.settings.Settings;
@@ -84,6 +86,12 @@ public class Row {
 
         public Row.RowBuilder font(final PDFont font) {
             settings.setFont(font);
+            return this;
+        }
+
+        // Convenience setter for being halfway backwards compatible
+        public Row.RowBuilder font(Standard14Fonts.FontName fontName) {
+            settings.setFont(new PDType1Font(fontName));
             return this;
         }
 

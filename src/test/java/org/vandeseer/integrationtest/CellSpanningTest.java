@@ -280,7 +280,7 @@ public class CellSpanningTest {
                 .horizontalAlignment(CENTER)
                 .verticalAlignment(MIDDLE)
                 .fontSize(8)
-                .font(new PDType1Font(HELVETICA));
+                .font(HELVETICA);
 
         tableBuilder.addRow(Row.builder()
                 .add(ImageCell.builder().borderWidth(1).image(createTuxImage()).scale(0.1f).build())

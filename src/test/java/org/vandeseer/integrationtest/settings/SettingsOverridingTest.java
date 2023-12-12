@@ -48,7 +48,7 @@ public class SettingsOverridingTest {
                 Row.builder()
                         .add(TextCell.builder().text("FCmjGVylqCjoxxfFWhehSrm").colSpan(2).borderWidth(1).build())
                         .add(TextCell.builder().text("Booz").build())
-                        .font(new PDType1Font(COURIER_BOLD)).fontSize(8)
+                        .font(COURIER_BOLD).fontSize(8)
                         .build());
 
         tableBuilder.addRow(
@@ -71,7 +71,7 @@ public class SettingsOverridingTest {
                         .add(TextCell.builder().text("Pur").backgroundColor(Color.YELLOW).borderWidth(1).build())
                         .add(TextCell.builder().text("Booz").build())
                         .add(TextCell.builder().text("baz").borderColor(Color.CYAN).borderWidthBottom(1)
-                                .font(new PDType1Font(HELVETICA_OBLIQUE)).fontSize(5).build())
+                                .font(HELVETICA_OBLIQUE).fontSize(5).build())
                         .build());
 
         return tableBuilder.build();
