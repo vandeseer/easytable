@@ -1,7 +1,7 @@
 # easytable
 
 This is a small project that builds upon
-[Apache's PDFBox](http://pdfbox.apache.org) and should allow you
+[Apache's PDFBox](http://pdfbox.apache.org) (>= 3.0.0) and should allow you
 to create tables in a fairly simple way.
 It emerged from the need in another project. Therefore, it also may miss some
 crucial features. Nevertheless, there is:
@@ -33,7 +33,7 @@ Add this to your `pom.xml`:
     <dependency>
         <groupId>com.github.vandeseer</groupId>
         <artifactId>easytable</artifactId>
-        <version>1.0.0-SNAPSHOT</version>
+        <version>1.0.1-SNAPSHOT</version>
     </dependency>
 
 Or checkout the repository and install it locally with maven (e.g. for the`develop` branch):
@@ -43,7 +43,7 @@ Or checkout the repository and install it locally with maven (e.g. for the`devel
 ## Examples
 
 There is a [minimal full working example](src/test/java/org/vandeseer/MinimumWorkingExample.java) 
-which should help you getting started.  
+which should help you to get started.  
 
 For a bit more involved tables have a look at [this code](src/test/java/org/vandeseer/integrationtest/ExcelLikeExampleTest.java) 
 which is needed for creating a PDF document with the following two tables:
@@ -85,6 +85,18 @@ improvements
 *   to [Miloš Čadek](https://github.com/c4da) for implementing alignment of vertical text cells
 
 ## Q&A
+
+### Can I use the library with version PDFBox 2.x.x?
+
+Every version of easytable < 1.0.0 is built on PDFBox 2.x.x. 
+
+Note that easytable 1.0.0 and below
+do basically only differ in the support PDFBox version, but 
+not in their feature set. Only exception being the experimental support
+for paragraph cells which had to be dropped with the upgrade to PDFBox 3. 
+
+Also note that easytable >= 1.0.0 is built for Java 11 and higher, whereas
+lower versions are using Java 8. 
 
 ### Can I customize the drawers for my own specific needs?
 
