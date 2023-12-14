@@ -16,10 +16,12 @@ import java.util.List;
 
 import static org.vandeseer.easytable.settings.HorizontalAlignment.*;
 
-@NoArgsConstructor
-public class TextCellDrawer<T extends AbstractTextCell> extends AbstractCellDrawer<AbstractTextCell> {
 
-    public TextCellDrawer(T cell) {
+@NoArgsConstructor
+public class ExtendedTextCellDrawer<T extends AbstractTextCell> extends TextCellDrawer<T>
+{
+    public ExtendedTextCellDrawer(T cell)
+    {
         this.cell = cell;
     }
 
@@ -41,7 +43,7 @@ public class TextCellDrawer<T extends AbstractTextCell> extends AbstractCellDraw
 
             yOffset -= calculateYOffset(currentFont, currentFontSize, i);
 
-            final float textWidth = PdfUtil.getStringWidth(line, currentFont, currentFontSize);
+            final float textWidth = PdfUtil.getExtendedStringWidth(line, currentFont, currentFontSize);
 
             // Handle horizontal alignment by adjusting the xOffset
             if (cell.isHorizontallyAligned(RIGHT)) {
@@ -69,44 +71,19 @@ public class TextCellDrawer<T extends AbstractTextCell> extends AbstractCellDraw
     }
 
     @Override
-    protected float calculateInnerHeight() {
-        return cell.getTextHeight();
-    }
-
-
-    protected float calculateYOffset(PDFont currentFont, int currentFontSize, int lineIndex) {
-        return PdfUtil.getFontHeight(currentFont, currentFontSize) // font height
-                + (lineIndex > 0 ? PdfUtil.getFontHeight(currentFont, currentFontSize) * cell.getLineSpacing() : 0f); // line spacing
-    }
-
-    static boolean isNotLastLine(List<String> lines, int i) {
-        return i != lines.size() - 1;
-    }
-
-    // Code from https://stackoverflow.com/questions/20680430/is-it-possible-to-justify-text-in-pdfbox
-    protected float calculateCharSpacingFor(String line) {
-        float charSpacing = 0;
-        if (line.length() > 1) {
-            float size = PdfUtil.getStringWidth(line, cell.getFont(), cell.getFontSize());
-            float free = cell.getWidthOfText() - size;
-            if (free > 0) {
-                charSpacing = free / (line.length() - 1);
-            }
-        }
-        return charSpacing;
-    }
-
-    protected List<String> calculateAndGetLines(PDFont currentFont, int currentFontSize, float maxWidth) {
-        return cell.isWordBreak()
-                ? PdfUtil.getOptimalTextBreakLines(cell.getText(), currentFont, currentFontSize, maxWidth)
-                : Collections.singletonList(cell.getText());
-    }
-
-    protected void drawText(DrawingContext drawingContext, PositionedStyledText positionedStyledText) throws IOException {
-        DrawingUtil.drawText(
+    protected void drawText(DrawingContext drawingContext, PositionedStyledText positionedStyledText) throws IOException
+    {
+        DrawingUtil.drawExtendedText(
                 drawingContext.getContentStream(),
                 positionedStyledText
         );
     }
 
+    @Override
+    protected List<String> calculateAndGetLines(PDFont currentFont, int currentFontSize, float maxWidth)
+    {
+        return cell.isWordBreak()
+                ? PdfUtil.getOptimalExtendedTextBreakLines(cell.getText(), currentFont, currentFontSize, maxWidth)
+                : Collections.singletonList(cell.getText());
+    }
 }
