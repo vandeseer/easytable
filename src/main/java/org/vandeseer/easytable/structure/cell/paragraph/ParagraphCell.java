@@ -75,20 +75,8 @@ public class ParagraphCell extends AbstractCell {
             }
 
             @SneakyThrows
-            public ParagraphBuilder append(StyledText styledText) {
-                processables.add(styledText);
-                return this;
-            }
-
-            @SneakyThrows
-            public ParagraphBuilder append(Hyperlink hyperlink) {
-                processables.add(hyperlink);
-                return this;
-            }
-
-            @SneakyThrows
-            public ParagraphBuilder append(Markup markup) {
-                processables.add(markup);
+            public ParagraphBuilder append(ParagraphProcessable processable) {
+                processables.add(processable);
                 return this;
             }
 
