@@ -8,11 +8,11 @@ import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.vandeseer.easytable.structure.Column;
-import org.vandeseer.easytable.structure.Row;
-import org.vandeseer.easytable.structure.Table;
-import org.vandeseer.easytable.structure.TableNotYetBuiltException;
+import org.vandeseer.easytable.structure.*;
 import org.vandeseer.easytable.util.PdfUtil;
+import java.util.List;
+
+import java.awt.*;
 
 import static org.apache.pdfbox.pdmodel.font.Standard14Fonts.FontName.HELVETICA;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -57,6 +57,22 @@ public class TextCellTest {
         );
 
         assertThat(cell.getWidthOfText(), equalTo(PdfUtil.getStringWidth(text, font, fontSize)));
+    }
+
+    @Test
+    public void getWidth_coloredTextCellWithNoWrappingText() {
+        final String redText = "red";
+        final String blueText = "blue";
+
+        final TextCell cell = prepareForTest(
+                TextCell.builder()
+                .font(font)
+                .fontSize(fontSize)
+                .coloredText(List.of(new Text(redText, Color.RED), new Text(blueText, Color.BLUE)))
+                .build()
+        );
+
+        assertThat(cell.getWidthOfText(), equalTo(PdfUtil.getStringWidth(redText+blueText, font, fontSize)));
     }
 
     @Test
@@ -134,7 +150,7 @@ public class TextCellTest {
         // is 10 in sum. Therefore the text will be split in pieces of "abc abc".
         assertThat(cell.getWidthOfText(), equalTo(PdfUtil.getStringWidth("abc abc", font, fontSize)));
     }
-    
+
     @Test
     public void getCell_toBuilderFeature() {
     	// Create two cells without border

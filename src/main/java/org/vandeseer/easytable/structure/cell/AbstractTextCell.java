@@ -7,11 +7,13 @@ import org.apache.pdfbox.pdmodel.font.PDFont;
 import org.apache.pdfbox.pdmodel.font.PDType1Font;
 import org.apache.pdfbox.pdmodel.font.Standard14Fonts;
 import org.vandeseer.easytable.structure.Column;
+import org.vandeseer.easytable.structure.Text;
 import org.vandeseer.easytable.util.PdfUtil;
 
 import java.awt.*;
 import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Getter
 @SuperBuilder(toBuilder = true)
@@ -36,7 +38,7 @@ public abstract class AbstractTextCell extends AbstractCell {
 
     private Float textHeight;
 
-    public abstract String getText();
+    public abstract List<Text> getText();
 
     @Override
     public float getMinHeight() {
@@ -74,18 +76,17 @@ public abstract class AbstractTextCell extends AbstractCell {
     public float getWidthOfText() {
         assertIsRendered();
 
-        final float notBrokenTextWidth = PdfUtil.getStringWidth(getText(), getFont(), getFontSize());
+        final float notBrokenTextWidth = PdfUtil.getStringWidth(getText().stream().map(Text::getText).collect(Collectors.joining()), getFont(), getFontSize());
 
         if (settings.isWordBreak()) {
 
             final float maxWidth = getMaxWidthOfText() - getHorizontalPadding();
-            List<String> textLines = PdfUtil.getOptimalTextBreakLines(getText(), getFont(), getFontSize(), maxWidth);
+            List<List<Text>> textLines = PdfUtil.getOptimalTextBreakLines(getText(), getFont(), getFontSize(), maxWidth);
 
             return textLines.stream()
-                    .map(line -> PdfUtil.getStringWidth(line, getFont(), getFontSize()))
+                    .map(line -> PdfUtil.getStringWidth(line.stream().map(Text::getText).collect(Collectors.joining()), getFont(), getFontSize()))
                     .max(Comparator.naturalOrder())
                     .orElse(notBrokenTextWidth);
-
         }
 
         return notBrokenTextWidth;
