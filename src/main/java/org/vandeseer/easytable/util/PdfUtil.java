@@ -96,6 +96,10 @@ public final class PdfUtil {
         List<Text> unfinishedLine = new ArrayList<>();
         for (Text t : texts) {
             List<Text> lines = Arrays.stream(t.getText().split(NEW_LINE_REGEX)).map(x -> new Text(x, t.getColor().orElse(null))).collect(Collectors.toList());
+            if (lines.isEmpty() && endsWithNewLine(t.getText())) {
+                result.add(List.of(new Text("\n")));
+                continue;
+            }
             Text lastLine = lines.get(lines.size() - 1);
             if (!endsWithNewLine(t.getText())) {
                 lines = lines.subList(0, lines.size() - 1);

@@ -107,17 +107,21 @@ public class PdfUtilTest {
         final List<Text> text = List.of(
           new Text("this is", Color.BLACK), new Text("a small text\n", Color.RED),
           new Text("that has two\n", Color.BLUE),
-          new Text("new lines", Color.RED), new Text("in it\n", Color.GREEN)
+          new Text("new lines", Color.RED), new Text("in it\n", Color.GREEN),
+          new Text("\n", Color.RED),
+          new Text("", Color.GREEN)
         );
 
         // Since we have new lines
         final float maxWidth = 2f * PdfUtil.getStringWidth(text.stream().map(Text::getText).collect(Collectors.joining()), new PDType1Font(HELVETICA), 12);
 
         List<List<Text>> lineTextBreaks = PdfUtil.getOptimalTextBreakLines(text, new PDType1Font(HELVETICA), 12, maxWidth);
-        assertThat(lineTextBreaks.size(), is(3));
+        assertThat(lineTextBreaks.size(), is(5));
         assertThat(lineTextBreaks.get(0).size(), is(2));
         assertThat(lineTextBreaks.get(1).size(), is(1));
         assertThat(lineTextBreaks.get(2).size(), is(2));
+        assertThat(lineTextBreaks.get(3).size(), is(1));
+        assertThat(lineTextBreaks.get(4).size(), is(1));
     }
 
     @Test
