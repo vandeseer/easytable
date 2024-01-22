@@ -116,12 +116,24 @@ public class PdfUtilTest {
         final float maxWidth = 2f * PdfUtil.getStringWidth(text.stream().map(Text::getText).collect(Collectors.joining()), new PDType1Font(HELVETICA), 12);
 
         List<List<Text>> lineTextBreaks = PdfUtil.getOptimalTextBreakLines(text, new PDType1Font(HELVETICA), 12, maxWidth);
-        assertThat(lineTextBreaks.size(), is(5));
+        assertThat(lineTextBreaks.size(), is(4));
         assertThat(lineTextBreaks.get(0).size(), is(2));
         assertThat(lineTextBreaks.get(1).size(), is(1));
         assertThat(lineTextBreaks.get(2).size(), is(2));
         assertThat(lineTextBreaks.get(3).size(), is(1));
-        assertThat(lineTextBreaks.get(4).size(), is(1));
+    }
+
+    @Test
+    public void getOptimalTextBreakLines_onlyLineBreak_shouldNotThrow() {
+        final List<Text> text = List.of(
+          new Text("\n", Color.RED),
+          new Text("\r\n", Color.RED)
+        );
+
+        final float maxWidth = 2f * PdfUtil.getStringWidth(text.stream().map(Text::getText).collect(Collectors.joining()), new PDType1Font(HELVETICA), 12);
+
+        List<List<Text>> lineTextBreaks = PdfUtil.getOptimalTextBreakLines(text, new PDType1Font(HELVETICA), 12, maxWidth);
+        assertThat(lineTextBreaks.size(), is(0));
     }
 
     @Test

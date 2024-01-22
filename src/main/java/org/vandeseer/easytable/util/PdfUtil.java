@@ -30,7 +30,11 @@ public final class PdfUtil {
      * @return Width (in points)
      */
     public static float getStringWidth(final String text, final PDFont font, final int fontSize) {
-        return Arrays.stream(text.split(NEW_LINE_REGEX))
+        List<String> lines = Arrays.stream(text.split(NEW_LINE_REGEX)).collect(Collectors.toList());
+        if (lines.isEmpty()) {
+           return 0;
+        }
+        return lines.stream()
                 .max(Comparator.comparing(String::length))
                 .map(x -> getWidthOfStringWithoutNewlines(x, font, fontSize))
                 .orElseThrow(CouldNotDetermineStringWidthException::new);
@@ -96,8 +100,7 @@ public final class PdfUtil {
         List<Text> unfinishedLine = new ArrayList<>();
         for (Text t : texts) {
             List<Text> lines = Arrays.stream(t.getText().split(NEW_LINE_REGEX)).map(x -> new Text(x, t.getColor().orElse(null))).collect(Collectors.toList());
-            if (lines.isEmpty() && endsWithNewLine(t.getText())) {
-                result.add(List.of(new Text("\n")));
+            if (lines.isEmpty()) {
                 continue;
             }
             Text lastLine = lines.get(lines.size() - 1);
