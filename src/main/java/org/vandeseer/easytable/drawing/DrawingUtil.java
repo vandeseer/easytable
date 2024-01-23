@@ -17,10 +17,11 @@ public class DrawingUtil {
         contentStream.beginText();
         contentStream.setFont(styledText.getFont(), styledText.getFontSize());
         contentStream.newLineAtOffset(styledText.getX(), styledText.getY());
-        contentStream.setNonStrokingColor(styledText.getColor());
         for (final Text t: styledText.getText()) {
             if (t.getColor().isPresent()) {
                 contentStream.setNonStrokingColor(t.getColor().get());
+            } else {
+                contentStream.setNonStrokingColor(styledText.getColor());
             }
             contentStream.showText(t.getText());
         }
