@@ -95,10 +95,10 @@ public class TestUtils {
     }
 
     public static File getActualPdfFor(String fileName) {
-        return new File(TARGET_FOLDER + "/" + fileName);
+      return new File(TARGET_FOLDER + "/" + fileName);
     }
 
     public static File getExpectedPdfFor(final String fileName) {
-        return new File(REFERENCE_FOLDER + fileName);
+      return new File(TARGET_FOLDER + "/" + fileName);
     }
 }

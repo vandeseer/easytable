@@ -7,6 +7,7 @@ import org.apache.pdfbox.pdmodel.font.PDFont;
 import org.apache.pdfbox.util.Matrix;
 import org.vandeseer.easytable.drawing.DrawingContext;
 import org.vandeseer.easytable.settings.VerticalAlignment;
+import org.vandeseer.easytable.structure.Text;
 import org.vandeseer.easytable.structure.cell.VerticalTextCell;
 import org.vandeseer.easytable.util.PdfUtil;
 
@@ -15,6 +16,7 @@ import java.awt.geom.AffineTransform;
 import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static org.vandeseer.easytable.settings.HorizontalAlignment.CENTER;
 import static org.vandeseer.easytable.settings.HorizontalAlignment.RIGHT;
@@ -55,13 +57,13 @@ public class VerticalTextCellDrawer extends AbstractCellDrawer<VerticalTextCell>
             height = cell.calculateHeightForRowSpan();
         }
 
-        final List<String> lines = cell.isWordBreak()
+        final List<List<Text>> lines = cell.isWordBreak()
                 ? PdfUtil.getOptimalTextBreakLines(cell.getText(), currentFont, currentFontSize, (height - cell.getVerticalPadding()))
                 : Collections.singletonList(cell.getText());
 
         float textHeight = 0;
-        for (String line : lines) {
-            float currentHeight = PdfUtil.getStringWidth(line, currentFont, currentFontSize);
+        for (List<Text> line : lines) {
+            float currentHeight = PdfUtil.getStringWidth(line.stream().map(Text::getText).collect(Collectors.joining()), currentFont, currentFontSize);
             textHeight = currentHeight > textHeight ? currentHeight : textHeight;
         }
         if (cell.isVerticallyAligned(VerticalAlignment.MIDDLE)) {
@@ -82,7 +84,7 @@ public class VerticalTextCellDrawer extends AbstractCellDrawer<VerticalTextCell>
         }
 
         for (int i = 0; i < lines.size(); i++) {
-            String line = lines.get(i);
+            List<Text> line = lines.get(i);
 
             xOffset += (
                     PdfUtil.getFontHeight(currentFont, currentFontSize) // font height
@@ -100,7 +102,7 @@ public class VerticalTextCellDrawer extends AbstractCellDrawer<VerticalTextCell>
     }
 
 
-    protected void drawText(String text, PDFont font, int fontSize, Color color, float x, float y, PDPageContentStream contentStream) throws IOException {
+    protected void drawText(List<Text> text, PDFont font, int fontSize, Color color, float x, float y, PDPageContentStream contentStream) throws IOException {
         // Rotate by 90 degrees counter clockwise
         final AffineTransform transform = AffineTransform.getTranslateInstance(x, y);
         transform.concatenate(AffineTransform.getRotateInstance(Math.PI * 0.5));
@@ -115,7 +117,12 @@ public class VerticalTextCellDrawer extends AbstractCellDrawer<VerticalTextCell>
         contentStream.setNonStrokingColor(color);
         contentStream.setFont(font, fontSize);
         contentStream.newLineAtOffset(x, y);
-        contentStream.showText(text);
+        for (final Text t : text) {
+            if (t.getColor().isPresent()) {
+                contentStream.setNonStrokingColor(t.getColor().get());
+            }
+            contentStream.showText(t.getText());
+        }
         contentStream.endText();
         contentStream.setCharacterSpacing(0);
     }

@@ -6,6 +6,7 @@ import org.apache.pdfbox.pdmodel.font.PDFont;
 import org.vandeseer.easytable.drawing.DrawingContext;
 import org.vandeseer.easytable.drawing.DrawingUtil;
 import org.vandeseer.easytable.drawing.PositionedStyledText;
+import org.vandeseer.easytable.structure.Text;
 import org.vandeseer.easytable.structure.cell.AbstractTextCell;
 import org.vandeseer.easytable.util.PdfUtil;
 
@@ -13,6 +14,7 @@ import java.awt.*;
 import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static org.vandeseer.easytable.settings.HorizontalAlignment.*;
 
@@ -35,13 +37,13 @@ public class TextCellDrawer<T extends AbstractTextCell> extends AbstractCellDraw
         float yOffset = drawingContext.getStartingPoint().y + getAdaptionForVerticalAlignment();
         float xOffset = startX + cell.getPaddingLeft();
 
-        final List<String> lines = calculateAndGetLines(currentFont, currentFontSize, cell.getMaxWidth());
+        final List<List<Text>> lines = calculateAndGetLines(currentFont, currentFontSize, cell.getMaxWidth());
         for (int i = 0; i < lines.size(); i++) {
-            final String line = lines.get(i);
+            final List<Text> line = lines.get(i);
 
             yOffset -= calculateYOffset(currentFont, currentFontSize, i);
 
-            final float textWidth = PdfUtil.getStringWidth(line, currentFont, currentFontSize);
+            final float textWidth = PdfUtil.getStringWidth(line.stream().map(Text::getText).collect(Collectors.joining()), currentFont, currentFontSize);
 
             // Handle horizontal alignment by adjusting the xOffset
             if (cell.isHorizontallyAligned(RIGHT)) {
@@ -79,24 +81,25 @@ public class TextCellDrawer<T extends AbstractTextCell> extends AbstractCellDraw
                 + (lineIndex > 0 ? PdfUtil.getFontHeight(currentFont, currentFontSize) * cell.getLineSpacing() : 0f); // line spacing
     }
 
-    static boolean isNotLastLine(List<String> lines, int i) {
+    static boolean isNotLastLine(List<List<Text>> lines, int i) {
         return i != lines.size() - 1;
     }
 
     // Code from https://stackoverflow.com/questions/20680430/is-it-possible-to-justify-text-in-pdfbox
-    protected float calculateCharSpacingFor(String line) {
+    protected float calculateCharSpacingFor(List<Text> line) {
         float charSpacing = 0;
-        if (line.length() > 1) {
-            float size = PdfUtil.getStringWidth(line, cell.getFont(), cell.getFontSize());
+        int joinedLineLength = line.stream().map(Text::getText).collect(Collectors.joining()).length();
+        if (joinedLineLength > 1) {
+            float size = PdfUtil.getStringWidth(line.stream().map(Text::getText).collect(Collectors.joining()), cell.getFont(), cell.getFontSize());
             float free = cell.getWidthOfText() - size;
             if (free > 0) {
-                charSpacing = free / (line.length() - 1);
+                charSpacing = free / (joinedLineLength - 1);
             }
         }
         return charSpacing;
     }
 
-    protected List<String> calculateAndGetLines(PDFont currentFont, int currentFontSize, float maxWidth) {
+    protected List<List<Text>> calculateAndGetLines(PDFont currentFont, int currentFontSize, float maxWidth) {
         return cell.isWordBreak()
                 ? PdfUtil.getOptimalTextBreakLines(cell.getText(), currentFont, currentFontSize, maxWidth)
                 : Collections.singletonList(cell.getText());

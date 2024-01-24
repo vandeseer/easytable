@@ -1,6 +1,7 @@
 package org.vandeseer.easytable.drawing;
 
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
+import org.vandeseer.easytable.structure.Text;
 
 import java.awt.*;
 import java.io.IOException;
@@ -14,10 +15,16 @@ public class DrawingUtil {
 
     public static void drawText(PDPageContentStream contentStream, PositionedStyledText styledText) throws IOException {
         contentStream.beginText();
-        contentStream.setNonStrokingColor(styledText.getColor());
         contentStream.setFont(styledText.getFont(), styledText.getFontSize());
         contentStream.newLineAtOffset(styledText.getX(), styledText.getY());
-        contentStream.showText(styledText.getText());
+        for (final Text t: styledText.getText()) {
+            if (t.getColor().isPresent()) {
+                contentStream.setNonStrokingColor(t.getColor().get());
+            } else {
+                contentStream.setNonStrokingColor(styledText.getColor());
+            }
+            contentStream.showText(t.getText());
+        }
         contentStream.endText();
         contentStream.setCharacterSpacing(0);
     }

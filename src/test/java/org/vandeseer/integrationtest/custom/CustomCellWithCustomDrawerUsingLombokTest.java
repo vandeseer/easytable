@@ -39,7 +39,7 @@ public class CustomCellWithCustomDrawerUsingLombokTest {
                 @Override
                 protected void drawText(DrawingContext drawingContext, PositionedStyledText text) throws IOException {
                     System.out.println("My custom drawer is called :-)");
-                    super.drawText(drawingContext, text.toBuilder().text(text.getText().toUpperCase()).build());
+                    super.drawText(drawingContext, text.toBuilder().text(text.getText()).build());
                 }
             };
         }
