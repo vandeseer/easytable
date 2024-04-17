@@ -83,6 +83,7 @@ improvements
 *   to [msww](https://github.com/msww) for finding a [small issue](https://github.com/vandeseer/easytable/issues/85)
 *   to [VakhoQ](https://github.com/VakhoQ) for implementing border styles
 *   to [Miloš Čadek](https://github.com/c4da) for implementing alignment of vertical text cells
+*   to [Chemmic](https://github.com/Chemmic) for adding repeating headers to tables that overflow on the same page
 
 ## Q&A
 
