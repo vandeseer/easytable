@@ -24,7 +24,7 @@ public class OverflowOnSamePageTableDrawerTest {
     private static final String OVERFLOW_ON_SAME_PAGE_PDF = "overflowOnSamePage.pdf";
 
     @Test
-    public void createTwoPageTableWithRepeatedHeader() throws IOException {
+    public void createTableWithOverflowOnSamePage() throws IOException {
 
         try (final PDDocument document = new PDDocument()) {
 
