@@ -5,6 +5,7 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import lombok.SneakyThrows;
 import org.apache.pdfbox.pdmodel.font.PDFont;
+import org.vandeseer.easytable.structure.Text;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -29,7 +30,11 @@ public final class PdfUtil {
      * @return Width (in points)
      */
     public static float getStringWidth(final String text, final PDFont font, final int fontSize) {
-        return Arrays.stream(text.split(NEW_LINE_REGEX))
+        List<String> lines = Arrays.stream(text.split(NEW_LINE_REGEX)).collect(Collectors.toList());
+        if (lines.isEmpty()) {
+           return 0;
+        }
+        return lines.stream()
                 .max(Comparator.comparing(String::length))
                 .map(x -> getWidthOfStringWithoutNewlines(x, font, fontSize))
                 .orElseThrow(CouldNotDetermineStringWidthException::new);
@@ -70,34 +75,102 @@ public final class PdfUtil {
     /**
      * Split a text into multiple lines to prevent a text-overflow.
      *
-     * @param text     Text
+     * One line is represented as List of Text. When there are multiple different colored parts in a line,
+     * then the line is split into multiple Texts.
+     *
+     * "This is an example\nWhere color changes here | and then there is a new line\nAnd another one"
+     * This example should be split into 3 lines:
+     * 1. "This is an example"
+     * 2. "Where color changes here and then there is a new line"
+     * 3. "And another one"
+     *
+     * If Text does not end with a newline, it's possible that the last line of the text is part of a multi-colored line.
+     * To determine if this is the case we don't append but save the last line after \n.
+     * On the next Text, instead of starting with an empty List of Text, we start with the saved line.
+     *
+     * @param texts    Texts to split
      * @param font     Used font
      * @param fontSize Used fontSize
      * @param maxWidth Maximal width of resulting text-lines
      * @return A list of lines, where all are smaller than maxWidth
      */
-    public static List<String> getOptimalTextBreakLines(final String text, final PDFont font, final int fontSize, final float maxWidth) {
-        final List<String> result = new ArrayList<>();
+    public static List<List<Text>> getOptimalTextBreakLines(final List<Text> texts, final PDFont font, final int fontSize, final float maxWidth) {
+        final List<List<Text>> result = new ArrayList<>();
 
-        for (final String line : text.split(NEW_LINE_REGEX)) {
-            if (PdfUtil.doesTextLineFit(line, font, fontSize, maxWidth)) {
-                result.add(line);
+        List<Text> unfinishedLine = new ArrayList<>();
+        for (Text t : texts) {
+            List<Text> lines = Arrays.stream(t.getText().split(NEW_LINE_REGEX)).map(x -> new Text(x, t.getColor().orElse(null))).collect(Collectors.toList());
+            if (lines.isEmpty()) {
+                continue;
+            }
+            Text lastLine = lines.get(lines.size() - 1);
+            if (!endsWithNewLine(t.getText())) {
+                lines = lines.subList(0, lines.size() - 1);
+            }
+
+            for (Text lineText : lines) {
+                List<Text> lineToAppend = new ArrayList<>(unfinishedLine);
+                unfinishedLine = new ArrayList<>();
+                lineToAppend.add(lineText);
+                if (PdfUtil.doesTextLineFit(lineToAppend.stream().map(Text::getText).collect(Collectors.joining()), font, fontSize, maxWidth)) {
+                    result.add(lineToAppend);
+                } else {
+                    result.addAll(PdfUtil.wrapLine(lineToAppend, font, fontSize, maxWidth));
+                }
+            }
+
+            if (!endsWithNewLine(t.getText())) {
+                unfinishedLine.add(lastLine);
+            }
+        }
+
+        if (!unfinishedLine.isEmpty()) {
+            if (PdfUtil.doesTextLineFit(unfinishedLine.stream().map(Text::getText).collect(Collectors.joining()), font, fontSize, maxWidth)) {
+                result.add(unfinishedLine);
             } else {
-                result.addAll(PdfUtil.wrapLine(line, font, fontSize, maxWidth));
+                result.addAll(PdfUtil.wrapLine(unfinishedLine, font, fontSize, maxWidth));
             }
         }
 
         return result;
     }
 
-    private static List<String> wrapLine(final String line, final PDFont font, final int fontSize, final float maxWidth) {
-        if (PdfUtil.doesTextLineFit(line, font, fontSize, maxWidth)) {
+    private static boolean endsWithNewLine(final String text) {
+        return text.endsWith("\n") || text.endsWith("\r\n");
+    }
+
+    private static List<List<Text>> wrapLine(final List<Text> line, final PDFont font, final int fontSize, final float maxWidth) {
+        if (PdfUtil.doesTextLineFit(line.stream().map(Text::getText).collect(Collectors.joining()), font, fontSize, maxWidth)) {
             return Collections.singletonList(line);
         }
 
-        List<String> goodLines = new ArrayList<>();
-        Stack<String> allWords = new Stack<>();
-        Arrays.asList(line.split("(?<=[\\\\. ,-])")).forEach(allWords::push);
+        List<List<Text>> goodLines = new ArrayList<>();
+        Stack<List<Text>> allWords = new Stack<>();
+
+        List<Text> unfinishedWord = new ArrayList<>();
+        for (Text t : line) {
+            List<Text> words = Arrays.stream(t.getText().split("(?<=[\\\\. ,-])")).map(x -> new Text(x, t.getColor().orElse(null))).collect(Collectors.toList());
+            Text lastWord = words.get(words.size() - 1);
+            if (!endsWithFullWord(t.getText())) {
+                words = words.subList(0, words.size() - 1);
+            }
+
+            for (Text word : words) {
+                List<Text> wordToAppend = new ArrayList<>(unfinishedWord);
+                unfinishedWord = new ArrayList<>();
+                wordToAppend.add(word);
+                allWords.push(wordToAppend);
+            }
+
+            if (!endsWithFullWord(t.getText())) {
+                unfinishedWord.add(lastWord);
+            }
+        }
+
+        if (!unfinishedWord.isEmpty()) {
+            allWords.push(unfinishedWord);
+        }
+
         Collections.reverse(allWords);
 
         while (!allWords.empty()) {
@@ -107,17 +180,35 @@ public final class PdfUtil {
         return goodLines;
     }
 
-    private static List<String> splitBySize(final String line, final PDFont font, final int fontSize, final float maxWidth) {
-        final List<String> returnList = new ArrayList<>();
+    private static boolean endsWithFullWord(final String text) {
+        return text.endsWith("(?<=[\\\\. ,-])");
+    }
 
-        for (int i = line.length() - 1; i > 0; i--) {
-            final String fittedNewLine = line.substring(0, i) + "-";
-            final String remains = line.substring(i);
+    private static List<List<Text>> splitBySize(final List<Text> line, final PDFont font, final int fontSize, final float maxWidth) {
+        final List<List<Text>> returnList = new ArrayList<>();
 
-            if (PdfUtil.doesTextLineFit(fittedNewLine, font, fontSize, maxWidth)) {
-                returnList.add(fittedNewLine);
-                returnList.addAll(PdfUtil.wrapLine(remains, font, fontSize, maxWidth));
+        for (int i = line.size() - 1; i >= 0; i--) {
+            LinkedList<Text> fittedNewLine = new LinkedList<>(line.subList(0, i));
+            LinkedList<Text> remainsLine = new LinkedList<>(line.subList(i + 1, line.size()));
+            boolean fitted = false;
+            for (int j = line.get(i).getText().length() - 1; j > 0; j--) {
+                final String fittedNewText = line.get(i).getText().substring(0, j) + "-";
+                final String remains = line.get(i).getText().substring(j);
 
+                fittedNewLine.addLast(new Text(fittedNewText, line.get(i).getColor().orElse(null)));
+                remainsLine.addFirst(new Text(remains, line.get(i).getColor().orElse(null)));
+
+                if (PdfUtil.doesTextLineFit(fittedNewLine.stream().map(Text::getText).collect(Collectors.joining()), font, fontSize, maxWidth)) {
+                    returnList.add(fittedNewLine);
+                    fitted = true;
+                    returnList.addAll(PdfUtil.wrapLine(remainsLine, font, fontSize, maxWidth));
+                    break;
+                } else {
+                    fittedNewLine.removeLast();
+                    remainsLine.removeFirst();
+                }
+            }
+            if (fitted) {
                 break;
             }
         }
@@ -126,24 +217,25 @@ public final class PdfUtil {
     }
 
 
-    private static String buildALine(final Stack<String> words,
+    private static List<Text> buildALine(final Stack<List<Text>> words,
                                      final PDFont font,
                                      final int fontSize,
                                      final float maxWidth) {
 
-        final StringBuilder line = new StringBuilder();
+        List<Text> line = new ArrayList<>();
         float width = 0;
 
         while (!words.empty()) {
-            float nextWordWidth = getStringWidth(words.peek(), font, fontSize);
+            List<Text> nextWord = words.peek();
+            float nextWordWidth = getStringWidth(nextWord.stream().map(Text::getText).collect(Collectors.joining()), font, fontSize);
 
             // if a single char on an empty line bigger than the max-size, then there is no split possible.
-            if (line.length() == 0 && words.peek().length() == 1 && nextWordWidth > maxWidth) {
+            if (line.isEmpty() && nextWord.stream().map(Text::getText).collect(Collectors.joining()).length() == 1 && nextWordWidth > maxWidth) {
                 return words.pop();
             }
 
             if (doesTextLineFit(width + nextWordWidth, maxWidth)) {
-                line.append(words.pop());
+                line.addAll(new ArrayList<>(words.pop()));
                 width += nextWordWidth;
             } else {
                 break;
@@ -152,14 +244,39 @@ public final class PdfUtil {
 
         // no word found -> split by size
         if (width == 0 && !words.empty()) {
-            List<String> cutBySize = splitBySize(words.pop(), font, fontSize, maxWidth);
+            List<List<Text>> cutBySize = splitBySize(words.pop(), font, fontSize, maxWidth);
             Collections.reverse(cutBySize);
             cutBySize.forEach(words::push);
 
             return buildALine(words, font, fontSize, maxWidth);
         }
 
-        return line.toString().trim();
+        if (!line.isEmpty()) {
+            line = mergeSameColors(line);
+            String endTrimmed = line.get(line.size() - 1).getText().replaceAll("\\s+$", "");
+            line.set(line.size() - 1, new Text(endTrimmed, line.get(line.size() - 1).getColor().orElse(null)));
+
+            String startTrimmed = line.get(0).getText().replaceAll("^\\s+", "");
+            line.set(0, new Text(startTrimmed, line.get(0).getColor().orElse(null)));
+        }
+        return line;
+    }
+
+    private static List<Text> mergeSameColors(final List<Text> texts) {
+        final List<Text> merged = new ArrayList<>();
+        for (Text t : texts) {
+            if (merged.isEmpty()) {
+                merged.add(t);
+            } else {
+                Text last = merged.get(merged.size() - 1);
+                if (last.getColor().equals(t.getColor())) {
+                    merged.set(merged.size() - 1, new Text(last.getText() + t.getText(), last.getColor().orElse(null)));
+                } else {
+                    merged.add(t);
+                }
+            }
+        }
+        return merged;
     }
 
     private static boolean doesTextLineFit(final String textLine, final PDFont font, final int fontSize, final float maxWidth) {
