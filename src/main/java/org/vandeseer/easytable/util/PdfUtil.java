@@ -97,7 +97,7 @@ public final class PdfUtil {
 
         List<String> goodLines = new ArrayList<>();
         Stack<String> allWords = new Stack<>();
-        Arrays.asList(line.split("(?<=[\\\\. ,-])")).forEach(allWords::push);
+        Arrays.asList(line.split("(?<=[\\\\. ,/-])")).forEach(allWords::push);
         Collections.reverse(allWords);
 
         while (!allWords.empty()) {

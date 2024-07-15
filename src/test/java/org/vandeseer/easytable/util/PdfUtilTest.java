@@ -81,6 +81,19 @@ public class PdfUtilTest {
     }
 
     @Test
+    public void getOptimalTextBreakLines_noSpacesNorDotsInText_shouldSplitOnSlash() {
+        final String text = "This/should/be/splitted/on/a/slash/no/space/nor/dots/in/here/";
+
+        final float maxWidth = PdfUtil.getStringWidth("This/should/be/splitted/on/a/slash/", new PDType1Font(HELVETICA), 12);
+
+        final List<String> lines = PdfUtil.getOptimalTextBreakLines(text, new PDType1Font(HELVETICA), 12, maxWidth);
+
+        assertThat(lines.size(), is(2));
+        assertThat(lines.get(0), is(equalTo("This/should/be/splitted/on/a/slash/")));
+        assertThat(lines.get(1), is(equalTo("no/space/nor/dots/in/here/")));
+    }
+
+    @Test
     public void getOptimalTextBreakLines_noSpacesNorDotsNorCommasInText_shouldSplitBySize() {
         final String text = "ThisDoesNotHaveAnyCharactersWhereWeCouldBreakMoreEasilySoWeBreakBySize";
 
@@ -103,12 +116,15 @@ public class PdfUtilTest {
             builder.append("https://averylonginternetdnsnamewhich-maybe-breaks-easytable.com ");
 
             // optimal text-break
-            expectedOutput.add("https://averylonginternetdns-");
-            expectedOutput.add("namewhich-maybe-breaks-");
+            expectedOutput.add("https://");
+            expectedOutput.add("averylonginternet-");
+            expectedOutput.add("dnsnamewhich-");
+            expectedOutput.add("maybe-breaks-");
             expectedOutput.add("easytable.com");
         }
+        expectedOutput.set(expectedOutput.size() - 1, "easytable.com");
 
-        final List<String> actualOutput = PdfUtil.getOptimalTextBreakLines(builder.toString(), new PDType1Font(HELVETICA), 8, 102);
+        final List<String> actualOutput = PdfUtil.getOptimalTextBreakLines(builder.toString(), new PDType1Font(HELVETICA), 8, 68);
 
         assertThat(actualOutput, equalTo(expectedOutput));
     }
